@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Diagnóstico (admin) · Maria</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <style>
+    /* ──────────────────────────────────────────────────────────
+       BASE
+       ────────────────────────────────────────────────────────── */    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT ADMIN — sidebar + topbar + main
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+      overflow-y: auto;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+    .nav-item__pulse {
+      margin-left: auto; min-width: 20px; height: 18px; padding: 0 6px;
+      font-size: 10px; font-weight: 800;
+      background: var(--error); color: var(--white);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .sidebar__section-title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--gray-600);
+      padding: 24px 16px 8px; margin-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    .main { flex: 1; min-width: 0; }
+
+    /* mobile vs desktop */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main    { padding: 72px 0 0; }
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main    { margin-left: var(--sidebar-w); padding: 0; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       BANNER ADMIN — status, ações, link, histórico
+       ══════════════════════════════════════════════════════════ */
+    .admin-banner {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 18px 24px;
+    }
+    @media (min-width: 1024px) { .admin-banner { padding: 22px 40px; } }
+
+    .ab-row {
+      display: flex; align-items: center; gap: 16px;
+      flex-wrap: wrap;
+    }
+    .ab-row + .ab-row { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--gray-200); }
+
+    /* linha 1: status + meta */
+    .ab-status {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--green); border: 1.5px solid var(--green);
+      background: rgba(66,180,73,0.06);
+    }
+    .ab-status::before {
+      content: ''; width: 8px; height: 8px;
+      background: var(--green); border-radius: 50%;
+    }
+    .ab-status--draft { color: var(--warning); border-color: var(--warning); background: rgba(245,158,11,0.06); }
+    .ab-status--draft::before { background: var(--warning); }
+    .ab-status--sent { color: var(--blue); border-color: var(--blue); background: rgba(59,158,232,0.06); }
+    .ab-status--sent::before { background: var(--blue); }
+
+    .ab-meta {
+      font-size: 12px; color: var(--gray-600); font-weight: 600;
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    }
+    .ab-meta strong { color: var(--black); font-weight: 800; }
+    .ab-meta__sep { color: var(--gray-300); }
+
+    /* linha 2: ações */
+    .ab-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .ab-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 14px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300); cursor: pointer;
+      transition: border-color var(--t), background var(--t), color var(--t);
+    }
+    .ab-btn:hover { border-color: var(--black); }
+    .ab-btn svg { width: 13px; height: 13px; }
+    .ab-btn--primary {
+      background: var(--green); color: var(--white); border-color: var(--green);
+    }
+    .ab-btn--primary:hover { background: var(--green-hover); border-color: var(--green-hover); }
+    .ab-btn--ghost { border-color: transparent; color: var(--gray-600); }
+    .ab-btn--ghost:hover { color: var(--black); border-color: var(--gray-300); }
+
+    /* linha 3: link único */
+    .ab-link {
+      display: flex; gap: 8px; align-items: center;
+      flex: 1; min-width: 0;
+    }
+    .ab-link__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600); white-space: nowrap;
+    }
+    .ab-link__url {
+      flex: 1; min-width: 0;
+      padding: 8px 12px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px; color: var(--black);
+      background: var(--off-white);
+      border: 1px solid var(--gray-300);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* histórico (drawer expansível) */
+    .ab-history {
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px dashed var(--gray-200);
+      display: none;
+    }
+    .ab-history.is-open { display: block; }
+    .ab-history__title {
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600); margin-bottom: 10px;
+    }
+    .ab-event {
+      display: grid;
+      grid-template-columns: 16px 1fr auto;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-200);
+      align-items: center;
+    }
+    .ab-event:last-child { border-bottom: none; }
+    .ab-event__dot {
+      width: 8px; height: 8px;
+      background: var(--green); border-radius: 50%;
+      margin-left: 4px;
+    }
+    .ab-event__dot--pending { background: var(--gray-300); }
+    .ab-event__title {
+      font-size: 12px; font-weight: 700; color: var(--black);
+    }
+    .ab-event__title strong { font-weight: 800; }
+    .ab-event__sub {
+      font-size: 10px; color: var(--gray-600); font-weight: 500;
+      margin-top: 2px;
+    }
+    .ab-event__time {
+      font-size: 10px; color: var(--gray-600); font-weight: 700;
+      letter-spacing: 0.04em; text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PREVIEW FRAME — banda separadora antes do conteúdo da peça
+       ══════════════════════════════════════════════════════════ */
+    .preview-band {
+      background: var(--off-white);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+    @media (min-width: 1024px) { .preview-band { padding: 14px 40px; } }
+    .preview-band__icon {
+      width: 14px; height: 14px; color: var(--gray-600);
+      flex-shrink: 0;
+    }
+    .preview-band strong { color: var(--black); font-weight: 800; }
+
+    /* desabilita visualmente o consent + CTA na admin */
+    .is-preview .consent-item { cursor: not-allowed; opacity: 0.7; }
+    .is-preview .consent-item input[type="checkbox"] { pointer-events: none; }
+    .is-preview .field__input { background: var(--gray-100); cursor: not-allowed; }
+    .is-preview .consent__cta {
+      background: var(--gray-300) !important;
+      border-color: var(--gray-300) !important;
+      color: var(--gray-600) !important;
+      cursor: not-allowed !important;
+    }
+    .is-preview .consent__cta::after {
+      content: " · visualização — somente o cliente assina";
+      font-weight: 600; opacity: 0.85;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MODAL — envio via WhatsApp
+       ══════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .modal-overlay.is-open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 28px; width: 100%; max-width: 520px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--green); margin-bottom: 8px;
+    }
+    .modal__title {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .modal__lead {
+      font-size: 13px; color: var(--gray-600); line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .modal__lead strong { color: var(--black); font-weight: 700; }
+
+    .modal-row { margin-bottom: 16px; }
+    .modal-row__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600); margin-bottom: 6px;
+    }
+    .modal-row__value {
+      padding: 12px 14px;
+      font-family: var(--f); font-size: 14px; font-weight: 700;
+      background: var(--off-white);
+      border: 1.5px solid var(--gray-300);
+      color: var(--black);
+    }
+
+    .modal-template {
+      padding: 14px 16px;
+      background: var(--off-white);
+      border-left: 4px solid var(--green);
+      font-size: 13px; line-height: 1.6;
+      color: var(--black); margin-bottom: 16px;
+    }
+    .modal-template__head {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600); margin-bottom: 6px;
+    }
+    .modal-template strong { font-weight: 700; }
+    .modal-template__link {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px; color: var(--green);
+      word-break: break-all;
+    }
+
+    .modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+      margin-top: 20px; padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .btn-modal-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+    }
+    .btn-modal-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-modal-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--green); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--green);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-modal-confirm:hover { background: var(--green-hover); border-color: var(--green-hover); }
+    .btn-modal-confirm svg { width: 13px; height: 13px; }
+
+    /* ──────────────────────────────────────────────────────────
+       PÁGINA / WRAPPER
+       ────────────────────────────────────────────────────────── */
+    .page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+    @media (min-width: 720px) {
+      .page { padding: 40px 32px 120px; }
+    }
+    @media (min-width: 1024px) {
+      .page { padding: 40px 40px 100px; }
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       HEADER MINIMAL
+       ────────────────────────────────────────────────────────── */
+    .doc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: 36px;
+    }
+    .doc-header__logo { height: 40px; width: auto; display: block; }
+    @media (min-width: 720px) { .doc-header__logo { height: 56px; } }
+    .doc-header__meta {
+      text-align: right;
+      font-size: 10px; font-weight: 700;
+      color: var(--gray-600); line-height: 1.5;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .doc-header__meta strong { color: var(--black); font-weight: 800; }
+
+    /* ──────────────────────────────────────────────────────────
+       KICKER + HERO VOCATIVO
+       ────────────────────────────────────────────────────────── */
+    .kicker {
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600);
+      margin-bottom: 18px;
+    }
+    .kicker__dot { color: var(--green); }
+
+    .hero-name {
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 800; letter-spacing: -0.045em;
+      line-height: 0.95; color: var(--black);
+      margin-bottom: 28px;
+    }
+
+    .lead {
+      font-size: clamp(15px, 1.6vw, 17px);
+      line-height: 1.7; color: var(--black);
+      max-width: 64ch;
+      margin-bottom: 28px;
+    }
+    /* Compound block: lead + KPIs viajam juntos como uma unidade */
+    .section:has(+ .kpis)        { margin-bottom: 16px; }
+    .section:has(+ .kpis) .lead  { margin-bottom: 0; }
+    .lead strong { font-weight: 800; }
+    .lead em {
+      font-style: normal;
+      background: rgba(245,158,11,0.18);
+      padding: 1px 4px; font-weight: 600;
+    }
+    .lead .num { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+    /* ──────────────────────────────────────────────────────────
+       KPI CARDS — 4-up SÍNTESE
+       ────────────────────────────────────────────────────────── */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      margin-bottom: 56px;
+    }
+    @media (min-width: 720px) { .kpis { grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; } }
+    .kpi {
+      padding: 14px 16px;
+      border-right: 1px solid var(--gray-300);
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .kpi:nth-child(2n) { border-right: none; }
+    .kpi:nth-last-child(-n+1) { border-bottom: none; }
+    @media (min-width: 720px) {
+      .kpi { border-bottom: none; }
+      .kpi:nth-child(2n) { border-right: 1px solid var(--gray-300); }
+      .kpi:last-child { border-right: none; }
+    }
+    .kpi__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--gray-600); margin-bottom: 6px;
+    }
+    .kpi__value {
+      font-size: clamp(15px, 2.4vw, 22px); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.05;
+      color: var(--black); font-variant-numeric: tabular-nums;
+      margin-bottom: 4px;
+    }
+    .kpi__sub {
+      font-size: 10px; color: var(--gray-600);
+      font-weight: 700; letter-spacing: 0.04em;
+    }
+    .kpi--alert .kpi__value { color: var(--error); }
+
+    /* ──────────────────────────────────────────────────────────
+       SECTION HEADERS
+       ────────────────────────────────────────────────────────── */
+    .section-head { margin-bottom: 20px; }
+    .section-head__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600); margin-bottom: 8px;
+    }
+    .section-head__title {
+      font-size: clamp(22px, 3.2vw, 28px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.15; color: var(--black);
+      max-width: 38ch;
+    }
+    .section-head__lead {
+      font-size: 14px; line-height: 1.65; color: var(--black);
+      max-width: 60ch; margin-top: 10px;
+    }
+    .section-head__lead strong { font-weight: 800; }
+
+    .section { margin-bottom: 48px; }
+
+    .transition {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 700; letter-spacing: -0.015em;
+      color: var(--black); line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       BANCOS ANALISADOS — 3-up
+       ────────────────────────────────────────────────────────── */
+    .banks {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    @media (min-width: 720px) { .banks { grid-template-columns: repeat(3, 1fr); } }
+    .bank {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .bank__name {
+      font-size: 16px; font-weight: 800;
+      letter-spacing: -0.015em; color: var(--black);
+    }
+    .bank__account {
+      font-size: 11px; font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      font-variant-numeric: tabular-nums;
+    }
+    .bank__exposure {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .bank__exposure-label {
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600); margin-bottom: 2px;
+    }
+    .bank__exposure-value {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       BLOCO POR BANCO — narrativa + indícios
+       ────────────────────────────────────────────────────────── */
+    .bank-block { margin-bottom: 48px; }
+    .bank-block__head {
+      border-left: 4px solid var(--black);
+      padding: 4px 0 4px 16px;
+      margin-bottom: 20px;
+    }
+    .bank-block__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--gray-600); margin-bottom: 4px;
+    }
+    .bank-block__name {
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 800; letter-spacing: -0.025em;
+      color: var(--black); line-height: 1.15;
+    }
+    .bank-block__story {
+      font-size: 14px; line-height: 1.7;
+      color: var(--black); max-width: 64ch;
+      margin-bottom: 16px;
+    }
+    .bank-block__story strong { font-weight: 800; }
+    .bank-block__story em {
+      font-style: normal;
+      background: rgba(245,158,11,0.18);
+      padding: 1px 4px; font-weight: 600;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       FINDING CARDS
+       ────────────────────────────────────────────────────────── */
+    .findings { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .finding {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      display: grid;
+      grid-template-columns: 4px 1fr;
+      transition: border-color var(--t);
+    }
+    .finding:hover { border-color: var(--black); }
+    .finding__rail { background: var(--gray-300); }
+    .finding--crit .finding__rail { background: var(--error); }
+    .finding--alta .finding__rail { background: var(--warning); }
+    .finding--media .finding__rail { background: var(--gray-600); }
+    .finding__main { padding: 18px 20px; }
+    .finding__head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 6px;
+    }
+    .finding__head-left { flex: 1; min-width: 0; }
+    .finding__tags {
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+      margin-bottom: 6px;
+    }
+    .finding__sev {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 8px;
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1.5px solid var(--gray-600);
+      color: var(--gray-600);
+    }
+    .finding--crit .finding__sev { color: var(--error); border-color: var(--error); }
+    .finding--alta .finding__sev { color: var(--warning); border-color: var(--warning); }
+    .finding--media .finding__sev { color: var(--gray-600); border-color: var(--gray-600); }
+    .finding__id {
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; color: var(--gray-600);
+      font-variant-numeric: tabular-nums;
+    }
+    .finding__cat {
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-600);
+    }
+    .finding__cat::before { content: '·'; margin: 0 6px; color: var(--gray-300); }
+    .finding__title {
+      font-size: 16px; font-weight: 800;
+      letter-spacing: -0.01em; color: var(--black);
+      line-height: 1.2; margin-bottom: 4px;
+    }
+    .finding__plain {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      max-width: 60ch;
+    }
+    .finding__plain strong { color: var(--black); font-weight: 700; }
+    .finding__meta {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      margin-top: 12px; padding-top: 10px;
+      border-top: 1px dashed var(--gray-200);
+    }
+    .finding__meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .finding__meta-label {
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--gray-600);
+    }
+    .finding__meta-value {
+      font-size: 12px; font-weight: 700; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+    .finding__meta-value--money { color: var(--green); }
+
+    /* ──────────────────────────────────────────────────────────
+       SÍNTESE DE OPORTUNIDADE
+       ────────────────────────────────────────────────────────── */
+    .opportunity {
+      background: var(--black);
+      color: var(--white);
+      padding: 32px 28px;
+      margin-bottom: 48px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 800px) {
+      .opportunity { grid-template-columns: 1fr 1fr; gap: 32px; padding: 40px; }
+    }
+    .opportunity__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .opportunity__title {
+      font-size: clamp(22px, 2.8vw, 30px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.2; color: var(--white);
+    }
+    .opportunity__title strong { color: var(--green); }
+    .opportunity__lead {
+      font-size: 14px; line-height: 1.7;
+      color: rgba(255,255,255,0.78);
+      margin-top: 12px;
+    }
+    .opportunity__breakdown {
+      display: grid; grid-template-columns: 1fr;
+      gap: 14px; align-self: center;
+    }
+    .opp-line {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .opp-line:last-child { border-bottom: none; padding-bottom: 0; }
+    .opp-line__label {
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .opp-line__value {
+      font-size: 18px; font-weight: 800;
+      color: var(--white); font-variant-numeric: tabular-nums;
+      letter-spacing: -0.015em;
+    }
+    .opp-line--total .opp-line__label { color: var(--white); font-weight: 800; }
+    .opp-line--total .opp-line__value { color: var(--green); font-size: 24px; }
+
+    /* ──────────────────────────────────────────────────────────
+       DISCLAIMER — sobre os números
+       ────────────────────────────────────────────────────────── */
+    .disclaimer {
+      background: var(--off-white);
+      border-left: 4px solid var(--green);
+      padding: 24px 24px 24px 28px;
+      margin-bottom: 48px;
+      max-width: 100%;
+    }
+    @media (min-width: 720px) { .disclaimer { padding: 28px 32px 28px 36px; } }
+    .disclaimer__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .disclaimer__title {
+      font-size: clamp(16px, 2vw, 19px);
+      font-weight: 800; letter-spacing: -0.015em;
+      color: var(--black); line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .disclaimer__body {
+      font-size: 13px; line-height: 1.7;
+      color: var(--black); max-width: 64ch;
+    }
+    .disclaimer__body p { margin-bottom: 10px; }
+    .disclaimer__body p:last-child { margin-bottom: 0; }
+    .disclaimer__body strong { font-weight: 800; }
+    .disclaimer__refs {
+      font-size: 10px; line-height: 1.55;
+      color: var(--gray-600); font-weight: 600;
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px dashed var(--gray-300);
+      letter-spacing: 0.02em;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       3 CAMINHOS
+       ────────────────────────────────────────────────────────── */
+    .paths {
+      display: grid; grid-template-columns: 1fr;
+      gap: 14px; margin-bottom: 40px;
+    }
+    @media (min-width: 880px) {
+      .paths {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto 1fr auto;
+        align-items: stretch;
+      }
+    }
+    .path {
+      background: var(--white);
+      border: 1.5px solid var(--gray-300);
+      padding: 24px 22px;
+      display: flex; flex-direction: column;
+      transition: border-color var(--t);
+    }
+    @media (min-width: 880px) {
+      .path {
+        grid-row: span 4;
+        display: grid;
+        grid-template-rows: subgrid;
+      }
+    }
+    .path:hover { border-color: var(--black); }
+    .path__num {
+      font-size: 32px; font-weight: 800;
+      letter-spacing: -0.04em; color: var(--green);
+      line-height: 1; margin-bottom: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+    .path__name {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--black);
+      line-height: 1.2; margin-bottom: 10px;
+    }
+    .path__desc {
+      font-size: 13px; line-height: 1.6;
+      color: var(--gray-600); margin-bottom: 18px;
+    }
+    .path__desc strong { color: var(--black); font-weight: 700; }
+    .path__features {
+      display: flex; flex-direction: column; gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-200);
+      margin-top: auto;
+    }
+    @media (min-width: 880px) {
+      .path__features {
+        align-self: start;
+        margin-top: 0;
+      }
+    }
+    .path__feature {
+      display: grid; grid-template-columns: 14px 1fr;
+      gap: 8px; align-items: flex-start;
+      font-size: 12px; line-height: 1.45;
+      color: var(--black);
+    }
+    .path__feature svg {
+      width: 14px; height: 14px;
+      color: var(--green); margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .path__feature strong { font-weight: 700; }
+
+    /* ──────────────────────────────────────────────────────────
+       BLOCO HONORÁRIOS
+       ────────────────────────────────────────────────────────── */
+    .fees {
+      background: var(--white);
+      border: 1.5px solid var(--black);
+      padding: 28px;
+      margin-bottom: 48px;
+    }
+    .fees__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--gray-600); margin-bottom: 12px;
+    }
+    .fees__title {
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--black); line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .fees__title strong { color: var(--green); }
+    .fees__body {
+      font-size: 14px; line-height: 1.7;
+      color: var(--black); max-width: 60ch;
+    }
+    .fees__body strong { font-weight: 800; }
+    .fees__split {
+      display: grid; grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 20px; padding-top: 20px;
+      border-top: 1px dashed var(--gray-300);
+    }
+    @media (min-width: 600px) { .fees__split { grid-template-columns: repeat(3, 1fr); } }
+    .fee-item {
+      padding: 14px 16px;
+      background: var(--off-white);
+      border: 1px solid var(--gray-300);
+    }
+    .fee-item__pct {
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -0.025em; color: var(--black);
+      line-height: 1; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    .fee-item--total .fee-item__pct { color: var(--green); }
+    .fee-item__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       TERMO DE CONSENTIMENTO + CTA
+       ────────────────────────────────────────────────────────── */
+    .consent {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+    }
+    @media (min-width: 720px) { .consent { padding: 40px; } }
+    .consent__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .consent__title {
+      font-size: clamp(22px, 2.8vw, 30px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.2; color: var(--black);
+      margin-bottom: 14px;
+    }
+    .consent__lead {
+      font-size: 14px; line-height: 1.7;
+      color: var(--gray-600); max-width: 60ch;
+      margin-bottom: 24px;
+    }
+    .consent__lead strong { color: var(--black); font-weight: 700; }
+
+    .consent-list {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: 28px;
+    }
+    .consent-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 14px;
+      padding: 16px;
+      background: var(--off-white);
+      border: 1.5px solid var(--gray-300);
+      cursor: pointer;
+      transition: border-color var(--t), background var(--t);
+    }
+    .consent-item:hover { border-color: var(--black); }
+    .consent-item input[type="checkbox"] {
+      width: 22px; height: 22px;
+      margin-top: 2px;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+    .consent-item__title {
+      font-size: 14px; font-weight: 800;
+      color: var(--black); line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .consent-item__desc {
+      font-size: 12px; line-height: 1.55;
+      color: var(--gray-600);
+    }
+    .consent-item__desc strong { color: var(--black); font-weight: 700; }
+    .consent-item.is-checked { border-color: var(--green); background: rgba(66,180,73,0.05); }
+
+    .consent-select-all {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--black);
+      color: var(--white);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin-bottom: 2px;
+      transition: opacity var(--t);
+      user-select: none;
+    }
+    .consent-select-all:hover { opacity: 0.82; }
+    .consent-select-all input[type="checkbox"] {
+      width: 20px; height: 20px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .consent-select-all.is-disabled { opacity: 0.5; cursor: not-allowed; }
+    .consent-select-all.is-disabled input { pointer-events: none; }
+
+    .consent__sign {
+      display: grid; grid-template-columns: 1fr;
+      gap: 12px; margin-bottom: 20px;
+    }
+    @media (min-width: 600px) { .consent__sign { grid-template-columns: 1.4fr 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+    .field__input {
+      padding: 12px 14px;
+      font-family: var(--f); font-size: 14px;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t);
+    }
+    .field__input:focus { border-color: var(--black); outline: none; }
+
+    .consent__legal {
+      font-size: 11px; line-height: 1.55;
+      color: var(--gray-600); margin-bottom: 20px;
+    }
+    .consent__legal strong { color: var(--black); font-weight: 700; }
+
+    .consent__cta {
+      display: block; width: 100%;
+      padding: 18px 24px;
+      font-family: var(--f); font-size: 14px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      background: var(--black); color: var(--white);
+      border: 2px solid var(--black);
+      cursor: pointer;
+      transition: background var(--t), border-color var(--t);
+    }
+    .consent__cta:hover { background: var(--green); border-color: var(--green); }
+    .consent__cta:disabled {
+      background: var(--gray-300); border-color: var(--gray-300);
+      color: var(--gray-600); cursor: not-allowed;
+    }
+    .consent__cta:disabled:hover { background: var(--gray-300); border-color: var(--gray-300); }
+
+    /* ──────────────────────────────────────────────────────────
+       RODAPÉ
+       ────────────────────────────────────────────────────────── */
+    .doc-footer {
+      padding-top: 32px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 11px; line-height: 1.7;
+      color: var(--gray-600);
+    }
+    .doc-footer__row {
+      display: grid; grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 720px) { .doc-footer__row { grid-template-columns: 1fr 1fr; } }
+    .doc-footer strong { color: var(--black); font-weight: 800; }
+    .doc-footer a { text-decoration: underline; text-underline-offset: 2px; }
+    /* nav-item placeholder "em breve" — sem destino ainda */
+    .nav-item--soon { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .nav-item--soon::after {
+      content: "Em breve";
+      margin-left: auto;
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--gray-600);
+      border: 1px solid var(--gray-300); padding: 2px 6px;
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- TOPBAR mobile -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">EV</a>
+</div>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR ADMIN -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+
+      <div class="sidebar__section-title">Admin</div>
+
+      <a href="18_basta-hoje.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Hoje
+      </a>
+      <a href="19_basta-admin-conversas.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversas
+      </a>
+      <a href="20_basta-admin-pipeline.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        CRM
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 5c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+        Diagnóstico
+        <span class="nav-item__pulse">7</span>
+      </span>
+      <a href="21_basta-admin-templates.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Templates
+      </a>
+      <a href="22_basta-admin-usuarios.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Usuários
+      </a>
+      <a href="#" class="nav-item nav-item--soon" aria-disabled="true" tabindex="-1" title="Em breve">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Consulta Extrato
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">EV</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Eduardo Vergueiro</div>
+        <div class="sidebar__user-email">eavergueiro@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN admin -->
+  <div class="main">
+
+    <!-- BANNER ADMIN — status, ações, link único, histórico -->
+    <section class="admin-banner" aria-label="Painel administrativo do diagnóstico">
+
+      <div class="ab-row">
+        <span class="ab-status" id="abStatus">Pronto para envio</span>
+        <div class="ab-meta">
+          <span>Diagnóstico <strong>BST-2026-000507</strong></span>
+          <span class="ab-meta__sep">·</span>
+          <span>Cliente: <strong>Maria Carvalho</strong></span>
+          <span class="ab-meta__sep">·</span>
+          <span>WhatsApp: <strong>+55 11 99999-9999</strong></span>
+        </div>
+      </div>
+
+      <div class="ab-row">
+        <div class="ab-actions">
+          <button class="ab-btn" onclick="alert('Editar conteúdo (mock)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+            Editar conteúdo
+          </button>
+          <button class="ab-btn" onclick="alert('Ajustar cálculos (mock)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="3" width="16" height="18"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="12" x2="12" y2="12"/><line x1="8" y1="17" x2="10" y2="17"/></svg>
+            Ajustar cálculos
+          </button>
+          <button class="ab-btn" onclick="alert('Marcar como pronto (mock)')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Marcar como pronto
+          </button>
+          <button class="ab-btn ab-btn--primary" onclick="openSendModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Enviar via WhatsApp
+          </button>
+          <button class="ab-btn ab-btn--ghost" id="historyToggle" onclick="toggleHistory()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Ver histórico
+          </button>
+        </div>
+      </div>
+
+      <div class="ab-row">
+        <div class="ab-link">
+          <span class="ab-link__label">Link único</span>
+          <span class="ab-link__url" id="abLinkUrl">https://app.basta.com.br/d/BST-2026-000507?t=preview-ab12cd34</span>
+          <button class="ab-btn" onclick="copyLink()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copiar
+          </button>
+          <button class="ab-btn" onclick="admRevogarLink()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+            Revogar
+          </button>
+        </div>
+      </div>
+
+      <div class="ab-history" id="abHistory">
+        <div class="ab-history__title">Histórico de eventos</div>
+        <div class="ab-event">
+          <div class="ab-event__dot"></div>
+          <div>
+            <div class="ab-event__title"><strong>Diagnóstico gerado</strong> a partir da análise Open Finance</div>
+            <div class="ab-event__sub">Por: análise automática · 7 indícios identificados</div>
+          </div>
+          <div class="ab-event__time">04 mai · 18:14</div>
+        </div>
+        <div class="ab-event">
+          <div class="ab-event__dot"></div>
+          <div>
+            <div class="ab-event__title"><strong>Revisão humana</strong> concluída</div>
+            <div class="ab-event__sub">Por: Eduardo Vergueiro · todos os 7 indícios confirmados</div>
+          </div>
+          <div class="ab-event__time">06 mai · 14:23</div>
+        </div>
+        <div class="ab-event">
+          <div class="ab-event__dot"></div>
+          <div>
+            <div class="ab-event__title"><strong>Marcado como pronto</strong> para envio</div>
+            <div class="ab-event__sub">Link único gerado · TTL 7 dias</div>
+          </div>
+          <div class="ab-event__time">06 mai · 14:25</div>
+        </div>
+        <div class="ab-event">
+          <div class="ab-event__dot ab-event__dot--pending"></div>
+          <div>
+            <div class="ab-event__title">Envio ao cliente <em>(pendente)</em></div>
+            <div class="ab-event__sub">Aguardando confirmação do operador</div>
+          </div>
+          <div class="ab-event__time">—</div>
+        </div>
+        <div class="ab-event">
+          <div class="ab-event__dot ab-event__dot--pending"></div>
+          <div>
+            <div class="ab-event__title">Cliente abriu o link <em>(pendente)</em></div>
+            <div class="ab-event__sub">Telemetria registra hora, IP e dispositivo</div>
+          </div>
+          <div class="ab-event__time">—</div>
+        </div>
+        <div class="ab-event">
+          <div class="ab-event__dot ab-event__dot--pending"></div>
+          <div>
+            <div class="ab-event__title">Cliente assinou autorização <em>(pendente)</em></div>
+            <div class="ab-event__sub">Caminhos autorizados serão registrados aqui</div>
+          </div>
+          <div class="ab-event__time">—</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- BANDA SEPARADORA — preview -->
+    <div class="preview-band">
+      <svg class="preview-band__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+      <span><strong>Pré-visualização do que o cliente vai ver</strong> · termo e botão de assinatura desabilitados</span>
+    </div>
+
+<main class="page is-preview">
+
+  <!-- HEADER MINIMAL -->
+  <header class="doc-header">
+    <svg class="doc-header__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    <div class="doc-header__meta">
+      Diagnóstico nº <strong>BST-2026-000507</strong><br>
+      <strong>06 maio 2026</strong>
+    </div>
+  </header>
+
+  <!-- KICKER + HERO VOCATIVO + LEAD NARRATIVO -->
+  <section class="section">
+    <div class="kicker">Diagnóstico Basta</div>
+    <h1 class="hero-name">Maria,</h1>
+
+    <p class="lead">
+      sua dívida total registrada no <strong>SCR/Bacen</strong> é de <span class="num">R$ 178.000,00</span>
+      (cento e setenta e oito mil reais), dividida em <strong>4 bancos</strong>.
+      Sua renda bruta reportada é de <span class="num">R$ 8.457,89</span> — após INSS
+      (<span class="num">R$ 908,85</span>) e IRRF (<span class="num">R$ 1.182,32</span>),
+      a renda líquida é de <span class="num">R$ 6.366,72</span>. Desse valor,
+      <span class="num">R$ 2.200,00</span> em <strong>empréstimos consignados</strong> são descontados
+      em folha, restando <span class="num">R$ 4.166,72</span>. Sobre esse valor ainda incidem
+      <span class="num">R$ 3.000,00/mês</span> de parcelas em
+      <strong>crédito pessoal e cartões de crédito</strong>, e algumas já estão em atraso.
+    </p>
+  </section>
+
+  <!-- CARD 4-up SÍNTESE FINANCEIRA -->
+  <div class="kpis" aria-label="Síntese financeira">
+    <div class="kpi kpi--alert">
+      <div class="kpi__label">Dívida Total</div>
+      <div class="kpi__value">R$ 178.000</div>
+      <div class="kpi__sub">SCR Bacen · 4 bancos</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Renda Bruta</div>
+      <div class="kpi__value">R$ 8.457</div>
+      <div class="kpi__sub">Holerite · CLT</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Renda Líquida</div>
+      <div class="kpi__value">R$ 6.367</div>
+      <div class="kpi__sub">Após INSS e IRRF</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Parcelas / Mês</div>
+      <div class="kpi__value">R$ 5.200</div>
+      <div class="kpi__sub">R$ 2.200 consig. · R$ 3.000 parcelas</div>
+    </div>
+    <div class="kpi kpi--alert">
+      <div class="kpi__label">% Comprometimento</div>
+      <div class="kpi__value">81,7%</div>
+      <div class="kpi__sub">Crítico · acima de 30%</div>
+    </div>
+  </div>
+
+  <!-- TRANSIÇÃO + 3 CARDS DE BANCOS -->
+  <section class="section">
+    <p class="transition">Contas analisadas</p>
+
+    <div class="banks">
+      <div class="bank">
+        <div class="bank__name">Banco do Brasil</div>
+        <div class="bank__account">Ag. 1234 · Conta 56789-0</div>
+        <div class="bank__exposure">
+          <div class="bank__exposure-label">Exposição</div>
+          <div class="bank__exposure-value">R$ 28.400</div>
+        </div>
+      </div>
+      <div class="bank">
+        <div class="bank__name">Banco Bradesco</div>
+        <div class="bank__account">Ag. 0345 · Conta 12345-6</div>
+        <div class="bank__exposure">
+          <div class="bank__exposure-label">Exposição</div>
+          <div class="bank__exposure-value">R$ 65.200</div>
+        </div>
+      </div>
+      <div class="bank">
+        <div class="bank__name">Banco Sicredi</div>
+        <div class="bank__account">Ag. 0710 · Conta 98765-4</div>
+        <div class="bank__exposure">
+          <div class="bank__exposure-label">Exposição</div>
+          <div class="bank__exposure-value">R$ 44.800</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANCO DO BRASIL -->
+  <section class="bank-block">
+    <div class="bank-block__head">
+      <div class="bank-block__eyebrow">Indícios de abusos que merecem atenção por banco · 1 de 3</div>
+      <h2 class="bank-block__name">Banco do Brasil</h2>
+    </div>
+
+    <p class="bank-block__story">
+      Identificamos um <strong>cartão consignado RMC</strong> sendo descontado
+      há <strong>14 meses sem uso efetivo</strong> e um <strong>seguro prestamista</strong> contratado no
+      mesmo dia do empréstimo, sem aceite separado. Encontramos ainda tarifa cobrada em conta salário.
+    </p>
+
+    <div class="findings">
+      <article class="finding finding--crit">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Crítico</span>
+                <span class="finding__id">AB17</span>
+                <span class="finding__cat">Consentimento</span>
+              </div>
+              <h3 class="finding__title">Cartão Consignado RMC sem solicitação</h3>
+              <p class="finding__plain">Há <strong>14 meses</strong> tem desconto de <strong>R$ 89,00</strong> no holerite com a descrição "RMC — BB Consignado". O cartão <strong>nunca foi usado</strong>: sem fatura, sem movimentação.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Desconto mensal</span><span class="finding__meta-value">R$ 89,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Períodos cobrados</span><span class="finding__meta-value">14 meses</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 2.492,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--crit">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Crítico</span>
+                <span class="finding__id">AB16</span>
+                <span class="finding__cat">Venda casada</span>
+              </div>
+              <h3 class="finding__title">Seguro prestamista contratado junto com o empréstimo</h3>
+              <p class="finding__plain">No mesmo dia do empréstimo, começou a ser cobrado seguro prestamista de <strong>R$ 47/mês</strong>. Não há apólice separada nem oferta de outra seguradora.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança mensal</span><span class="finding__meta-value">R$ 47,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Períodos cobrados</span><span class="finding__meta-value">12 meses</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 1.128,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB13</span>
+                <span class="finding__cat">Tarifa indevida</span>
+              </div>
+              <h3 class="finding__title">Tarifa cobrada em conta salário</h3>
+              <p class="finding__plain">Sua conta no BB recebe seu salário e mesmo assim cobra <strong>R$ 24/mês</strong> de manutenção há 14 meses. Conta salário não admite cobrança de manutenção.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança mensal</span><span class="finding__meta-value">R$ 24,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Períodos cobrados</span><span class="finding__meta-value">14 meses</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 672,00</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ITAÚ -->
+  <section class="bank-block">
+    <div class="bank-block__head">
+      <div class="bank-block__eyebrow">Indícios de abusos que merecem atenção por banco · 2 de 3</div>
+      <h2 class="bank-block__name">Banco Bradesco</h2>
+    </div>
+
+    <p class="bank-block__story">
+      No Bradesco identificamos — o ponto mais grave — <strong>8 seguros prestamistas</strong> ativos sobre operações de
+      crédito, todos contratados no mesmo dia das respectivas operações, sem aceite separado. Há também indícios
+      de <strong>capitalização de juros sem autorização expressa no contrato</strong> e <strong>juros de atraso acima da taxa de referência</strong>
+      no contrato de empréstimo pessoal de R$ 18.500.
+    </p>
+
+    <div class="findings">
+      <article class="finding finding--crit">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Crítico</span>
+                <span class="finding__id">AB16</span>
+                <span class="finding__cat">Venda casada</span>
+              </div>
+              <h3 class="finding__title">8 seguros prestamistas contratados sem aceite separado</h3>
+              <p class="finding__plain">Identificamos <strong>8 apólices ativas</strong>, todas com débito iniciado no <strong>mesmo dia</strong> da operação de crédito correspondente. Ausência de aceite separado e de oferta de seguradora alternativa. Cobrança média de <strong>R$ 38/mês por apólice</strong>.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Apólices</span><span class="finding__meta-value">8 ativas</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança total/mês</span><span class="finding__meta-value">R$ 304,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 7.296,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB02</span>
+                <span class="finding__cat">Juros sobre juros</span>
+              </div>
+              <h3 class="finding__title">Capitalização de juros sem autorização expressa no contrato</h3>
+              <p class="finding__plain">A taxa anual contratada (<strong>37,2% a.a.</strong>) é maior que <strong>12× a taxa mensal</strong> declarada (2,7% a.m. → 32,4% a.a.). Diferença de 4,8 p.p. indica cobrança de juros sobre juros.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Diferença</span><span class="finding__meta-value">4,8 p.p.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Saldo do contrato</span><span class="finding__meta-value">R$ 18.500</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Redução estimada</span><span class="finding__meta-value finding__meta-value--money">R$ 3.200,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB03</span>
+                <span class="finding__cat">Juros de atraso</span>
+              </div>
+              <h3 class="finding__title">Juros de atraso acima da taxa de referência</h3>
+              <p class="finding__plain">O contrato prevê <strong>1,8% ao mês</strong> de juros de atraso. A taxa de referência é <strong>1% a.m.</strong> A diferença de 0,8 p.p. incide em todas as parcelas com atraso.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrado</span><span class="finding__meta-value">1,8% a.m.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Referência</span><span class="finding__meta-value">1,0% a.m.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Redução estimada</span><span class="finding__meta-value finding__meta-value--money">R$ 1.380,00</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SICREDI -->
+  <section class="bank-block">
+    <div class="bank-block__head">
+      <div class="bank-block__eyebrow">Indícios de abusos que merecem atenção por banco · 3 de 3</div>
+      <h2 class="bank-block__name">Banco Sicredi</h2>
+    </div>
+
+    <p class="bank-block__story">
+      No Sicredi a operação é mais limpa, mas dois pontos pedem revisão: <strong>capitalização de juros</strong>
+      sem autorização expressa no contrato de empréstimo com garantia (saldo de R$ 44.800), e tarifa de avaliação
+      de garantia cobrada sem laudo apresentado.
+    </p>
+
+    <div class="findings">
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB02</span>
+                <span class="finding__cat">Juros sobre juros</span>
+              </div>
+              <h3 class="finding__title">Capitalização sem autorização expressa no contrato</h3>
+              <p class="finding__plain">Diferença de <strong>3,4 p.p.</strong> entre a taxa anual contratada e a equivalente mensal × 12. Autorização para cobrança de juros sobre juros <strong>não consta</strong> no contrato.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Diferença</span><span class="finding__meta-value">3,4 p.p.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Saldo do contrato</span><span class="finding__meta-value">R$ 44.800</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Redução estimada</span><span class="finding__meta-value finding__meta-value--money">R$ 4.800,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--media">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Médio</span>
+                <span class="finding__id">AB10</span>
+                <span class="finding__cat">Tarifa sem laudo</span>
+              </div>
+              <h3 class="finding__title">Tarifa de avaliação de garantia sem laudo</h3>
+              <p class="finding__plain">Contrato cobrou <strong>R$ 850,00</strong> de "avaliação da garantia" na contratação. Não há laudo de avaliação anexo nem identificação do avaliador.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança</span><span class="finding__meta-value">R$ 850,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Laudo</span><span class="finding__meta-value">Ausente</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 1.700,00</span></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SÍNTESE DE OPORTUNIDADE -->
+  <section class="opportunity">
+    <div>
+      <div class="opportunity__eyebrow">Síntese de oportunidade</div>
+      <h2 class="opportunity__title">
+        Há <strong>R$ 30.668,00</strong> de economia total — entre dinheiro de volta, dívida reduzida e fluxo de caixa aliviado.
+      </h2>
+    </div>
+    <div class="opportunity__breakdown">
+      <div class="opp-line">
+        <span class="opp-line__label">Restituição em dobro</span>
+        <span class="opp-line__value">R$ 13.288</span>
+      </div>
+      <div class="opp-line">
+        <span class="opp-line__label">Redução de saldo devedor</span>
+        <span class="opp-line__value">R$ 9.380</span>
+      </div>
+      <div class="opp-line">
+        <span class="opp-line__label">Alívio de fluxo (12 meses)</span>
+        <span class="opp-line__value">R$ 8.000</span>
+      </div>
+      <div class="opp-line opp-line--total">
+        <span class="opp-line__label">Economia total</span>
+        <span class="opp-line__value">R$ 30.668</span>
+      </div>
+      <div class="opp-line">
+        <span class="opp-line__label">Honorários de êxito (30%)</span>
+        <span class="opp-line__value">− R$ 9.200</span>
+      </div>
+      <div class="opp-line opp-line--total">
+        <span class="opp-line__label">Você recebe (estimado)</span>
+        <span class="opp-line__value">R$ 21.468</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER — sobre os números, natureza da atividade e success fee -->
+  <section class="disclaimer" aria-label="Sobre estes números">
+    <div class="disclaimer__eyebrow">Sobre estes números</div>
+    <h2 class="disclaimer__title">Os valores apresentados são estimativas calculadas a partir de informações e documentos que você compartilhou. Os números não representam garantia de resultado. Podem ser maiores ou menores.</h2>
+    <div class="disclaimer__body">
+      <p>
+        O Basta usa tecnologia para analisar sua situação financeira e identificar os melhores caminhos disponíveis
+        para você sair do endividamento. O resultado efetivo depende de fatores
+        fora do nosso controle, como políticas das instituições financeiras, condições de mercado e decisões de
+        órgãos públicos.
+      </p>
+    </div>
+  </section>
+
+  <!-- BLOCO HONORÁRIOS -->
+  <section class="fees">
+    <div class="fees__eyebrow">Como cobramos</div>
+    <h2 class="fees__title">
+      Em caso de êxito: <strong>30% sobre a economia total</strong>.<br>Sem êxito, sem cobrança. Simples assim.
+    </h2>
+    <p class="fees__body">
+      A "economia total" é a soma do que efetivamente entrar no seu bolso ou sair da sua dívida:
+      <strong>restituições recebidas</strong> + <strong>redução do saldo devedor</strong> +
+      <strong>redução de fluxo de caixa</strong> obtida via portabilidade (calculada nos primeiros 12 meses
+      após a migração). O cálculo é discriminado a cada etapa, com memória de cálculo entregue por escrito.
+    </p>
+    <div class="fees__split">
+      <div class="fee-item">
+        <div class="fee-item__pct">10%</div>
+        <div class="fee-item__label">Basta · diagnóstico, supervisão e plataforma</div>
+      </div>
+      <div class="fee-item">
+        <div class="fee-item__pct">20%</div>
+        <div class="fee-item__label">Parceiro especializado · contestação das cobranças identificadas</div>
+      </div>
+      <div class="fee-item fee-item--total">
+        <div class="fee-item__pct">30%</div>
+        <div class="fee-item__label">Total sobre a economia realizada</div>
+      </div>
+    </div>
+
+    <!-- LEGAL-NOTE: revisar com advogado a redação dos honorários e definir contrato anexo
+         que detalhe (i) momento de exigibilidade, (ii) base de incidência por caminho,
+         (iii) cláusula de rescisão por inação, (iv) limite máximo nominal por contrato.
+         Hoje a peça promete "30% sobre economia projetada" — precisa de instrumento jurídico
+         que o consumidor leia e assine separadamente. -->
+  </section>
+
+  <!-- OS 3 CAMINHOS -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head__eyebrow">Os 3 caminhos para sair do endividamento</div>
+      <h2 class="section-head__title">Três ações complementares.</h2>
+      <p class="section-head__lead">
+        Cada ação atua em uma frente diferente do seu caso. Você decide quais autorizar.
+      </p>
+    </div>
+
+    <div class="paths">
+
+      <article class="path">
+        <div class="path__num">01</div>
+        <h3 class="path__name">Portabilidade da Crédito</h3>
+        <p class="path__desc">
+          Compartilhamos seus dados com instituições financeiras parceiras para
+          <strong>encontrar condições de crédito mais vantajosas</strong>. <strong>Buscamos alívio da parcela mensal e redução do custo da dívida.</strong>
+        </p>
+        <div class="path__features">
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Resposta em até <strong>15 dias</strong></div>
+          </div>
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Sem custo se não houver migração</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="path">
+        <div class="path__num">02</div>
+        <h3 class="path__name">Renegociação Administrativa</h3>
+        <p class="path__desc">
+          Acionamos cada banco credor compartilhando o diagnóstico para que <strong>proponham um acordo de renegociação</strong>,
+          com a supervisão do Basta <strong>avaliando se a proposta é justa e vantajosa para você.</strong>
+        </p>
+        <div class="path__features">
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Resposta em até <strong>30 dias úteis</strong></div>
+          </div>
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Você decide aceitar ou recusar</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="path">
+        <div class="path__num">03</div>
+        <h3 class="path__name">Representação por Advogado</h3>
+        <p class="path__desc">
+          Compartilhamos todos os seus dados e documentos com um parceiro, <strong>advogado especializado em direito bancário</strong>, que te representa na renegociação litigiosa.
+        </p>
+        <div class="path__features">
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Autorização assinada <strong>diretamente</strong> com o parceiro</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- TERMO DE CONSENTIMENTO + ASSINATURA + CTA -->
+  <section class="consent" id="consent">
+    <div class="consent__eyebrow">Autorização e contratação</div>
+    <h2 class="consent__title">Autorize o Basta a encontrar alternativas<br>para você sair do endividamento.</h2>
+    <p class="consent__lead">
+      Autorize os serviços que você deseja utilizar.
+    </p>
+
+    <label class="consent-select-all is-disabled" id="consentSelectAll">
+      <input type="checkbox" id="consent-all" disabled />
+      <span>Autorizar todos os serviços</span>
+    </label>
+
+    <div class="consent-list">
+      <label class="consent-item" data-consent="portabilidade">
+        <input type="checkbox" id="consent-portabilidade" />
+        <div class="consent-item__body">
+          <div class="consent-item__title">01 · Autorizo a busca de portabilidade de crédito</div>
+          <div class="consent-item__desc">
+            <strong>Finalidade:</strong> compartilhar meus dados financeiros (cadastrais, registro SCR, fluxo
+            de pagamentos e contratos vigentes) com instituições financeiras parceiras para
+            <strong>buscar condições de portabilidade da dívida</strong>. Compartilhamento revogável a qualquer
+            momento via app ou WhatsApp do Basta.
+          </div>
+        </div>
+      </label>
+
+      <label class="consent-item" data-consent="renegociacao">
+        <input type="checkbox" id="consent-renegociacao" />
+        <div class="consent-item__body">
+          <div class="consent-item__title">02 · Autorizo a renegociação administrativa</div>
+          <div class="consent-item__desc">
+            <strong>Finalidade:</strong> compartilhar este diagnóstico com os bancos analisados
+            (Banco do Brasil, Bradesco e Sicredi) para que <strong>proponham acordo de renegociação</strong>,
+            com a supervisão técnica do Basta. Não autorizo automaticamente a aceitação de qualquer proposta —
+            cada acordo passa pela minha decisão final.
+          </div>
+        </div>
+      </label>
+
+      <label class="consent-item" data-consent="judicial">
+        <input type="checkbox" id="consent-judicial" />
+        <div class="consent-item__body">
+          <div class="consent-item__title">03 · Autorizo o encaminhamento para parceiro especializado</div>
+          <div class="consent-item__desc">
+            <strong>Finalidade:</strong> compartilhar este diagnóstico e os documentos coletados com o
+            parceiro especializado do Basta para <strong>análise e contestação das cobranças identificadas</strong>.
+            A contestação só tem início após eu assinar a autorização diretamente com o parceiro,
+            em ato separado.
+          </div>
+        </div>
+      </label>
+    </div>
+
+    <!-- LEGAL-NOTE: revisar conformidade do termo:
+         (a) granularidade Open Finance (Res. BCB 32 exige finalidade específica e prazo)
+         (b) base legal LGPD: consentimento (art. 7º, I) — texto da finalidade precisa ser estanque
+         (c) Código de Ética OAB (art. 39 e ss): a relação com o escritório parceiro NÃO PODE
+             configurar captação de cliente. O ato 03 está desenhado para que o cliente apenas
+             AUTORIZE A ANÁLISE. O mandato ao escritório é evento posterior e separado.
+             Confirmar redação com o escritório parceiro antes de publicar. -->
+
+    <div class="consent__sign">
+      <div class="field">
+        <label class="field__label" for="sign-name">Nome completo</label>
+        <input class="field__input" id="sign-name" type="text" placeholder="Como aparece no seu RG" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="sign-cpf">CPF</label>
+        <input class="field__input" id="sign-cpf" type="text" placeholder="000.000.000-00" inputmode="numeric" autocomplete="off" />
+      </div>
+    </div>
+
+    <p class="consent__legal">
+      Ao clicar em <strong>"Autorizar e assinar"</strong>, declaro que li e compreendi este Diagnóstico,
+      autorizo o Basta a executar somente os caminhos que marquei acima, e concordo com os
+      <strong>honorários de êxito</strong> conforme descrito (10% Basta + 20% parceiro especializado = 30%
+      sobre a economia projetada total). Esta autorização é registrada com data, hora e IP, e pode ser
+      revogada a qualquer momento.
+    </p>
+
+    <button class="consent__cta" id="ctaSign" type="button" disabled>
+      Autorizar e assinar
+    </button>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer class="doc-footer">
+    <div class="doc-footer__row">
+      <div>
+        <strong>Basta Tecnologia LTDA</strong><br>
+        CNPJ <strong>00.000.000/0001-00</strong> · São Paulo, SP<br>
+        Suporte WhatsApp: <a href="https://wa.me/5511000000000">+55 (11) 0000-0000</a>
+      </div>
+      <div>
+        Diagnóstico nº <strong>BST-2026-000507</strong> · gerado em 06/05/2026.
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+  </div><!-- /.main -->
+</div><!-- /.dashboard -->
+
+<!-- MODAL — Envio via WhatsApp -->
+<div class="modal-overlay" id="sendModal" role="dialog" aria-modal="true" aria-labelledby="sendModalTitle">
+  <div class="modal">
+    <div class="modal__eyebrow">Envio ao cliente</div>
+    <h2 class="modal__title" id="sendModalTitle">Enviar diagnóstico via WhatsApp</h2>
+    <p class="modal__lead">
+      O cliente receberá uma mensagem com o link único para visualizar e autorizar os caminhos.
+      A mensagem usa o template <strong>aprovado pela Meta</strong> e é registrada no histórico deste diagnóstico.
+    </p>
+
+    <div class="modal-row">
+      <div class="modal-row__label">Cliente</div>
+      <div class="modal-row__value">Maria Carvalho</div>
+    </div>
+
+    <div class="modal-row">
+      <div class="modal-row__label">WhatsApp</div>
+      <div class="modal-row__value">+55 11 99999-9999</div>
+    </div>
+
+    <div class="modal-row">
+      <div class="modal-row__label">Template (aprovado pela Meta)</div>
+      <div class="modal-template">
+        <div class="modal-template__head">Mensagem que será enviada</div>
+        Olá, <strong>Maria</strong>. Aqui é do <strong>Basta</strong>. Seu Diagnóstico está pronto — analisamos suas operações e identificamos oportunidades concretas de revisão. Toque no link abaixo para ler e decidir os próximos passos:<br><br>
+        <span class="modal-template__link">https://app.basta.com.br/d/BST-2026-000507?t=preview-ab12cd34</span>
+      </div>
+    </div>
+
+    <div class="modal__actions">
+      <button class="btn-modal-cancel" onclick="closeSendModal()">Cancelar</button>
+      <button class="btn-modal-confirm" onclick="confirmSend()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Confirmar envio
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-overlay" id="logoutModal" role="presentation">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle" aria-describedby="logoutDesc">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc" id="logoutDesc">Você precisará entrar novamente para acessar suas informações.</p>
+    <div class="logout-modal__actions">
+      <button type="button" class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button type="button" class="btn-logout-confirm" onclick="window.location.href='03_basta-login.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Logout ───────────────────────────────────────────────── */
+  let lastFocusedElement = null;
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    document.getElementById('logoutModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+  function closeLogout() {
+    document.getElementById('logoutModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+  document.getElementById('logoutModal').addEventListener('click', function(e){ if (e.target === this) closeLogout(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && document.getElementById('logoutModal').classList.contains('is-open')) closeLogout();
+  });
+</script>
+
+<script>
+  /* ── Revogar link público do diagnóstico (mock) ── */
+  function admRevogarLink() {
+    var ok = confirm('Revogar este link e gerar um novo? O cliente perderá o acesso pelo link atual.');
+    if (ok) alert('Link revogado (mock)');
+  }
+
+  /* ── Marca visual no consent (preview, não funcional) ── */
+  document.querySelectorAll('.consent-item input[type="checkbox"]').forEach(function(input){
+    input.disabled = true;
+  });
+  document.getElementById('sign-name').disabled = true;
+  document.getElementById('sign-cpf').disabled = true;
+  /* CTA permanece desabilitado em modo preview */
+
+  /* ── Toggle histórico ── */
+  function toggleHistory() {
+    const h = document.getElementById('abHistory');
+    const t = document.getElementById('historyToggle');
+    h.classList.toggle('is-open');
+    t.innerHTML = h.classList.contains('is-open')
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg> Recolher histórico'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Ver histórico';
+  }
+
+  /* ── Copiar link ── */
+  function copyLink() {
+    const url = document.getElementById('abLinkUrl').textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function(){
+        alert('Link copiado: ' + url);
+      });
+    } else {
+      alert('Link: ' + url);
+    }
+  }
+
+  /* ── Modal de envio ── */
+  function openSendModal() {
+    document.getElementById('sendModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSendModal() {
+    document.getElementById('sendModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  function confirmSend() {
+    closeSendModal();
+    /* INTEGRAÇÃO: chamar backend para disparar template Meta e registrar evento.
+       Aqui apenas atualiza visualmente o status. */
+    const status = document.getElementById('abStatus');
+    status.textContent = 'Enviado — aguardando cliente';
+    status.classList.remove('ab-status--draft');
+    status.classList.add('ab-status--sent');
+    alert('Mensagem disparada via WhatsApp Business API (mock). O histórico foi atualizado.');
+  }
+  document.getElementById('sendModal').addEventListener('click', function(e){
+    if (e.target === this) closeSendModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && document.getElementById('sendModal').classList.contains('is-open')) {
+      closeSendModal();
+    }
+  });
+</script>
+
+</body>
+</html>

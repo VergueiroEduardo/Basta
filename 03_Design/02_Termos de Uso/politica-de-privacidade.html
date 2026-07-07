@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidade — Basta.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #1A1A1A;
+      --white: #FFFFFF;
+      --off-white: #F5F3EF;
+      --green: #42b449;
+      --gray-600: #4A4A4A;
+      --gray-300: #D4D4D4;
+      --max-w: 1200px;
+      --px: 24px;
+      --px-lg: 80px;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --t: 240ms var(--ease);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--black);
+      background-color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--black);
+      color: var(--white);
+      padding: var(--px) var(--px);
+    }
+
+    .header-container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+      font-weight: 700;
+      font-size: 18px;
+      transition: opacity var(--t);
+    }
+
+    .logo:hover {
+      opacity: 0.8;
+    }
+
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: opacity var(--t);
+      margin-left: 32px;
+    }
+
+    nav a:hover {
+      opacity: 0.7;
+    }
+
+    /* Main Content */
+    main {
+      background-color: var(--white);
+      padding-top: var(--px-lg);
+      padding-bottom: var(--px-lg);
+      padding-left: var(--px);
+      padding-right: var(--px);
+      min-height: calc(100vh - 200px);
+    }
+
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--gray-600);
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+
+    h2 {
+      font-size: clamp(20px, 3vw, 24px);
+      font-weight: 700;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    strong {
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    ul {
+      padding-left: 24px;
+      list-style-type: disc;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--gray-600);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+
+    table th {
+      background-color: var(--black);
+      color: var(--white);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    table td {
+      border: 1px solid var(--gray-300);
+      padding: 12px 16px;
+      color: var(--gray-600);
+    }
+
+    table tr:nth-child(even) {
+      background-color: var(--off-white);
+    }
+
+    .last-updated {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--gray-300);
+      border-top: 1px solid var(--gray-300);
+      padding-top: 32px;
+      margin-top: 64px;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--black);
+      color: var(--white);
+      padding: 48px var(--px);
+      text-align: center;
+    }
+
+    .footer-container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    footer p {
+      font-size: 14px;
+      color: var(--white);
+      margin: 0;
+    }
+
+    footer a {
+      color: var(--white);
+      text-decoration: underline;
+      transition: opacity var(--t);
+    }
+
+    footer a:hover {
+      opacity: 0.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 16px var(--px);
+      }
+
+      nav {
+        display: none;
+      }
+
+      main {
+        padding-left: var(--px);
+        padding-right: var(--px);
+        padding-top: 48px;
+        padding-bottom: 48px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      table th, table td {
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Symbol -->
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="logo-symbol" viewBox="0 0 602.25 254.23">
+      <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+      <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+      <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+      <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+    </symbol>
+  </svg>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="01_basta-landing.html" class="logo">
+        <svg viewBox="0 0 602.25 254.23">
+          <use href="#logo-symbol"></use>
+        </svg>
+        Basta.
+      </a>
+      <nav>
+        <a href="01_basta-landing.html#sobre">Sobre</a>
+        <a href="01_basta-landing.html#como-funciona">Como funciona</a>
+        <a href="01_basta-landing.html#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <article>
+      <h1 class="page-title">Política de Privacidade</h1>
+      <p class="subtitle">Aliado Legal Tecnologia LTDA — CNPJ: 40.115.118/0001-80 | Vigência: 31 de março de 2026 | Versão 1.0</p>
+
+      <h2>1. Controlador de Dados</h2>
+      <p>O controlador dos dados pessoais tratados por meio da Plataforma Basta. é a <strong>Aliado Legal Tecnologia LTDA</strong>, pessoa jurídica de direito privado, inscrita no CNPJ sob o nº 40.115.118/0001-80, com nome fantasia Basta.</p>
+      <p><strong>Encarregado de Dados (DPO):</strong> ola@bastaeponto.com.br</p>
+
+      <h2>2. Dados Pessoais Coletados</h2>
+      <p>A Basta. coleta e trata as seguintes categorias de dados pessoais:</p>
+
+      <h3>2.1. Dados Cadastrais</h3>
+      <p>Coletados diretamente do Usuário no momento do cadastro:</p>
+      <ul>
+        <li>Nome completo;</li>
+        <li>CPF;</li>
+        <li>Número de telefone (WhatsApp);</li>
+        <li>E-mail (quando fornecido).</li>
+      </ul>
+
+      <h3>2.2. Dados Financeiros (via Open Finance)</h3>
+      <p>Coletados mediante consentimento específico do Usuário, conforme regulamentação do Banco Central do Brasil:</p>
+      <ul>
+        <li>Dados cadastrais vinculados às instituições financeiras;</li>
+        <li>Contas correntes e poupança: saldos, limites, extratos e histórico de transações;</li>
+        <li>Cartões de crédito: faturas, limites, parcelas, datas de vencimento e fechamento;</li>
+        <li>Operações de crédito: empréstimos, financiamentos, taxas contratadas, parcelas e saldos devedores;</li>
+        <li>Investimentos (quando disponíveis no escopo Open Finance);</li>
+        <li>Transações e movimentações financeiras.</li>
+      </ul>
+      <p><strong>Nota importante:</strong> dados financeiros podem ser considerados dados pessoais sensíveis pela Autoridade Nacional de Proteção de Dados (ANPD), em razão de seu potencial discriminatório. A Basta. trata esses dados com o mais alto nível de proteção e segurança.</p>
+
+      <h3>2.3. Dados de Uso e Técnicos</h3>
+      <ul>
+        <li>Registros de acesso e interação com a Plataforma (logs);</li>
+        <li>Informações do dispositivo (modelo, sistema operacional);</li>
+        <li>Dados de navegação no ambiente web (quando aplicável);</li>
+        <li>Endereço IP e geolocalização aproximada.</li>
+      </ul>
+
+      <h2>3. Base Legal para o Tratamento</h2>
+      <p>O tratamento de dados pessoais pela Basta. fundamenta-se nas seguintes bases legais da LGPD (art. 7º e art. 11):</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Base Legal</th>
+            <th>Fundamento LGPD</th>
+            <th>Aplicação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Consentimento</td>
+            <td>Art. 7º, I / Art. 11, I</td>
+            <td>Conexão Open Finance e compartilhamento de dados financeiros</td>
+          </tr>
+          <tr>
+            <td>Execução de contrato</td>
+            <td>Art. 7º, V</td>
+            <td>Prestação dos serviços de diagnóstico e reestruturação</td>
+          </tr>
+          <tr>
+            <td>Legítimo interesse</td>
+            <td>Art. 7º, IX</td>
+            <td>Melhoria da Plataforma, análises agregadas, prevenção a fraudes</td>
+          </tr>
+          <tr>
+            <td>Obrigação legal/regulatória</td>
+            <td>Art. 7º, II</td>
+            <td>Cumprimento de regulamentação do BCB, LGPD e legislação tributária</td>
+          </tr>
+          <tr>
+            <td>Exercício regular de direitos</td>
+            <td>Art. 7º, VI</td>
+            <td>Defesa em processos judiciais, administrativos ou arbitrais</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>4. Finalidades do Tratamento</h2>
+      <p>Os dados pessoais são tratados para as seguintes finalidades:</p>
+      <ul>
+        <li>Realizar o cadastro e a autenticação do Usuário;</li>
+        <li>Conectar-se ao Open Finance e receber dados financeiros;</li>
+        <li>Elaborar o Diagnóstico Financeiro;</li>
+        <li>Identificar cobranças indevidas, taxas abusivas e oportunidades de economia;</li>
+        <li>Construir e apresentar Propostas de Reestruturação;</li>
+        <li>Intermediar negociações com Credores (mediante autorização do Usuário);</li>
+        <li>Processar a portabilidade de crédito;</li>
+        <li>Comunicar-se com o Usuário via WhatsApp;</li>
+        <li>Aprimorar a Plataforma e a experiência do Usuário;</li>
+        <li>Cumprir obrigações legais e regulatórias;</li>
+        <li>Prevenir fraudes e garantir a segurança da Plataforma.</li>
+      </ul>
+      <p>A Basta. observa o <strong>princípio da necessidade</strong> (art. 6º, III, LGPD): somente são coletados e tratados os dados estritamente necessários para as finalidades descritas acima.</p>
+
+      <h2>5. Open Finance — Seção Específica</h2>
+
+      <h3>5.1. Regulamentação</h3>
+      <p>O compartilhamento de dados via Open Finance é regulamentado pelo Banco Central do Brasil, especialmente pela Resolução Conjunta nº 1/2020, Resolução BCB nº 32/2020 e normas complementares. A Basta. cumpre integralmente as exigências regulatórias para receptoras de dados.</p>
+
+      <h3>5.2. Pluggy como Operadora</h3>
+      <p>A conexão aos dados do Open Finance é realizada por meio da Pluggy, infraestrutura certificada pelo Banco Central do Brasil. Nos termos da LGPD, a Pluggy atua como operadora de dados, tratando dados pessoais em nome e por conta da Basta. (controladora), conforme instruções contratuais específicas.</p>
+
+      <h3>5.3. Consentimento Granular</h3>
+      <p>O consentimento para compartilhamento de dados via Open Finance é:</p>
+      <ul>
+        <li><strong>Específico:</strong> o Usuário autoriza o compartilhamento de escopos determinados de dados;</li>
+        <li><strong>Informado:</strong> antes de consentir, o Usuário recebe informações claras sobre quais dados serão acessados e para quais finalidades;</li>
+        <li><strong>Temporário:</strong> o consentimento tem vigência máxima de 12 (doze) meses, conforme regulamentação do BCB;</li>
+        <li><strong>Revogável:</strong> pode ser revogado a qualquer momento, sem prejuízo da licitude do tratamento realizado anteriormente.</li>
+      </ul>
+
+      <h3>5.4. Tratamento Após Revogação</h3>
+      <p>Após a revogação do consentimento Open Finance, a Basta. cessa imediatamente o acesso a novos dados. Os dados já coletados poderão ser mantidos para:</p>
+      <ul>
+        <li>Conclusão de serviços em andamento (base legal: execução de contrato);</li>
+        <li>Cumprimento de obrigações legais e regulatórias;</li>
+        <li>Exercício regular de direitos em processos judiciais ou administrativos.</li>
+      </ul>
+
+      <h2>6. Compartilhamento de Dados</h2>
+      <p>A Basta. poderá compartilhar dados pessoais do Usuário nas seguintes hipóteses:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Destinatário</th>
+            <th>Finalidade</th>
+            <th>Base Legal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pluggy</td>
+            <td>Operação da conexão Open Finance</td>
+            <td>Execução de contrato + regulamentação BCB</td>
+          </tr>
+          <tr>
+            <td>Credores</td>
+            <td>Negociação de dívidas (somente dados necessários, com autorização)</td>
+            <td>Consentimento do Usuário</td>
+          </tr>
+          <tr>
+            <td>Z-API / WhatsApp (Meta)</td>
+            <td>Envio de mensagens operacionais</td>
+            <td>Execução de contrato</td>
+          </tr>
+          <tr>
+            <td>Supabase</td>
+            <td>Armazenamento seguro de dados (infra cloud)</td>
+            <td>Execução de contrato</td>
+          </tr>
+          <tr>
+            <td>Autoridades competentes</td>
+            <td>Cumprimento de determinações legais, judiciais ou regulatórias</td>
+            <td>Obrigação legal</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>A Basta. <strong>não vende, não comercializa e não compartilha dados pessoais para fins publicitários</strong>. O compartilhamento ocorre exclusivamente para as finalidades descritas nesta Política e nos Termos de Uso.</p>
+
+      <h2>7. Armazenamento e Segurança</h2>
+      <p>Os dados pessoais são armazenados em infraestrutura cloud (Supabase) localizada no Brasil, em conformidade com as exigências de segurança da LGPD e da regulamentação do Banco Central.</p>
+      <p>As medidas de segurança adotadas incluem:</p>
+      <ul>
+        <li>Criptografia de dados em trânsito (TLS/SSL) e em repouso;</li>
+        <li>Controle de acesso baseado em perfis e princípio do menor privilégio;</li>
+        <li>Monitoramento contínuo de acessos e anomalias;</li>
+        <li>Backup automatizado com redundância;</li>
+        <li>Revisão periódica de vulnerabilidades e atualizações de segurança.</li>
+      </ul>
+      <p>Em caso de incidente de segurança que envolva dados pessoais, a Basta. comunicará a Autoridade Nacional de Proteção de Dados (ANPD) e os titulares afetados, nos termos do art. 48 da LGPD, em prazo razoável.</p>
+
+      <h2>8. Retenção de Dados</h2>
+      <p>Os dados pessoais serão mantidos pelo tempo necessário ao cumprimento das finalidades para as quais foram coletados, observados os seguintes critérios:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Categoria de Dados</th>
+            <th>Prazo de Retenção</th>
+            <th>Fundamentação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dados cadastrais</td>
+            <td>Duração do contrato + 5 anos</td>
+            <td>Prescrição civil (art. 206, § 5º, CC)</td>
+          </tr>
+          <tr>
+            <td>Dados financeiros (Open Finance)</td>
+            <td>Duração do serviço + 5 anos</td>
+            <td>Prescrição + regulamentação BCB</td>
+          </tr>
+          <tr>
+            <td>Registros de acesso (logs)</td>
+            <td>6 meses</td>
+            <td>Marco Civil da Internet (art. 15)</td>
+          </tr>
+          <tr>
+            <td>Dados para obrigações fiscais</td>
+            <td>5 anos</td>
+            <td>Código Tributário Nacional</td>
+          </tr>
+          <tr>
+            <td>Dados para defesa em processos</td>
+            <td>Até trânsito em julgado</td>
+            <td>Exercício regular de direitos</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Decorridos os prazos de retenção, os dados serão eliminados ou anonimizados, salvo obrigação legal em contrário.</p>
+
+      <h2>9. Direitos do Titular</h2>
+      <p>Nos termos do art. 18 da LGPD, o Usuário tem direito a:</p>
+      <ul>
+        <li><strong>Confirmação e acesso:</strong> saber se a Basta. trata seus dados e acessar os dados tratados;</li>
+        <li><strong>Correção:</strong> solicitar a correção de dados incompletos, inexatos ou desatualizados;</li>
+        <li><strong>Anonimização, bloqueio ou eliminação:</strong> de dados desnecessários, excessivos ou tratados em desconformidade;</li>
+        <li><strong>Portabilidade:</strong> receber seus dados em formato estruturado para transferência a outro fornecedor;</li>
+        <li><strong>Eliminação:</strong> solicitar a exclusão de dados tratados com base no consentimento;</li>
+        <li><strong>Informação sobre compartilhamento:</strong> saber com quais entidades públicas ou privadas seus dados foram compartilhados;</li>
+        <li><strong>Revogação do consentimento:</strong> revogar o consentimento a qualquer momento, sem prejuízo da licitude do tratamento anterior;</li>
+        <li><strong>Oposição:</strong> opor-se ao tratamento quando realizado com base em hipótese diferente do consentimento, em caso de descumprimento da LGPD;</li>
+        <li><strong>Revisão de decisões automatizadas:</strong> solicitar revisão de decisões tomadas unicamente com base em tratamento automatizado.</li>
+      </ul>
+
+      <h3>9.1. Como Exercer seus Direitos</h3>
+      <p>O Usuário pode exercer qualquer dos direitos acima por meio dos seguintes canais:</p>
+      <ul>
+        <li>WhatsApp: canal principal da Plataforma;</li>
+        <li>E-mail: ola@bastaeponto.com.br.</li>
+      </ul>
+      <p>As solicitações serão respondidas no prazo de 15 (quinze) dias úteis, conforme regulamentação da ANPD, podendo ser prorrogado em caso de complexidade, mediante justificativa.</p>
+
+      <h2>10. Cookies e Tecnologias de Rastreamento</h2>
+      <p>O ambiente web da Basta. pode utilizar cookies e tecnologias similares para:</p>
+      <ul>
+        <li>Garantir o funcionamento técnico da Plataforma (cookies essenciais);</li>
+        <li>Análise de uso e desempenho (cookies analíticos);</li>
+        <li>Personalização da experiência do Usuário (cookies de preferências).</li>
+      </ul>
+      <p>O Usuário pode gerenciar suas preferências de cookies diretamente no navegador. A desativação de cookies essenciais poderá impactar o funcionamento da Plataforma.</p>
+      <p>A Basta. não utiliza cookies para fins publicitários de terceiros.</p>
+
+      <h2>11. Transferência Internacional de Dados</h2>
+      <p>A infraestrutura principal da Basta. está localizada no Brasil. Caso seja necessária a transferência de dados para servidores localizados fora do país (por exemplo, para serviços auxiliares de processamento), a Basta. adotará as salvaguardas previstas nos arts. 33 a 36 da LGPD, incluindo:</p>
+      <ul>
+        <li>Cláusulas contratuais específicas que garantam o nível de proteção exigido pela LGPD;</li>
+        <li>Verificação de que o país de destino oferece grau adequado de proteção;</li>
+        <li>Obtenção de consentimento específico do titular, quando aplicável.</li>
+      </ul>
+
+      <h2>12. Menores de Idade</h2>
+      <p>A Plataforma Basta. é destinada exclusivamente a pessoas maiores de 18 (dezoito) anos. A Basta. não coleta intencionalmente dados de menores. Caso identifique a coleta inadvertida de dados de menor, procederá à exclusão imediata.</p>
+
+      <h2>13. Alterações desta Política</h2>
+      <p>Esta Política de Privacidade poderá ser atualizada para refletir mudanças nos serviços, na legislação ou nas práticas de tratamento de dados. Alterações relevantes serão comunicadas ao Usuário com antecedência mínima de 15 (quinze) dias, por meio do WhatsApp e/ou e-mail.</p>
+      <p>A versão atualizada estará sempre disponível na Plataforma, com indicação da data da última alteração.</p>
+
+      <h2>14. Contato</h2>
+      <p>Para dúvidas, solicitações ou reclamações sobre esta Política de Privacidade ou sobre o tratamento de seus dados pessoais:</p>
+      <p><strong>Basta.</strong> — Aliado Legal Tecnologia LTDA<br>
+      <strong>CNPJ:</strong> 40.115.118/0001-80<br>
+      <strong>Encarregado de Dados (DPO):</strong> ola@bastaeponto.com.br<br>
+      <strong>Canal de atendimento:</strong> WhatsApp da Plataforma</p>
+      <p>Caso o Usuário entenda que o tratamento de seus dados pessoais viola a LGPD, poderá apresentar reclamação à Autoridade Nacional de Proteção de Dados (ANPD), nos termos do art. 55-J, V, da LGPD.</p>
+
+      <p class="last-updated">Última atualização: 31 de março de 2026</p>
+    </article>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <p>&copy; 2026 Basta. — Aliado Legal Tecnologia LTDA. Todos os direitos reservados. | <a href="01_basta-landing.html">Voltar para home</a></p>
+    </div>
+  </footer>
+</body>
+</html>

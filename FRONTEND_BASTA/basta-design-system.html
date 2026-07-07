@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basta. — Design System Completo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ════════════════════════════════════════════════════════════════════════════════
+     DESIGN SYSTEM BASTA — TOKENS CENTRALIZADOS
+     Fonte: home-v3.html (verificado contra código-fonte real)
+     Data: Março 2026
+     ════════════════════════════════════════════════════════════════════════════════ */
+  :root {
+    /* 01 — PALETA DE CORES */
+    --black:              #1A1A1A;  /* Texto primário, bordas, elementos de destaque */
+    --white:              #FFFFFF;  /* Fundo padrão, texto sobre escuro */
+    --off-white:          #F5F3EF;  /* Fundo alternativo seções, hover states */
+    --sage:               #bdc0ac;  /* Accent terciário (terra, bege) */
+    --green:              #42b449;  /* Brand accent — buttons, highlights, success */
+    --gray-600:           #4A4A4A;  /* Texto secundário, labels, subtítulos */
+    --gray-300:           #D4D4D4;  /* Bordas, divisores, linhas */
+    --gray-200:           #EEEEEE;  /* Fundo modal/overlay area */
+    --warning:            #F59E0B;  /* Status warning/pendente */
+    --error:              #DC2626;  /* Destrutivo (logout, delete) */
+    --blue:               #3B9EE8;  /* Brand azul — informativo, destaque secundário */
+    --blue-dark:          #1A3A8F;  /* Azul profundo — fundos, headers */
+    --info:               #3B9EE8;  /* Informativo, banners */
+    /* 02 — TIPOGRAFIA */
+    --font-family:        'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-weight-light:  300;  /* Apenas em quotes */
+    --font-weight-normal: 400;  /* Body padrão */
+    --font-weight-medium: 500;  /* Subtítulos, labels */
+    --font-weight-semibold: 600;  /* Títulos menores */
+    --font-weight-bold:   700;  /* Títulos */
+    --font-weight-black:  800;  /* Headlines protagonistas */
+    /* Type scale — desktop first */
+    --fs-xs:              12px;  /* Labels, badges, small text */
+    --fs-sm:              13px;  /* Form labels, hints */
+    --fs-base:            16px;  /* Body padrão, inputs */
+    --fs-lg:              17px;  /* Body maior, seções */
+    --fs-xl:              18px;  /* Títulos menores */
+    --fs-2xl:             20px;  /* Títulos médios */
+    --fs-3xl:             24px;  /* Headlines seções */
+    --fs-4xl:             40px;  /* Headlines grandes */
+    --fs-5xl:             56px;  /* Headlines heroicas */
+    /* Line height por contexto */
+    --lh-tight:           1.02;   /* Headlines (aperto visual) */
+    --lh-snug:            1.2;    /* Títulos */
+    --lh-normal:          1.6;    /* Body padrão */
+    --lh-relaxed:         1.75;   /* Body em seções longas */
+    /* Letter spacing */
+    --ls-tight:           -0.03em;  /* Headlines */
+    --ls-snug:            -0.01em;  /* Subtítulos */
+    --ls-normal:          0;
+    --ls-wide:            0.04em;   /* Botões */
+    --ls-wider:           0.06em;   /* Labels, uppercase */
+    --ls-widest:          0.14em;   /* Muito aberto */
+    /* 03 — ESPAÇAMENTO */
+    --space-xs:           4px;
+    --space-sm:           8px;
+    --space-md:           12px;
+    --space-lg:           16px;
+    --space-xl:           24px;
+    --space-2xl:          32px;
+    --space-3xl:          40px;
+    --space-4xl:          48px;
+    --space-5xl:          64px;
+    --space-6xl:          80px;
+    /* Padding padrão */
+    --px-mobile:          16px;  /* Lateral mobile */
+    --px-desktop:         24px;  /* Lateral desktop */
+    --px-lg:              80px;  /* Grande (seções) */
+    /* 04 — MOTION & EASING */
+    --ease-out:           cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-in:            cubic-bezier(0.4, 1, 0.2, 0);
+    --duration-fast:      150ms;
+    --duration-normal:    240ms;
+    --duration-slow:      300ms;
+    --duration-deliberate: 600ms;
+    --transition:         var(--duration-normal) var(--ease-out);
+    /* 05 — LAYOUT */
+    --max-width:          1200px;
+    --border-radius:      0;  /* Brutalismo: sem arredondamento */
+    --border-width-thin:  1px;
+    --border-width-thick: 2px;
+    /* Sombras (brutalismo = mínimo) */
+    --shadow-none:        none;
+    --shadow-sm:          0 2px 4px rgba(26, 26, 26, 0.1);
+    --shadow-md:          0 4px 12px rgba(26, 26, 26, 0.15);
+    --shadow-lg:          0 8px 24px rgba(26, 26, 26, 0.2);
+    --shadow-inset:       inset 2px 0 0 var(--black);
+  }
+  /* Reset + Tipografia base */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    font-family: var(--font-family);
+    font-size: var(--fs-base);
+    line-height: var(--lh-normal);
+    color: var(--black);
+    background: var(--white);
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-weight: inherit;
+  }
+  input, select, textarea {
+    font-family: inherit;
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     LAYOUT & STRUCTURE
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .ds-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--px-mobile);
+  }
+  @media (min-width: 1024px) {
+    .ds-container {
+      padding: var(--space-xl) var(--px-desktop);
+    }
+  }
+  .ds-header {
+    border-bottom: var(--border-width-thick) solid var(--black);
+    padding-bottom: var(--space-xl);
+    margin-bottom: var(--space-5xl);
+  }
+  .ds-logo {
+    font-size: var(--fs-4xl);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-tight);
+    margin-bottom: var(--space-sm);
+  }
+  .ds-subtitle {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-md);
+  }
+  .ds-meta {
+    font-size: 11px;
+    color: var(--gray-600);
+    margin-top: var(--space-md);
+  }
+  .ds-section {
+    margin-bottom: var(--space-6xl);
+  }
+  .ds-section-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    border-bottom: var(--border-width-thin) solid var(--gray-300);
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-3xl);
+  }
+  .ds-subsection {
+    margin-bottom: var(--space-3xl);
+  }
+  .ds-subsection-title {
+    font-size: var(--fs-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--black);
+    margin-bottom: var(--space-lg);
+  }
+  .component-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-lg);
+    display: block;
+  }
+  .component-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    align-items: center;
+    margin-bottom: var(--space-2xl);
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    margin-bottom: var(--space-3xl);
+  }
+  @media (max-width: 767px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  @media (max-width: 1024px) {
+    .grid-3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+  .dark-bg {
+    background: var(--black);
+    color: var(--white);
+    padding: var(--space-3xl);
+    margin: var(--space-2xl) 0;
+  }
+  .dark-bg .component-label {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     05 — BOTÕES
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    font-size: var(--fs-xs);
+    padding: 18px 36px;
+    min-height: 56px;
+    transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    border-radius: var(--border-radius);
+  }
+  @media (min-width: 768px) {
+    .btn {
+      font-size: var(--fs-sm);
+      padding: 20px 48px;
+      min-height: 60px;
+    }
+  }
+  .btn-sm {
+    font-size: var(--fs-xs);
+    padding: 10px 20px;
+    min-height: 40px;
+  }
+  /* Primary — Verde */
+  .btn-primary {
+    background: var(--green);
+    color: var(--white);
+    border: var(--border-width-thick) solid var(--green);
+  }
+  .btn-primary:hover {
+    background: #389d3e;
+    border-color: #389d3e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(66, 180, 73, 0.28);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  /* Outline — Preto */
+  .btn-outline-black {
+    background: transparent;
+    color: var(--black);
+    border: var(--border-width-thick) solid var(--black);
+  }
+  .btn-outline-black:hover {
+    background: var(--black);
+    color: var(--white);
+  }
+  /* Outline — Branco */
+  .btn-outline-white {
+    background: transparent;
+    color: var(--white);
+    border: var(--border-width-thick) solid var(--white);
+  }
+  .btn-outline-white:hover {
+    background: var(--white);
+    color: var(--black);
+  }
+  /* Outline — Branco → Verde (NOVO) */
+  .btn-outline-white-green {
+    background: transparent;
+    color: var(--white);
+    border: var(--border-width-thick) solid var(--white);
+  }
+  .btn-outline-white-green:hover {
+    background: transparent;
+    color: var(--green);
+    border-color: var(--green);
+  }
+  /* Error — Destrutor */
+  .btn-error {
+    background: var(--error);
+    color: var(--white);
+    border: var(--border-width-thick) solid var(--error);
+  }
+  .btn-error:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     06 — CARDS
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .card {
+    background: var(--white);
+    border: var(--border-width-thick) solid var(--black);
+    padding: var(--space-2xl);
+    transition: transform var(--transition), box-shadow var(--transition);
+    border-radius: var(--border-radius);
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 var(--black);
+  }
+  .card-dark {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+  .card-title {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-md);
+  }
+  .card-dark .card-title {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .card-content {
+    font-size: var(--fs-lg);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--lh-relaxed);
+    color: var(--gray-600);
+  }
+  .card-dark .card-content {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     07 — STEP ITEMS
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .step-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: var(--space-lg);
+    align-items: flex-start;
+    background: var(--white);
+    border: var(--border-width-thin) solid var(--gray-300);
+    border-left: 3px solid var(--green);
+    padding: 20px var(--space-xl);
+    margin-bottom: var(--space-md);
+    transition: background var(--transition), box-shadow var(--duration-slow) var(--ease-out);
+    border-radius: var(--border-radius);
+  }
+  .step-item:hover {
+    background: var(--off-white);
+    box-shadow: var(--shadow-inset);
+  }
+  @media (min-width: 768px) {
+    .step-item {
+      grid-template-columns: 80px 1fr auto;
+      gap: var(--space-2xl);
+      padding: var(--space-2xl);
+    }
+  }
+  .step-badge {
+    width: 40px;
+    height: 40px;
+    background: var(--green);
+    color: var(--white);
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    flex-shrink: 0;
+  }
+  .step-badge.alt {
+    background: var(--black);
+  }
+  .step-content {
+    flex: 1;
+  }
+  .step-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: var(--space-sm);
+  }
+  .step-desc {
+    font-size: var(--fs-sm);
+    color: var(--gray-600);
+    line-height: var(--lh-snug);
+  }
+  .step-status {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .step-status.done {
+    color: var(--green);
+  }
+  .step-status.pending {
+    color: var(--warning);
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     10 — STATUS BADGES (INLINE)
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .badge {
+    display: inline-block;
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--border-radius);
+    white-space: nowrap;
+  }
+  .badge-success {
+    background: transparent;
+    color: var(--green);
+    border: var(--border-width-thin) solid var(--green);
+  }
+  .badge-warning {
+    background: transparent;
+    color: var(--warning);
+    border: var(--border-width-thin) solid var(--warning);
+  }
+  .badge-info {
+    background: var(--info);
+    color: var(--white);
+    border: none;
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     11 — FORM FIELDS (espaçamento compacto em blocos)
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--space-lg);  /* 16px entre campos do mesmo bloco */
+  }
+  .form-group + .form-group.new-block {
+    margin-top: var(--space-2xl);  /* 32px para novo bloco */
+  }
+  .form-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-sm);  /* 8px entre label e input */
+  }
+  .form-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .form-input {
+    width: 100%;
+    padding: 14px var(--space-lg);
+    font-family: var(--font-family);
+    font-size: var(--fs-base);
+    border: var(--border-width-thin) solid var(--gray-300);
+    background: var(--white);
+    color: var(--black);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    border-radius: var(--border-radius);
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--black);
+    box-shadow: inset 0 0 0 1px var(--black);
+  }
+  .form-input::placeholder {
+    color: var(--gray-600);
+  }
+  .form-action-link {
+    position: absolute;
+    right: var(--space-lg);
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--info);
+    cursor: pointer;
+    transition: color var(--transition);
+    user-select: none;
+  }
+  .form-action-link:hover {
+    color: var(--black);
+  }
+  .form-select {
+    width: 100%;
+    padding: 12px var(--space-lg);
+    font-family: var(--font-family);
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    border: var(--border-width-thin) solid var(--gray-300);
+    background: var(--white);
+    color: var(--gray-600);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A4A4A' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+    padding-right: 40px;
+    border-radius: var(--border-radius);
+  }
+  .form-select:focus {
+    outline: none;
+    border-color: var(--black);
+    box-shadow: inset 0 0 0 1px var(--black);
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     12 — EXPANDABLE ROWS
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .expandable-row {
+    background: var(--white);
+    border: var(--border-width-thin) solid var(--gray-300);
+    margin-bottom: var(--space-md);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+  }
+  .expandable-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background var(--transition);
+    user-select: none;
+  }
+  @media (min-width: 768px) {
+    .expandable-header {
+      padding: 20px var(--space-xl);
+    }
+  }
+  .expandable-header:hover {
+    background: var(--off-white);
+  }
+  .expandable-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--black);
+  }
+  .expandable-subtitle {
+    font-size: var(--fs-xs);
+    color: var(--gray-600);
+    margin-top: 2px;
+  }
+  .expandable-count {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-black);
+    color: var(--gray-600);
+    margin-right: var(--space-lg);
+    min-width: 30px;
+    text-align: right;
+  }
+  .expandable-chevron {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition);
+    color: var(--gray-600);
+    flex-shrink: 0;
+  }
+  .expandable-row.open .expandable-chevron {
+    transform: rotate(180deg);
+  }
+  .expandable-content {
+    display: none;
+    padding: 0;
+    background: var(--off-white);
+  }
+  .expandable-row.open .expandable-content {
+    display: block;
+  }
+  .expandable-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) 20px;
+    border-top: var(--border-width-thin) solid var(--gray-300);
+    font-size: var(--fs-sm);
+  }
+  @media (min-width: 768px) {
+    .expandable-item {
+      padding: var(--space-lg) var(--space-xl);
+    }
+  }
+  .expandable-item-name {
+    color: var(--black);
+    font-weight: var(--font-weight-medium);
+  }
+  .expandable-item-status {
+    margin-left: auto;
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     13 — REQUIREMENT ITEMS
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .requirement-item {
+    background: var(--white);
+    border: var(--border-width-thin) solid var(--gray-300);
+    padding: var(--space-xl);
+    margin-bottom: var(--space-lg);
+    border-radius: var(--border-radius);
+  }
+  .requirement-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+    gap: var(--space-lg);
+  }
+  .requirement-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--black);
+    flex: 1;
+  }
+  .requirement-meta {
+    display: flex;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    flex-wrap: wrap;
+  }
+  .requirement-bank {
+    font-size: var(--fs-xs);
+    color: var(--gray-600);
+    font-weight: var(--font-weight-medium);
+  }
+  .requirement-separator {
+    color: var(--gray-300);
+  }
+  .requirement-account {
+    font-size: var(--fs-xs);
+    color: var(--gray-600);
+  }
+  .requirement-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     14 — MODAL / DIALOG
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 26, 26, 0.82);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-xl);
+  }
+  .modal-overlay.open {
+    display: flex;
+  }
+  .modal-content {
+    background: var(--white);
+    padding: var(--space-3xl);
+    max-width: 500px;
+    width: 100%;
+    border-radius: var(--border-radius);
+    animation: slideUp var(--duration-normal) var(--ease-out);
+  }
+  @keyframes slideUp {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  .modal-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-md);
+    display: block;
+  }
+  .modal-heading {
+    font-size: var(--fs-3xl);
+    font-weight: var(--font-weight-black);
+    color: var(--black);
+    margin-bottom: var(--space-lg);
+  }
+  .modal-body {
+    font-size: var(--fs-sm);
+    color: var(--gray-600);
+    line-height: var(--lh-normal);
+    margin-bottom: var(--space-2xl);
+  }
+  .modal-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-direction: column-reverse;
+  }
+  @media (min-width: 640px) {
+    .modal-actions {
+      flex-direction: row;
+    }
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     15 — DASHBOARD COMPONENTS (EXISTENTES VALIDADOS)
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .progress-card {
+    background: var(--white);
+    border: var(--border-width-thick) solid var(--green);
+    padding: var(--space-2xl);
+    margin-bottom: var(--space-3xl);
+    border-radius: var(--border-radius);
+  }
+  .progress-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-lg);
+  }
+  .progress-title {
+    font-size: var(--fs-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--black);
+    margin-bottom: var(--space-sm);
+  }
+  .progress-subtitle {
+    font-size: var(--fs-xs);
+    color: var(--gray-600);
+    margin-bottom: var(--space-2xl);
+  }
+  .progress-percent {
+    font-size: var(--fs-5xl);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-tight);
+    color: var(--green);
+    line-height: 1;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--gray-300);
+    margin-top: var(--space-2xl);
+    border-radius: var(--border-radius);
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    width: 62%;
+    transition: width var(--duration-deliberate) var(--ease-out);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+    margin-bottom: var(--space-3xl);
+  }
+  @media (max-width: 1024px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .stat-card {
+    background: var(--white);
+    border: var(--border-width-thin) solid var(--gray-300);
+    padding: var(--space-xl);
+    border-radius: var(--border-radius);
+  }
+  .stat-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: var(--space-lg);
+  }
+  .stat-number {
+    font-size: var(--fs-4xl);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-tight);
+    color: var(--black);
+    line-height: 1;
+  }
+  .pipeline-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    background: var(--white);
+    border: var(--border-width-thin) solid var(--gray-300);
+    padding: 16px 20px;
+    margin-bottom: var(--space-sm);
+    font-size: var(--fs-xs);
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    border-radius: var(--border-radius);
+  }
+  @media (min-width: 768px) {
+    .pipeline-row {
+      padding: 16px var(--space-xl);
+    }
+  }
+  .bank-badge {
+    width: 32px;
+    height: 32px;
+    background: var(--black);
+    color: var(--white);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-black);
+  }
+  .bank-badge.nubank {
+    background: #820AD1;
+  }
+  .bank-badge.bradesco {
+    background: #CC0000;
+  }
+  .bank-name {
+    min-width: 90px;
+  }
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    align-items: center;
+    font-size: 10px;
+    flex: 1;
+    overflow-x: auto;
+  }
+  .pipeline-step {
+    padding: 2px 6px;
+    border: 1px dashed var(--gray-300);
+    color: var(--gray-600);
+    white-space: nowrap;
+  }
+  .pipeline-step.done {
+    border: none;
+    color: var(--green);
+    font-weight: var(--font-weight-black);
+  }
+  .pipeline-sep {
+    color: var(--gray-300);
+    margin: 0 4px;
+  }
+  .banner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: 20px var(--space-xl);
+    margin-bottom: var(--space-3xl);
+    border-radius: var(--border-radius);
+    background: var(--info);
+    border-left: 3px solid var(--info);
+    color: var(--white);
+  }
+  .banner-content {
+    flex: 1;
+  }
+  .banner-title {
+    font-size: var(--fs-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--white);
+    margin-bottom: var(--space-sm);
+  }
+  .banner-text {
+    font-size: var(--fs-xs);
+    color: rgba(255, 255, 255, 0.9);
+    line-height: var(--lh-normal);
+  }
+  .banner-link {
+    color: var(--white);
+    font-weight: var(--font-weight-bold);
+    text-decoration: underline;
+    transition: opacity var(--transition);
+  }
+  .banner-link:hover {
+    opacity: 0.8;
+  }
+  /* ════════════════════════════════════════════════════════════════════════════════
+     UTILITIES
+     ════════════════════════════════════════════════════════════════════════════════ */
+  .ds-footer {
+    border-top: var(--border-width-thick) solid var(--black);
+    padding-top: var(--space-3xl);
+    margin-top: var(--space-6xl);
+    font-size: var(--fs-xs);
+    color: var(--gray-600);
+  }
+  .token-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-xs);
+    margin: var(--space-2xl) 0;
+  }
+  .token-table th {
+    font-weight: var(--font-weight-black);
+    letter-spacing: var(--ls-wider);
+    text-transform: uppercase;
+    color: var(--gray-600);
+    text-align: left;
+    padding: var(--space-md);
+    border-bottom: var(--border-width-thin) solid var(--gray-300);
+  }
+  .token-table td {
+    padding: var(--space-md);
+    border-bottom: var(--border-width-thin) solid var(--gray-300);
+    vertical-align: top;
+  }
+  .token-table code {
+    font-family: 'Courier New', monospace;
+    background: var(--off-white);
+    padding: 2px 6px;
+    font-size: 11px;
+  }
+  .color-swatch {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: var(--border-width-thin) solid var(--gray-300);
+    margin-right: var(--space-lg);
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+<div class="ds-container">
+  <!-- HEADER -->
+  <header class="ds-header">
+    <div class="ds-logo">Basta.</div>
+    <div class="ds-subtitle">Design System Completo</div>
+    <div class="ds-meta">
+      ✓ Plus Jakarta Sans · Tokens Verificados contra home-v3.html · Todas as 16 seções · Março 2026
+    </div>
+  </header>
+  <!-- 01 — PALETA DE CORES -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">01 — Paleta de Cores</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Cores Primárias</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Hex</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--black</code></td>
+            <td><span class="color-swatch" style="background: #1A1A1A;"></span>#1A1A1A</td>
+            <td>Texto primário, bordas, elementos de destaque</td>
+          </tr>
+          <tr>
+            <td><code>--white</code></td>
+            <td><span class="color-swatch" style="background: #FFFFFF; border: 1px solid #CCC;"></span>#FFFFFF</td>
+            <td>Fundo padrão, texto sobre escuro</td>
+          </tr>
+          <tr>
+            <td><code>--green</code></td>
+            <td><span class="color-swatch" style="background: #42b449;"></span>#42b449</td>
+            <td>Brand accent — buttons, highlights, success</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Cores Neutras</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Hex</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--off-white</code></td>
+            <td><span class="color-swatch" style="background: #F5F3EF;"></span>#F5F3EF</td>
+            <td>Fundo alternativo, hover states, seções</td>
+          </tr>
+          <tr>
+            <td><code>--gray-600</code></td>
+            <td><span class="color-swatch" style="background: #4A4A4A;"></span>#4A4A4A</td>
+            <td>Texto secundário, labels, subtítulos</td>
+          </tr>
+          <tr>
+            <td><code>--gray-300</code></td>
+            <td><span class="color-swatch" style="background: #D4D4D4;"></span>#D4D4D4</td>
+            <td>Bordas, divisores, linhas</td>
+          </tr>
+          <tr>
+            <td><code>--sage</code></td>
+            <td><span class="color-swatch" style="background: #bdc0ac;"></span>#bdc0ac</td>
+            <td>Accent terciário (terra, bege) — raro</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Cores de Feedback</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Hex</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--warning</code></td>
+            <td><span class="color-swatch" style="background: #F59E0B;"></span>#F59E0B</td>
+            <td>Status warning, pendente, atenção</td>
+          </tr>
+          <tr>
+            <td><code>--error</code></td>
+            <td><span class="color-swatch" style="background: #DC2626;"></span>#DC2626</td>
+            <td>Destrutivo (logout, delete)</td>
+          </tr>
+          <tr>
+            <td><code>--info</code></td>
+            <td><span class="color-swatch" style="background: #3B9EE8;"></span>#3B9EE8</td>
+            <td>Informativo, banners, avisos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <!-- 02 — TIPOGRAFIA -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">02 — Tipografia</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Fonte Primária</h3>
+      <p style="font-size: var(--fs-lg); margin-bottom: var(--space-2xl);">
+        <strong>Plus Jakarta Sans</strong><br>
+        <span style="color: var(--gray-600);">Pesos: 300, 400, 500, 600, 700, 800</span>
+      </p>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Type Scale</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Valor</th>
+            <th>Exemplo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--fs-xs</code></td>
+            <td>12px</td>
+            <td style="font-size: 12px;">Labels, badges, small text</td>
+          </tr>
+          <tr>
+            <td><code>--fs-sm</code></td>
+            <td>13px</td>
+            <td style="font-size: 13px;">Form labels, hints</td>
+          </tr>
+          <tr>
+            <td><code>--fs-base</code></td>
+            <td>16px</td>
+            <td style="font-size: 16px;">Body padrão, inputs</td>
+          </tr>
+          <tr>
+            <td><code>--fs-lg</code></td>
+            <td>17px</td>
+            <td style="font-size: 17px;">Body maior, seções</td>
+          </tr>
+          <tr>
+            <td><code>--fs-xl</code></td>
+            <td>18px</td>
+            <td style="font-size: 18px;">Títulos menores</td>
+          </tr>
+          <tr>
+            <td><code>--fs-2xl</code></td>
+            <td>20px</td>
+            <td style="font-size: 20px;">Títulos médios</td>
+          </tr>
+          <tr>
+            <td><code>--fs-3xl</code></td>
+            <td>24px</td>
+            <td style="font-size: 24px;"><strong>Headlines seções</strong></td>
+          </tr>
+          <tr>
+            <td><code>--fs-4xl</code></td>
+            <td>40px</td>
+            <td style="font-size: 40px;"><strong>Headlines grandes</strong></td>
+          </tr>
+          <tr>
+            <td><code>--fs-5xl</code></td>
+            <td>56px</td>
+            <td style="font-size: 56px;"><strong>Headlines heroicas</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Font Weight + Line Height</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Contexto</th>
+            <th>Weight</th>
+            <th>Line Height</th>
+            <th>Letter Spacing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Headlines</td>
+            <td>800 (black)</td>
+            <td>1.02</td>
+            <td>-0.03em (tight)</td>
+          </tr>
+          <tr>
+            <td>Títulos</td>
+            <td>700 (bold)</td>
+            <td>1.2</td>
+            <td>-0.01em (snug)</td>
+          </tr>
+          <tr>
+            <td>Body padrão</td>
+            <td>400 (normal)</td>
+            <td>1.6</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>Body em seções</td>
+            <td>400</td>
+            <td>1.75</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>Labels (uppercase)</td>
+            <td>700</td>
+            <td>—</td>
+            <td>0.06em–0.14em</td>
+          </tr>
+          <tr>
+            <td>Botões</td>
+            <td>700</td>
+            <td>—</td>
+            <td>0.04em</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <!-- 03 — ESPAÇAMENTO -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">03 — Espaçamento</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Escala de Espaçamento</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Valor</th>
+            <th>Uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--space-xs</code></td>
+            <td>4px</td>
+            <td>Micro-spacing (muito raro)</td>
+          </tr>
+          <tr>
+            <td><code>--space-sm</code></td>
+            <td>8px</td>
+            <td>Gap entre label e input, items muito próximos</td>
+          </tr>
+          <tr>
+            <td><code>--space-md</code></td>
+            <td>12px</td>
+            <td>Gap entre items em lista, expandable items</td>
+          </tr>
+          <tr>
+            <td><code>--space-lg</code></td>
+            <td>16px</td>
+            <td><strong>Entre campos do mesmo form block</strong>, gap padrão</td>
+          </tr>
+          <tr>
+            <td><code>--space-xl</code></td>
+            <td>24px</td>
+            <td>Padding componentes, gap entre seções pequenas</td>
+          </tr>
+          <tr>
+            <td><code>--space-2xl</code></td>
+            <td>32px</td>
+            <td><strong>Entre form blocks</strong>, margin bottom componentes</td>
+          </tr>
+          <tr>
+            <td><code>--space-3xl</code></td>
+            <td>40px</td>
+            <td>Gap grande, margin section</td>
+          </tr>
+          <tr>
+            <td><code>--space-4xl</code></td>
+            <td>48px</td>
+            <td>Spacing entre seções</td>
+          </tr>
+          <tr>
+            <td><code>--space-5xl</code></td>
+            <td>64px</td>
+            <td>Spacing grande entre seções</td>
+          </tr>
+          <tr>
+            <td><code>--space-6xl</code></td>
+            <td>80px</td>
+            <td>Padding top/bottom seções grandes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Padrão de Espaçamento em Form Fields</h3>
+      <p style="color: var(--gray-600); margin-bottom: var(--space-lg);">
+        Form fields devem ser organizados em <strong>blocos compactos</strong>:
+      </p>
+      <ul style="color: var(--gray-600); padding-left: 20px; margin-bottom: var(--space-2xl);">
+        <li style="margin-bottom: 8px;">8px (sm) entre label e input</li>
+        <li style="margin-bottom: 8px;"><strong>16px (lg) entre campos DO MESMO BLOCO</strong></li>
+        <li>32px (2xl) para separar BLOCOS diferentes</li>
+      </ul>
+    </div>
+  </section>
+  <!-- 04 — MOTION & EASING -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">04 — Motion & Easing</h2>
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Valor</th>
+          <th>Contexto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>--ease-out</code></td>
+          <td>cubic-bezier(0.4, 0, 0.2, 1)</td>
+          <td>Transição padrão (ease-out)</td>
+        </tr>
+        <tr>
+          <td><code>--duration-fast</code></td>
+          <td>150ms</td>
+          <td>Micro-interactions (raro)</td>
+        </tr>
+        <tr>
+          <td><code>--duration-normal</code></td>
+          <td><strong>240ms</strong></td>
+          <td>Transição padrão (hover, focus)</td>
+        </tr>
+        <tr>
+          <td><code>--duration-slow</code></td>
+          <td>300ms</td>
+          <td>Animações UI mais lentas</td>
+        </tr>
+        <tr>
+          <td><code>--duration-deliberate</code></td>
+          <td>600ms</td>
+          <td>Progress bar, animações longas</td>
+        </tr>
+        <tr>
+          <td><code>--transition</code></td>
+          <td>240ms cubic-bezier(...)</td>
+          <td>Shorthand padrão</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: var(--gray-600); font-size: var(--fs-sm); margin-top: var(--space-2xl);">
+      <strong>Regra principal:</strong> 240ms é o padrão. Use 300ms para animações mais lentas (collapse, expand). Nunca use timing maior que 600ms.
+    </p>
+  </section>
+  <!-- 05 — BOTÕES -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">05 — Botões</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Botão Primary (CTA Principal)</h3>
+      <div class="component-row">
+        <button class="btn btn-primary">Começar Agora →</button>
+        <button class="btn btn-primary">Conectar →</button>
+      </div>
+      <p style="color: var(--gray-600); font-size: var(--fs-sm);">
+        Fundo verde (#42b449), texto branco. Hover: transformY(-2px) + shadow. Use para ações primárias.
+      </p>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Botão Outline Black (Ação Secundária)</h3>
+      <div class="component-row">
+        <button class="btn btn-outline-black">Saiba Mais</button>
+        <button class="btn btn-outline-black">Ver Documento</button>
+      </div>
+      <p style="color: var(--gray-600); font-size: var(--fs-sm);">
+        Border preto, texto preto. Hover: background preto, texto branco. Use para ações secundárias.
+      </p>
+    </div>
+    <div class="dark-bg">
+      <div class="ds-subsection">
+        <h3 class="ds-subsection-title" style="color: rgba(255,255,255,0.8);">Botão Outline White (Fundo Escuro)</h3>
+        <div class="component-row">
+          <button class="btn btn-outline-white">Falar pelo WhatsApp</button>
+          <button class="btn btn-outline-white">Mais Informações</button>
+        </div>
+        <p style="color: rgba(255,255,255,0.6); font-size: var(--fs-sm);">
+          Border branco, texto branco. Hover: background branco, texto preto.
+        </p>
+      </div>
+      <div class="ds-subsection">
+        <h3 class="ds-subsection-title" style="color: rgba(255,255,255,0.8);">Botão Outline White → Green (NOVO)</h3>
+        <div class="component-row">
+          <button class="btn btn-outline-white-green">Conectar Dados →</button>
+          <button class="btn btn-outline-white-green">Próximo Passo</button>
+        </div>
+        <p style="color: rgba(255,255,255,0.6); font-size: var(--fs-sm);">
+          Border e texto branco. Hover: apenas texto muda para verde, sem background. Uso exclusivo em fundos escuros.
+        </p>
+      </div>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Botão Small (.btn-sm)</h3>
+      <div class="component-row">
+        <button class="btn btn-sm btn-primary">Assinar</button>
+        <button class="btn btn-sm btn-outline-black">PDF</button>
+      </div>
+      <p style="color: var(--gray-600); font-size: var(--fs-sm);">
+        Tamanho compacto. Use em requirement items e ações inline.
+      </p>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Botão Error (Destrutivo)</h3>
+      <div class="component-row">
+        <button class="btn btn-sm btn-error">Sair</button>
+      </div>
+      <p style="color: var(--gray-600); font-size: var(--fs-sm);">
+        Fundo vermelho (#DC2626). Use apenas para ações destrutivas (logout, delete).
+      </p>
+    </div>
+  </section>
+  <!-- 06 — CARDS -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">06 — Cards</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Card Padrão</div>
+        <div class="card-content">
+          Border preto (2px), padding 28px. Hover: translateY(-3px) + shadow offset. Use para conteúdo destacado.
+        </div>
+      </div>
+      <div class="card card-dark">
+        <div class="card-title">Card Dark</div>
+        <div class="card-content">
+          Fundo preto, texto branco. Mesma semântica que card padrão, mas invertido.
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 07 — STEP ITEMS -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">07 — Step Items</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Variante com Badge Verde (Padrão)</h3>
+      <div class="step-item">
+        <div class="step-badge">1</div>
+        <div class="step-content">
+          <div class="step-title">Conectar Contas Bancárias</div>
+          <div class="step-desc">Pelo Open Finance, você autoriza Basta a acessar seus dados financeiros.</div>
+        </div>
+        <div class="step-status done">✓ Concluído</div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge">2</div>
+        <div class="step-content">
+          <div class="step-title">Enviar Documentos Pessoais</div>
+          <div class="step-desc">Copie seus documentos e envie pelo WhatsApp.</div>
+        </div>
+        <div class="step-status pending">Pendente</div>
+      </div>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Variante com Badge Preto (Alternativo)</h3>
+      <div class="step-item">
+        <div class="step-badge alt">1</div>
+        <div class="step-content">
+          <div class="step-title">Você conecta suas contas bancárias</div>
+          <div class="step-desc">Pelo Open Finance, a gente lê sua data financeira. Você pode desconectar quando quiser.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-badge alt">2</div>
+        <div class="step-content">
+          <div class="step-title">A gente gera seus requerimentos</div>
+          <div class="step-desc">Com base nos seus dados, criamos requerimentos administrativos formais.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 08 — RESPONSIVIDADE -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">08 — Responsividade</h2>
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Breakpoint</th>
+          <th>Largura</th>
+          <th>Contexto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mobile</td>
+          <td>&lt; 640px</td>
+          <td>Smartphone, default</td>
+        </tr>
+        <tr>
+          <td>Tablet</td>
+          <td>640px – 1024px</td>
+          <td>Tablet, mobile landscape</td>
+        </tr>
+        <tr>
+          <td>Desktop</td>
+          <td>&gt; 1024px</td>
+          <td>Desktop padrão</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="ds-subsection" style="margin-top: var(--space-3xl);">
+      <h3 class="ds-subsection-title">Regras por Componente</h3>
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Componente</th>
+            <th>Mobile</th>
+            <th>Desktop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Form Fields</strong></td>
+            <td>Padding 14px 16px, full-width</td>
+            <td>Padding 14px 16px, full-width (igual)</td>
+          </tr>
+          <tr>
+            <td><strong>Expandable Rows</strong></td>
+            <td>Padding 16px 20px</td>
+            <td>Padding 20px 24px</td>
+          </tr>
+          <tr>
+            <td><strong>Step Items</strong></td>
+            <td>Grid: 40px + 1fr, padding 20px 24px</td>
+            <td>Grid: 80px + 1fr, padding 32px</td>
+          </tr>
+          <tr>
+            <td><strong>Stats Grid</strong></td>
+            <td>1 coluna</td>
+            <td>3 colunas (até 1024px = 2)</td>
+          </tr>
+          <tr>
+            <td><strong>Requirement Items</strong></td>
+            <td>Stack vertical, buttons full-width</td>
+            <td>Flex row, buttons side-by-side</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <!-- 09 — PRINCÍPIOS-CHAVE -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">09 — Princípios-Chave</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Brutalismo Editorial Refinado</h3>
+      <ul style="color: var(--gray-600); padding-left: 20px; margin-bottom: var(--space-2xl);">
+        <li style="margin-bottom: 8px;"><strong>Tipografia é arquitetura:</strong> Headlines bold (peso 800), body neutro (peso 400). A tipografia define o espaço.</li>
+        <li style="margin-bottom: 8px;"><strong>Cor como argumento:</strong> 1 accent cromático único (verde), paleta máxima 2 cores + neutrals + feedback set.</li>
+        <li style="margin-bottom: 8px;"><strong>Estrutura visível:</strong> Bordas, linhas, espaço negativo como linguagem, não separadores técnicos. Máximo 3 níveis de hierarquia por tela.</li>
+        <li style="margin-bottom: 8px;"><strong>Zero decoração:</strong> Nada de gradientes, sombras suaves, ícones flat 2015, arredondamentos, ilustrações ornamentais.</li>
+        <li><strong>Comunicação direta:</strong> Labels curtos, verbos de ação, zero jargão. Copy que assume usuário inteligente.</li>
+      </ul>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Basta — Aplicação Específica</h3>
+      <p style="color: var(--gray-600);">
+        Sério, direto, do lado do usuário. Alta densidade informacional com hierarquia clara. Confiança sem condescendência. Brutalismo Editorial em versão afirmativa. Nunca genérico.
+      </p>
+    </div>
+  </section>
+  <!-- 10 — STATUS BADGES -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">10 — Status Badges (Inline)</h2>
+    <div class="component-row">
+      <span class="badge badge-success">Recebido</span>
+      <span class="badge badge-success">Assinado</span>
+      <span class="badge badge-success">Enviado</span>
+      <span class="badge badge-warning">Pendente</span>
+      <span class="badge badge-info">Conectada</span>
+    </div>
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Variante</th>
+          <th>Cor</th>
+          <th>Uso</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>.badge-success</td>
+          <td>Verde (#42b449), border</td>
+          <td>Recebido, Assinado, Enviado, Conectada</td>
+        </tr>
+        <tr>
+          <td>.badge-warning</td>
+          <td>Laranja (#F59E0B), border</td>
+          <td>Pendente, atenção</td>
+        </tr>
+        <tr>
+          <td>.badge-info</td>
+          <td>Azul (#3B9EE8), fundo</td>
+          <td>Informativo (raro em status)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color: var(--gray-600); font-size: var(--fs-sm); margin-top: var(--space-2xl);">
+      <strong>Padrão:</strong> 11px, uppercase, border 1px (exceto info que tem fundo). Inline em listas e requirement items.
+    </p>
+  </section>
+  <!-- 11 — FORM FIELDS -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">11 — Form Fields</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Bloco 1: Informações Pessoais</h3>
+      <p style="color: var(--gray-600); font-size: var(--fs-sm); margin-bottom: var(--space-lg);">
+        <strong>Espaçamento interno:</strong> 8px (label-input), 16px (entre campos DO MESMO BLOCO)
+      </p>
+      <div class="form-group">
+        <label class="form-label">Nome Completo</label>
+        <input type="text" class="form-input" placeholder="Digite seu nome" value="Usuário Demo">
+      </div>
+      <div class="form-group">
+        <label class="form-label">CPF</label>
+        <div class="form-input-wrapper">
+          <input type="password" class="form-input" value="•••••••••••••" placeholder="000.000.000-00">
+          <span class="form-action-link">Revelar</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data de Nascimento</label>
+        <input type="text" class="form-input" placeholder="DD/MM/AAAA">
+      </div>
+    </div>
+    <div class="ds-subsection form-group new-block">
+      <h3 class="ds-subsection-title">Bloco 2: Localidade</h3>
+      <p style="color: var(--gray-600); font-size: var(--fs-sm); margin-bottom: var(--space-lg);">
+        <strong>Espaçamento com bloco anterior:</strong> 32px (2xl)
+      </p>
+      <div class="grid-3">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">CEP</label>
+          <input type="text" class="form-input" placeholder="00000-000">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">Cidade</label>
+          <input type="text" class="form-input" placeholder="São Paulo">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label">UF</label>
+          <input type="text" class="form-input" placeholder="SP">
+        </div>
+      </div>
+    </div>
+    <div class="ds-subsection" style="margin-top: var(--space-2xl);">
+      <h3 class="ds-subsection-title">Select / Dropdown</h3>
+      <div class="form-group">
+        <label class="form-label">Filtro de Bancos</label>
+        <select class="form-select">
+          <option>Todos os Bancos</option>
+          <option>Nubank</option>
+          <option>Bradesco</option>
+        </select>
+      </div>
+    </div>
+  </section>
+  <!-- 12 — EXPANDABLE ROWS -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">12 — Expandable Rows</h2>
+    <p style="color: var(--gray-600); font-size: var(--fs-sm); margin-bottom: var(--space-2xl);">
+      Componente para organizar grandes volumes de dados. Clique para expandir/colapsar.
+    </p>
+    <div class="expandable-row open">
+      <div class="expandable-header">
+        <div>
+          <div class="expandable-title">Documentos Pessoais</div>
+          <div class="expandable-subtitle">RG, CPF e Comprovante de Residência</div>
+        </div>
+        <div class="expandable-count">2</div>
+        <div class="expandable-chevron">↓</div>
+      </div>
+      <div class="expandable-content">
+        <div class="expandable-item">
+          <span class="expandable-item-name">✓ RG</span>
+          <span class="expandable-item-status"><span class="badge badge-success">Recebido</span></span>
+        </div>
+        <div class="expandable-item">
+          <span class="expandable-item-name">✓ CPF</span>
+          <span class="expandable-item-status"><span class="badge badge-success">Recebido</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="expandable-row">
+      <div class="expandable-header">
+        <div>
+          <div class="expandable-title">Relatórios</div>
+          <div class="expandable-subtitle">SCR, Haleríes, SUSEP e INSS</div>
+        </div>
+        <div class="expandable-count">0</div>
+        <div class="expandable-chevron">↓</div>
+      </div>
+      <div class="expandable-content">
+        <div class="expandable-item">
+          <span class="expandable-item-name">Nenhum documento enviado</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 13 — REQUIREMENT ITEMS -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">13 — Requirement Items</h2>
+    <div class="banner">
+      <div class="banner-content">
+        <div class="banner-title">Clique em Assinar via ClickSign</div>
+        <div class="banner-text">para abrir a assinatura digital. O link também é enviado pelo WhatsApp.</div>
+      </div>
+    </div>
+    <div class="requirement-item">
+      <div class="requirement-header">
+        <div style="flex: 1;">
+          <div class="requirement-title">GPD — Relação completa de produtos e serviços vinculados ao meu CPF</div>
+          <div class="requirement-meta">
+            <span class="requirement-bank">Banco: Nubank</span>
+            <span class="requirement-separator">·</span>
+            <span class="requirement-account">Ag. 0001 · Conta +321 · Corrente</span>
+          </div>
+        </div>
+        <span class="badge badge-success">Assinado</span>
+      </div>
+      <div class="requirement-actions">
+        <button class="btn btn-sm btn-outline-black">PDF</button>
+      </div>
+    </div>
+    <div class="requirement-item">
+      <div class="requirement-header">
+        <div style="flex: 1;">
+          <div class="requirement-title">Demonstrativo de Evolução da Dívida e Memória de Cálculo</div>
+          <div class="requirement-meta">
+            <span class="requirement-bank">Banco: Nubank</span>
+            <span class="requirement-separator">·</span>
+            <span class="requirement-account">Ag. 0001 · Conta +321</span>
+          </div>
+        </div>
+        <span class="badge badge-warning">Pendente</span>
+      </div>
+      <div class="requirement-actions">
+        <button class="btn btn-sm btn-primary">Assinar</button>
+        <button class="btn btn-sm btn-outline-black">PDF</button>
+      </div>
+    </div>
+  </section>
+  <!-- 14 — MODAL / DIALOG -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">14 — Modal / Dialog</h2>
+    <p style="color: var(--gray-600); font-size: var(--fs-sm); margin-bottom: var(--space-2xl);">
+      Modal renderizado abaixo como exemplo visual. Backdrop: rgba(26, 26, 26, 0.82), animação slideUp 240ms.
+    </p>
+    <div style="background: var(--gray-200); padding: var(--space-3xl); border-radius: 0; display: flex; align-items: center; justify-content: center; min-height: 300px;">
+      <div class="modal-content">
+        <span class="modal-label">Confirmação de Logout</span>
+        <h3 class="modal-heading">Tem Certeza?</h3>
+        <div class="modal-body">Você será redirecionado para a página inicial.</div>
+        <div class="modal-actions">
+          <button class="btn btn-sm btn-outline-black">Cancelar</button>
+          <button class="btn btn-sm btn-error">Sair</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 15 — DASHBOARD COMPONENTS -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">15 — Dashboard Components (Validados)</h2>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Progress Card</h3>
+      <div class="progress-card">
+        <div class="progress-label">Progresso Geral</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-2xl);">
+          <div>
+            <div class="progress-title">Coleta de documentos e análise.</div>
+            <div class="progress-subtitle">Você está no passo 2 de 4.</div>
+          </div>
+          <div class="progress-percent">62%</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+      </div>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Stat Cards — Grid 3 Colunas</h3>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Documentos Coletados</div>
+          <div class="stat-number">8</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Requerimentos Pendentes</div>
+          <div class="stat-number">2</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Contas Conectadas</div>
+          <div class="stat-number">2</div>
+        </div>
+      </div>
+    </div>
+    <div class="ds-subsection">
+      <h3 class="ds-subsection-title">Pipeline — Bank Status</h3>
+      <div class="pipeline-row">
+        <div class="bank-badge nubank">NU</div>
+        <div class="bank-name">Nubank</div>
+        <div class="pipeline">
+          <span class="pipeline-step done">Conectado</span>
+          <span class="pipeline-sep">→</span>
+          <span class="pipeline-step done">Docs coletados</span>
+          <span class="pipeline-sep">→</span>
+          <span class="pipeline-step">Análise</span>
+          <span class="pipeline-sep">→</span>
+          <span class="pipeline-step">Requerimento</span>
+        </div>
+      </div>
+      <div class="pipeline-row">
+        <div class="bank-badge bradesco">BR</div>
+        <div class="bank-name">Bradesco</div>
+        <div class="pipeline">
+          <span class="pipeline-step done">Conectado</span>
+          <span class="pipeline-sep">→</span>
+          <span class="pipeline-step">Docs coletados</span>
+          <span class="pipeline-sep">→</span>
+          <span class="pipeline-step">Análise</span>
+          <span class="pipeline-sep">→</span>
+          <span class="pipeline-step">Requerimento</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 16 — ÍCONES -->
+  <section class="ds-section">
+    <h2 class="ds-section-title">16 — Ícones</h2>
+    <table class="token-table">
+      <thead>
+        <tr>
+          <th>Ícone</th>
+          <th>Tamanho</th>
+          <th>Cor</th>
+          <th>Contexto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Eye (Reveal)</td>
+          <td>16px</td>
+          <td>#3B9EE8 (info)</td>
+          <td>Link "REVELAR" em CPF/senha</td>
+        </tr>
+        <tr>
+          <td>PDF / Document</td>
+          <td>16px</td>
+          <td>#4A4A4A (gray-600)</td>
+          <td>Botão "PDF" em requirement items</td>
+        </tr>
+        <tr>
+          <td>Settings / Gear</td>
+          <td>16px</td>
+          <td>#4A4A4A</td>
+          <td>Menu settings (raro nesse context)</td>
+        </tr>
+        <tr>
+          <td>Chevron (Expand/Collapse)</td>
+          <td>20px</td>
+          <td>#4A4A4A</td>
+          <td>Expandable rows header</td>
+        </tr>
+        <tr>
+          <td>Bank Logo / Badge</td>
+          <td>32px</td>
+          <td>Nubank: #820AD1, Bradesco: #CC0000</td>
+          <td>Pipeline rows, bank identification</td>
+        </tr>
+        <tr>
+          <td>Check / Checkmark</td>
+          <td>16px</td>
+          <td>#42b449 (green)</td>
+          <td>Status "concluído" em expandable items</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="ds-subsection" style="margin-top: var(--space-3xl);">
+      <h3 class="ds-subsection-title">Padrões de Uso de Ícones</h3>
+      <ul style="color: var(--gray-600); padding-left: 20px;">
+        <li style="margin-bottom: 8px;"><strong>Inline com texto:</strong> 16px, vertical-align: middle</li>
+        <li style="margin-bottom: 8px;"><strong>Em botões:</strong> 16px, gap 6px do texto (.btn-sm)</li>
+        <li style="margin-bottom: 8px;"><strong>Standalone em badges:</strong> 12px, margin-right 4px</li>
+        <li style="margin-bottom: 8px;"><strong>Em headers:</strong> 20px, cor gray-600</li>
+        <li><strong>Em identidade bancária:</strong> 32px, cores de marca do banco</li>
+      </ul>
+    </div>
+    <div class="ds-subsection" style="margin-top: var(--space-3xl);">
+      <h3 class="ds-subsection-title">Formato Recomendado</h3>
+      <p style="color: var(--gray-600);">
+        SVG inline (não imagem). Sem fill fixo — herdar cor do texto com <code>currentColor</code> quando possível. Para cores específicas (bank badges), usar fill direto.
+      </p>
+    </div>
+  </section>
+  <!-- FOOTER -->
+  <section class="ds-footer">
+    ✅ Design System Completo — 16 seções mapeadas e validadas contra home-v3.html · Pronto para implementação do dashboard
+  </section>
+</div>
+</body>
+</html>

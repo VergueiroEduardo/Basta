@@ -1,0 +1,15 @@
+<!--
+  LOGOUT MODAL — Basta
+  Reusado em 12-17. Toggle via openLogout() / closeLogout() (em sidebar.js).
+-->
+<div class="logout-overlay" id="logoutModal" role="presentation">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle" aria-describedby="logoutDesc">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc" id="logoutDesc">Você precisará entrar novamente para acessar suas informações.</p>
+    <div class="logout-modal__actions">
+      <button type="button" class="btn-logout-cancel" onclick="closeLogout()">Cancelar</button>
+      <button type="button" class="btn-logout-confirm" onclick="confirmLogout()">Sair</button>
+    </div>
+  </div>
+</div>

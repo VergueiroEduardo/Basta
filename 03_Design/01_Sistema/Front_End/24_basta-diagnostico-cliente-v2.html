@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Maria, sua proposta</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <style>
+    /* ──────────────────────────────────────────────────────────
+       BASE
+       ────────────────────────────────────────────────────────── */    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+    /* ──────────────────────────────────────────────────────────
+       PÁGINA / WRAPPER
+       ────────────────────────────────────────────────────────── */
+    .page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 24px 20px 80px;
+    }
+    @media (min-width: 720px) {
+      .page { padding: 40px 32px 120px; }
+    }
+    @media (min-width: 1024px) {
+      .page { padding: 48px 40px 140px; }
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       HEADER MINIMAL
+       ────────────────────────────────────────────────────────── */
+    .doc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: 36px;
+    }
+    .doc-header__logo { height: 40px; width: auto; display: block; }
+    @media (min-width: 720px) { .doc-header__logo { height: 56px; } }
+    .doc-header__meta {
+      text-align: right;
+      font-size: 10px; font-weight: 700;
+      color: var(--gray-600); line-height: 1.5;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .doc-header__meta strong { color: var(--black); font-weight: 800; }
+
+    /* ──────────────────────────────────────────────────────────
+       KICKER + HERO VOCATIVO
+       ────────────────────────────────────────────────────────── */
+    .kicker {
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600);
+      margin-bottom: 18px;
+    }
+    .kicker__dot { color: var(--green); }
+
+    .hero-name {
+      font-size: clamp(36px, 7vw, 64px);
+      font-weight: 800; letter-spacing: -0.04em;
+      line-height: 0.95; color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    .lead {
+      font-size: clamp(15px, 1.6vw, 17px);
+      line-height: 1.7; color: var(--black);
+      max-width: 64ch;
+      margin-bottom: 28px;
+    }
+    /* Compound block: lead + KPIs viajam juntos como uma unidade */
+    .section:has(+ .kpis)        { margin-bottom: 16px; }
+    .section:has(+ .kpis) .lead  { margin-bottom: 0; }
+    .lead strong { font-weight: 800; }
+    .lead em {
+      font-style: normal;
+      background: rgba(245,158,11,0.18);
+      padding: 1px 4px; font-weight: 600;
+    }
+    .lead .num { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+    /* ──────────────────────────────────────────────────────────
+       KPI CARDS — 4-up SÍNTESE
+       ────────────────────────────────────────────────────────── */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      margin-bottom: 72px;
+    }
+    @media (min-width: 720px) { .kpis { grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr; } }
+    .kpi {
+      padding: 14px 16px;
+      border-right: 1px solid var(--gray-300);
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .kpi:nth-child(2n) { border-right: none; }
+    .kpi:nth-last-child(-n+1) { border-bottom: none; }
+    @media (min-width: 720px) {
+      .kpi { border-bottom: none; }
+      .kpi:nth-child(2n) { border-right: 1px solid var(--gray-300); }
+      .kpi:last-child { border-right: none; }
+    }
+    .kpi__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--gray-600); margin-bottom: 6px;
+    }
+    .kpi__value {
+      font-size: clamp(15px, 2.4vw, 22px); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.05;
+      color: var(--black); font-variant-numeric: tabular-nums;
+      margin-bottom: 4px;
+    }
+    .kpi__sub {
+      font-size: 10px; color: var(--gray-600);
+      font-weight: 700; letter-spacing: 0.04em;
+    }
+    .kpi--alert .kpi__value { color: var(--error); }
+
+    /* ──────────────────────────────────────────────────────────
+       SECTION HEADERS
+       ────────────────────────────────────────────────────────── */
+    .section-head { margin-bottom: 20px; }
+    .section-head__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600); margin-bottom: 8px;
+    }
+    .section-head__title {
+      font-size: clamp(22px, 3.2vw, 28px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.15; color: var(--black);
+      max-width: 38ch;
+    }
+    .section-head__lead {
+      font-size: 14px; line-height: 1.65; color: var(--black);
+      max-width: 60ch; margin-top: 10px;
+    }
+    .section-head__lead strong { font-weight: 800; }
+
+    .section { margin-bottom: 64px; }
+
+    .transition {
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 700; letter-spacing: -0.015em;
+      color: var(--black); line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       BANCOS ANALISADOS — 3-up
+       ────────────────────────────────────────────────────────── */
+    .banks {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 56px;
+    }
+    @media (min-width: 720px) { .banks { grid-template-columns: repeat(3, 1fr); } }
+    .bank {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .bank__name {
+      font-size: 16px; font-weight: 800;
+      letter-spacing: -0.015em; color: var(--black);
+    }
+    .bank__account {
+      font-size: 11px; font-weight: 700;
+      color: var(--gray-600);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      font-variant-numeric: tabular-nums;
+    }
+    .bank__exposure {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .bank__exposure-label {
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600); margin-bottom: 2px;
+    }
+    .bank__exposure-value {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       BLOCO POR BANCO — narrativa + indícios
+       ────────────────────────────────────────────────────────── */
+    .bank-block { margin-bottom: 48px; }
+    .bank-block__head {
+      border-left: 4px solid var(--black);
+      padding: 4px 0 4px 16px;
+      margin-bottom: 20px;
+    }
+    .bank-block__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--gray-600); margin-bottom: 4px;
+    }
+    .bank-block__name {
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 800; letter-spacing: -0.025em;
+      color: var(--black); line-height: 1.15;
+    }
+    .bank-block__story {
+      font-size: 14px; line-height: 1.7;
+      color: var(--black); max-width: 64ch;
+      margin-bottom: 16px;
+    }
+    .bank-block__story strong { font-weight: 800; }
+    .bank-block__story em {
+      font-style: normal;
+      background: rgba(245,158,11,0.18);
+      padding: 1px 4px; font-weight: 600;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       FINDING CARDS
+       ────────────────────────────────────────────────────────── */
+    .findings { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .finding {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      display: grid;
+      grid-template-columns: 4px 1fr;
+      transition: border-color var(--t);
+    }
+    .finding:hover { border-color: var(--black); }
+    .finding__rail { background: var(--gray-300); }
+    .finding--crit .finding__rail { background: var(--error); }
+    .finding--alta .finding__rail { background: var(--warning); }
+    .finding--media .finding__rail { background: var(--gray-600); }
+    .finding__main { padding: 16px 20px; }
+    .finding__head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 6px;
+    }
+    .finding__head-left { flex: 1; min-width: 0; }
+    .finding__tags {
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+      margin-bottom: 6px;
+    }
+    .finding__sev {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 8px;
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1.5px solid var(--gray-600);
+      color: var(--gray-600);
+    }
+    .finding--crit .finding__sev { color: var(--error); border-color: var(--error); }
+    .finding--alta .finding__sev { color: var(--warning); border-color: var(--warning); }
+    .finding--media .finding__sev { color: var(--gray-600); border-color: var(--gray-600); }
+    .finding__id {
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; color: var(--gray-600);
+      font-variant-numeric: tabular-nums;
+    }
+    .finding__cat {
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-600);
+    }
+    .finding__cat::before { content: '·'; margin: 0 6px; color: var(--gray-300); }
+    .finding__title {
+      font-size: 16px; font-weight: 800;
+      letter-spacing: -0.01em; color: var(--black);
+      line-height: 1.2; margin-bottom: 4px;
+    }
+    .finding__plain {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      max-width: 60ch;
+    }
+    .finding__plain strong { color: var(--black); font-weight: 700; }
+    .finding__meta {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      margin-top: 12px; padding-top: 10px;
+      border-top: 1px dashed var(--gray-200);
+    }
+    .finding__meta-item { display: flex; flex-direction: column; gap: 2px; }
+    .finding__meta-label {
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--gray-600);
+    }
+    .finding__meta-value {
+      font-size: 12px; font-weight: 700; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+    .finding__meta-value--money { color: var(--green); }
+
+    /* ──────────────────────────────────────────────────────────
+       SÍNTESE DE OPORTUNIDADE
+       ────────────────────────────────────────────────────────── */
+    .opportunity {
+      background: var(--black);
+      color: var(--white);
+      padding: 32px 28px;
+      margin-bottom: 56px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 800px) {
+      .opportunity { grid-template-columns: 1fr 1fr; gap: 32px; padding: 40px; }
+    }
+    .opportunity__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .opportunity__title {
+      font-size: clamp(22px, 2.8vw, 30px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.2; color: var(--white);
+    }
+    .opportunity__title strong { color: var(--green); }
+    .opportunity__lead {
+      font-size: 14px; line-height: 1.7;
+      color: rgba(255,255,255,0.78);
+      margin-top: 12px;
+    }
+    .opportunity__breakdown {
+      display: grid; grid-template-columns: 1fr;
+      gap: 14px; align-self: center;
+    }
+    .opp-line {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .opp-line:last-child { border-bottom: none; padding-bottom: 0; }
+    .opp-line__label {
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .opp-line__value {
+      font-size: 18px; font-weight: 800;
+      color: var(--white); font-variant-numeric: tabular-nums;
+      letter-spacing: -0.015em;
+    }
+    .opp-line--total .opp-line__label { color: var(--white); font-weight: 800; }
+    .opp-line--total .opp-line__value { color: var(--green); font-size: 24px; }
+
+    /* ──────────────────────────────────────────────────────────
+       DISCLAIMER — sobre os números
+       ────────────────────────────────────────────────────────── */
+    .disclaimer {
+      background: var(--off-white);
+      border-left: 4px solid var(--green);
+      padding: 24px 24px 24px 28px;
+      margin-bottom: 56px;
+      max-width: 100%;
+    }
+    @media (min-width: 720px) { .disclaimer { padding: 28px 32px 28px 36px; } }
+    .disclaimer__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .disclaimer__title {
+      font-size: clamp(16px, 2vw, 19px);
+      font-weight: 800; letter-spacing: -0.015em;
+      color: var(--black); line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .disclaimer__body {
+      font-size: 13px; line-height: 1.7;
+      color: var(--black); max-width: 64ch;
+    }
+    .disclaimer__body p { margin-bottom: 10px; }
+    .disclaimer__body p:last-child { margin-bottom: 0; }
+    .disclaimer__body strong { font-weight: 800; }
+    .disclaimer__refs {
+      font-size: 10px; line-height: 1.55;
+      color: var(--gray-600); font-weight: 600;
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px dashed var(--gray-300);
+      letter-spacing: 0.02em;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       3 CAMINHOS
+       ────────────────────────────────────────────────────────── */
+    .paths {
+      display: grid; grid-template-columns: 1fr;
+      gap: 14px; margin-bottom: 56px;
+    }
+    @media (min-width: 880px) { .paths { grid-template-columns: repeat(3, 1fr); } }
+    .path {
+      background: var(--white);
+      border: 1.5px solid var(--gray-300);
+      padding: 24px 22px;
+      display: flex; flex-direction: column;
+      transition: border-color var(--t);
+    }
+    .path:hover { border-color: var(--black); }
+    .path__num {
+      font-size: 32px; font-weight: 800;
+      letter-spacing: -0.04em; color: var(--green);
+      line-height: 1; margin-bottom: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+    .path__name {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--black);
+      line-height: 1.2; margin-bottom: 10px;
+    }
+    .path__desc {
+      font-size: 13px; line-height: 1.6;
+      color: var(--gray-600); margin-bottom: 18px;
+    }
+    .path__desc strong { color: var(--black); font-weight: 700; }
+    .path__features {
+      display: flex; flex-direction: column; gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-200);
+      margin-top: auto;
+    }
+    .path__feature {
+      display: grid; grid-template-columns: 14px 1fr;
+      gap: 8px; align-items: flex-start;
+      font-size: 12px; line-height: 1.45;
+      color: var(--black);
+    }
+    .path__feature svg {
+      width: 14px; height: 14px;
+      color: var(--green); margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .path__feature strong { font-weight: 700; }
+
+    /* ──────────────────────────────────────────────────────────
+       BLOCO HONORÁRIOS
+       ────────────────────────────────────────────────────────── */
+    .fees {
+      background: var(--white);
+      border: 1.5px solid var(--black);
+      padding: 28px;
+      margin-bottom: 56px;
+    }
+    .fees__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--gray-600); margin-bottom: 12px;
+    }
+    .fees__title {
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--black); line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .fees__title strong { color: var(--green); }
+    .fees__body {
+      font-size: 14px; line-height: 1.7;
+      color: var(--black); max-width: 60ch;
+    }
+    .fees__body strong { font-weight: 800; }
+    .fees__split {
+      display: grid; grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 20px; padding-top: 20px;
+      border-top: 1px dashed var(--gray-300);
+    }
+    @media (min-width: 600px) { .fees__split { grid-template-columns: repeat(3, 1fr); } }
+    .fee-item {
+      padding: 14px 16px;
+      background: var(--off-white);
+      border: 1px solid var(--gray-300);
+    }
+    .fee-item__pct {
+      font-size: 28px; font-weight: 800;
+      letter-spacing: -0.025em; color: var(--black);
+      line-height: 1; margin-bottom: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    .fee-item--total .fee-item__pct { color: var(--green); }
+    .fee-item__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       TERMO DE CONSENTIMENTO + CTA
+       ────────────────────────────────────────────────────────── */
+    .consent {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 32px 28px;
+      margin-bottom: 24px;
+    }
+    @media (min-width: 720px) { .consent { padding: 40px; } }
+    .consent__eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); margin-bottom: 10px;
+    }
+    .consent__title {
+      font-size: clamp(22px, 2.8vw, 30px);
+      font-weight: 800; letter-spacing: -0.025em;
+      line-height: 1.2; color: var(--black);
+      margin-bottom: 14px;
+    }
+    .consent__lead {
+      font-size: 14px; line-height: 1.7;
+      color: var(--gray-600); max-width: 60ch;
+      margin-bottom: 24px;
+    }
+    .consent__lead strong { color: var(--black); font-weight: 700; }
+
+    .consent-list {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: 28px;
+    }
+    .consent-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 14px;
+      padding: 16px;
+      background: var(--off-white);
+      border: 1.5px solid var(--gray-300);
+      cursor: pointer;
+      transition: border-color var(--t), background var(--t);
+    }
+    .consent-item:hover { border-color: var(--black); }
+    .consent-item input[type="checkbox"] {
+      width: 22px; height: 22px;
+      margin-top: 2px;
+      accent-color: var(--green);
+      cursor: pointer;
+    }
+    .consent-item__title {
+      font-size: 14px; font-weight: 800;
+      color: var(--black); line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .consent-item__desc {
+      font-size: 12px; line-height: 1.55;
+      color: var(--gray-600);
+    }
+    .consent-item__desc strong { color: var(--black); font-weight: 700; }
+    .consent-item.is-checked { border-color: var(--green); background: rgba(66,180,73,0.05); }
+
+    .consent-select-all {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--black);
+      color: var(--white);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin-bottom: 2px;
+      transition: opacity var(--t);
+      user-select: none;
+    }
+    .consent-select-all:hover { opacity: 0.82; }
+    .consent-select-all input[type="checkbox"] {
+      width: 20px; height: 20px;
+      accent-color: var(--green);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .consent-select-all.is-disabled { opacity: 0.5; cursor: not-allowed; }
+    .consent-select-all.is-disabled input { pointer-events: none; }
+
+    .consent__sign {
+      display: grid; grid-template-columns: 1fr;
+      gap: 12px; margin-bottom: 20px;
+    }
+    @media (min-width: 600px) { .consent__sign { grid-template-columns: 1.4fr 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field__label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+    .field__input {
+      padding: 12px 14px;
+      font-family: var(--f); font-size: 14px;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t);
+    }
+    .field__input:focus { border-color: var(--black); outline: none; }
+
+    .consent__legal {
+      font-size: 11px; line-height: 1.55;
+      color: var(--gray-600); margin-bottom: 20px;
+    }
+    .consent__legal strong { color: var(--black); font-weight: 700; }
+
+    .consent__cta {
+      display: block; width: 100%;
+      padding: 18px 24px;
+      font-family: var(--f); font-size: 14px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      background: var(--black); color: var(--white);
+      border: 2px solid var(--black);
+      cursor: pointer;
+      transition: background var(--t), border-color var(--t);
+    }
+    .consent__cta:hover { background: var(--green); border-color: var(--green); }
+    .consent__cta:disabled {
+      background: var(--gray-300); border-color: var(--gray-300);
+      color: var(--gray-600); cursor: not-allowed;
+    }
+    .consent__cta:disabled:hover { background: var(--gray-300); border-color: var(--gray-300); }
+
+    /* ──────────────────────────────────────────────────────────
+       RODAPÉ
+       ────────────────────────────────────────────────────────── */
+    .doc-footer {
+      padding-top: 32px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 11px; line-height: 1.7;
+      color: var(--gray-600);
+    }
+    .doc-footer__row {
+      display: grid; grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 720px) { .doc-footer__row { grid-template-columns: 1fr 1fr; } }
+    .doc-footer strong { color: var(--black); font-weight: 800; }
+    .doc-footer a { text-decoration: underline; text-underline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<main class="page">
+
+  <!-- HEADER MINIMAL -->
+  <header class="doc-header">
+    <svg class="doc-header__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    <div class="doc-header__meta">
+      Diagnóstico nº <strong>BST-2026-000507</strong><br>
+      <strong>06 maio 2026</strong>
+    </div>
+  </header>
+
+  <!-- KICKER + HERO VOCATIVO + LEAD NARRATIVO -->
+  <section class="section">
+    <div class="kicker">Diagnóstico Basta</div>
+    <h1 class="hero-name">Maria,</h1>
+
+    <p class="lead">
+      sua dívida total registrada no <strong>SCR/Bacen</strong> é de <span class="num">R$ 178.000,00</span>
+      (cento e setenta e oito mil reais), dividida em <strong>4 bancos</strong>.
+      Sua renda bruta reportada é de <span class="num">R$ 8.457,89</span> — após INSS
+      (<span class="num">R$ 908,85</span>) e IRRF (<span class="num">R$ 1.182,32</span>),
+      a renda líquida é de <span class="num">R$ 6.366,72</span>. Desse valor,
+      <span class="num">R$ 2.200,00</span> em <strong>empréstimos consignados</strong> são descontados
+      em folha, restando <span class="num">R$ 4.166,72</span>. Sobre esse valor ainda incidem
+      <span class="num">R$ 3.000,00/mês</span> de parcelas em
+      <strong>crédito pessoal e cartões de crédito</strong>, e algumas já estão em atraso.
+    </p>
+  </section>
+
+  <!-- CARD 4-up SÍNTESE FINANCEIRA -->
+  <div class="kpis" aria-label="Síntese financeira">
+    <div class="kpi kpi--alert">
+      <div class="kpi__label">Dívida Total</div>
+      <div class="kpi__value">R$ 178.000</div>
+      <div class="kpi__sub">SCR Bacen</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Renda Bruta</div>
+      <div class="kpi__value">R$ 8.457</div>
+      <div class="kpi__sub">Holerite + Outras Rendas</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Renda Líquida</div>
+      <div class="kpi__value">R$ 6.367</div>
+      <div class="kpi__sub">Renda Bruta - Descontos Legais</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Parcelas / Mês</div>
+      <div class="kpi__value">R$ 5.200</div>
+      <div class="kpi__sub">Consig + Pessoais + Cartões + Outros.</div>
+    </div>
+    <div class="kpi kpi--alert">
+      <div class="kpi__label">% Comprometido</div>
+      <div class="kpi__value">81,7%</div>
+      <div class="kpi__sub">Crítico · > 30%</div>
+    </div>
+  </div>
+
+  <!-- TRANSIÇÃO + 3 CARDS DE BANCOS -->
+  <section class="section">
+    <p class="transition">Contas analisadas</p>
+
+    <div class="banks">
+      <div class="bank">
+        <div class="bank__name">Banco do Brasil</div>
+        <div class="bank__account">Ag. 1234 · Conta 56789-0</div>
+        <div class="bank__exposure">
+          <div class="bank__exposure-label">Exposição</div>
+          <div class="bank__exposure-value">R$ 28.400</div>
+        </div>
+      </div>
+      <div class="bank">
+        <div class="bank__name">Banco Bradesco</div>
+        <div class="bank__account">Ag. 0345 · Conta 12345-6</div>
+        <div class="bank__exposure">
+          <div class="bank__exposure-label">Exposição</div>
+          <div class="bank__exposure-value">R$ 65.200</div>
+        </div>
+      </div>
+      <div class="bank">
+        <div class="bank__name">Banco Sicredi</div>
+        <div class="bank__account">Ag. 0710 · Conta 98765-4</div>
+        <div class="bank__exposure">
+          <div class="bank__exposure-label">Exposição</div>
+          <div class="bank__exposure-value">R$ 44.800</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANCO DO BRASIL -->
+  <section class="bank-block">
+    <div class="bank-block__head">
+      <div class="bank-block__eyebrow">Indícios de abusos que merecem atenção por banco · 1 de 3</div>
+      <h2 class="bank-block__name">Banco do Brasil</h2>
+    </div>
+
+    <p class="bank-block__story">
+      Identificamos um <strong>cartão consignado RMC</strong> sendo descontado
+      há <strong>14 meses sem uso efetivo</strong> e um <strong>seguro prestamista</strong> contratado no
+      mesmo dia do empréstimo, sem aceite separado. Encontramos ainda tarifa cobrada em conta salário.
+    </p>
+
+    <div class="findings">
+      <article class="finding finding--crit">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Crítico</span>
+                <span class="finding__id">AB17</span>
+                <span class="finding__cat">Consentimento</span>
+              </div>
+              <h3 class="finding__title">Cartão Consignado RMC sem solicitação</h3>
+              <p class="finding__plain">Há <strong>14 meses</strong> tem desconto de <strong>R$ 89,00</strong> no holerite com a descrição "RMC — BB Consignado". O cartão <strong>nunca foi usado</strong>: sem fatura, sem movimentação.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Desconto mensal</span><span class="finding__meta-value">R$ 89,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Períodos cobrados</span><span class="finding__meta-value">14 meses</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 2.492,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--crit">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Crítico</span>
+                <span class="finding__id">AB16</span>
+                <span class="finding__cat">Venda casada</span>
+              </div>
+              <h3 class="finding__title">Seguro prestamista contratado junto com o empréstimo</h3>
+              <p class="finding__plain">No mesmo dia do empréstimo, começou a ser cobrado seguro prestamista de <strong>R$ 47/mês</strong>. Não há apólice separada nem oferta de outra seguradora.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança mensal</span><span class="finding__meta-value">R$ 47,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Períodos cobrados</span><span class="finding__meta-value">12 meses</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 1.128,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB13</span>
+                <span class="finding__cat">Tarifa indevida</span>
+              </div>
+              <h3 class="finding__title">Tarifa cobrada em conta salário</h3>
+              <p class="finding__plain">Sua conta no BB recebe seu salário e mesmo assim cobra <strong>R$ 24/mês</strong> de manutenção há 14 meses. Conta salário não admite cobrança de manutenção.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança mensal</span><span class="finding__meta-value">R$ 24,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Períodos cobrados</span><span class="finding__meta-value">14 meses</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 672,00</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- BRADESCO -->
+  <section class="bank-block">
+    <div class="bank-block__head">
+      <div class="bank-block__eyebrow">Indícios de abusos que merecem atenção por banco · 2 de 3</div>
+      <h2 class="bank-block__name">Banco Bradesco</h2>
+    </div>
+
+    <p class="bank-block__story">
+      No Bradesco identificamos — o ponto mais grave — <strong>8 seguros prestamistas</strong> ativos sobre operações de
+      crédito, todos contratados no mesmo dia das respectivas operações, sem aceite separado. Há também indícios
+      de <strong>capitalização de juros sem autorização expressa no contrato</strong> e <strong>juros de atraso acima da taxa de referência</strong>
+      no contrato de empréstimo pessoal de R$ 18.500.
+    </p>
+
+    <div class="findings">
+      <article class="finding finding--crit">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Crítico</span>
+                <span class="finding__id">AB16</span>
+                <span class="finding__cat">Venda casada</span>
+              </div>
+              <h3 class="finding__title">8 seguros prestamistas contratados sem aceite separado</h3>
+              <p class="finding__plain">Identificamos <strong>8 apólices ativas</strong>, todas com débito iniciado no <strong>mesmo dia</strong> da operação de crédito correspondente. Ausência de aceite separado e de oferta de seguradora alternativa. Cobrança média de <strong>R$ 38/mês por apólice</strong>.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Apólices</span><span class="finding__meta-value">8 ativas</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança total/mês</span><span class="finding__meta-value">R$ 304,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 7.296,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB02</span>
+                <span class="finding__cat">Juros sobre juros</span>
+              </div>
+              <h3 class="finding__title">Capitalização de juros sem autorização expressa no contrato</h3>
+              <p class="finding__plain">A taxa anual contratada (<strong>37,2% a.a.</strong>) é maior que <strong>12× a taxa mensal</strong> declarada (2,7% a.m. → 32,4% a.a.). Diferença de 4,8 p.p. indica cobrança de juros sobre juros.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Diferença</span><span class="finding__meta-value">4,8 p.p.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Saldo do contrato</span><span class="finding__meta-value">R$ 18.500</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Redução estimada</span><span class="finding__meta-value finding__meta-value--money">R$ 3.200,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB03</span>
+                <span class="finding__cat">Juros de atraso</span>
+              </div>
+              <h3 class="finding__title">Juros de atraso acima da taxa de referência</h3>
+              <p class="finding__plain">O contrato prevê <strong>1,8% ao mês</strong> de juros de atraso. A taxa de referência é <strong>1% a.m.</strong> A diferença de 0,8 p.p. incide em todas as parcelas com atraso.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrado</span><span class="finding__meta-value">1,8% a.m.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Referência</span><span class="finding__meta-value">1,0% a.m.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Redução estimada</span><span class="finding__meta-value finding__meta-value--money">R$ 1.380,00</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SICREDI -->
+  <section class="bank-block">
+    <div class="bank-block__head">
+      <div class="bank-block__eyebrow">Indícios de abusos que merecem atenção por banco · 3 de 3</div>
+      <h2 class="bank-block__name">Banco Sicredi</h2>
+    </div>
+
+    <p class="bank-block__story">
+      No Sicredi a operação é mais limpa, mas dois pontos pedem revisão: <strong>capitalização de juros</strong>
+      sem autorização expressa no contrato de empréstimo com garantia (saldo de R$ 44.800), e tarifa de avaliação
+      de garantia cobrada sem laudo apresentado.
+    </p>
+
+    <div class="findings">
+      <article class="finding finding--alta">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Alto</span>
+                <span class="finding__id">AB02</span>
+                <span class="finding__cat">Juros sobre juros</span>
+              </div>
+              <h3 class="finding__title">Capitalização sem autorização expressa no contrato</h3>
+              <p class="finding__plain">Diferença de <strong>3,4 p.p.</strong> entre a taxa anual contratada e a equivalente mensal × 12. Autorização para cobrança de juros sobre juros <strong>não consta</strong> no contrato.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Diferença</span><span class="finding__meta-value">3,4 p.p.</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Saldo do contrato</span><span class="finding__meta-value">R$ 44.800</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Redução estimada</span><span class="finding__meta-value finding__meta-value--money">R$ 4.800,00</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="finding finding--media">
+        <div class="finding__rail"></div>
+        <div class="finding__main">
+          <div class="finding__head">
+            <div class="finding__head-left">
+              <div class="finding__tags">
+                <span class="finding__sev">Médio</span>
+                <span class="finding__id">AB10</span>
+                <span class="finding__cat">Tarifa sem laudo</span>
+              </div>
+              <h3 class="finding__title">Tarifa de avaliação de garantia sem laudo</h3>
+              <p class="finding__plain">Contrato cobrou <strong>R$ 850,00</strong> de "avaliação da garantia" na contratação. Não há laudo de avaliação anexo nem identificação do avaliador.</p>
+            </div>
+          </div>
+          <div class="finding__meta">
+            <div class="finding__meta-item"><span class="finding__meta-label">Cobrança</span><span class="finding__meta-value">R$ 850,00</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Laudo</span><span class="finding__meta-value">Ausente</span></div>
+            <div class="finding__meta-item"><span class="finding__meta-label">Restituição em dobro</span><span class="finding__meta-value finding__meta-value--money">R$ 1.700,00</span></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- SÍNTESE DE OPORTUNIDADE -->
+  <section class="opportunity">
+    <div>
+      <div class="opportunity__eyebrow">Síntese de oportunidade</div>
+      <h2 class="opportunity__title">
+        Há <strong>R$ 30.668,00</strong> de economia total — entre dinheiro de volta, dívida reduzida e fluxo de caixa aliviado.
+      </h2>
+    </div>
+    <div class="opportunity__breakdown">
+      <div class="opp-line">
+        <span class="opp-line__label">Restituição em dobro</span>
+        <span class="opp-line__value">R$ 13.288</span>
+      </div>
+      <div class="opp-line">
+        <span class="opp-line__label">Redução de saldo devedor</span>
+        <span class="opp-line__value">R$ 9.380</span>
+      </div>
+      <div class="opp-line">
+        <span class="opp-line__label">Alívio de fluxo (12 meses)</span>
+        <span class="opp-line__value">R$ 8.000</span>
+      </div>
+      <div class="opp-line opp-line--total">
+        <span class="opp-line__label">Economia total</span>
+        <span class="opp-line__value">R$ 30.668</span>
+      </div>
+      <div class="opp-line">
+        <span class="opp-line__label">Honorários de êxito (30%)</span>
+        <span class="opp-line__value">− R$ 9.200</span>
+      </div>
+      <div class="opp-line opp-line--total">
+        <span class="opp-line__label">Você recebe (estimado)</span>
+        <span class="opp-line__value">R$ 21.468</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER — sobre os números, natureza da atividade e success fee -->
+  <section class="disclaimer" aria-label="Sobre estes números">
+    <div class="disclaimer__eyebrow">Sobre estes números</div>
+    <h2 class="disclaimer__title">Os valores apresentados são estimativas calculadas a partir de informações e documentos que você compartilhou. Os números não representam garantia de resultado. Podem ser maiores ou menores.</h2>
+    <div class="disclaimer__body">
+      <p>
+        O Basta usa tecnologia para analisar sua situação financeira e identificar os melhores caminhos disponíveis
+        para você sair do endividamento. O resultado efetivo depende de fatores
+        fora do nosso controle, como políticas das instituições financeiras, condições de mercado e decisões de
+        órgãos públicos.
+      </p>
+    </div>
+  </section>
+
+  <!-- BLOCO HONORÁRIOS -->
+  <section class="fees">
+    <div class="fees__eyebrow">Como cobramos</div>
+    <h2 class="fees__title">
+      Em caso de êxito: <strong>30% sobre a economia total</strong>.<br>Sem êxito, sem cobrança. Simples assim.
+    </h2>
+    <p class="fees__body">
+      A "economia total" é a soma do que efetivamente entrar no seu bolso ou sair da sua dívida:
+      <strong>restituições recebidas</strong> + <strong>redução do saldo devedor</strong> +
+      <strong>redução de fluxo de caixa</strong> obtida via portabilidade (calculada nos primeiros 12 meses
+      após a migração). O cálculo é discriminado a cada etapa, com memória de cálculo entregue por escrito.
+    </p>
+    <div class="fees__split">
+      <div class="fee-item">
+        <div class="fee-item__pct">10%</div>
+        <div class="fee-item__label">Basta · diagnóstico, supervisão e plataforma</div>
+      </div>
+      <div class="fee-item">
+        <div class="fee-item__pct">20%</div>
+        <div class="fee-item__label">Parceiro especializado · contestação das cobranças identificadas</div>
+      </div>
+      <div class="fee-item fee-item--total">
+        <div class="fee-item__pct">30%</div>
+        <div class="fee-item__label">Total sobre a economia realizada</div>
+      </div>
+    </div>
+
+    <!-- LEGAL-NOTE: revisar com advogado a redação dos honorários e definir contrato anexo
+         que detalhe (i) momento de exigibilidade, (ii) base de incidência por caminho,
+         (iii) cláusula de rescisão por inação, (iv) limite máximo nominal por contrato.
+         Hoje a peça promete "30% sobre economia projetada" — precisa de instrumento jurídico
+         que o consumidor leia e assine separadamente. -->
+  </section>
+
+  <!-- OS 3 CAMINHOS -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head__eyebrow">Os 3 caminhos para sair do endividamento</div>
+      <h2 class="section-head__title">Três ações complementares.</h2>
+      <p class="section-head__lead">
+        Cada ação atua em uma frente diferente do seu caso. Você decide quais autorizar.
+      </p>
+    </div>
+
+    <div class="paths">
+
+      <article class="path">
+        <div class="path__num">01</div>
+        <h3 class="path__name">Portabilidade da Crédito</h3>
+        <p class="path__desc">
+          Compartilhamos seus dados com instituições financeiras parceiras para
+          <strong>encontrar condições de crédito mais vantajosas</strong>. <strong>Buscamos alívio da parcela mensal e redução do custo da dívida.</strong>
+        </p>
+        <div class="path__features">
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Resposta em até <strong>15 dias</strong></div>
+          </div>
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Sem custo se não houver migração</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="path">
+        <div class="path__num">02</div>
+        <h3 class="path__name">Renegociação Administrativa</h3>
+        <p class="path__desc">
+          Acionamos cada banco credor compartilhando o diagnóstico para que <strong>proponham um acordo de renegociação</strong>,
+          com a supervisão do Basta <strong>avaliando se a proposta é justa e vantajosa para você.</strong>
+        </p>
+        <div class="path__features">
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Resposta em até <strong>30 dias úteis</strong></div>
+          </div>
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Você decide aceitar ou recusar</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="path">
+        <div class="path__num">03</div>
+        <h3 class="path__name">Representação por Advogado</h3>
+        <p class="path__desc">
+          Compartilhamos todos os seus dados e documentos com um parceiro, <strong>advogado especializado em direito bancário</strong>, que te representa na renegociação litigiosa.
+        </p>
+        <div class="path__features">
+          <div class="path__feature">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>Autorização assinada <strong>diretamente</strong> com o parceiro</div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- TERMO DE CONSENTIMENTO + ASSINATURA + CTA -->
+  <section class="consent" id="consent">
+    <div class="consent__eyebrow">Autorização e contratação</div>
+    <h2 class="consent__title">Autorize o Basta a encontrar alternativas<br>para você sair do endividamento.</h2>
+    <p class="consent__lead">
+      Autorize os serviços que você deseja utilizar.
+    </p>
+
+    <label class="consent-select-all" id="consentSelectAll">
+      <input type="checkbox" id="consent-all" />
+      <span>Autorizar todos os serviços</span>
+    </label>
+
+    <div class="consent-list">
+      <label class="consent-item" data-consent="portabilidade">
+        <input type="checkbox" id="consent-portabilidade" />
+        <div class="consent-item__body">
+          <div class="consent-item__title">01 · Autorizo a busca de portabilidade de crédito</div>
+          <div class="consent-item__desc">
+            <strong>Finalidade:</strong> compartilhar meus dados financeiros (cadastrais, registro SCR, fluxo
+            de pagamentos e contratos vigentes) com instituições financeiras parceiras para
+            <strong>buscar condições de portabilidade da dívida</strong>. Compartilhamento revogável a qualquer
+            momento via app ou WhatsApp do Basta.
+          </div>
+        </div>
+      </label>
+
+      <label class="consent-item" data-consent="renegociacao">
+        <input type="checkbox" id="consent-renegociacao" />
+        <div class="consent-item__body">
+          <div class="consent-item__title">02 · Autorizo a renegociação administrativa</div>
+          <div class="consent-item__desc">
+            <strong>Finalidade:</strong> compartilhar este diagnóstico com os bancos analisados
+            (Banco do Brasil, Bradesco e Sicredi) para que <strong>proponham acordo de renegociação</strong>,
+            com a supervisão técnica do Basta. Não autorizo automaticamente a aceitação de qualquer proposta —
+            cada acordo passa pela minha decisão final.
+          </div>
+        </div>
+      </label>
+
+      <label class="consent-item" data-consent="judicial">
+        <input type="checkbox" id="consent-judicial" />
+        <div class="consent-item__body">
+          <div class="consent-item__title">03 · Autorizo o encaminhamento para parceiro especializado</div>
+          <div class="consent-item__desc">
+            <strong>Finalidade:</strong> compartilhar este diagnóstico e os documentos coletados com o
+            parceiro especializado do Basta para <strong>análise e contestação das cobranças identificadas</strong>.
+            A contestação só tem início após eu assinar a autorização diretamente com o parceiro,
+            em ato separado.
+          </div>
+        </div>
+      </label>
+    </div>
+
+    <!-- LEGAL-NOTE: revisar conformidade do termo:
+         (a) granularidade Open Finance (Res. BCB 32 exige finalidade específica e prazo)
+         (b) base legal LGPD: consentimento (art. 7º, I) — texto da finalidade precisa ser estanque
+         (c) Código de Ética OAB (art. 39 e ss): a relação com o escritório parceiro NÃO PODE
+             configurar captação de cliente. O ato 03 está desenhado para que o cliente apenas
+             AUTORIZE A ANÁLISE. O mandato ao escritório é evento posterior e separado.
+             Confirmar redação com o escritório parceiro antes de publicar. -->
+
+    <div class="consent__sign">
+      <div class="field">
+        <label class="field__label" for="sign-name">Nome completo</label>
+        <input class="field__input" id="sign-name" type="text" placeholder="Como aparece no seu RG" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="sign-cpf">CPF</label>
+        <input class="field__input" id="sign-cpf" type="text" placeholder="000.000.000-00" inputmode="numeric" autocomplete="off" />
+      </div>
+    </div>
+
+    <p class="consent__legal">
+      Ao clicar em <strong>"Autorizar e assinar"</strong>, declaro que li e compreendi este Diagnóstico,
+      autorizo o Basta a executar somente os caminhos que marquei acima, e concordo com os
+      <strong>honorários de êxito</strong> conforme descrito (10% Basta + 20% parceiro especializado = 30%
+      sobre a economia projetada total). Esta autorização é registrada com data, hora e IP, e pode ser
+      revogada a qualquer momento.
+    </p>
+
+    <button class="consent__cta" id="ctaSign" type="button" disabled onclick="handleSign()">
+      Autorizar e assinar
+    </button>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer class="doc-footer">
+    <div class="doc-footer__row">
+      <div>
+        <strong>Basta Tecnologia LTDA</strong><br>
+        CNPJ <strong>00.000.000/0001-00</strong> · São Paulo, SP<br>
+        Suporte WhatsApp: <a href="https://wa.me/5511000000000">+55 (11) 0000-0000</a>
+      </div>
+      <div>
+        Diagnóstico nº <strong>BST-2026-000507</strong> · gerado em 06/05/2026.
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  /* Marca o item de consentimento como "checked" visualmente */
+  document.querySelectorAll('.consent-item input[type="checkbox"]').forEach(function(input){
+    input.addEventListener('change', function(){
+      input.closest('.consent-item').classList.toggle('is-checked', input.checked);
+      syncSelectAll();
+      updateCtaState();
+    });
+  });
+
+  /* ── Selecionar todos ── */
+  var selectAllEl = document.getElementById('consent-all');
+  var consentItems = document.querySelectorAll('.consent-item input[type="checkbox"]');
+
+  selectAllEl.addEventListener('change', function(){
+    consentItems.forEach(function(cb){
+      cb.checked = selectAllEl.checked;
+      cb.closest('.consent-item').classList.toggle('is-checked', selectAllEl.checked);
+    });
+    selectAllEl.indeterminate = false;
+    updateCtaState();
+  });
+
+  function syncSelectAll() {
+    var total   = consentItems.length;
+    var checked = document.querySelectorAll('.consent-item input[type="checkbox"]:checked').length;
+    selectAllEl.checked       = checked === total;
+    selectAllEl.indeterminate = checked > 0 && checked < total;
+  }
+
+  /* CTA fica habilitado se ao menos 1 caminho marcado + nome + cpf válido */
+  const nameInput = document.getElementById('sign-name');
+  const cpfInput  = document.getElementById('sign-cpf');
+  const cta       = document.getElementById('ctaSign');
+
+  function updateCtaState() {
+    const anyConsent = document.querySelectorAll('.consent-item input[type="checkbox"]:checked').length > 0;
+    const hasName    = nameInput.value.trim().length >= 3;
+    const hasCpf     = cpfInput.value.replace(/\D/g, '').length === 11;
+    cta.disabled = !(anyConsent && hasName && hasCpf);
+  }
+  nameInput.addEventListener('input', updateCtaState);
+  cpfInput.addEventListener('input', function(){
+    let v = cpfInput.value.replace(/\D/g, '').slice(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
+    v = v.replace(/(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
+    cpfInput.value = v;
+    updateCtaState();
+  });
+
+  function handleSign() {
+    const consents = {
+      portabilidade: document.getElementById('consent-portabilidade').checked,
+      renegociacao:  document.getElementById('consent-renegociacao').checked,
+      judicial:      document.getElementById('consent-judicial').checked
+    };
+    const payload = {
+      diagnosticId: 'BST-2026-000507',
+      name: nameInput.value.trim(),
+      cpf: cpfInput.value.trim(),
+      consents: consents,
+      signedAt: new Date().toISOString()
+    };
+    /* INTEGRAÇÃO: enviar payload ao backend, registrar IP, gerar contrato e PDF do termo,
+       disparar fluxo de cada caminho autorizado.
+       payload disponível para inspeção via DevTools quando integrado. */
+    alert('Autorização registrada. Em instantes você receberá um WhatsApp do Basta com o resumo do que foi autorizado e os próximos passos de cada caminho.');
+  }
+</script>
+
+</body>
+</html>

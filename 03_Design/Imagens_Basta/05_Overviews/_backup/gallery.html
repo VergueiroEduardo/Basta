@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Basta — Social Media Gallery</title>
+  <link rel="preload" href="PlusJakartaSans-ExtraBold.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="PlusJakartaSans-Bold.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'PlusJakarta';
+      src: url('PlusJakartaSans-Regular.ttf') format('truetype');
+      font-weight: 400; font-style: normal; font-display: block;
+    }
+    @font-face {
+      font-family: 'PlusJakarta';
+      src: url('PlusJakartaSans-SemiBold.ttf') format('truetype');
+      font-weight: 600; font-style: normal; font-display: block;
+    }
+    @font-face {
+      font-family: 'PlusJakarta';
+      src: url('PlusJakartaSans-Bold.ttf') format('truetype');
+      font-weight: 700; font-style: normal; font-display: block;
+    }
+    @font-face {
+      font-family: 'PlusJakarta';
+      src: url('PlusJakartaSans-ExtraBold.ttf') format('truetype');
+      font-weight: 800; font-style: normal; font-display: block;
+    }
+  </style>
+  <style>
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0e0e0e;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* ── Barra ── */
+    .bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      background: #161616;
+      border-bottom: 1px solid #222;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 20px;
+      z-index: 100;
+      font-size: 11.5px;
+      color: #555;
+    }
+    .bar b  { color: #bbb; font-weight: 600; }
+    .bar kbd {
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-family: monospace;
+      font-size: 10.5px;
+      color: #999;
+    }
+    .bar .sep { width: 1px; height: 16px; background: #2a2a2a; }
+
+    /* ── Grade 5 × 10 ── */
+    .gallery {
+      padding: 60px 32px 48px;
+      display: grid;
+      grid-template-columns: repeat(5, 270px);  /* 25 % de 1080px */
+      gap: 20px 16px;
+    }
+
+    /* ── Card ── */
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-id  { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: #888; }
+    .card-dim { font-size: 9px; color: #3a3a3a; letter-spacing: .03em; }
+
+    /* ── Post wrapper ── */
+    /* Feed 1080×1350 → 25% → 270×337.5 */
+    .wrap {
+      width: 270px;
+      height: 337px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,.55);
+      cursor: pointer;
+      transition: box-shadow .15s;
+    }
+    .wrap:hover { box-shadow: 0 12px 40px rgba(0,0,0,.8); }
+
+    /* ── Post real 1080×1350 (captura DevTools aqui) ── */
+    .post {
+      width: 1080px;
+      height: 1350px;
+      background: #fff;
+      position: absolute;
+      top: 0; left: 0;
+      transform: scale(.25);
+      transform-origin: top left;
+      overflow: hidden;
+
+      /* tokens Basta */
+      --black:    #1A1A1A;
+      --white:    #FFFFFF;
+      --green:    #42b449;
+      --font:     'PlusJakarta', sans-serif;
+      --lh-tight: 1.02;
+      --lh-snug:  1.2;
+      --ls-tight: -0.03em;
+      --ls-snug:  -0.01em;
+    }
+
+    /* elementos internos */
+    .logo { position: absolute; top: 88px; left: 80px; }
+    .logo svg { display: block; fill: var(--black); }
+
+    .content { position: absolute; bottom: 104px; left: 80px; right: 80px; }
+
+    .hook {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 66px;
+      line-height: var(--lh-tight);
+      letter-spacing: var(--ls-tight);
+      color: var(--black);
+      margin-bottom: 48px;
+    }
+
+    .post-sep { width: 44px; height: 2px; background: var(--black); }
+
+    .body {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 1.45;
+      letter-spacing: var(--ls-snug);
+      color: var(--black);
+      opacity: 0.72;
+      margin-top: 28px;
+    }
+
+    .hook-xl {
+      font-size: 88px;
+      margin-bottom: 32px;
+    }
+
+    .of-block { display: flex; flex-direction: column; gap: 0px; margin-top: 43px; }
+    .of-logo { margin-bottom: 12px; }
+    .of-logo svg { display: block;
+      margin-top: -73px;
+      margin-bottom: -74px; }
+
+    .of-header {
+      font-family: var(--font); font-weight: 400; font-size: 28px;
+      line-height: 1.45; letter-spacing: var(--ls-snug); color: var(--black);
+    }
+    .of-cta {
+      font-family: var(--font); font-weight: 800; font-size: 30px;
+      line-height: var(--lh-snug); letter-spacing: var(--ls-tight); color: var(--black);
+    }
+    .of-sub {
+      font-family: var(--font); font-weight: 400; font-size: 28px;
+      line-height: 1.45; letter-spacing: var(--ls-snug); color: var(--black);
+    }
+
+    /* ── Tema escuro ── */
+    .post.dark {
+      background: #1A1A1A;
+      --black: #FFFFFF;
+      --white: #1A1A1A;
+    }
+
+    /* ── CTA post ── */
+    .post.cta-post {
+      background: #1A1A1A;
+      --black: #FFFFFF;
+    }
+    .post.cta-post .logo svg {
+      height: 250px;
+      width: auto;
+    }
+    .post.cta-post.cta-light {
+      background: #FFFFFF;
+      --black: #1A1A1A;
+    }
+    .cta-content {
+      position: absolute;
+      top: 606px;
+      left: 80px;
+      right: 80px;
+    }
+    .cta-hook {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 80px;
+      line-height: var(--lh-tight);
+      letter-spacing: var(--ls-tight);
+      color: var(--black);
+      margin-bottom: 28px;
+    }
+    .cta-sub-bold {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 30px;
+      line-height: var(--lh-snug);
+      letter-spacing: var(--ls-snug);
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+    .cta-sub-body {
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 38px;
+      line-height: 1.45;
+      letter-spacing: var(--ls-snug);
+      color: var(--black);
+      opacity: 0.72;
+    }
+    .cta-btn {
+      position: absolute;
+      bottom: 88px;
+      left: 80px;
+      right: 80px;
+      background: var(--green);
+      border-radius: 20px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 52px;
+    }
+    .cta-btn-label {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 38px;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+
+    /* ── Post tema verde ── */
+    .post.green-post {
+      background: var(--green);
+      /* --black permanece #1A1A1A → logo e texto ficam pretos */
+    }
+    .post.green-post .logo {
+      top: auto;
+      bottom: 500px; /* 80px margem + 337px texto (5 linhas × 66px × lh 1.02) + 83px gap */
+    }
+    .post.green-post .logo svg {
+      height: 250px;
+      width: auto;
+    }
+    .post.green-post .content {
+      bottom: 80px; /* alinha margem inferior com as margens laterais */
+    }
+    #feed-13 .logo {
+      bottom: 365px; /* 80px margem + 202px texto (3 linhas × 66px × lh 1.02) + 83px gap */
+    }
+    #feed-33 .logo {
+      bottom: 432px; /* 80px margem + 269px texto (4 linhas × 66px × lh 1.02) + 83px gap */
+    }
+    #feed-43 .logo {
+      bottom: 584px; /* 80px margem + 421px bloco (hook 4L + body 2L) + 83px gap */
+    }
+    #feed-48 .logo,
+    #feed-49 .logo,
+    #feed-50 .logo {
+      top: auto;
+      bottom: 500px; /* igual Feed 46/47: 80px + 337px (5L) + 83px gap */
+    }
+    #feed-48 .logo svg,
+    #feed-49 .logo svg,
+    #feed-50 .logo svg {
+      height: 250px;
+      width: auto;
+    }
+    #feed-48 .content,
+    #feed-49 .content,
+    #feed-50 .content {
+      bottom: 80px;
+    }
+
+    /* ── Alinhamento horizontal de grade: Feeds 17–19 e 23–24 ── */
+    #feed-17 .content,
+    #feed-18 .content,
+    #feed-19 .content,
+    #feed-23 .content,
+    #feed-24 .content {
+      bottom: auto;
+      top: 751px; /* topo do hook alinhado pela grade — Feed 19/24 são a referência */
+    }
+
+    /* ── Post só com logo Open Finance centralizado ── */
+    .post.of-only .of-center {
+      position: absolute;
+      top: 50%;
+      left: 80px;
+      right: 80px;
+      transform: translateY(-50%);
+    }
+    .post.of-only .of-center svg {
+      height: 321px; /* 214 × 1.5 */
+      width: auto;
+      display: block;
+    }
+    .post.of-only .of-hook {
+      font-family: var(--font);
+      font-weight: 800;
+      font-size: 66px;
+      line-height: var(--lh-tight);
+      letter-spacing: var(--ls-tight);
+      color: var(--black);
+      margin-top: -100px; /* compensa sobra inferior do viewBox do SVG_OF */
+    }
+    .post.of-only .of-body {
+      font-family: var(--font);
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.45;
+      letter-spacing: var(--ls-snug);
+      color: var(--black);
+      margin-top: 28px;
+      max-width: 920px;
+    }
+
+    /* ── Tema imagem de fundo ── */
+    .post.has-bg {
+      --black: #FFFFFF;
+      --white: #1A1A1A;
+    }
+    .post.has-bg .bg-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      filter: none;
+    }
+    .post.has-bg .bg-img.flip-y  { transform: scaleY(-1); }
+    .post.has-bg .bg-img.flip-x  { transform: scaleX(-1); }
+    .post.has-bg .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.55) 35%, rgba(0,0,0,.05) 100%);
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="bar">
+  <b>Basta — Social Media</b>
+  <div class="sep"></div>
+  <span>5 × 10 &nbsp;·&nbsp; Feed 1080 × 1350</span>
+  <div class="sep"></div>
+  <span>Export: DevTools → inspecionar <b>.post</b> → <kbd>Capture node screenshot</kbd></span>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<script>
+// ── SVGs ──────────────────────────────────────────────────────────────────
+const SVG_BASTA = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 603.33 254.68" height="125">
+  <path d="M0,1.25h48.16c27.57,0,43.11,9.72,53.59,43.28l2.72,8.78c6.6,21.33.78,32.62-13.98,38.58l.78,2.51c23.3,3.76,30.29,14.11,36.5,33.56l22.53,72.14c10.87,35.13-8.16,52.07-37.67,52.07h-34.95L0,1.25ZM63.69,81.86h4.27c4.27,0,5.82-3.14,4.27-8.15l-10.88-35.13c-1.94-5.96-3.88-7.53-9.32-7.53h-3.88l15.53,50.81ZM107.18,222.38h4.27c4.27,0,5.82-3.45,4.27-8.47l-30.29-97.86c-1.55-5.65-3.88-7.21-9.32-7.21h-3.88l34.95,113.54Z"/>
+  <path d="M172.98,231.47l-17.86-57.71c-7.38-23.52-5.44-31.68,9.32-49.24l9.71-11.6c6.21-7.53,7.38-11.92,3.88-22.9l-6.21-20.07c-1.55-5.65-2.72-7.53-6.21-7.53-4.27,0-5.83,3.45-4.27,8.47l9.32,30.74h-38.06l-5.05-16.31c-10.87-35.13,7.77-52.07,36.89-52.07,25.24,0,37.28,10.04,47.38,42.97l44.27,143.34c.78,2.51,1.55,3.45,4.66,3.45h3.11l8.93,29.17h-22.53c-16.31,0-23.3-5.02-27.18-18.19l-.78-2.51h-2.33c1.55,14.74-5.05,23.21-20.19,23.21s-21.75-7.53-26.8-23.21ZM206.77,217.99c1.55,5.65,2.72,7.53,6.21,7.53,4.27,0,5.83-3.45,4.27-8.47l-25.24-81.86c0,2.2-1.17,3.76-1.94,4.71-3.88,4.39-5.05,7.84-1.56,19.13l18.25,58.97Z"/>
+  <path d="M271.2,210.46l-7.77-25.41h38.06l9.71,31.68c1.55,5.65,2.72,7.53,6.21,7.53,4.27,0,5.83-3.45,4.27-8.47l-3.11-10.03c-14.37-46.73-69.13-64.93-85.82-119.19l-.78-2.51c-10.87-35.13,7.77-52.07,36.89-52.07,25.24,0,37.28,10.04,47.38,42.97l7.77,25.41h-38.06l-9.71-31.68c-1.56-5.65-2.72-7.53-6.21-7.53-4.27,0-5.83,3.45-4.27,8.47l3.11,10.04c14.37,46.73,69.13,64.93,85.82,119.19l.78,2.51c10.88,35.13-7.76,52.07-36.89,52.07-25.24,0-37.28-10.04-47.38-42.97Z"/>
+  <path d="M390.18,230.85l-51.65-167.18h-11.65l-8.93-29.17h11.65L318.72,0h38.06l10.87,34.5h11.65l8.93,29.17h-11.65l47.77,154.63c.78,2.82,1.94,3.45,5.44,3.45h7.38l8.93,29.17h-22.52c-18.64,0-28.74-5.02-33.4-20.07Z"/>
+  <path d="M452.75,230.22l-17.86-57.71c-7.38-23.52-5.44-31.68,9.32-49.24l9.71-11.6c6.21-7.53,7.38-11.92,3.88-22.9l-6.21-20.07c-1.55-5.65-2.72-7.53-6.21-7.53-4.27,0-5.83,3.45-4.27,8.47l9.32,30.74h-38.06l-5.05-16.31c-10.87-35.13,7.77-52.07,36.89-52.07,25.24,0,37.28,10.04,47.38,42.97l44.27,143.34c.78,2.51,1.55,3.45,4.66,3.45h3.11l8.93,29.17h-22.53c-16.31,0-23.3-5.02-27.18-18.19l-.78-2.51h-2.33c1.55,14.74-5.05,23.21-20.19,23.21s-21.75-7.53-26.8-23.21ZM486.53,216.73c1.55,5.65,2.72,7.53,6.21,7.53,4.27,0,5.83-3.45,4.27-8.47l-25.24-81.86c0,2.2-1.17,3.76-1.94,4.71-3.88,4.39-5.05,7.84-1.56,19.13l18.25,58.97Z"/>
+  <path d="M564.5,208.58h38.84v42.34h-38.84v-42.34Z"/>
+</svg>`;
+
+const SVG_OF = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="87 0 754.89 340.72" height="214">
+  <defs><style>.ofl{fill:var(--black)}</style></defs>
+  <g><g>
+    <path class="ofl" d="M708.74,175.33c0,7.47,1.61,13.19,4.85,17.17,3.23,3.98,7.95,5.97,14.17,5.97,3.47,0,6.4-.55,8.78-1.64,2.38-1.09,4.83-2.89,7.33-5.39l4.6,3.63c-1.45,1.45-2.93,2.74-4.42,3.85-1.5,1.12-3.07,2.05-4.72,2.8-1.66.75-3.45,1.3-5.39,1.66-1.94.35-4.12.53-6.54.53-8.08,0-14.23-2.54-18.47-7.63-4.24-5.09-6.36-12.52-6.36-22.29s2.06-16.8,6.18-22.05c4.12-5.25,9.85-7.87,17.2-7.87s13.08,2.5,17.2,7.51c4.12,5.01,6.18,11.99,6.18,20.96v2.79h-40.59ZM742.9,166.79c-.08-1.01-.2-1.9-.36-2.67-.16-.77-.36-1.53-.61-2.3-.24-.77-.53-1.59-.85-2.48-1.29-3.07-3.29-5.47-6-7.21-2.71-1.74-5.75-2.6-9.15-2.6s-6.44.87-9.15,2.6c-2.71,1.74-4.71,4.14-6,7.21-.41.89-.71,1.72-.91,2.48-.2.77-.38,1.54-.55,2.3-.16.77-.28,1.66-.36,2.67-.08,1.01-.16,2.2-.24,3.57h34.41c-.08-1.37-.16-2.56-.24-3.57Z"/>
+    <path class="ofl" d="M439.76,150.26v53.66h-6.16v-53.66h-7.98v-4.59h7.98v-12.57c0-4.43,1.19-8.08,3.57-10.94,2.38-2.86,5.86-4.29,10.45-4.29h14.69v5.44h-13.6c-3.06,0-5.32.85-6.77,2.54-1.45,1.69-2.18,4.07-2.18,7.13v12.69h8.3v4.59h-8.3Z"/>
+    <rect class="ofl" x="462.47" y="145.67" width="6.16" height="58.25"/>
+    <path class="ofl" d="M578.78,198.08c-2.97,2.71-5.82,3.66-8.83,4.66-3.17.9-6.53,1.07-10.64,1.07-4.35,0-7.84-.4-10.45-1.21-2.62-.8-4.85-2.18-6.71-4.11-1.37-1.37-2.42-3.06-3.14-5.08-.73-2.01-1.09-4.11-1.09-6.29,0-5.32,1.79-9.44,5.38-12.39,3.58-2.94,8.56-4.41,14.93-4.41h18.85v-6.53c0-4.67-1.25-8.22-3.75-10.64-2.5-2.42-6.73-3.63-12.69-3.63-4.11,0-7.35.56-9.73,1.69-2.38,1.13-4.49,3.02-6.34,5.68l-4.47-3.87c2.5-3.46,5.36-5.82,8.58-7.07,3.22-1.25,7.21-1.87,11.96-1.87,7.73,0,13.43,1.65,17.1,4.96,3.66,3.3,5.5,8.02,5.5,14.14v23.87c-.25,3.73-.77,7.06-4.46,11ZM577.07,175.28h-18.13c-9.91,0-14.87,3.91-14.87,11.72,0,3.87,1.21,6.73,3.63,8.58,2.42,1.85,6.28,2.78,11.6,2.78,2.66,0,5.21-.24,7.67-.72,2.46-.48,4.73-1.73,6.83-3.75,2.18-2.01,3.26-5.72,3.26-11.12v-7.49Z"/>
+    <path class="ofl" d="M691.2,199.15c-1.45,1.17-2.92,2.1-4.41,2.78-1.49.69-3.06,1.17-4.71,1.45-1.65.28-3.49.42-5.5.42-3.95,0-7.51-.69-10.7-2.05-3.18-1.37-5.88-3.34-8.1-5.92-2.22-2.58-3.91-5.72-5.08-9.43-1.17-3.71-1.75-7.86-1.75-12.45s.58-8.74,1.75-12.45c1.17-3.7,2.86-6.85,5.08-9.43,2.22-2.58,4.91-4.55,8.1-5.92,3.18-1.37,6.75-2.05,10.7-2.05,2.01,0,3.85.14,5.5.42,1.65.28,3.22.77,4.71,1.45,1.49.68,2.96,1.61,4.41,2.78,1.45,1.17,2.98,2.6,4.59,4.29l-4.23,3.87c-2.5-2.74-4.85-4.65-7.07-5.74-2.22-1.09-4.85-1.63-7.92-1.63-3.31,0-6.27.65-8.88,1.93-2.62,1.29-4.81,3.22-6.59,5.8-1.45,2.1-2.48,4.41-3.08,6.95-.6,2.54-.91,5.78-.91,9.73s.3,7.19.91,9.73c.6,2.54,1.63,4.85,3.08,6.95,1.77,2.58,3.97,4.51,6.59,5.8,2.62,1.29,5.58,1.93,8.88,1.93,1.53,0,2.94-.12,4.23-.36,1.29-.24,2.52-.64,3.69-1.21,1.17-.56,2.34-1.33,3.5-2.3,1.17-.97,2.36-2.13,3.56-3.51l4.23,3.87c-1.61,1.69-3.14,3.12-4.59,4.29Z"/>
+    <path class="ofl" d="M633.34,150.5c-3.87-3.71-9.02-5.56-15.47-5.56-.3,0-.59.03-.89.04-.3,0-.59-.04-.89-.04-6.44,0-11.6,1.85-15.47,5.56-4.03,3.87-6.04,9.27-6.04,16.19v37.22h6.16v-36.13c0-5.64,1.37-9.95,4.11-12.93,2.74-2.98,6.73-4.47,11.96-4.47.06,0,.11,0,.16,0,.06,0,.11,0,.16,0,5.24,0,9.22,1.49,11.96,4.47,2.74,2.98,4.11,7.29,4.11,12.93v36.13h6.16v-37.22c0-6.93-2.02-12.33-6.04-16.19Z"/>
+    <path class="ofl" d="M520.15,150.5c-3.87-3.71-9.02-5.56-15.47-5.56-.3,0-.59.03-.89.04-.3,0-.59-.04-.89-.04-6.44,0-11.6,1.85-15.47,5.56-4.03,3.87-6.04,9.27-6.04,16.19v37.22h6.16v-36.13c0-5.64,1.37-9.95,4.11-12.93,2.74-2.98,6.73-4.47,11.96-4.47.06,0,.11,0,.16,0,.06,0,.11,0,.16,0,5.24,0,9.22,1.49,11.96,4.47,2.74,2.98,4.11,7.29,4.11,12.93v36.13h6.16v-37.22c0-6.93-2.02-12.33-6.04-16.19Z"/>
+  </g><g>
+    <path class="ofl" d="M338.36,172.87h-58.5c.84,5.16,3.1,9.26,6.77,12.31,3.67,3.05,8.35,4.57,14.04,4.57,6.8,0,12.65-2.38,17.54-7.14l15.34,7.2c-3.83,5.43-8.41,9.44-13.74,12.04-5.34,2.6-11.67,3.9-19.01,3.9-11.38,0-20.66-3.59-27.82-10.77-7.16-7.18-10.74-16.18-10.74-26.98s3.57-20.27,10.71-27.58c7.14-7.31,16.09-10.97,26.85-10.97,11.43,0,20.72,3.66,27.88,10.97,7.16,7.32,10.74,16.98,10.74,28.98l-.07,3.47ZM320.15,158.53c-1.2-4.05-3.58-7.34-7.12-9.87-3.54-2.53-7.65-3.8-12.33-3.8-5.08,0-9.53,1.42-13.36,4.27-2.41,1.78-4.63,4.91-6.68,9.41h39.49Z"/>
+    <path class="ofl" d="M350.28,138.7h18.46v-.02c4.19-3.53,7.98-5.98,11.38-7.36,3.4-1.38,6.88-2.07,10.44-2.07,7.29,0,13.48,2.55,18.57,7.64,4.28,4.33,6.41,10.73,6.41,19.21v48.63h-18.26v-32.22c0-8.78-.39-14.61-1.18-17.5-.79-2.88-2.16-5.08-4.12-6.59-1.96-1.51-4.37-2.26-7.25-2.26-3.73,0-6.94,1.25-9.61,3.75-2.68,2.5-4.53,5.96-5.57,10.37-.54,2.3-.81,7.27-.81,14.93v29.52h-18.46v-66.02Z"/>
+    <path class="ofl" d="M199.59,139.47v-.22c3.34-3.34,6.94-5.84,10.82-7.51,3.88-1.67,8.02-2.5,12.44-2.5,9.6,0,17.76,3.63,24.48,10.89,6.72,7.26,10.08,16.57,10.08,27.93s-3.47,20.12-10.41,27.49c-6.94,7.37-15.17,11.06-24.68,11.06-4.24,0-8.18-.75-11.84-2.27-3.65-1.51-7.28-3.98-10.89-7.41v25.74h-18.33v-83.21h18.33ZM219,146.29c-5.82,0-10.64,1.98-14.47,5.95-3.83,3.97-5.75,9.15-5.75,15.56s1.92,11.82,5.75,15.86c3.72,3.92,8.37,5.93,13.96,6.05,5.07.11,10.08-1.7,13.77-5.17,4.51-4.24,6.76-9.8,6.76-16.67,0-6.31-1.89-11.48-5.68-15.52-3.79-4.03-8.57-6.05-14.34-6.05Z"/>
+  </g>
+  <path class="ofl" d="M169.04,148.17c-3.43-5.95-8.19-10.66-14.3-14.13-5.38-3.06-11.08-4.77-17.1-5.13v17.4c4.9.44,8.99,2.38,12.29,5.82,3.77,3.95,5.66,9.07,5.66,15.39s-1.92,11.47-5.76,15.49c-3.84,4.01-8.65,6.02-14.43,6.02-5.29,0-9.73-1.67-13.34-4.98l-12.34,12.34c7.16,6.54,15.66,9.82,25.51,9.82,7.17,0,13.73-1.7,19.68-5.11,6.01-3.44,10.74-8.22,14.2-14.35,3.27-5.79,5.02-12.36,5.07-19.01.05-7.01-1.66-13.53-5.14-19.57Z"/>
+  <g>
+    <path class="ofl" d="M121.77,151.56c3.19-3.06,7-4.81,11.46-5.24v-29.12c-11.36.83-22.14,6.29-29.7,16.12l18.24,18.24Z"/>
+    <path class="ofl" d="M115.47,165.73c.25-4.12,1.41-7.71,3.46-10.78l-18.54-18.54c-6.42,8.96-8.73,20.39-7.5,29.32h22.59Z"/>
+    <path class="ofl" d="M115.53,170.14h-22.64c1.73,10.31,7.51,17.99,13.73,23.09l12.53-12.53c-2.06-2.97-3.26-6.49-3.62-10.56Z"/>
+  </g></g>
+</svg>`;
+
+// ── WhatsApp icon ────────────────────────────────────────────────────────
+const WA_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="72" height="72" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+// ── Template CTA ─────────────────────────────────────────────────────────
+function ctaPostHTML(hook, subBold, subBody) {
+  return `
+  <div class="logo">${SVG_BASTA}</div>
+  <div class="cta-content">
+    <p class="cta-hook">${hook}</p>
+    ${subBold ? `<p class="cta-sub-bold">${subBold}</p>` : ''}
+    <p class="cta-sub-body">${subBody}</p>
+  </div>
+  <div class="cta-btn">
+    <span class="cta-btn-label">FALAR NO WHATSAPP</span>
+    ${WA_ICON}
+  </div>`;
+}
+
+// ── Template post só com logo Open Finance centralizado ─────────────────
+function ofOnlyPostHTML(hook = '', body = '') {
+  return `
+  <div class="logo">${SVG_BASTA}</div>
+  <div class="of-center">
+    ${SVG_OF}
+    ${hook ? `<p class="of-hook">${hook}</p>` : ''}
+    ${body ? `<p class="of-body">${body}</p>` : ''}
+  </div>`;
+}
+
+// ── Template de um post ──────────────────────────────────────────────────
+function postHTML(hook, ofHeader, ofCta, ofSub, bgImage = null, noOF = false, flipBg = '', bgPos = '', bgFilter = '', body = '', hookXl = false) {
+  const ofBlock = noOF ? '' : `
+    <div class="post-sep"></div>
+    <div class="of-block">
+      <div class="of-logo">${SVG_OF}</div>
+      <p class="of-header">${ofHeader}</p>
+      <p class="of-cta">${ofCta}</p>
+      <p class="of-sub">${ofSub}</p>
+    </div>`;
+  const bgLayer = bgImage ? `
+  <div class="bg-img${flipBg ? ' ' + flipBg : ''}" style="background-image:url('${bgImage}');${bgPos?`background-position:${bgPos};`:''}${bgFilter?`filter:${bgFilter};`:''}"></div>
+  <div class="bg-overlay"></div>` : '';
+  return `
+  ${bgLayer}
+  <div class="logo">${SVG_BASTA}</div>
+  <div class="content">
+    <p class="hook${hookXl ? ' hook-xl' : ''}">${hook}</p>
+    ${body ? `<p class="body">${body}</p>` : ''}
+    ${ofBlock}
+  </div>`;
+}
+
+// ── Conteúdo dos posts ───────────────────────────────────────────────────
+// Edite aqui para personalizar cada post.
+// Slots sem conteúdo próprio herdam o post 01 como placeholder.
+
+const posts = [
+  {
+    hook: "Servidor Público,<br><span style=\"color:var(--green)\">experimente</span> renegociar<br>suas dívidas usando seus<br>dados bancários a seu favor.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    hook: "Servidor Público<br>Se coloque em <span style=\"color:var(--green)\">igualdade de<br>condições</span> para renegociar<br>com seus credores.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    hook: "Existe uma <span style=\"color:var(--green)\">forma justa</span> de<br>sair do endividamento.<br>E não é a que o credor<br>te ofereceu.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    hook: "Servidor, entenda sua real<br>situação para poder<br>renegociar suas dívidas<br><span style=\"color:var(--green)\">definitivamente.</span>",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    hook: "Servidor, seus dados<br>bancários são uma das suas<br><span style=\"color:var(--green)\">melhores oportunidades</span><br>para se livrar das dívidas.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  // ── Versões fundo preto (06–10) ──────────────────────────────────────
+  {
+    dark: true,
+    hook: "Servidor Público,<br><span style=\"color:var(--green)\">experimente</span> renegociar<br>suas dívidas usando seus<br>dados bancários a seu favor.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    dark: true,
+    hook: "Servidor Público<br>Se coloque em <span style=\"color:var(--green)\">igualdade de<br>condições</span> para renegociar<br>com seus credores.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    dark: true,
+    hook: "Existe uma <span style=\"color:var(--green)\">forma justa</span> de<br>sair do endividamento.<br>E não é a que o credor<br>te ofereceu.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    dark: true,
+    hook: "Servidor, entenda sua real<br>situação para poder<br>renegociar suas dívidas<br><span style=\"color:var(--green)\">definitivamente.</span>",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  {
+    dark: true,
+    hook: "Servidor, seus dados<br>bancários são uma das suas<br><span style=\"color:var(--green)\">melhores oportunidades</span><br>para se livrar das dívidas.",
+    ofHeader: "É do Banco Central do Brasil",
+    ofCta: "É confiável. É seguro.",
+    ofSub: "Acesso apenas de leitura."
+  },
+  // ── Posts com imagem de fundo ─────────────────────────────────────────
+  {
+    bgImage: "Gemini_Generated_Image_ke3k8ike3k8ike3k.png",
+    flipBg: "flip-x",
+    noOF: true,
+    hook: "Servidor Público,<br><span style=\"color:var(--green)\">experimente</span> renegociar<br>suas dívidas usando seus<br>dados bancários a seu favor.",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // Feed 12: logo Open Finance centralizado · Feed 13: tema verde · Feed 14: placeholder · Feed 15: CTA
+  { ofOnly: true, hook: "Seu maior aliado<br>contra o endividamento.", body: "Renegociar após entender seus dados bancários<br>evita que você caia em armadilhas.<br><br>Você entende sua real situação: qual o valor de<br>suas dívidas, qual o valor dos juros, quais as taxas<br>cobradas em sua conta, se há produtos e serviços<br>que você paga sem nem saber, e se existem<br>seguros contratados em seu nome." }, { greenPost: true, noOF: true, hook: "Pague <span style=\"color:var(--white)\">apenas o justo.</span><br>Sem letras miúdas.<br>Retome sua autonomia." }, { noOF: true, hookXl: true, hook: "Suas dívidas<br>têm solução.", body: "Resolva sem pagar nada antes.<br>Você só paga uma parte do que ganhar." }, { cta: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // Feed 16
+  {
+    bgImage: "Gemini_Generated_Image_xbdc2dxbdc2dxbdc.png",
+    noOF: true,
+    hook: "Servidor Público,<br>o endividamento não é<br>uma sentença definitiva.<br><span style=\"color:var(--green)\">Existe saída.</span>",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // feeds 17–19: placeholder · Feed 20: CTA
+  { noOF: true, hook: "Se reorganizar<br>financeiramente é possível<br>e pode ser mais simples<br>do que você imagina.", body: "O Basta te guia para que você<br>renegocie sem cair em armadilhas." }, { dark: true, noOF: true, hook: "Use instrumentos gratuitos<br>para dar um basta no<br>endividamento <span style=\"color:var(--green)\">sem<br>data para acabar.</span>" }, { noOF: true, hookXl: true, hook: "Descontar<br>50, 60, 70% do<br>seu salário não<br>pode ser normal.", body: "Saia do endividamento<br>de forma justa." }, { cta: true, ctaLight: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // Feed 21
+  {
+    bgImage: "Gemini_Generated_Image_oo4a6uoo4a6uoo4a.png",
+    bgPos: "65% center",
+    bgFilter: "contrast(1.15) brightness(1.00)",
+    noOF: true,
+    hook: "Servidor Público,<br>descontar <span style=\"color:var(--green)\">50, 60, 70%<br>do seu salário</span> não<br>pode ser normal.",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // feeds 22–24: placeholder · Feed 25: CTA
+  { greenPost: true, noOF: true, hook: "Aja com instrumentos<br>gratuitos para ter alívio<br>imediato enquanto você<br>resolve sua situação<br>de endividamento." }, { noOF: true, hook: "Envie seus documentos.<br>Crie sua conta.<br>Conecte seus bancos.<br>Pronto.", body: "Pelo celular, no seu tempo.<br>Simples assim." }, { noOF: true, hookXl: true, hook: "Resolva sem pagar<br>nada antes.<br>Você só paga uma<br>parte do que ganhar.", body: "Pague apenas o justo.<br>Sem letras miúdas." }, { cta: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // Feed 26
+  {
+    bgImage: "Gemini_Generated_Image_mnm6t6mnm6t6mnm6.png",
+    bgPos: "center 20%",
+    bgFilter: "contrast(1.1) brightness(1.00)",
+    noOF: true,
+    hook: "Bombeiro,<br>você refinancia,<br>paga e <span style=\"color:var(--green)\">as dívidas<br>só aumentam?</span>",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // feeds 27–29: placeholder · Feed 30: CTA
+  { dark: true, noOF: true, hook: "Se reorganizar<br>financeiramente é possível<br>e pode ser mais simples<br>do que você imagina.", body: "O Basta te guia para que você<br>renegocie sem cair em armadilhas." }, { noOF: true, hook: "Não permita que sua<br>renda seja consumida<br>por dívidas que só crescem,<br>que nunca acabam.", body: "Saia do endividamento<br>de forma justa. Basta." }, { dark: true, noOF: true, hookXl: true, hook: "<span style=\"color:var(--green)\">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.", body: "Pague apenas o justo.<br>Sem letras miúdas." }, { cta: true, ctaLight: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // Feed 31
+  {
+    bgImage: "Gemini_Generated_Image_vr7upvr7upvr7upv.png",
+    bgPos: "center 25%",
+    bgFilter: "contrast(1.1) brightness(0.95)",
+    noOF: true,
+    hook: "Servidor Público,<br>não aguenta mais <span style=\"color:var(--green)\">o peso<br>das dívidas</span> que tomam<br>seu salário todo mês?",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // feeds 32–34: placeholder · Feed 35: CTA
+  { noOF: true, hook: "O endividamento é <span style=\"color:var(--green)\">um<br>fardo pesado demais,</span><br>que frustra, cansa e<br>nos deixa sem<br>esperança no futuro." }, { greenPost: true, noOF: true, hook: "Existe um aliado que<br>muda tudo. Que te coloca<br>em <span style=\"color:var(--white)\">igualdade de condições</span><br>com os credores." }, { ofOnly: true, hook: "Use seus dados bancários<br>a seu favor.", body: "Renegociar após entender seus dados bancários<br>evita que você caia em armadilhas.<br><br>Você entende sua real situação: qual o valor de<br>suas dívidas, qual o valor dos juros, quais as taxas<br>cobradas em sua conta, se há produtos e serviços<br>que você paga sem nem saber, e se existem<br>seguros contratados em seu nome." }, { cta: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // Feed 36
+  {
+    bgImage: "Gemini_Generated_Image_wdr25xwdr25xwdr2.png",
+    bgPos: "center 15%",
+    bgFilter: "contrast(1.2) brightness(0.95)",
+    noOF: true,
+    hook: "Servidor Público,<br>não permita que o<br>endividamento tire<br><span style=\"color:var(--green)\">sua alegria de viver.</span>",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // feeds 37–39: placeholder · Feed 40: CTA
+  { noOF: true, hook: "Sair do endividamento<br>pode ser <span style=\"color:var(--green)\">mais simples</span><br>do que você imagina.", body: "Você faz tudo pelo celular,<br>na hora que desejar." }, { noOF: true, hook: "Acesse: bastaeponto.com.br<br>Envie seus documentos.<br>Crie sua conta.<br>Conecte seus bancos.<br><span style=\"color:var(--green)\">Pronto.</span>" }, { noOF: true, hookXl: true, hook: "Descontar<br>50, 60, 70% do<br>seu salário não<br>pode ser normal.", body: "Saia do endividamento<br>de forma justa." }, { cta: true, ctaLight: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // Feed 41
+  {
+    bgImage: "Gemini_Generated_Image_xm6mh6xm6mh6xm6m.png",
+    bgPos: "center 20%",
+    bgFilter: "contrast(1.25) brightness(0.90)",
+    noOF: true,
+    hook: "Servidor Público,<br>conheça <span style=\"color:var(--green)\">seu maior<br>aliado</span> na luta contra<br>o endividamento.",
+    ofHeader: "", ofCta: "", ofSub: ""
+  },
+  // feeds 42–44: placeholder · Feed 45: CTA
+  { dark: true, ofOnly: true, hook: "<span style=\"color:var(--green)\">Use seus dados bancários<br>a seu favor.</span>", body: "Renegociar após entender seus dados bancários<br>evita que você caia em armadilhas.<br><br>Você entende sua real situação: qual o valor de<br>suas dívidas, qual o valor dos juros, quais as taxas<br>cobradas em sua conta, se há produtos e serviços<br>que você paga sem nem saber, e se existem<br>seguros contratados em seu nome." }, { greenPost: true, noOF: true, hook: "Envie seus documentos.<br>Crie sua conta.<br>Conecte seus bancos.<br><span style=\"color:var(--white)\">Pronto.</span>", body: "Pelo celular, no seu tempo.<br>Simples assim." }, { noOF: true, hookXl: true, hook: "Resolva sem pagar<br>nada antes.<br>Você só paga uma<br>parte do que ganhar.", body: "Pague apenas o justo.<br>Sem letras miúdas." }, { cta: true, hook: "Chame agora e<br>mude sua história.", ctaSubBold: "", ctaSubBody: "A análise é gratuita, o diagnóstico é completo<br>e a conversa pode mudar sua situação,<br>definitivamente." },
+  // feeds 46–49: placeholder · Feed 50: CTA
+  { greenPost: true, noOF: true, hook: "Aja com <span style=\"color:var(--white)\">instrumentos<br>gratuitos para ter alívio<br>imediato</span> enquanto você<br>resolve sua situação<br>de endividamento." }, { greenPost: true, noOF: true, hook: "Saia do endividamento<br>de forma justa.<br>Reorganize suas dívidas<br>para que elas tenham<br><span style=\"color:var(--white)\">data para acabar.</span>" }, { dark: true, noOF: true, hook: "Saia do endividamento<br>de forma justa.<br><span style=\"color:var(--green)\">Reorganize suas dívidas<br>para que elas tenham<br>data para acabar.</span>" }, { noOF: true, hook: "Saia do endividamento<br>de forma justa.<br>Reorganize suas dívidas<br>para que elas tenham<br><span style=\"color:var(--green)\">data para acabar.</span>" }, { noOF: true, hook: "Aja com <span style=\"color:var(--green)\">instrumentos<br>gratuitos para ter alívio<br>imediato</span> enquanto você<br>resolve sua situação<br>de endividamento." },
+];
+
+// ── Gera 50 cards (5 colunas × 10 linhas) ────────────────────────────────
+const gallery = document.getElementById('gallery');
+const TOTAL = 50;
+
+for (let i = 0; i < TOTAL; i++) {
+  const n = String(i + 1).padStart(2, '0');
+  const data = posts[i] || posts[0]; // usa placeholder se não definido
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-meta">
+      <span class="card-id">Feed ${n}</span>
+      <span class="card-dim">1080 × 1350</span>
+    </div>
+    <div class="wrap">
+      <div class="post${data.cta ? ' cta-post' : ''}${data.cta && data.ctaLight ? ' cta-light' : ''}${data.dark ? ' dark' : ''}${data.bgImage ? ' has-bg' : ''}${data.ofOnly ? ' of-only' : ''}${data.greenPost ? ' green-post' : ''}" id="feed-${n}">
+        ${data.cta
+          ? ctaPostHTML(data.hook, data.ctaSubBold, data.ctaSubBody)
+          : data.ofOnly
+            ? ofOnlyPostHTML(data.hook, data.body)
+            : postHTML(data.hook, data.ofHeader, data.ofCta, data.ofSub, data.bgImage, data.noOF, data.flipBg || '', data.bgPos || '', data.bgFilter || '', data.body || '', data.hookXl || false)}
+      </div>
+    </div>`;
+  gallery.appendChild(card);
+}
+</script>
+
+</body>
+</html>

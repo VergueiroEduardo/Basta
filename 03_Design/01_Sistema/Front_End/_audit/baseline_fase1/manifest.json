@@ -1,0 +1,146 @@
+{
+  "01_basta-landing.html": {
+    "struct_hash": "af7747c7a2d9927a",
+    "style_hash": "f54520d25d25b94f",
+    "element_count": 364,
+    "style_chars": 36471
+  },
+  "02_basta-cadastro.html": {
+    "struct_hash": "f3b335540a4a8864",
+    "style_hash": "8c1c62206e5c6cf3",
+    "element_count": 107,
+    "style_chars": 13663
+  },
+  "03_basta-login.html": {
+    "struct_hash": "8ef1975846325bd0",
+    "style_hash": "9b284f2400e071c8",
+    "element_count": 62,
+    "style_chars": 12237
+  },
+  "04_basta-recuperar-senha.html": {
+    "struct_hash": "3bf58e9e3d8105d9",
+    "style_hash": "fe67a9db80234ce5",
+    "element_count": 50,
+    "style_chars": 10488
+  },
+  "05_basta-redefinir-senha.html": {
+    "struct_hash": "dfc5d34feee7f86e",
+    "style_hash": "83c59408571de93a",
+    "element_count": 91,
+    "style_chars": 11698
+  },
+  "06_basta-conta-criada.html": {
+    "struct_hash": "a2ae4082be2eeab4",
+    "style_hash": "ef7f7bb56cc30af0",
+    "element_count": 29,
+    "style_chars": 4978
+  },
+  "07_basta-of-selecao-banco.html": {
+    "struct_hash": "b7e44c9f3977254e",
+    "style_hash": "bf4629f88b865f93",
+    "element_count": 60,
+    "style_chars": 8816
+  },
+  "08_basta-of-credenciais.html": {
+    "struct_hash": "2657b19ce2e8386b",
+    "style_hash": "18134f013834865e",
+    "element_count": 47,
+    "style_chars": 9903
+  },
+  "09_basta-of-instrucao-banco.html": {
+    "struct_hash": "dd93bbb1ff0b7e25",
+    "style_hash": "5d176c9f5a4a21c1",
+    "element_count": 60,
+    "style_chars": 9409
+  },
+  "10_basta-of-progresso.html": {
+    "struct_hash": "c08808322e2cd394",
+    "style_hash": "a7a90fed68de3cac",
+    "element_count": 67,
+    "style_chars": 9537
+  },
+  "11_basta-of-erro.html": {
+    "struct_hash": "b5f03a8e10021dfe",
+    "style_hash": "44c02e3524842b60",
+    "element_count": 39,
+    "style_chars": 7930
+  },
+  "12_basta-dashboard.html": {
+    "struct_hash": "fccada93bc4165be",
+    "style_hash": "d145223868bf3a8e",
+    "element_count": 131,
+    "style_chars": 22556
+  },
+  "13_basta-documentos.html": {
+    "struct_hash": "9c30097eab99a123",
+    "style_hash": "073da3670709c497",
+    "element_count": 300,
+    "style_chars": 18371
+  },
+  "14_basta-contas-bancarias.html": {
+    "struct_hash": "8851c88da9ae34bb",
+    "style_hash": "6370c50f4b71bf25",
+    "element_count": 125,
+    "style_chars": 16247
+  },
+  "15_basta-requerimentos.html": {
+    "struct_hash": "d099b4def1b9004e",
+    "style_hash": "6981ee4da26432cf",
+    "element_count": 335,
+    "style_chars": 20507
+  },
+  "16_basta-perfil.html": {
+    "struct_hash": "99c231e7a9b4a9bf",
+    "style_hash": "a24eacd0710e3788",
+    "element_count": 142,
+    "style_chars": 15873
+  },
+  "17_basta-ajuda.html": {
+    "struct_hash": "5996944ed6504116",
+    "style_hash": "5e68c9c1fdfe26ce",
+    "element_count": 267,
+    "style_chars": 16525
+  },
+  "18_basta-hoje.html": {
+    "struct_hash": "70f81a870d173c94",
+    "style_hash": "3e2dc07b78777260",
+    "element_count": 355,
+    "style_chars": 25071
+  },
+  "19_basta-admin-conversas.html": {
+    "struct_hash": "df2ec28a1e191e31",
+    "style_hash": "fd39657020963d58",
+    "element_count": 521,
+    "style_chars": 34230
+  },
+  "20_basta-admin-pipeline.html": {
+    "struct_hash": "652f3208c6f6e4f3",
+    "style_hash": "e91f9c0423ff0c4c",
+    "element_count": 1238,
+    "style_chars": 31334
+  },
+  "21_basta-admin-templates.html": {
+    "struct_hash": "0adb04c9d68e9d57",
+    "style_hash": "92eeff381de8832e",
+    "element_count": 556,
+    "style_chars": 24283
+  },
+  "22_basta-admin-usuarios.html": {
+    "struct_hash": "4594cec862578d55",
+    "style_hash": "dc7b2cfa4695e47c",
+    "element_count": 764,
+    "style_chars": 30908
+  },
+  "23_basta-diagnostico-admin.html": {
+    "struct_hash": "2612f34c17279955",
+    "style_hash": "ecbbc8557cf2a025",
+    "element_count": 650,
+    "style_chars": 36399
+  },
+  "24_basta-diagnostico-cliente-v2.html": {
+    "struct_hash": "487301d82eb93cde",
+    "style_hash": "668cfdc77089bbf5",
+    "element_count": 432,
+    "style_chars": 22653
+  }
+}

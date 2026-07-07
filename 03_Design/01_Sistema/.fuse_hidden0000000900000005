@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Chega de dívida.</title>
+  <meta name="description" content="Plataforma de reestruturação financeira. Analisamos sua situação real, identificamos abusos e construímos um caminho concreto para você retomar o controle da sua vida financeira." />
+  <meta name="theme-color" content="#FFFFFF" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }    body {
+      font-family: var(--f);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+    }    img { display: block; max-width: 100%; }
+    :where(button, a, input, select, textarea) { border-radius: 0; }
+    /* ── ACESSIBILIDADE ─────────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: -6rem; left: var(--px);
+      background: var(--green); color: var(--white);
+      font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 14px 24px; z-index: 9999; transition: top var(--t);
+    }
+    .skip-link:focus { top: 1rem; }/* ── QUEBRAS DE LINHA CONTROLADAS POR BREAKPOINT ─────────── */
+    /* br.d-break: invisível no mobile, ativo no desktop          */
+    br.d-break { display: none; }
+    @media (min-width: 768px) { br.d-break { display: inline; } }
+    /* br.m-break: ativo no mobile, invisível no desktop          */
+    br.m-break { display: inline; }
+    @media (min-width: 768px) { br.m-break { display: none; } }
+    /* ── LAYOUT ─────────────────────────────────────────────── */
+    /* .container local removido — usa o canônico de _foundation/grid.css
+       (padding-inline progressivo 16/24/32 + safe-area-inset) */
+    /* ── TIPOGRAFIA BASE ─────────────────────────────────────── */
+    .label {
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    /* ── BOTÕES ─────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--f); font-size: 15px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 18px 36px; min-height: 56px;
+      transition: background var(--t), color var(--t), transform var(--t), border-color var(--t);
+      border: none; cursor: pointer;
+      border-radius: 0;
+    }
+    @media (min-width: 768px) {
+      .btn { font-size: 16px; padding: 20px 48px; min-height: 60px; }
+    }
+    .btn-primary {
+      background: var(--green); color: var(--white);
+    }
+    .btn-primary:hover {
+      background: var(--black);
+    }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-outline-black {
+      background: transparent; color: var(--black);
+      border: 2px solid var(--black);
+    }
+    .btn-outline-black:hover { background: var(--black); color: var(--white); }
+    .btn-outline-white {
+      background: transparent; color: var(--white);
+      border: 2px solid var(--white);
+    }
+    .btn-outline-white:hover { background: var(--white); color: var(--black); }
+    /* ── LOGOS ──────────────────────────────────────────────── */
+    /* Logo em fundo claro: letras #000000, ponto sempre #bdc0ac */
+    .logo-svg { display: block; width: auto; }
+    .logo-link { display: inline-flex; align-items: center; }
+    .logo-link:hover { opacity: 0.8; transition: opacity var(--t); }
+    /* ══════════════════════════════════════════════════════════
+       HEADER
+    ══════════════════════════════════════════════════════════ */
+    .site-header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--black);
+      border-bottom: none;
+    }
+    .header-inner {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    /* Grupo direito: dois blocos visuais separados */
+    .header-right {
+      display: none;
+      align-items: center; gap: 0;
+    }
+    /* Bloco 1: Nav desktop */
+    .header-nav {
+      display: flex;
+      align-items: center; gap: 20px;
+      padding-right: 32px;
+      border-right: 1px solid color-mix(in srgb, var(--white) 15%, transparent);
+      margin-right: 32px;
+    }
+    .header-nav a {
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--white) 55%, transparent); position: relative;
+      padding-bottom: 2px;
+    }
+    .header-nav a::after {
+      content: ''; position: absolute; bottom: -1px; left: 0;
+      width: 0; height: 1px; background: var(--white);
+      transition: width var(--t);
+    }
+    .header-nav a:hover { color: var(--white); }
+    .header-nav a:hover::after { width: 100%; }
+    /* Bloco 2: Header actions desktop */
+    .header-actions {
+      display: flex;
+      align-items: center; gap: 16px;
+    }
+    .btn-header-login {
+      font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--white); border: 2px solid var(--white);
+      padding: 10px 24px; min-height: 48px; display: flex; align-items: center;
+      transition: background var(--t), color var(--t);
+    }
+    .btn-header-login:hover { background: var(--white); color: var(--black); }
+    .btn-header-cta {
+      font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--white); background: var(--green);
+      padding: 10px 24px; min-height: 48px; display: flex; align-items: center;
+      transition: background var(--t), transform var(--t);
+    }
+    .btn-header-cta:hover { background: var(--black); transform: none; }
+    /* Hamburger mobile */
+    .hamburger {
+      display: flex; flex-direction: column; justify-content: center;
+      gap: 5px; width: 48px; height: 48px;
+      padding: 12px; cursor: pointer;
+    }
+    .hamburger span {
+      display: block; height: 2px; background: var(--white);
+      transition: transform var(--t), opacity var(--t);
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    /* Mobile nav overlay */
+    .mobile-nav {
+      position: fixed; inset: 0; z-index: 99;
+      background: var(--black);
+      display: flex; flex-direction: column;
+      padding: 88px var(--px) var(--px);
+      opacity: 0; pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity var(--t), transform var(--t);
+    }
+    .mobile-nav.open {
+      opacity: 1; pointer-events: all; transform: translateY(0);
+    }
+    .mobile-nav a {
+      font-size: 36px; font-weight: 800; color: var(--white);
+      letter-spacing: -0.02em; border-bottom: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+      padding: 20px 0; display: block;
+      transition: color var(--t);
+    }
+    .mobile-nav a:hover { color: var(--gray-300); }
+    /* Logo tokens (sem cores inline) */
+    .logo-svg-lg { height: 36px; }
+    .logo-svg-md { height: 48px; }
+    @media (min-width: 768px) { .logo-svg-md { height: 80px; } }
+    .logo-fill { fill: var(--white); }
+    .logo-dot { fill: var(--white); }
+    /* Cross-fade entre logo do hero e logo do header conforme o usuário rola.
+       Curva: cubic-bezier custom para entrada elegante (out + slight overshoot avoidance).
+       Duração: 480ms — devagar o bastante para ser percebido, rápido o bastante para não atrasar. */
+    .header-logo {
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.48s cubic-bezier(0.22, 0.61, 0.36, 1),
+                  transform 0.48s cubic-bezier(0.22, 0.61, 0.36, 1);
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+    .header-logo.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    /* Estado inicial via classe legado: igual ao default acima */
+    .header-logo.is-hidden { opacity: 0; transform: translateY(-12px); pointer-events: none; }
+    /* Hero logo: cross-fade simétrico ao header-logo */
+    .hero-logo {
+      transition: opacity 0.48s cubic-bezier(0.22, 0.61, 0.36, 1),
+                  transform 0.48s cubic-bezier(0.22, 0.61, 0.36, 1);
+      will-change: opacity, transform;
+    }
+    .hero-logo.is-fading {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.96);
+    }
+    /* Logo grande na hero — canto inferior direito, presença brutal */
+    /* Logo do hero — branco, alinhado pelo TOPO ao TOPO do botão "Começar agora".
+       Anchored no .hero-actions (que envolve o botão), top:0 garante a coincidência. */
+    .hero-content { position: relative; }
+    .hero-actions { position: relative; }
+    .hero-logo {
+      /* Mobile: escondido (logo aparece grande no header mobile já) */
+      display: none;
+    }
+    @media (min-width: 900px) {
+      .hero-logo {
+        display: block;
+        position: absolute;
+        top: 0;                                /* topo do logo = topo do .hero-actions = topo do botão */
+        left: calc(100% + clamp(16px, 2vw, 32px));   /* ~1 coluna de respiro do CTA — composição coesa */
+        height: clamp(140px, 18vw, 240px);
+        width: auto;
+        color: var(--white);
+        opacity: 0.95;
+        z-index: 2;
+        pointer-events: none;
+      }
+    }
+    .hero-logo path,
+    .hero-logo use { fill: var(--white) !important; }
+    .mobile-nav-actions {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 32px;
+      border-top: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+    }
+    .mobile-nav-actions .btn {
+      width: 100%;
+      justify-content: center;
+      min-height: 52px;
+      font-size: 14px;
+    }
+    /* Desktop breakpoint: show header-right, hide hamburger */
+    @media (min-width: 900px) {
+      .header-inner { height: 84px; }
+      .header-right { display: flex; }
+      .hamburger { display: none; }
+      .mobile-nav { display: none; }
+    }
+    /* ══════════════════════════════════════════════════════════
+       HERO — full-bleed background image
+    ══════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      background: var(--black); /* fallback enquanto imagem carrega */
+      border-bottom: none;
+      overflow: hidden;
+    }
+    /* Camada de imagem */
+    .hero-bg {
+      position: absolute; inset: 0;
+    }
+    .hero-bg-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      /* mantém rosto + mão visíveis em qualquer viewport */
+      object-position: center 20%;
+      display: block;
+    }
+    /* Overlay escuro — topo 100% preto (fusão com header), gradiente para overlay */
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        var(--black) 0%,
+        color-mix(in srgb, var(--black) 72%, transparent) 15%,
+        color-mix(in srgb, var(--black) 72%, transparent) 100%
+      );
+    }
+    /* Mobile: overlay mais denso */
+    @media (max-width: 767px) {
+      .hero-overlay {
+        background: linear-gradient(
+          to bottom,
+          var(--black) 0%,
+          color-mix(in srgb, var(--black) 78%, transparent) 15%,
+          color-mix(in srgb, var(--black) 78%, transparent) 100%
+        );
+      }
+    }
+    /* Conteúdo sobre o fundo */
+    .hero-content {
+      position: relative; z-index: 1;
+      padding: 32px 0;
+      max-width: 680px;
+    }
+    /* Kicker acima do headline */
+    .hero-kicker {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 32px;
+    }
+    .hero-kicker-dot {
+      width: 8px; height: 8px;
+      background: var(--gray-300); border-radius: 0;
+      flex-shrink: 0;
+    }
+    .hero-kicker-text {
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--white) 55%, transparent);
+    }
+    /* Headline — protagonista da página */
+    .hero-headline {
+      font-size: clamp(44px, 10vw, 88px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 28px;
+    }
+    /* "sua" com underline em sage */
+    .hero-headline .hl-sua {
+      text-decoration: underline;
+      text-decoration-color: var(--gray-300);
+      text-underline-offset: 0.1em;
+      text-decoration-thickness: 0.035em;
+    }
+    .hero-sub {
+      font-size: clamp(17px, 2.2vw, 20px); font-weight: 400;
+      line-height: 1.7; color: color-mix(in srgb, var(--white) 72%, transparent);
+      max-width: 48ch; margin-bottom: 32px;
+    }
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px; align-items: flex-start; margin-bottom: 32px;
+    }
+    .hero-actions .btn { width: 100%; justify-content: center; }
+    @media (min-width: 600px) {
+      .hero-actions { flex-direction: row; flex-wrap: wrap; gap: 16px; align-items: center; }
+      .hero-actions .btn { width: auto; }
+    }
+    .hero-link-secondary {
+      font-size: 16px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--white); display: flex; align-items: center; gap: 6px;
+      min-height: 48px; padding: 4px 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--white) 35%, transparent);
+      transition: color var(--t), border-color var(--t);
+    }
+    .hero-link-secondary:hover { color: var(--gray-300); border-color: var(--gray-300); }
+    /* Trust signals inline */
+    .hero-trust {
+      display: flex; flex-wrap: wrap; gap: 0;
+    }
+    .trust-signal {
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: color-mix(in srgb, var(--white) 45%, transparent);
+      padding-right: 20px; margin-right: 20px;
+      border-right: 1px solid color-mix(in srgb, var(--white) 18%, transparent);
+    }
+    .trust-signal:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+    @media (max-width: 480px) {
+      .hero-content { padding: 32px 0; }
+      .hero-headline { font-size: clamp(38px, 12vw, 56px); }
+    }
+    /* ══════════════════════════════════════════════════════════
+       TRUST BAR
+       "Sem ícones. Só texto. O texto é o ícone."
+    ══════════════════════════════════════════════════════════ */
+    .trust-bar {
+      background: var(--off-white);
+      border-top: 1px solid var(--gray-300);
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .trust-bar-inner {
+      display: flex;
+      flex-direction: column;
+    }
+    .trust-col {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .trust-col:last-child { border-bottom: none; }
+    .trust-col-value {
+      font-size: clamp(32px, 5vw, 42px);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: var(--black); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .trust-col-desc {
+      font-size: 16px; font-weight: 400;
+      color: var(--gray-600); line-height: 1.5;
+    }
+    @media (min-width: 768px) {
+      .trust-bar-inner {
+        flex-direction: row;
+        border-top: none;
+        border-bottom: none;
+      }
+      .trust-col {
+        flex: 1; padding: 40px 48px;
+        border-bottom: none;
+        border-right: 1px solid var(--gray-300);
+      }
+      .trust-col:first-child { padding-left: 0; }
+      .trust-col:last-child { border-right: none; padding-right: 0; }
+    }
+    /* ══════════════════════════════════════════════════════════
+       COMO FUNCIONA
+       Lista vertical com números oversized como elemento visual.
+       Hover: número → sage, fundo → off-white.
+    ══════════════════════════════════════════════════════════ */
+    .section-steps {
+      background: var(--white);
+      padding: 64px 0 32px 0;
+    }
+    .section-heading {
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 800; line-height: 1.02;
+      letter-spacing: -0.03em; color: var(--black);
+      margin-bottom: 40px;
+      text-wrap: balance;
+    }
+    /* ── EYEBROW — componente reutilizável ──────────────────── */
+    .section-eyebrow {
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gray-600); margin-bottom: 40px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .section-eyebrow::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--gray-300);
+    }
+    /* Variante sobre fundo escuro */
+    .section-eyebrow--dark {
+      color: var(--green);
+    }
+    .section-eyebrow--dark::after {
+      background: rgba(255,255,255,0.15);
+    }
+    .section-heading-sm {
+      font-size: clamp(40px, 5.5vw, 64px);
+      font-weight: 800; line-height: 1.02;
+      letter-spacing: -0.03em; color: var(--black);
+      margin-bottom: 40px;
+      text-wrap: balance;
+    }
+    /* ── JOURNEY BAR ──────────────────────────────────────── */
+    .journey-bar {
+      background: var(--off-white);
+      border-radius: 0;
+      padding: 32px var(--px) 28px;
+      margin-bottom: 48px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      /* Background full-bleed: estende a cor até as extremidades da viewport
+         sem afetar o layout interno (padding, scroll, conteúdo respeitam o container). */
+      box-shadow: 100vmax 0 0 var(--off-white), -100vmax 0 0 var(--off-white);
+      clip-path: inset(0 -100vmax);
+    }
+    .journey-bar::-webkit-scrollbar { display: none; }
+    .journey-track {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+      min-width: 560px;
+    }
+    /* Linha conectora horizontal */
+    .journey-track::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 32px;
+      right: 32px;
+      height: 2px;
+      background: var(--gray-300);
+      z-index: 0;
+    }
+    .journey-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      min-width: 0;
+    }
+    .journey-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--black);
+      background: var(--off-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--black);
+      flex-shrink: 0;
+    }
+    .journey-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+      text-align: center;
+      max-width: 110px;
+      line-height: 1.3;
+    }
+    @media (min-width: 768px) {
+      .journey-bar {
+        padding: 40px var(--px-lg) 36px;
+        margin: 0 calc(-1 * var(--px-lg)) 56px;
+        overflow: visible;
+      }
+      .journey-track { min-width: 0; }
+      .journey-num {
+        width: 52px;
+        height: 52px;
+        font-size: 20px;
+      }
+      .journey-track::before {
+        top: 26px;
+        left: 40px;
+        right: 40px;
+      }
+      .journey-label {
+        font-size: 14px;
+        max-width: 130px;
+      }
+    }
+    /* Journey step como link */
+    a.journey-step {
+      text-decoration: none;
+      color: inherit;
+      transition: transform 180ms var(--ease);
+    }
+    a.journey-step:hover { transform: translateY(-2px); }
+    a.journey-step:hover .journey-num {
+      background: var(--black);
+      color: var(--white);
+    }
+    /* ── STEPS CTA (rodapé da seção como funciona) ────────── */
+    .steps-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: flex-start;
+      margin-top: 48px;
+    }
+    @media (min-width: 600px) {
+      .steps-cta {
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+      }
+    }
+    .steps-link-secondary {
+      font-size: 16px; font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      color: var(--black);
+      display: flex; align-items: center; gap: 6px;
+      min-height: 48px; padding: 4px 0;
+      border-bottom: 1px solid var(--gray-300);
+      transition: color var(--t), border-color var(--t);
+    }
+    .steps-link-secondary:hover {
+      color: var(--gray-600);
+      border-color: var(--gray-600);
+    }
+    /* ── STEPS LIST ──────────────────────────────────────── */
+    .steps-list {
+      list-style: none;
+    }
+    .step {
+      scroll-margin-top: 24px;
+    }
+    .step.is-highlighted {
+      background: var(--off-white);
+      animation: step-flash 1.2s var(--ease) both;
+    }
+    .step.is-highlighted .step-num { color: var(--green); opacity: 1; }
+    @keyframes step-flash {
+      0%   { background: color-mix(in srgb, var(--green) 10%, var(--off-white)); }
+      100% { background: transparent; }
+    }
+    .step {
+      /* Mobile-first: stack — número no topo, conteúdo full-width.
+         Libera o desc para usar a largura total da viewport, melhorando
+         medida de leitura (~50–60 caracteres por linha). */
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 24px 0;
+      border-top: 1px solid var(--gray-300);
+      align-items: start;
+      /* Transições: fundo + sombra esquerda */
+      transition: background var(--t);
+      margin: 0 calc(-1 * var(--px));
+      padding-left: var(--px);
+      padding-right: var(--px);
+    }
+    .step:last-child { border-bottom: 1px solid var(--gray-300); }
+    .step:hover {
+      background: var(--off-white);
+      cursor: default;
+    }
+    .step-num {
+      font-size: clamp(48px, 13vw, 64px);
+      font-weight: 800; line-height: 0.85;
+      color: var(--gray-300);
+      letter-spacing: -0.04em;
+      transition: color var(--t), opacity var(--t);
+      user-select: none;
+    }
+    .step:hover .step-num { color: var(--green); opacity: 1; }
+    /* Bloco de texto desloca levemente no hover */
+    .step-content {
+      transition: transform var(--t);
+      max-width: 60ch;
+    }
+    .step:hover .step-content { transform: none; }
+    .step-title {
+      font-size: clamp(19px, 2.2vw, 22px);
+      font-weight: 700; color: var(--black);
+      letter-spacing: -0.01em; line-height: 1.25;
+      margin-bottom: 8px;
+      text-wrap: balance;
+    }
+    .step-desc {
+      font-size: 17px; font-weight: 400;
+      color: var(--gray-600); line-height: 1.6;
+      /* Otimiza quebras de parágrafo: evita viúvas/órfãs e linhas curtas
+         desbalanceadas. Combina com max-width: 60ch do .step-content. */
+      text-wrap: pretty;
+    }
+    @media (min-width: 768px) {
+      .section-steps { padding: 96px 0 48px 0; }
+      .step {
+        /* Tablet+: side-by-side — número como âncora visual em coluna fixa */
+        grid-template-columns: 120px 1fr;
+        gap: 40px; padding: 32px 0;
+        margin: 0 calc(-1 * var(--px-lg));
+        padding-left: var(--px-lg);
+        padding-right: var(--px-lg);
+      }
+      .step-num {
+        font-size: clamp(56px, 7vw, 80px);
+      }
+      .step-title {
+        line-height: 1.2;
+      }
+      .step-desc {
+        line-height: 1.65;
+      }
+    }
+    /* ══════════════════════════════════════════════════════════
+       MANIFESTO
+       Coração emocional da página. Preto total, texto branco.
+       Frases de impacto em peso máximo.
+    ══════════════════════════════════════════════════════════ */
+    .section-manifesto {
+      background: var(--black);
+      padding: 80px 0;
+    }
+    .manifesto-inner { max-width: 800px; }
+    /* manifesto eyebrow: usa .section-eyebrow--dark */
+    .manifesto-heading {
+      font-size: clamp(40px, 5.5vw, 64px);
+      font-weight: 800; line-height: 1.02;
+      letter-spacing: -0.03em; color: var(--white);
+      margin-bottom: 48px;
+      text-wrap: balance;
+    }
+    .manifesto-body {
+      font-size: 17px; font-weight: 400;
+      line-height: 1.75; color: color-mix(in srgb, var(--white) 60%, transparent);
+    }
+    @media (min-width: 768px) {
+      .manifesto-body { font-size: 20px; line-height: 1.8; }
+    }
+    .manifesto-body p + p { margin-top: 24px; }
+    .manifesto-body strong {
+      color: var(--white); font-weight: 700;
+    }
+    .manifesto-sig {
+      margin-top: 80px; padding-top: 48px;
+      border-top: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+      display: flex; align-items: baseline; gap: 24px; flex-wrap: wrap;
+    }
+    .sig-word {
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 800; color: var(--white);
+      letter-spacing: -0.04em; line-height: 1;
+    }
+    .sig-dot-green { color: var(--green); }
+    /* Pontos brancos: presença tipográfica, somem contra o fundo escuro */
+    .sig-dot-white { color: var(--white); }
+    @media (min-width: 768px) { .section-manifesto { padding: 160px 0; } }
+    /* ══════════════════════════════════════════════════════════
+       OPEN FINANCE — seção de confiança e segurança
+    ══════════════════════════════════════════════════════════ */
+    .section-openfinance {
+      background: var(--black);
+      color: var(--white);
+      padding: 64px 0;
+    }
+    @media (min-width: 768px) {
+      .section-openfinance { padding: 96px 0; }
+    }
+    /* of eyebrow: usa .section-eyebrow--dark */
+    .of-headline {
+      font-size: clamp(40px, 5.5vw, 64px);
+      font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--white);
+      max-width: 780px;
+      margin-bottom: 20px;
+      text-wrap: balance;
+    }
+    .of-subtitle {
+      font-size: 17px; font-weight: 400;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.7);
+      max-width: 600px;
+      margin-bottom: 48px;
+    }
+    @media (min-width: 768px) {
+      .of-subtitle { font-size: 20px; line-height: 1.75; }
+    }
+    .of-blocks {
+      display: flex; flex-direction: column;
+    }
+    .of-block {
+      padding: 32px 0;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    .of-block:last-child { border-bottom: 1px solid rgba(255,255,255,0.15); }
+    .of-block-title {
+      font-size: clamp(18px, 2.2vw, 22px);
+      font-weight: 700; color: var(--white);
+      letter-spacing: -0.01em; line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .of-block-desc {
+      font-size: 16px; font-weight: 400;
+      color: rgba(255,255,255,0.6); line-height: 1.5;
+      max-width: 480px;
+    }
+    @media (min-width: 768px) {
+      .of-blocks {
+        flex-direction: row;
+        border-top: 1px solid rgba(255,255,255,0.15);
+        border-bottom: 1px solid rgba(255,255,255,0.15);
+      }
+      .of-block {
+        flex: 1; padding: 40px 48px;
+        border-top: none; border-bottom: none;
+        border-right: 1px solid rgba(255,255,255,0.15);
+      }
+      .of-block:first-child { padding-left: 0; }
+      .of-block:last-child { border-right: none; padding-right: 0; border-bottom: none; }
+    }
+    .of-normalization {
+      font-size: 17px; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      margin-top: 40px;
+    }
+    .of-seal {
+      font-size: 13px; font-weight: 400;
+      color: rgba(255,255,255,0.35);
+      margin-top: 12px;
+    }
+    /* ══════════════════════════════════════════════════════════
+       SOBRE
+    ══════════════════════════════════════════════════════════ */
+    .section-about {
+      background: var(--off-white);
+      padding: 64px 0;
+      border-top: 1px solid var(--gray-300);
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .about-text {
+      max-width: 640px;
+      font-size: 17px; font-weight: 400;
+      line-height: 1.7; color: var(--gray-600);
+      margin-bottom: 40px;
+    }
+    @media (min-width: 768px) {
+      .about-text { font-size: 20px; line-height: 1.75; margin-bottom: 56px; }
+    }
+    .about-text p + p { margin-top: 24px; }
+    /* Métricas: 3 colunas com separador vertical */
+    .about-metrics {
+      display: flex; flex-direction: column;
+      max-width: 800px;
+    }
+    .about-metric {
+      padding: 32px 0;
+      border-top: 1px solid var(--gray-300);
+    }
+    .about-metric:last-child { border-bottom: 1px solid var(--gray-300); }
+    .metric-value {
+      font-size: clamp(40px, 6vw, 56px);
+      font-weight: 800; letter-spacing: -0.03em;
+      color: var(--black); line-height: 1;
+      margin-bottom: 8px;
+    }
+    .metric-desc {
+      font-size: 16px; font-weight: 400;
+      color: var(--gray-600); line-height: 1.5;
+    }
+    @media (min-width: 768px) {
+      .section-about { padding: 96px 0; }
+      .about-metrics {
+        flex-direction: row;
+        border-top: 1px solid var(--gray-300);
+        border-bottom: 1px solid var(--gray-300);
+      }
+      .about-metric {
+        flex: 1; padding: 48px 48px;
+        border-top: none; border-bottom: none;
+        border-right: 1px solid var(--gray-300);
+      }
+      .about-metric:first-child { padding-left: 0; }
+      .about-metric:last-child { border-right: none; padding-right: 0; }
+    }
+    /* ══════════════════════════════════════════════════════════
+       FAQ
+    ══════════════════════════════════════════════════════════ */
+    .section-faq {
+      background: var(--off-white);
+      padding: 64px 0;
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .faq-list { max-width: 800px; }
+    .faq-item { border-bottom: 1px solid var(--gray-300); }
+    .faq-item:first-child { border-top: 1px solid var(--gray-300); }
+    /* Suporte a conteúdo enriquecido dentro da resposta — mantém tipografia do landing */
+    .faq-answer + .faq-answer { margin-top: 16px; }
+    .faq-answer ol, .faq-answer ul {
+      margin: 16px 0;
+      padding-left: 24px;
+      list-style: decimal;
+    }
+    .faq-answer ul { list-style: disc; }
+    .faq-answer li {
+      margin-bottom: 14px;
+      line-height: 1.7;
+      padding-left: 4px;
+    }
+    .faq-answer li strong {
+      display: inline;
+      color: var(--black);
+      font-weight: 700;
+    }
+    .faq-answer .faq-callout {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: var(--off-white);
+      border-left: 3px solid var(--green);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--gray-600);
+    }
+    .faq-answer .faq-callout strong { color: var(--black); }
+    .faq-answer .faq-highlight {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin: 0 0 12px;
+    }
+    .faq-answer .faq-highlight em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .faq-btn {
+      width: 100%; display: flex; justify-content: space-between;
+      align-items: center; gap: 24px;
+      padding: 32px 0; text-align: left;
+      background: none; cursor: pointer;
+    }
+    .faq-question {
+      font-size: 20px; font-weight: 600; color: var(--black);
+      line-height: 1.3; transition: color var(--t);
+    }
+    .faq-btn:hover .faq-question { color: var(--gray-600); }
+    .faq-indicator {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border: 2px solid var(--black);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 300; color: var(--black); line-height: 1;
+      transition: background var(--t), color var(--t), transform var(--t);
+    }
+    .faq-item.open .faq-indicator {
+      background: var(--black); color: var(--white);
+      transform: rotate(45deg);
+    }
+    .faq-body {
+      height: 0; overflow: hidden;
+      transition: height var(--t);
+    }
+    .faq-answer {
+      font-size: 18px; font-weight: 400;
+      line-height: 1.75; color: var(--gray-600);
+      padding-bottom: 28px; max-width: 68ch;
+    }
+    @media (min-width: 768px) { .section-faq { padding: 96px 0; } }
+    /* ══════════════════════════════════════════════════════════
+       CTA FINAL
+    ══════════════════════════════════════════════════════════ */
+    .section-cta {
+      background: var(--black);
+      padding: 96px 0;
+      text-align: center;
+    }
+    .cta-heading {
+      font-size: clamp(40px, 5.5vw, 64px);
+      font-weight: 800; line-height: 1.02;
+      letter-spacing: -0.03em; color: var(--white);
+      margin-bottom: 20px;
+      max-width: 24ch; margin-left: auto; margin-right: auto;
+      text-wrap: balance;
+    }
+    .cta-sub {
+      font-size: 16px; font-weight: 400;
+      line-height: 1.6; color: color-mix(in srgb, var(--white) 60%, transparent);
+      max-width: 48ch; margin: 0 auto 36px;
+    }
+    @media (min-width: 768px) {
+      .cta-sub { font-size: 19px; }
+    }
+    .cta-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px; align-items: stretch;
+      padding: 0 8px;
+    }
+    .cta-actions .btn { justify-content: center; }
+    @media (min-width: 600px) {
+      .cta-actions { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; padding: 0; gap: 16px; }
+      .cta-actions .btn { width: auto; }
+    }
+    @media (min-width: 768px) { .section-cta { padding: 120px 0; } }
+    /* ══════════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════════ */
+    .site-footer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-300);
+      padding: 64px 0 48px;
+    }
+    .footer-logo-svg {
+      height: clamp(80px, 14vw, 140px);
+      width: auto;
+      margin-bottom: 32px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1fr;
+      gap: 32px; margin-bottom: 40px;
+    }
+    .footer-tagline {
+      font-size: 16px; font-weight: 400;
+      color: var(--gray-600); margin-top: 12px;
+      max-width: 28ch; line-height: 1.5;
+    }
+    .footer-col-title {
+      font-size: 14px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li + li { margin-top: 6px; }
+    .footer-links a {
+      font-size: 15px; font-weight: 400; color: var(--gray-600);
+      transition: color var(--t);
+    }
+    .footer-links a:hover { color: var(--black); }
+    .footer-contact {
+      font-size: 15px; font-weight: 400;
+      color: var(--gray-600); line-height: 1.5;
+      display: flex; flex-direction: column;
+      gap: 10px;
+    }
+    .footer-contact a {
+      display: inline-block;
+      width: fit-content;
+      transition: color var(--t);
+    }
+    .footer-contact a:hover { color: var(--black); }
+    .footer-bottom {
+      padding-top: 32px; border-top: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .footer-copy {
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .footer-social { display: flex; gap: 16px; align-items: center; }
+    .footer-social a {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px;
+      color: var(--gray-600);
+      transition: color var(--t), transform var(--t);
+    }
+    .footer-social a:hover { color: var(--black); transform: translateY(-2px); }
+    .footer-social svg { display: block; }
+
+    /* ── NVIDIA Inception badge ─────────────────────────────── */
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      opacity: 0.85;
+      transition: opacity var(--t);
+      /* Badge original tem fundo branco + texto preto. Sobre o footer branco fica
+         redundante o fundo; este filtro mantém apenas o desenho preto. */
+    }
+    .footer-badge:hover { opacity: 1; }
+    .footer-badge img {
+      display: block;
+      width: 140px;
+      height: auto;
+      /* Mantém a aparência preta original (sem alterar o asset) */
+      filter: contrast(1) saturate(0);
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; }
+      .footer-bottom {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 32px;
+        align-items: center;
+      }
+    }
+    /* ══════════════════════════════════════════════════════════
+       WHATSAPP FAB
+    ══════════════════════════════════════════════════════════ */
+    .wa-fab {
+      position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); right: 20px; z-index: 200;
+      width: 56px; height: 56px;
+      background: var(--green); border-radius: 0;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: none;
+      border: 2px solid var(--black);
+      color: var(--white);
+      transition: background var(--t), color var(--t), border-color var(--t), transform var(--t), opacity 0.3s var(--ease);
+      /* Escondido por padrão, JS adiciona .is-visible */
+      opacity: 0; pointer-events: none;
+    }
+    .wa-fab.is-visible {
+      opacity: 1; pointer-events: all;
+    }
+    .wa-fab:hover {
+      background: var(--black);
+      border-color: var(--black);
+      transform: none;
+    }
+    @media (min-width: 768px) {
+      .wa-fab { width: 68px; height: 68px; bottom: max(32px, env(safe-area-inset-bottom)); right: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+  <a href="#main" class="skip-link">Pular para o conteúdo</a>
+  <!-- ══════════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════════ -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <!-- Logo: branco no header preto -->
+      <a href="#" class="logo-link header-logo is-hidden" aria-label="Basta — página inicial">
+        <svg class="logo-svg logo-svg-lg logo--on-dark" viewBox="0 0 602.25 254.23" aria-label="Basta." role="img"><use href="#logo-basta"/></svg>
+      </a>
+      <div class="header-right">
+        <nav class="header-nav" aria-label="Navegação principal">
+          <a href="#como-funciona">Como Funciona</a>
+          <a href="#open-finance">Open Finance</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#manifesto">Manifesto</a>
+        </nav>
+        <div class="header-actions">
+          <a href="03_basta-login.html" class="btn-header-login">Entrar</a>
+          <a href="02_basta-cadastro.html" class="btn-header-cta">Começar</a>
+        </div>
+      </div>
+      <button class="hamburger" id="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav" id="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+    <nav>
+      <a href="#como-funciona">Como Funciona</a>
+      <a href="#open-finance">Open Finance</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#manifesto">Manifesto</a>
+    </nav>
+    <div class="mobile-nav-actions">
+      <a href="03_basta-login.html" class="btn btn-outline-white">Entrar</a>
+      <a href="02_basta-cadastro.html" class="btn btn-primary">Começar agora</a>
+    </div>
+  </div>
+  <main id="main">
+    <!-- ══════════════════════════════════════════════════════════
+         HERO
+         Headline 88px desktop, 40px mobile.
+         "sua" com underline sage. Foto placeholder 3:4 com presença.
+    ══════════════════════════════════════════════════════════ -->
+    <section class="hero" aria-labelledby="hero-headline">
+      <!-- Fundo fotográfico — substituir src pela foto real antes de publicar -->
+      <div class="hero-bg" aria-hidden="true">
+        <img class="hero-bg-img"
+             src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221920%22%20height%3D%221280%22%2F%3E"
+             alt=""
+             width="1920" height="1280">
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="container">
+        <div class="hero-content">
+          <!-- hero-kicker suprimido -->
+          <h1 class="hero-headline" id="hero-headline">
+            Saia do endividamento<br>
+            de forma <span class="hl-sua">justa!</span>
+          </h1>
+          <p class="hero-sub">
+            Crie sua conta em 2 minutos. A análise é gratuita,<br class="d-break"> o diagnóstico é completo — <strong>e a conversa pode mudar<br class="d-break"> sua situação financeira, definitivamente.</strong>
+          </p>
+          <div class="hero-actions">
+            <a href="#como-funciona" class="hero-link-secondary">
+              Como funciona
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </a>
+            <a href="02_basta-cadastro.html" class="btn btn-primary">
+              Começar agora
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <!-- Logo: anchored DENTRO do .hero-actions; top:0 alinha topo logo com topo do botão -->
+            <svg id="hero-logo" class="hero-logo logo--on-dark" viewBox="0 0 602.25 254.23" aria-label="Basta." role="img"><use href="#logo-basta"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ══════════════════════════════════════════════════════════
+         TRUST BAR — cards grandes com tipografia de display
+    ══════════════════════════════════════════════════════════ -->
+    <div class="trust-bar" role="list" aria-label="Por que confiar na Basta.">
+      <div class="container">
+        <div class="trust-bar-inner">
+          <div class="trust-col" role="listitem">
+            <div class="trust-col-value">100% Gratuito</div>
+            <div class="trust-col-desc">Até gerar benefício real,<br class="d-break"> nenhum pagamento antecipado.</div>
+          </div>
+          <div class="trust-col" role="listitem">
+            <div class="trust-col-value">Open Finance</div>
+            <div class="trust-col-desc">Regulado pelo Banco Central.<br class="d-break"> Só leitura, criptografado.</div>
+          </div>
+          <div class="trust-col" role="listitem">
+            <div class="trust-col-value">WhatsApp</div>
+            <div class="trust-col-desc">Atendimento direto, 24/07.<br class="d-break"> Simples, sem burocracia.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ══════════════════════════════════════════════════════════
+         COMO FUNCIONA
+         Lista vertical. Números 96px oversized em gray-300.
+         Hover: número → sage, fundo → off-white.
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-steps" id="como-funciona" aria-labelledby="steps-heading">
+      <div class="container">
+        <h2 class="section-heading" id="steps-heading">Como funciona.</h2>
+        <!-- Journey Bar — visão macro da jornada -->
+        <div class="journey-bar" role="list" aria-label="Jornada do usuário em 6 passos">
+          <div class="journey-track">
+            <a class="journey-step" href="#step-1" role="listitem">
+              <span class="journey-num">1</span>
+              <span class="journey-label">Entenda sua situação</span>
+            </a>
+            <a class="journey-step" href="#step-2" role="listitem">
+              <span class="journey-num">2</span>
+              <span class="journey-label">Conecte seus bancos</span>
+            </a>
+            <a class="journey-step" href="#step-3" role="listitem">
+              <span class="journey-num">3</span>
+              <span class="journey-label">Aja com instrumentos</span>
+            </a>
+            <a class="journey-step" href="#step-4" role="listitem">
+              <span class="journey-num">4</span>
+              <span class="journey-label">Contrate seu crédito justo</span>
+            </a>
+            <a class="journey-step" href="#step-5" role="listitem">
+              <span class="journey-num">5</span>
+              <span class="journey-label">Busque reparação de abusos</span>
+            </a>
+            <a class="journey-step" href="#step-6" role="listitem">
+              <span class="journey-num">6</span>
+              <span class="journey-label">Tenha autonomia financeira</span>
+            </a>
+          </div>
+        </div>
+        <ol class="steps-list">
+          <li class="step" id="step-1">
+            <div class="step-num" aria-hidden="true">01</div>
+            <div class="step-content">
+              <h3 class="step-title">Entenda sua real situação</h3>
+              <p class="step-desc">Veja o que nunca te mostraram: quanto deve, para quem, quanto da sua renda está comprometida — e por quantos meses.</p>
+            </div>
+          </li>
+          <li class="step" id="step-2">
+            <div class="step-num" aria-hidden="true">02</div>
+            <div class="step-content">
+              <h3 class="step-title">Use seus dados bancários a seu favor com Open Finance</h3>
+              <p class="step-desc">Você autoriza a leitura dos seus dados bancários via Open Finance. Só leitura, seguro, sem movimentação.</p>
+            </div>
+          </li>
+          <li class="step" id="step-3">
+            <div class="step-num" aria-hidden="true">03</div>
+            <div class="step-content">
+              <h3 class="step-title">Aja com instrumentos</h3>
+              <p class="step-desc">Receba documentos prontos e instruções claras de como usá-los para proteger sua renda, exigir explicações e registrar reclamações.</p>
+            </div>
+          </li>
+          <li class="step" id="step-4">
+            <div class="step-num" aria-hidden="true">04</div>
+            <div class="step-content">
+              <h3 class="step-title">Contrate seu crédito justo</h3>
+              <p class="step-desc">Tenha acesso às melhores condições de crédito disponíveis para você. Troque taxas altas pelas melhores taxas oferecidas no mercado.</p>
+            </div>
+          </li>
+          <li class="step" id="step-5">
+            <div class="step-num" aria-hidden="true">05</div>
+            <div class="step-content">
+              <h3 class="step-title">Busque reparação de abusos</h3>
+              <p class="step-desc">Se o credor agiu de forma abusiva, receba apoio especializado para exigir reparação — do jeito certo.</p>
+            </div>
+          </li>
+          <li class="step" id="step-6">
+            <div class="step-num" aria-hidden="true">06</div>
+            <div class="step-content">
+              <h3 class="step-title">Tenha autonomia financeira</h3>
+              <p class="step-desc">Coloque suas dívidas em uma trajetória de pagamento real, com data para acabar. Retome o controle da sua vida financeira.</p>
+            </div>
+          </li>
+        </ol>
+        <!-- steps-cta suprimido (Quem somos + Começar agora removidos) -->
+      </div>
+    </section>
+    <!-- ══════════════════════════════════════════════════════════
+         OPEN FINANCE — confiança e segurança
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-openfinance" id="open-finance" aria-labelledby="of-heading">
+      <div class="container">
+        <div class="section-eyebrow section-eyebrow--dark">Open Finance</div>
+        <h2 class="of-headline" id="of-heading">
+          Use seus dados bancários<br class="m-break"> para vencer o endividamento.
+        </h2>
+        <p class="of-subtitle">
+          Conecte suas contas bancárias e disponibilize seus dados para uma verificação completa sobre como você chegou na sua situação de endividamento atual.
+        </p>
+        <p class="of-subtitle">
+          <strong>Não movimentamos suas contas.</strong><br><strong>É acesso de leitura, seguro, sem risco.</strong>
+        </p>
+        <div class="of-blocks">
+          <div class="of-block">
+            <div class="of-block-title">Banco Central do Brasil</div>
+            <div class="of-block-desc">Infraestrutura oficial do sistema financeiro. Regulado, auditado, supervisionado.</div>
+          </div>
+          <div class="of-block">
+            <div class="of-block-title">Só leitura</div>
+            <div class="of-block-desc">Nenhuma transação, nenhuma movimentação. Seus dados são consultados, nunca tocados.</div>
+          </div>
+          <div class="of-block">
+            <div class="of-block-title">Você no controle</div>
+            <div class="of-block-desc">Desconecte quando quiser, sem burocracia, sem justificativa.</div>
+          </div>
+        </div>
+        <p class="of-normalization">Milhões de brasileiros já usam Open Finance.</p>
+        <p class="of-seal">Conexão via Pluggy — infraestrutura certificada pelo Banco Central.</p>
+      </div>
+    </section>
+    <!-- ══════════════════════════════════════════════════════════
+         SOBRE
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-about" id="sobre" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="section-eyebrow">Sobre</div>
+        <h2 class="section-heading-sm" id="about-heading">
+          Somos uma plataforma<br>
+          de reestruturação<br>
+          financeira.
+        </h2>
+        <div class="about-text">
+          <p>Lemos seus dados financeiros, identificamos o que está errado e mostramos o que pode ser feito para você sair do endividamento.</p>
+          <p>Encontramos as melhores opções de crédito para sua situação, identificamos indícios de abusos cometidos por credores e construímos um caminho concreto para fora da armadilha do crédito.</p>
+          <p>Com clareza, do seu lado, sem letras miúdas.</p>
+          <p><strong>Você paga uma parte do que economizar ou recuperar. Sem ganho concreto, você não paga nada. Simples assim.</strong></p>
+        </div>
+      </div>
+    </section>
+    <!-- ══════════════════════════════════════════════════════════
+         MANIFESTO — coração emocional da página
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-manifesto" id="manifesto" aria-labelledby="manifesto-heading">
+      <div class="container">
+        <div class="manifesto-inner">
+          <div class="section-eyebrow section-eyebrow--dark">Manifesto</div>
+          <h2 class="manifesto-heading" id="manifesto-heading">
+            Crédito deve libertar,<br>
+            não&nbsp;aprisionar.
+          </h2>
+          <div class="manifesto-body">
+            <p><strong>O sistema de crédito brasileiro captura pessoas comuns, consome sua renda e as mantém presas no modo de sobrevivência — mês após mês, ano após ano.</strong></p>
+            <p>Diante de urgências financeiras, essas pessoas aceitam qualquer oferta de renegociação — uma ligação do banco, um botão no app, um parcelamento no balcão. Rápido, sem pensar, sem alternativa visível.</p>
+            <p>São chefes de família. São metade da população adulta do Brasil. Pessoas pressionadas, envergonhadas, com autoestima baixa — sem o conhecimento necessário para negociar em igualdade de condições. Muitas vezes, sem renda suficiente para sobreviver.</p>
+            <p><strong>Essas pessoas precisam se preparar antes de renegociar. Precisam saber que existem instrumentos simples para não recomeçar dentro da mesma armadilha.</strong></p>
+            <p><strong>Quem deve, merece um caminho justo para se libertar.</strong><br>Essa é nossa razão de existir: ajudar as pessoas a renegociar suas dívidas em igualdade de condições para que possam sair do endividamento pagando o justo, colocando suas dívidas em trajetória de pagamento e recuperando o que foi pago a mais.</p>
+            <p><strong>Basta de tornar pessoas prisioneiras do sistema de crédito.</strong></p>
+          </div>
+          <div class="manifesto-sig" aria-label="Assinatura">
+            <span class="sig-word">Basta<span class="sig-dot-white">.</span></span>
+            <span class="sig-word">E&nbsp;ponto<span class="sig-dot-white">.</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ══════════════════════════════════════════════════════════
+         FAQ — accordion com height animation
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-faq" id="faq" aria-labelledby="faq-heading">
+      <div class="container">
+        <h2 class="section-heading-sm" id="faq-heading">Perguntas frequentes.</h2>
+        <div class="faq-list" role="list">
+
+          <!-- Q1: Como funciona o Basta? -->
+          <div class="faq-item" role="listitem">
+            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a1">
+              <span class="faq-question">Como funciona o Basta?</span>
+              <span class="faq-indicator" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-body" id="faq-a1" role="region">
+              <div class="faq-answer">
+                <ol>
+                  <li><strong>Você conecta suas contas bancárias.</strong> Pelo Open Finance, você autoriza o acesso de leitura aos seus dados bancários. O Basta lê, analisa e identifica o que está errado — colocando você em um caminho concreto para sair do endividamento.</li>
+                  <li><strong>Você envia seus documentos e conhece sua situação real.</strong> Envie documentos pessoais, de renda e de endividamento e receba sua análise financeira completa, gratuitamente.</li>
+                  <li><strong>Você recebe requerimentos que equilibram a relação com seus credores.</strong> Preenchemos e enviamos requerimentos que aliviam sua situação financeira e preparam você para renegociar suas dívidas. Você lê e assina digitalmente via ClickSign, nossa parceira em assinatura eletrônica com validade jurídica.</li>
+                  <li><strong>Você registra suas tentativas de renegociação.</strong> Orientamos você a documentar cada tentativa de renegociação — para demonstrar, formalmente, que buscou condições justas para quitar suas dívidas.</li>
+                  <li><strong>Encontramos o melhor caminho para você sair do endividamento.</strong> Identificamos crédito em condições melhores que suas operações atuais e analisamos seus dados em busca de indícios de práticas abusivas que podem ser contestadas ou restituídas.</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q2: Quando e quanto vou pagar? -->
+          <div class="faq-item" role="listitem">
+            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a2">
+              <span class="faq-question">Quando e quanto vou pagar?</span>
+              <span class="faq-indicator" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-body" id="faq-a2" role="region">
+              <div class="faq-answer">
+                <span class="faq-highlight">Nenhum <em>pagamento adiantado.</em></span>
+                <ul>
+                  <li><strong>Análise financeira</strong> — Gratuita. Diagnóstico completo da sua situação de crédito.</li>
+                  <li><strong>Requerimentos e assinaturas</strong> — Gratuitos. Geramos e enviamos todos os documentos sem custo.</li>
+                  <li><strong>Taxa de êxito</strong> — Cobramos um percentual somente se conseguirmos resultado concreto: redução de dívida, cancelamento de cobranças ou recuperação de valores. Se não houver resultado, você não paga nada.</li>
+                </ul>
+                <div class="faq-callout"><strong>Sem surpresas.</strong> O percentual de êxito é acordado antes do início do processo. Nada é cobrado sem sua ciência e aprovação.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q3: O que cada tela faz? -->
+          <div class="faq-item" role="listitem">
+            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a3">
+              <span class="faq-question">O que cada tela faz?</span>
+              <span class="faq-indicator" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-body" id="faq-a3" role="region">
+              <div class="faq-answer">
+                <ul>
+                  <li><strong>Resumo</strong> — Visão geral do seu progresso e principal tela de ação. Todos os próximos passos necessários estão aqui.</li>
+                  <li><strong>Meus Documentos</strong> — Onde ficam seus documentos pessoais, de renda e de endividamento. Visualize e baixe tudo em um só lugar.</li>
+                  <li><strong>Contas Bancárias</strong> — Mostra as contas conectadas pelo Open Finance e o status de cada uma.</li>
+                  <li><strong>Requerimentos</strong> — Os requerimentos gerados para cada banco. Visualize, baixe e assine digitalmente via ClickSign.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q4: O que é o Open Finance? -->
+          <div class="faq-item" role="listitem">
+            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a4">
+              <span class="faq-question">O que é o Open Finance?</span>
+              <span class="faq-indicator" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-body" id="faq-a4" role="region">
+              <div class="faq-answer">
+                <p>Sistema regulado pelo Banco Central que permite compartilhar seus dados bancários com empresas autorizadas — de forma segura, controlada por você.</p>
+                <ol>
+                  <li><strong>Você escolhe o banco na plataforma.</strong> Selecione o banco onde estão as operações de crédito que precisam de revisão.</li>
+                  <li><strong>Você autoriza o acesso aos seus dados.</strong> Dentro da plataforma Basta, via Pluggy — instituição de pagamento autorizada pelo Banco Central —, você autoriza a leitura dos seus dados bancários.</li>
+                  <li><strong>O banco libera acesso de leitura.</strong> Conseguimos ler histórico de transações, contratos e dados de crédito. Nunca movimentamos valores — isso é bloqueado tecnicamente pelo sistema.</li>
+                  <li><strong>Você revoga quando quiser.</strong> No app do banco, em "Open Finance" ou "Compartilhamento de dados", você cancela o acesso a qualquer momento — sem precisar falar com a Basta.</li>
+                </ol>
+                <div class="faq-callout"><strong>Regulado pelo Banco Central.</strong> O Open Finance segue normas rígidas. Empresas como a Basta passam por credenciamento e auditoria contínua.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q5: O que são os requerimentos? -->
+          <div class="faq-item" role="listitem">
+            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a5">
+              <span class="faq-question">O que são os requerimentos?</span>
+              <span class="faq-indicator" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-body" id="faq-a5" role="region">
+              <div class="faq-answer">
+                <p>Documentos administrativos formais endereçados diretamente ao banco. Cada um tem uma função específica para solicitar informações e revisões sobre a sua conta.</p>
+                <ul>
+                  <li><strong>Demonstrativo de Evolução da Dívida e Memória de Cálculo</strong> — Solicita ao banco que apresente, em detalhes, como sua dívida chegou ao valor atual. Permite identificar cobranças e encargos que merecem revisão.</li>
+                  <li><strong>Res. CMN 4.790 – Cancelamento de débitos</strong> — Solicita o cancelamento de cobranças irregulares com base na resolução do Banco Central que proíbe práticas abusivas nas relações de crédito.</li>
+                </ul>
+                <div class="faq-callout"><strong>Processo administrativo formal.</strong> Os requerimentos são endereçados diretamente ao banco pelos canais adequados. A Basta acompanha cada etapa e orienta os próximos passos com base nas respostas recebidas.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q6: Como funciona a assinatura digital? -->
+          <div class="faq-item" role="listitem">
+            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a6">
+              <span class="faq-question">Como funciona a assinatura digital?</span>
+              <span class="faq-indicator" aria-hidden="true">+</span>
+            </button>
+            <div class="faq-body" id="faq-a6" role="region">
+              <div class="faq-answer">
+                <ol>
+                  <li><strong>Você acessa os requerimentos na plataforma.</strong> Quando um requerimento está pronto, ele aparece disponível na aba Requerimentos. O link de assinatura também é enviado pelo WhatsApp.</li>
+                  <li><strong>Você lê o documento antes de assinar.</strong> Abra o link, leia o conteúdo completo. Nunca assine sem entender o que está sendo solicitado ao banco.</li>
+                  <li><strong>Assina com um clique.</strong> A assinatura é feita pelo celular, sem impressão. Leva menos de 1 minuto.</li>
+                  <li><strong>Você recebe o comprovante por e-mail.</strong> A ClickSign envia automaticamente o documento assinado com registro e autenticação digital.</li>
+                </ol>
+                <div class="faq-callout"><strong>ClickSign é parceira do Basta.</strong> Uma das principais plataformas de assinatura digital do Brasil. Cada assinatura é registrada, autenticada e rastreável — com comprovante em seu email.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- ══════════════════════════════════════════════════════════
+         CTA FINAL
+    ══════════════════════════════════════════════════════════ -->
+    <section class="section-cta" aria-labelledby="cta-heading">
+      <div class="container">
+        <h2 class="cta-heading" id="cta-heading">
+          Basta de dívidas que<br>consomem toda sua renda.
+        </h2>
+        <p class="cta-sub">
+          Crie sua conta em 2 minutos. A análise é gratuita, o diagnóstico é completo — e a conversa pode mudar sua situação financeira, definitivamente.
+        </p>
+        <div class="cta-actions">
+          <a href="02_basta-cadastro.html" class="btn btn-outline-white">
+            Criar conta gratuita
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!-- ══════════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════════ -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <!-- Logo em fundo claro -->
+          <a href="#" class="logo-link" aria-label="Basta — página inicial">
+            <svg class="logo-svg footer-logo-svg logo--on-light" viewBox="0 0 602.25 254.23" aria-label="Basta." role="img"><use href="#logo-basta"/></svg>
+          </a>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Basta.</h3>
+          <ul class="footer-links">
+            <li><a href="#como-funciona">Como Funciona</a></li>
+            <li><a href="#open-finance">Open Finance</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#manifesto">Manifesto</a></li>
+            <li><a href="#faq">Perguntas Frequentes</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Legal</h3>
+          <ul class="footer-links">
+            <li><a href="#">Privacidade</a></li>
+            <li><a href="#">Termos de Uso</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="footer-col-title">Contato</h3>
+          <div class="footer-contact">
+            <a href="mailto:ola@bastaeponto.com.br">ola@bastaeponto.com.br</a>
+            <a href="https://wa.me/5519971795723" target="_blank" rel="noopener noreferrer">WhatsApp: (19) 97179-5723</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <a href="https://www.nvidia.com/en-us/startups/"
+           target="_blank" rel="noopener noreferrer"
+           class="footer-badge"
+           aria-label="Membro do programa NVIDIA Inception">
+          <img src="_assets/nvidia-inception-badge.svg"
+               alt="NVIDIA Inception Program — membro"
+               width="140" height="60" loading="lazy">
+        </a>
+        <span class="footer-copy">&copy; 2026 Basta. Todos os direitos reservados.</span>
+        <div class="footer-social">
+          <!-- Instagram -->
+          <a href="https://instagram.com/basta.financas" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Basta.">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <!-- Facebook -->
+          <a href="https://facebook.com/basta.financas" target="_blank" rel="noopener noreferrer" aria-label="Facebook da Basta.">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <!-- TikTok -->
+          <a href="https://tiktok.com/@basta.financas" target="_blank" rel="noopener noreferrer" aria-label="TikTok da Basta.">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          </a>
+          <!-- YouTube -->
+          <a href="https://youtube.com/@basta.financas" target="_blank" rel="noopener noreferrer" aria-label="YouTube da Basta.">
+            <svg width="22" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- WhatsApp FAB -->
+  <a href="https://wa.me/5519971795723"
+     class="wa-fab"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Falar com a Basta. pelo WhatsApp">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+  <script>
+    // ── SCROLL TO TOP ON LOAD (limpa hash para abrir na hero) ──
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname);
+      window.scrollTo(0, 0);
+    }
+
+    // ── MOBILE MENU ─────────────────────────────────────────
+    var menuBtn = document.getElementById('menu-btn');
+    var mobileNav = document.getElementById('mobile-nav');
+
+    // Função para coletar focusable elements dentro do menu
+    function getFocusableElements() {
+      return Array.from(mobileNav.querySelectorAll(
+        'a, button, input[type="text"], input[type="email"], input[type="button"], [tabindex]:not([tabindex="-1"])'
+      )).filter(function(el) {
+        return el.offsetParent !== null; // visível
+      });
+    }
+
+    // Função para fechar o menu
+    function closeMenu() {
+      mobileNav.classList.remove('open');
+      menuBtn.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      menuBtn.setAttribute('aria-label', 'Abrir menu de navegação');
+      document.body.style.overflow = '';
+    }
+
+    // Função para abrir o menu
+    function openMenu() {
+      mobileNav.classList.add('open');
+      menuBtn.classList.add('open');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      menuBtn.setAttribute('aria-label', 'Fechar menu de navegação');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Toggle do menu ao clicar no hamburger
+    menuBtn.addEventListener('click', function() {
+      if (mobileNav.classList.contains('open')) {
+        closeMenu();
+      } else {
+        openMenu();
+        // Move foco para o primeiro elemento focusável
+        setTimeout(function() {
+          var focusable = getFocusableElements();
+          if (focusable.length > 0) {
+            focusable[0].focus();
+          }
+        }, 0);
+      }
+    });
+
+    // Fechar menu ao clicar em um link
+    mobileNav.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        closeMenu();
+        menuBtn.focus();
+      });
+    });
+
+    // Focus trap dentro do menu
+    mobileNav.addEventListener('keydown', function(e) {
+      if (e.key !== 'Tab' || !mobileNav.classList.contains('open')) {
+        return;
+      }
+
+      var focusable = getFocusableElements();
+      if (focusable.length === 0) return;
+
+      var activeEl = document.activeElement;
+      var activeIndex = focusable.indexOf(activeEl);
+
+      if (e.shiftKey) {
+        // Shift+Tab: volta pro anterior (ou último se estiver no primeiro)
+        e.preventDefault();
+        var prevIndex = activeIndex <= 0 ? focusable.length - 1 : activeIndex - 1;
+        focusable[prevIndex].focus();
+      } else {
+        // Tab: vai pro próximo (ou primeiro se estiver no último)
+        e.preventDefault();
+        var nextIndex = activeIndex >= focusable.length - 1 ? 0 : activeIndex + 1;
+        focusable[nextIndex].focus();
+      }
+    });
+
+    // Escape fecha o menu
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        closeMenu();
+        menuBtn.focus();
+      }
+    });
+    // ── SCROLL: cross-fade hero-logo → header-logo + WhatsApp FAB ─────
+    // Quando o bloco do CTA (.hero-actions) sai da viewport, o logo do hero
+    // some com slide+scale e o logo do header surge com slide vertical.
+    // Transição simétrica de 480ms.
+    (function() {
+      var sentinel   = document.querySelector('.hero-actions');
+      var heroLogo   = document.querySelector('.hero-logo');
+      var headerLogo = document.querySelector('.header-logo');
+      var waFab      = document.querySelector('.wa-fab');
+
+      if (!sentinel || !headerLogo) return;
+
+      // Estado inicial limpo
+      headerLogo.classList.remove('is-hidden');
+      headerLogo.classList.remove('is-visible');
+
+      var show = function() {
+        headerLogo.classList.add('is-visible');
+        if (heroLogo)  heroLogo.classList.add('is-fading');
+        if (waFab)     waFab.classList.add('is-visible');
+      };
+      var hide = function() {
+        headerLogo.classList.remove('is-visible');
+        if (heroLogo)  heroLogo.classList.remove('is-fading');
+        if (waFab)     waFab.classList.remove('is-visible');
+      };
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          // Sentinel visível na viewport: hero ainda está em cena → header logo escondido.
+          // Sentinel saiu (rolou para cima): header logo aparece.
+          if (entry.isIntersecting) {
+            hide();
+          } else {
+            show();
+          }
+        });
+      }, {
+        threshold: 0,
+        // Considera "fora" quando o sentinel passa para cima do topo da viewport
+        rootMargin: '-80px 0px 0px 0px'
+      });
+
+      observer.observe(sentinel);
+    })();
+
+    // ── JOURNEY BAR → SCROLL TO CENTER ──────────────────────
+    document.querySelectorAll('.journey-step').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var targetId = this.getAttribute('href').substring(1);
+        var target = document.getElementById(targetId);
+        if (!target) return;
+        // Remove highlight anterior
+        document.querySelectorAll('.step.is-highlighted').forEach(function(s) {
+          s.classList.remove('is-highlighted');
+        });
+        // Scroll suave centralizado na viewport
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Aplica highlight via classe (sem depender de :target que força scroll ao topo)
+        target.classList.add('is-highlighted');
+        // Remove highlight após a animação e limpa hash
+        setTimeout(function() {
+          target.classList.remove('is-highlighted');
+          history.replaceState(null, '', window.location.pathname);
+        }, 1400);
+      });
+    });
+
+    // ── FAQ ACCORDION ────────────────────────────────────────
+    document.querySelectorAll('.faq-item').forEach(function(item) {
+      var btn  = item.querySelector('.faq-btn');
+      var body = item.querySelector('.faq-body');
+      btn.addEventListener('click', function() {
+        var isOpen = item.classList.contains('open');
+        // Fecha todos
+        document.querySelectorAll('.faq-item').forEach(function(i) {
+          i.classList.remove('open');
+          i.querySelector('.faq-body').style.height = '0';
+          i.querySelector('.faq-btn').setAttribute('aria-expanded', 'false');
+        });
+        // Abre o clicado se não estava aberto
+        if (!isOpen) {
+          item.classList.add('open');
+          body.style.height = body.scrollHeight + 'px';
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

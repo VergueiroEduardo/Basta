@@ -1,0 +1,70 @@
+{
+  "#1a1a1a": [
+    "black"
+  ],
+  "#ffffff": [
+    "white"
+  ],
+  "#f5f3ef": [
+    "off-white"
+  ],
+  "#bdc0ac": [
+    "sage"
+  ],
+  "#42b449": [
+    "green"
+  ],
+  "#389d3e": [
+    "green-hover"
+  ],
+  "#4a4a4a": [
+    "gray-600"
+  ],
+  "#d4d4d4": [
+    "gray-300"
+  ],
+  "#eeeeee": [
+    "gray-200"
+  ],
+  "#f4f4f4": [
+    "gray-100"
+  ],
+  "#f59e0b": [
+    "warning"
+  ],
+  "#dc2626": [
+    "error"
+  ],
+  "#3b9ee8": [
+    "blue",
+    "info"
+  ],
+  "#1a3a8f": [
+    "blue-dark"
+  ],
+  "#25d366": [
+    "wa"
+  ],
+  "#1da851": [
+    "wa-hover"
+  ],
+  "#003882": [
+    "bank-bb"
+  ],
+  "#ec0000": [
+    "bank-itau",
+    "bank-santander"
+  ],
+  "#cc092f": [
+    "bank-bradesco"
+  ],
+  "#820ad1": [
+    "bank-nubank"
+  ],
+  "#005ca9": [
+    "bank-caixa"
+  ],
+  "#ff7a00": [
+    "bank-inter"
+  ]
+}

@@ -1,0 +1,73 @@
+/* ============================================================================
+   TYPOGRAPHY UTILITIES — Basta
+   Classes utilitárias para uso direto no markup. Sempre via tokens.
+   ============================================================================ */
+
+/* Headlines — protagonistas */
+.display-1 {
+  font-size: var(--fs-5xl);
+  font-weight: var(--font-weight-black);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+.display-2 {
+  font-size: var(--fs-4xl);
+  font-weight: var(--font-weight-black);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+.heading-1 {
+  font-size: var(--fs-3xl);
+  font-weight: var(--font-weight-black);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-snug);
+}
+.heading-2 {
+  font-size: var(--fs-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-snug);
+}
+.heading-3 {
+  font-size: var(--fs-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--lh-snug);
+}
+
+/* Body */
+.body-lg {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-relaxed);
+}
+.body {
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+}
+.body-sm {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+/* Labels — uppercase, brutalismo */
+.label {
+  font-size: var(--fs-xs);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--gray-600);
+}
+.label-sm {
+  font-size: 11px;
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--gray-600);
+}
+
+/* Cores de texto utilitárias */
+.text-black    { color: var(--black); }
+.text-gray     { color: var(--gray-600); }
+.text-white    { color: var(--white); }
+.text-green    { color: var(--green); }
+.text-error    { color: var(--error); }
+.text-warning  { color: var(--warning); }
+.text-info     { color: var(--info); }

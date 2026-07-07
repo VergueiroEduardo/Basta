@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Criar Conta</title>
+  <meta name="description" content="Crie sua conta na Basta e comece a negociar suas dívidas de forma justa e transparente." />
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/form.css" />
+  <style>
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      font-family: var(--f);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; }
+    :where(button, a, input, select, textarea) { border-radius: 0; -webkit-appearance: none; }
+
+    /* ── ACESSIBILIDADE ─────────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: -6rem; left: 24px;
+      background: var(--green); color: var(--white);
+      font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 14px 24px; z-index: 9999; transition: top var(--t);
+    }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    /* ── LAYOUT PRINCIPAL ───────────────────────────────────── */
+    .register-page {
+      display: flex;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* ── SIDEBAR ────────────────────────────────────────────── */
+    .sidebar {
+      width: 440px;
+      background: var(--black);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar__logo { margin-bottom: 48px; }
+
+    .sidebar__headline {
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .sidebar__headline-accent { color: var(--green); }
+
+    .sidebar__subtext {
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .sidebar::after { display: none; }
+
+    /* ── FORM AREA ──────────────────────────────────────────── */
+    .form-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 64px;
+      background: var(--white);
+      overflow-y: auto;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ── FORM HEADER ────────────────────────────────────────── */
+    .form-header { margin-bottom: 16px; }
+
+    .form-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .form-subtitle {
+      font-size: 15px;
+      color: var(--gray-600);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── FORM CORE — WhatsApp + bloco + CTA como unidade ───── */
+    .form-core {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── FORM ELEMENTS ──────────────────────────────────────── */
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: var(--f);
+      font-size: 16px;
+      font-weight: 400;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--black);
+      transition: border-color var(--t);
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--black);
+    }
+
+    .form-input::placeholder { color: #999; font-weight: 400; }
+
+    .form-input--disabled {
+      background: var(--off-white);
+      color: var(--gray-600);
+      cursor: not-allowed;
+      border-color: var(--gray-300);
+    }
+    .form-input--disabled:focus { border-color: var(--gray-300); box-shadow: none; }
+
+    .form-input--readonly {
+      background: #F5F5F5;
+      color: var(--gray-600);
+      cursor: not-allowed;
+    }
+
+    /* ── FORM VALIDATION ───────────────────────────────────── */
+    .form-input--error {
+      border-color: var(--error) !important;
+    }
+    .form-error {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 6px;
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .form-error__icon {
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+      margin-top: 1px;
+    }
+    .form-error[hidden] { display: none; }
+
+    /* ── FORM FIELDS BLOCK ─────────────────────────────────── */
+    .form-fields-block {
+      border: 1px solid var(--gray-300);
+      padding: 20px 20px 4px;
+      margin-top: -1px; /* fusiona borda com campo WhatsApp acima */
+    }
+
+    .form-fields-block .form-group { margin-bottom: 16px; }
+    .form-fields-block .form-row { margin-bottom: 0; }
+
+    /* ── FORM ROWS ──────────────────────────────────────────── */
+    .form-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .form-row .form-group { flex: 1; }
+    .form-row .form-group--fixed { flex: 0 0 170px; }
+
+    /* ── CEP ROW ────────────────────────────────────────────── */
+    .cep-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .cep-row__cep { flex: 0 0 130px; }
+    .cep-row__cidade { flex: 1; }
+    .cep-row__uf { flex: 0 0 68px; }
+
+    /* ── WHATSAPP BADGE ─────────────────────────────────────── */
+    .input-wrapper { position: relative; }
+
+    .input-badge {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .input-badge--whatsapp { color: #25D366; }
+
+    /* ── PASSWORD TOGGLE ────────────────────────────────────── */
+    .password-wrapper { position: relative; }
+    .password-wrapper .form-input { padding-right: 48px; }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      color: #999;
+      transition: color var(--t);
+      padding: 0;
+    }
+
+    .password-toggle:hover { color: var(--black); }
+
+    /* ── BOTÃO FECHAR ────────────────────────────────────────── */
+    .btn-close {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 80;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .btn-close:hover {
+      color: var(--black);
+      background: rgba(0,0,0,0.05);
+      border-radius: 50%;
+    }
+    .btn-close:active {
+      transform: scale(0.98);
+    }
+
+    /* ── CTA ─────────────────────────────────────────────────── */
+    .form-cta { margin-top: 24px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--f);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 18px 36px;
+      min-height: 56px;
+      border: none;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background var(--t), color var(--t), transform var(--t), border-color var(--t);
+      width: 100%;
+    }
+
+    .btn-primary { background: var(--green); color: var(--white); }
+    .btn-primary:hover { background: var(--black); }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { background: var(--gray-300); color: #999; cursor: not-allowed; }
+
+    .btn__arrow { font-size: 1.2em; transition: transform var(--t); }
+    .btn-primary:hover .btn__arrow { transform: translateX(3px); }
+
+    /* ── TERMS & LOGIN LINK ─────────────────────────────────── */
+    .form-terms {
+      font-size: 12px;
+      color: #999;
+      margin-top: 16px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .form-terms a {
+      color: var(--black);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .form-terms a:hover { color: var(--green); }
+
+    .form-login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .form-login-link a {
+      color: var(--black);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid var(--green);
+      padding-bottom: 1px;
+      transition: border-color var(--t), color var(--t);
+    }
+
+    .form-login-link a:hover { color: var(--green); }
+
+    /* ── LOADING STATE ──────────────────────────────────────── */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn--loading {
+      pointer-events: none;
+      opacity: 0.7;
+      position: relative;
+    }
+    .btn--loading .btn__text { visibility: hidden; }
+    .btn--loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      top: 50%;
+      left: 50%;
+      margin: -9px 0 0 -9px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVO
+       ══════════════════════════════════════════════════════════ */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .sidebar { width: 360px; padding: 40px; }
+      .form-area { padding: 40px 48px; }
+    }
+
+    /* Mobile — sidebar vira header compacto */
+    @media (max-width: 768px) {
+      .register-page { flex-direction: column; }
+
+      .sidebar {
+        width: 100%;
+        padding: 24px 20px;
+        min-height: auto;
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .sidebar__logo { margin-bottom: 0; flex-shrink: 0; max-width: 120px; }
+      .sidebar__logo svg { width: 100%; height: auto; }
+
+      .sidebar__text-group { flex: 1; min-width: 0; }
+
+      .sidebar__headline {
+        font-size: 18px;
+        margin-bottom: 4px;
+        white-space: normal;
+        line-height: 1.2;
+      }
+
+      .sidebar__br { display: none; }
+
+      .sidebar__subtext {
+        font-size: 12px;
+        max-width: 100%;
+        line-height: 1.4;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      br.m-break { display: inline; }
+      @media (min-width: 768px) { br.m-break { display: none; } }
+
+      .sidebar::after { display: none; }
+
+      .form-area {
+        flex: 1;
+        padding: 24px 20px 40px;
+        align-items: flex-start;
+      }
+
+      .form-container { max-width: 100%; }
+
+      .form-header { margin-bottom: 12px; }
+      .form-title { font-size: 22px; margin-bottom: 4px; }
+
+      .form-fields-block { padding: 16px 16px 4px; }
+
+      .form-input { padding: 12px 14px; font-size: 16px; } /* 16px previne zoom iOS */
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .form-row .form-group--fixed { flex: 1; }
+
+      .cep-row { flex-wrap: wrap; }
+      .cep-row__cep { flex: 1 1 100%; }
+      .cep-row__cidade { flex: 1; }
+      .cep-row__uf { flex: 0 0 72px; }
+
+      .btn {
+        font-size: 14px;
+        padding: 16px 24px;
+        min-height: 52px;
+      }
+
+      .form-terms { font-size: 11px; }
+      .form-login-link { font-size: 13px; }
+    }
+
+    /* Small mobile (iPhone SE, etc.) */
+    @media (max-width: 380px) {
+      .sidebar { padding: 20px 16px; gap: 12px; }
+      .sidebar__headline { font-size: 16px; }
+      .sidebar__subtext { font-size: 11px; }
+
+      .form-area { padding: 20px 16px 32px; }
+      .form-fields-block { padding: 14px 12px 4px; }
+      .form-row { gap: 0; }
+      .cep-row { gap: 8px; }
+    }
+
+    /* Landscape mobile — sidebar como faixa lateral fina */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .register-page { flex-direction: row; }
+
+      .sidebar {
+        width: 280px;
+        padding: 24px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+      }
+
+      .sidebar__logo { margin-bottom: 24px; max-width: 160px; }
+      .sidebar__logo svg { width: 100%; height: auto; }
+      .sidebar__headline { font-size: 24px; }
+
+      .form-area {
+        padding: 24px 32px;
+        overflow-y: auto;
+      }
+    }
+
+    /* Safe area para notch/dynamic island */
+    @supports (padding: env(safe-area-inset-top)) {
+      .sidebar { padding-top: max(24px, env(safe-area-inset-top)); }
+      .form-area {
+        padding-bottom: max(40px, env(safe-area-inset-bottom));
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<a href="01_basta-landing.html" class="btn-close" aria-label="Fechar">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+</a>
+
+<a href="#form-cadastro" class="skip-link">Pular para o formulário</a>
+
+<div class="register-page">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <svg style="color: var(--white)" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    </div>
+
+  </aside>
+
+  <!-- ── FORM AREA ───────────────────────────────────────── -->
+  <main class="form-area" id="form-cadastro">
+    <div class="form-container">
+
+      <div class="form-header">
+        <h1 class="form-title">Crie Sua Conta<span style="color:var(--green)">.</span></h1>
+        <p class="form-subtitle">Esse é o primeiro passo para retomar o<br class="m-break"> controle sobre sua vida financeira.</p>
+      </div>
+
+      <form novalidate onsubmit="event.preventDefault(); if(validateCadastro()) simulateLoading(document.querySelector('.btn-primary'))">
+        <div class="form-core">
+
+          <!-- 1. WhatsApp (read-only) -->
+          <div class="form-group">
+            <label class="form-label" for="whatsapp">WhatsApp</label>
+            <div class="input-wrapper">
+              <input type="text" id="whatsapp" class="form-input form-input--disabled" value="(19) •••••-5723" disabled style="padding-right: 120px;">
+              <span class="input-badge input-badge--whatsapp">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Verificado
+              </span>
+            </div>
+          </div>
+
+          <!-- Bloco de campos agrupados -->
+          <div class="form-fields-block">
+
+            <!-- 2. CPF + Data de Nascimento -->
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cpf">CPF</label>
+                <input type="text" id="cpf" class="form-input" placeholder="000.000.000-00" inputmode="numeric" autocomplete="off">
+                <div class="form-error" id="cpf-error" hidden>
+                  <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>CPF inválido.</span>
+                </div>
+              </div>
+              <div class="form-group form-group--fixed">
+                <label class="form-label" for="nascimento">Data de Nascimento</label>
+                <input type="text" id="nascimento" class="form-input" placeholder="DD/MM/AAAA" inputmode="numeric">
+              </div>
+            </div>
+
+            <!-- 3. Email -->
+            <div class="form-group">
+              <label class="form-label" for="email">Email</label>
+              <input type="email" id="email" class="form-input" placeholder="seu@email.com" autocomplete="email">
+              <div class="form-error" id="email-error" hidden>
+                <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>Informe um email válido.</span>
+              </div>
+            </div>
+
+            <!-- 4. CEP + Cidade + Estado -->
+            <div class="form-group">
+              <div class="cep-row">
+                <div class="cep-row__cep">
+                  <label class="form-label" for="cep">CEP</label>
+                  <input type="text" id="cep" class="form-input" placeholder="00000-000" inputmode="numeric">
+                </div>
+                <div class="cep-row__cidade">
+                  <label class="form-label">Cidade</label>
+                  <input type="text" class="form-input form-input--readonly" placeholder="—" readonly tabindex="-1">
+                </div>
+                <div class="cep-row__uf">
+                  <label class="form-label">UF</label>
+                  <input type="text" class="form-input form-input--readonly" placeholder="—" readonly tabindex="-1">
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Senha -->
+            <div class="form-group">
+              <label class="form-label" for="senha">Senha</label>
+              <div class="password-wrapper">
+                <input type="password" id="senha" class="form-input" placeholder="Mínimo 8 caracteres">
+                <button type="button" class="password-toggle" aria-label="Mostrar senha" onclick="togglePassword('senha', this)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="form-error" id="senha-error" hidden>
+                <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>Mínimo de 8 caracteres.</span>
+              </div>
+            </div>
+
+            <!-- 6. Confirmar Senha -->
+            <div class="form-group">
+              <label class="form-label" for="confirmar-senha">Confirmar Senha</label>
+              <div class="password-wrapper">
+                <input type="password" id="confirmar-senha" class="form-input" placeholder="Repita a senha">
+                <button type="button" class="password-toggle" aria-label="Mostrar senha" onclick="togglePassword('confirmar-senha', this)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="form-error" id="confirmar-senha-error" hidden>
+                <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>As senhas não coincidem.</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CTA -->
+          <div class="form-cta">
+            <button type="submit" class="btn btn-primary" aria-disabled="false">
+              <span class="btn__text">Criar Conta <span class="btn__arrow">&rarr;</span></span>
+            </button>
+          </div>
+
+        </div>
+
+        <p class="form-terms">
+          Ao criar sua conta, você concorda com os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>.
+        </p>
+
+        <p class="form-login-link">
+          Já tem uma conta? <a href="03_basta-login.html">Entrar</a>
+        </p>
+      </form>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  /* ── FORM VALIDATION ────────────────────────────────────── */
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validateField(fieldId, isValid, errorMsg = '') {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById(fieldId + '-error');
+
+    if (!isValid) {
+      field.classList.add('form-input--error');
+      if (errorEl) {
+        errorEl.removeAttribute('hidden');
+        if (errorMsg) errorEl.querySelector('span').textContent = errorMsg;
+      }
+      return false;
+    } else {
+      field.classList.remove('form-input--error');
+      if (errorEl) errorEl.setAttribute('hidden', '');
+      return true;
+    }
+  }
+
+  function validateCadastro() {
+    const cpf = document.getElementById('cpf').value.replace(/\D/g, '');
+    const email = document.getElementById('email').value.trim();
+    const senha = document.getElementById('senha').value;
+    const confirmar = document.getElementById('confirmar-senha').value;
+
+    let isValid = true;
+
+    isValid = validateField('cpf', cpf.length === 11, 'CPF inválido.') && isValid;
+    isValid = validateField('email', email && validateEmail(email), 'Informe um email válido.') && isValid;
+    isValid = validateField('senha', senha.length >= 8, 'Mínimo de 8 caracteres.') && isValid;
+    isValid = validateField('confirmar-senha', senha === confirmar && senha.length >= 8, 'As senhas não coincidem.') && isValid;
+
+    return isValid;
+  }
+
+  // Validação no blur de cada campo
+  document.getElementById('cpf')?.addEventListener('blur', function() {
+    if (this.value.trim()) {
+      const cpf = this.value.replace(/\D/g, '');
+      validateField('cpf', cpf.length === 11, 'CPF inválido.');
+    }
+  });
+
+  document.getElementById('email')?.addEventListener('blur', function() {
+    if (this.value.trim()) {
+      validateField('email', validateEmail(this.value.trim()), 'Informe um email válido.');
+    }
+  });
+
+  document.getElementById('senha')?.addEventListener('blur', function() {
+    if (this.value) {
+      validateField('senha', this.value.length >= 8, 'Mínimo de 8 caracteres.');
+    }
+  });
+
+  document.getElementById('confirmar-senha')?.addEventListener('blur', function() {
+    const senha = document.getElementById('senha').value;
+    if (this.value) {
+      validateField('confirmar-senha', senha === this.value && senha.length >= 8, 'As senhas não coincidem.');
+    }
+  });
+
+  /* ── LOADING STATE ──────────────────────────────────────── */
+  function simulateLoading(btn) {
+    btn.classList.add('btn--loading');
+    btn.setAttribute('aria-disabled', 'true');
+    setTimeout(function() {
+      btn.classList.remove('btn--loading');
+      btn.setAttribute('aria-disabled', 'false');
+    }, 2000);
+  }
+
+  /* ── TOGGLE PASSWORD ────────────────────────────────────── */
+  function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.setAttribute('aria-label', 'Ocultar senha');
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    } else {
+      input.type = 'password';
+      btn.setAttribute('aria-label', 'Mostrar senha');
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    }
+  }
+
+  document.getElementById('cpf')?.addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    e.target.value = v;
+  });
+
+  document.getElementById('nascimento')?.addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 8) v = v.slice(0, 8);
+    if (v.length > 4) v = v.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1/$2/$3');
+    else if (v.length > 2) v = v.replace(/(\d{2})(\d{1,2})/, '$1/$2');
+    e.target.value = v;
+  });
+
+  document.getElementById('cep')?.addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 8) v = v.slice(0, 8);
+    if (v.length > 5) v = v.replace(/(\d{5})(\d{1,3})/, '$1-$2');
+    e.target.value = v;
+  });
+</script>
+
+</body>
+</html>

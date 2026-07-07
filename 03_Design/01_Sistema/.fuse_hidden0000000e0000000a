@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Conta Criada</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <style>
+
+    /* ── RESET ──────────────────────────────────────────────── */    body {
+      font-family: var(--f);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* ── OVERLAY ────────────────────────────────────────────── */
+    .overlay {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: rgba(26, 26, 26, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+
+      /* Simula a tela de cadastro atrás */
+      background-color: var(--black);
+      background-image:
+        linear-gradient(135deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(45deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    /* ── MODAL ──────────────────────────────────────────────── */
+    .modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 480px;
+      padding: 48px 48px 40px;
+      position: relative;
+      animation: modalIn 0.32s var(--ease) both;
+      border: 1.5px solid var(--black);
+    }
+
+    /* ── LOGO ───────────────────────────────────────────────── */
+    .modal__logo {
+      margin-bottom: 32px;
+    }
+
+    /* ── ÍCONE DE SUCESSO ───────────────────────────────────── */
+    .success-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    /* ── CONTEÚDO ───────────────────────────────────────────── */
+    .modal__title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 6px;
+    }
+
+    .modal__title span { color: var(--green); }
+
+    .modal__text {
+      font-size: 15px;
+      color: var(--gray-600);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      max-width: 360px;
+    }
+
+    /* ── BLOCO INFORMATIVO ──────────────────────────────────── */
+    .info-block {
+      background: var(--off-white);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .info-block__text {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--gray-600);
+    }
+
+    .info-block__text strong {
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    /* ── CTA ─────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--f);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 18px 36px;
+      min-height: 56px;
+      border: none;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background var(--t), color var(--t), border-color var(--t);
+      width: 100%;
+    }
+
+    .btn-primary { background: var(--green); color: var(--white); }
+    .btn-primary:hover { background: var(--black); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn__arrow { font-size: 1.2em; transition: transform var(--t); }
+    .btn-primary:hover .btn__arrow { transform: translateX(3px); }
+
+    /* ── BORDA DECORATIVA ───────────────────────────────────── */
+
+    /* ── RESPONSIVO ─────────────────────────────────────────── */
+    @media (max-width: 540px) {
+      .modal {
+        padding: 32px 24px 28px;
+      }
+
+      .modal__logo { margin-bottom: 24px; }
+      .modal__logo svg { height: 28px; }
+
+      .modal__title { font-size: 26px; margin-bottom: 4px; }
+      .modal__text { font-size: 14px; margin-bottom: 16px; }
+
+      .success-icon { margin-bottom: 16px; }
+
+      .info-block { padding: 14px 16px; }
+      .info-block__text { font-size: 12px; }
+
+      .btn { font-size: 14px; min-height: 52px; }
+    }
+
+    /* iPhone SE (375px) */
+    @media (max-width: 390px) {
+      .modal { padding: 28px 20px 24px; }
+      .modal__title { font-size: 24px; }
+    }
+
+    @supports (padding: env(safe-area-inset-bottom)) {
+      .overlay {
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+
+    <!-- Logo -->
+    <div class="modal__logo">
+      <svg aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    </div>
+
+    <!-- Ícone de sucesso -->
+    <div class="success-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <!-- Título e texto -->
+    <h1 class="modal__title" id="modal-title">
+      Conta criada<br>com sucesso<span>.</span>
+    </h1>
+    <p class="modal__text">
+      Tudo pronto. Agora você pode <strong>usar seus dados bancários a seu favor, pela primeira vez!</strong> Conecte sua conta via Open Finance, o sistema seguro regulado pelo Banco Central do Brasil.
+    </p>
+
+    <!-- Bloco informativo Open Finance -->
+    <div class="info-block">
+      <p class="info-block__text">
+        <strong>Open Finance</strong> é um sistema do Banco Central que permite a você compartilhar seus dados bancários com segurança. <strong>Ninguém acessa sua conta — o acesso é de leitura.</strong>
+      </p>
+    </div>
+
+    <!-- CTA único -->
+    <a href="07_basta-of-selecao-banco.html" class="btn btn-primary">
+      Continuar <span class="btn__arrow">&rarr;</span>
+    </a>
+
+  </div>
+</div>
+
+</body>
+</html>

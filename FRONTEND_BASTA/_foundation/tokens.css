@@ -1,0 +1,122 @@
+/* ============================================================================
+   BASTA — DESIGN TOKENS (single source of truth)
+   Origem: basta-design-system.html (linhas 17–93)
+   Adições: derivadas da auditoria de 25/04/2026
+   Não alterar tokens sem atualizar basta-design-system.html simultaneamente.
+   ============================================================================ */
+:root {
+  /* 01 — PALETA DE CORES (DS canônica) */
+  --black:              #1A1A1A;  /* Texto primário, bordas, elementos de destaque */
+  --white:              #FFFFFF;  /* Fundo padrão, texto sobre escuro */
+  --off-white:          #F5F3EF;  /* Fundo alternativo seções, hover states */
+  --sage:               #bdc0ac;  /* Accent terciário (terra, bege) */
+  --green:              #42b449;  /* Brand accent — buttons, highlights, success */
+  --green-hover:        #389d3e;  /* Hover do --green */
+  --gray-600:           #4A4A4A;  /* Texto secundário, labels, subtítulos */
+  --gray-300:           #D4D4D4;  /* Bordas, divisores, linhas */
+  --gray-200:           #EEEEEE;  /* Fundo modal/overlay area */
+  --gray-100:           #F4F4F4;  /* Fundo neutro suave (extensão) */
+  --warning:            #F59E0B;  /* Status warning/pendente */
+  --error:              #DC2626;  /* Destrutivo (logout, delete) */
+  --blue:               #3B9EE8;  /* Brand azul — informativo, destaque secundário */
+  --blue-dark:          #1A3A8F;  /* Azul profundo — fundos, headers */
+  --info:               #3B9EE8;  /* Informativo, banners */
+
+  /* WhatsApp (canal de produto) */
+  --wa:                 #25D366;
+  --wa-hover:           #1DA851;
+
+  /* Cores institucionais de bancos (lookup, não tokens de tema) */
+  --bank-bb:            #003882;
+  --bank-itau:          #EC0000;
+  --bank-bradesco:      #CC092F;
+  --bank-nubank:        #820AD1;  /* canônico — corrige drift #8A05BE */
+  --bank-santander:     #EC0000;
+  --bank-caixa:         #005CA9;
+  --bank-inter:         #FF7A00;
+
+  /* 02 — TIPOGRAFIA */
+  --font-family:        'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-weight-light:    300;  /* Apenas em quotes */
+  --font-weight-normal:   400;  /* Body padrão */
+  --font-weight-medium:   500;  /* Subtítulos, labels */
+  --font-weight-semibold: 600;  /* Títulos menores */
+  --font-weight-bold:     700;  /* Títulos */
+  --font-weight-black:    800;  /* Headlines protagonistas */
+
+  /* Type scale — desktop first */
+  --fs-xs:              12px;  /* Labels, badges, small text */
+  --fs-sm:              13px;  /* Form labels, hints */
+  --fs-base:            16px;  /* Body padrão, inputs */
+  --fs-lg:              17px;  /* Body maior, seções */
+  --fs-xl:              18px;  /* Títulos menores */
+  --fs-2xl:             20px;  /* Títulos médios */
+  --fs-3xl:             24px;  /* Headlines seções */
+  --fs-4xl:             40px;  /* Headlines grandes */
+  --fs-5xl:             56px;  /* Headlines heroicas */
+
+  /* Line height por contexto */
+  --lh-tight:           1.02;   /* Headlines (aperto visual) */
+  --lh-snug:            1.2;    /* Títulos */
+  --lh-normal:          1.6;    /* Body padrão */
+  --lh-relaxed:         1.75;   /* Body em seções longas */
+
+  /* Letter spacing */
+  --ls-tight:           -0.03em;  /* Headlines */
+  --ls-snug:            -0.01em;  /* Subtítulos */
+  --ls-normal:          0;
+  --ls-wide:            0.04em;   /* Botões */
+  --ls-wider:           0.06em;   /* Labels, uppercase */
+  --ls-widest:          0.14em;   /* Muito aberto */
+
+  /* 03 — ESPAÇAMENTO */
+  --space-xs:           4px;
+  --space-sm:           8px;
+  --space-md:           12px;
+  --space-lg:           16px;
+  --space-xl:           24px;
+  --space-2xl:          32px;
+  --space-3xl:          40px;
+  --space-4xl:          48px;
+  --space-5xl:          64px;
+  --space-6xl:          80px;
+
+  /* Padding padrão */
+  --px-mobile:          16px;  /* Lateral mobile */
+  --px-desktop:         24px;  /* Lateral desktop */
+  --px-lg:              80px;  /* Grande (seções) */
+
+  /* 04 — MOTION & EASING */
+  --ease-out:           cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in:            cubic-bezier(0.4, 1, 0.2, 0);
+  --duration-fast:      150ms;
+  --duration-normal:    240ms;
+  --duration-slow:      300ms;
+  --duration-deliberate: 600ms;
+  --transition:         var(--duration-normal) var(--ease-out);
+
+  /* 05 — LAYOUT */
+  --max-width:          1200px;
+  --border-radius:      0;  /* Brutalismo: sem arredondamento */
+  --border-width-thin:  1px;
+  --border-width-thick: 2px;
+  --sidebar-w:          240px;
+
+  /* Sombras (brutalismo = mínimo) */
+  --shadow-none:        none;
+  --shadow-sm:          0 2px 4px rgba(26, 26, 26, 0.1);
+  --shadow-md:          0 4px 12px rgba(26, 26, 26, 0.15);
+  --shadow-lg:          0 8px 24px rgba(26, 26, 26, 0.2);
+  --shadow-inset:       inset 2px 0 0 var(--black);
+
+  /* === LEGADO (DEPRECATED — não usar em código novo) ===
+     Aliases para os nomes encurtados que circulam nos arquivos atuais.
+     Mantidos para retrocompatibilidade durante o refactor incremental.
+     Remover quando todos os arquivos forem migrados. */
+  --f:      var(--font-family);
+  --t:      var(--transition);
+  --ease:   var(--ease-out);
+  --max-w:  var(--max-width);     /* alias para 01_landing */
+  --px:     var(--px-mobile);     /* gutter mobile (alias para 01_landing) */
+  --px-md:  var(--px-desktop);    /* gutter desktop (alias para 01_landing) */
+}

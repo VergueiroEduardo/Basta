@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termos de Uso — Basta.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --black: #1A1A1A;
+      --white: #FFFFFF;
+      --off-white: #F5F3EF;
+      --green: #42b449;
+      --gray-600: #4A4A4A;
+      --gray-300: #D4D4D4;
+      --max-w: 1200px;
+      --px: 24px;
+      --px-lg: 80px;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --t: 240ms var(--ease);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--white);
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--black);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .logo-svg {
+      color: var(--white);
+    }
+
+    .logo-svg-lg {
+      height: 36px;
+      width: auto;
+    }
+
+    nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: opacity var(--t);
+    }
+
+    nav a:hover {
+      opacity: 0.7;
+    }
+
+    /* Main Content */
+    article {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: var(--px-lg) var(--px) 64px;
+      background: var(--white);
+    }
+
+    .page-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 15px;
+      color: var(--gray-600);
+      margin-bottom: 48px;
+      line-height: 1.6;
+    }
+
+    h2 {
+      font-size: clamp(20px, 3vw, 24px);
+      font-weight: 700;
+      color: var(--black);
+      margin-top: 48px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    ul {
+      padding-left: 24px;
+      list-style-type: disc;
+      margin-bottom: 16px;
+    }
+
+    li {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+
+    strong {
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    .last-updated {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--gray-300);
+      border-top: 1px solid var(--gray-300);
+      padding-top: 32px;
+      margin-top: 64px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--gray-300);
+      padding: 32px var(--px);
+      text-align: center;
+      background: var(--white);
+    }
+
+    .footer-container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+
+    .footer-link {
+      color: var(--black);
+      text-decoration: none;
+      font-weight: 600;
+      transition: opacity var(--t);
+    }
+
+    .footer-link:hover {
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <!-- SVG Symbol Definition -->
+  <svg style="display:none" aria-hidden="true">
+    <symbol id="logo-symbol" viewBox="0 0 602.25 254.23">
+      <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+      <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+      <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+      <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+    </symbol>
+  </svg>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="01_basta-landing.html" class="logo-link">
+        <svg class="logo-svg logo-svg-lg" viewBox="0 0 602.25 254.23">
+          <use xlink:href="#logo-symbol"></use>
+        </svg>
+      </a>
+      <nav>
+        <a href="01_basta-landing.html#como-funciona">Como Funciona</a>
+        <a href="01_basta-landing.html#open-finance">Open Finance</a>
+        <a href="01_basta-landing.html#sobre">Sobre</a>
+        <a href="01_basta-landing.html#manifesto">Manifesto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <article>
+    <h1 class="page-title">Termos de Uso</h1>
+    <p class="page-subtitle">Aliado Legal Tecnologia LTDA — CNPJ: 40.115.118/0001-80 | Vigência: 31 de março de 2026 | Versão 1.0</p>
+
+    <!-- Seção 1 -->
+    <h2>1. Definições</h2>
+    <ul>
+      <li><strong>Plataforma:</strong> sistema digital desenvolvido e operado pela Basta., acessível por meio de aplicativo de mensagens (WhatsApp) e ambiente web, destinado à análise financeira, diagnóstico de endividamento e apoio à reestruturação de dívidas.</li>
+      <li><strong>Usuário:</strong> pessoa física, maior de 18 anos, residente no Brasil, que se cadastra e utiliza a Plataforma.</li>
+      <li><strong>Open Finance:</strong> sistema financeiro aberto regulamentado pelo Banco Central do Brasil (Resolução Conjunta nº 1/2020 e normas complementares), que permite o compartilhamento padronizado de dados e serviços financeiros mediante consentimento do titular.</li>
+      <li><strong>Pluggy:</strong> infraestrutura tecnológica certificada pelo Banco Central do Brasil, utilizada como operadora para conexão e recepção de dados do Open Finance.</li>
+      <li><strong>Diagnóstico Financeiro:</strong> análise automatizada e/ou assistida da situação financeira do Usuário, elaborada com base nos dados compartilhados via Open Finance e informações prestadas diretamente pelo Usuário.</li>
+      <li><strong>Proposta de Reestruturação:</strong> conjunto de estratégias e sugestões apresentadas ao Usuário para renegociação de dívidas, portabilidade de crédito ou recuperação de direitos creditórios.</li>
+      <li><strong>Credores:</strong> instituições financeiras, empresas e demais entidades com as quais o Usuário possui obrigações financeiras.</li>
+      <li><strong>Success Fee:</strong> remuneração devida à Basta. condicionada à obtenção de benefício financeiro efetivo para o Usuário.</li>
+    </ul>
+
+    <!-- Seção 2 -->
+    <h2>2. Objeto do Serviço</h2>
+    <p>A Basta. é uma plataforma de reestruturação financeira que utiliza dados do Open Finance e inteligência artificial para analisar a situação financeira do Usuário, identificar práticas abusivas e construir caminhos concretos para a renegociação de dívidas.</p>
+    <p>Os serviços compreendem:</p>
+    <ul>
+      <li>Análise da situação financeira do Usuário por meio de dados do Open Finance;</li>
+      <li>Elaboração de Diagnóstico Financeiro com identificação de cobranças indevidas, taxas abusivas e oportunidades de economia;</li>
+      <li>Construção de Proposta de Reestruturação personalizada;</li>
+      <li>Apoio na negociação com Credores;</li>
+      <li>Portabilidade de crédito, quando aplicável;</li>
+      <li>Recuperação de direitos creditórios (valores cobrados indevidamente).</li>
+    </ul>
+
+    <h3>2.1. Natureza do Serviço</h3>
+    <p>A Basta. <strong>não é instituição financeira</strong>, não concede crédito, não realiza operações de pagamento e não presta assessoria jurídica. A Plataforma atua como <strong>intermediária tecnológica</strong>, fornecendo ferramentas de análise e apoio à tomada de decisão pelo Usuário.</p>
+
+    <!-- Seção 3 -->
+    <h2>3. Elegibilidade</h2>
+    <p>Para utilizar a Plataforma, o Usuário deve:</p>
+    <ul>
+      <li>Ser pessoa física, maior de 18 (dezoito) anos;</li>
+      <li>Possuir CPF válido e regular junto à Receita Federal;</li>
+      <li>Ser residente no Brasil;</li>
+      <li>Possuir conta em instituição financeira participante do Open Finance;</li>
+      <li>Possuir número de telefone com WhatsApp ativo.</li>
+    </ul>
+
+    <!-- Seção 4 -->
+    <h2>4. Cadastro e Autenticação</h2>
+    <p>O cadastro é realizado por meio do WhatsApp, com validação do número de telefone e coleta de dados básicos (nome completo e CPF). O Usuário é responsável pela veracidade das informações prestadas e pela segurança de acesso ao seu dispositivo.</p>
+    <p>A Basta. poderá solicitar documentação complementar para verificação de identidade, conforme necessário para a prestação dos serviços ou cumprimento de obrigações legais.</p>
+
+    <!-- Seção 5 -->
+    <h2>5. Conexão Open Finance</h2>
+
+    <h3>5.1. Consentimento</h3>
+    <p>A conexão aos dados do Open Finance é realizada mediante consentimento específico do Usuário, em conformidade com a regulamentação do Banco Central do Brasil. O consentimento é concedido diretamente na interface da instituição financeira do Usuário, garantindo que a Basta. nunca tenha acesso a senhas bancárias.</p>
+
+    <h3>5.2. Escopo de Dados</h3>
+    <p>Os dados acessados via Open Finance incluem, conforme os escopos disponíveis:</p>
+    <ul>
+      <li>Dados cadastrais vinculados à instituição financeira;</li>
+      <li>Contas correntes e poupança (saldos, limites e extratos);</li>
+      <li>Cartões de crédito (faturas, limites, parcelas);</li>
+      <li>Operações de crédito (empréstimos, financiamentos, condições contratadas);</li>
+      <li>Transações e histórico de movimentações.</li>
+    </ul>
+
+    <h3>5.3. Somente Leitura</h3>
+    <p>A conexão Open Finance utilizada pela Basta. é <strong>exclusivamente de leitura</strong>. A Plataforma não realiza movimentações financeiras, transferências, pagamentos ou qualquer operação ativa nas contas do Usuário.</p>
+
+    <h3>5.4. Vigência e Revogação</h3>
+    <p>O consentimento para compartilhamento de dados via Open Finance tem vigência máxima de 12 (doze) meses, conforme regulamentação do Banco Central. O Usuário pode revogar o consentimento a qualquer momento, diretamente na interface da sua instituição financeira ou por meio da Plataforma.</p>
+    <p>A revogação do consentimento implica a interrupção do acesso a novos dados. Os dados já coletados serão tratados conforme a Política de Privacidade e a legislação aplicável.</p>
+
+    <h3>5.5. Infraestrutura</h3>
+    <p>A conexão Open Finance é operada por meio da Pluggy, infraestrutura certificada pelo Banco Central do Brasil, que atua como operadora de dados conforme a LGPD.</p>
+
+    <!-- Seção 6 -->
+    <h2>6. Modelo de Remuneração</h2>
+
+    <h3>6.1. Gratuidade da Análise</h3>
+    <p>O cadastro, a conexão Open Finance e a elaboração do Diagnóstico Financeiro são <strong>integralmente gratuitos</strong>. Nenhum valor é cobrado do Usuário antes da obtenção de benefício financeiro efetivo.</p>
+
+    <h3>6.2. Success Fee</h3>
+    <p>A remuneração da Basta. é condicionada ao resultado e devida apenas quando houver benefício financeiro comprovável para o Usuário, nos seguintes percentuais:</p>
+    <ul>
+      <li><strong>Portabilidade de crédito:</strong> 5% (cinco por cento) sobre a economia gerada, calculada como a diferença entre o custo efetivo total (CET) da operação original e da nova operação;</li>
+      <li><strong>Direitos creditórios:</strong> 10% (dez por cento) sobre os valores recuperados em favor do Usuário, decorrentes de cobranças indevidas, tarifas abusivas ou encargos ilegais identificados.</li>
+    </ul>
+
+    <h3>6.3. Transparência</h3>
+    <p>Antes de qualquer ação que gere cobrança, o Usuário receberá detalhamento claro do benefício estimado e do valor do Success Fee correspondente. A aceitação expressa do Usuário é requisito obrigatório para o prosseguimento.</p>
+
+    <h3>6.4. Momento da Cobrança</h3>
+    <p>O Success Fee é devido somente após a efetivação do benefício financeiro, ou seja, após a conclusão da portabilidade de crédito ou o crédito dos valores recuperados em favor do Usuário.</p>
+
+    <!-- Seção 7 -->
+    <h2>7. Processo de Negociação</h2>
+    <p>A Basta. poderá, mediante autorização expressa do Usuário, entrar em contato com Credores para apresentar propostas de renegociação. O Usuário será informado sobre todas as propostas recebidas e nenhum acordo será formalizado sem seu consentimento prévio e expresso.</p>
+    <p>A Basta. <strong>não garante</strong> a aceitação de propostas por parte dos Credores nem resultados específicos nas negociações. O resultado depende de fatores alheios ao controle da Plataforma, como políticas internas dos Credores e condições de mercado.</p>
+
+    <!-- Seção 8 -->
+    <h2>8. Comunicação via WhatsApp</h2>
+    <p>O canal principal de comunicação entre a Basta. e o Usuário é o WhatsApp, por meio da API Business (via Z-API). Ao se cadastrar, o Usuário consente com o recebimento de mensagens relacionadas ao serviço, incluindo:</p>
+    <ul>
+      <li>Atualizações sobre o Diagnóstico Financeiro;</li>
+      <li>Propostas de reestruturação e andamento de negociações;</li>
+      <li>Solicitações de informações complementares;</li>
+      <li>Notificações operacionais e de segurança.</li>
+    </ul>
+    <p>O Usuário pode solicitar a interrupção das mensagens a qualquer momento, estando ciente de que tal solicitação poderá impactar a prestação dos serviços.</p>
+
+    <!-- Seção 9 -->
+    <h2>9. Obrigações do Usuário</h2>
+    <p>Ao utilizar a Plataforma, o Usuário se compromete a:</p>
+    <ul>
+      <li>Fornecer informações verdadeiras, completas e atualizadas;</li>
+      <li>Manter o consentimento Open Finance ativo durante o período de análise e negociação;</li>
+      <li>Responder às solicitações da Plataforma em prazo razoável;</li>
+      <li>Não utilizar a Plataforma para fins ilícitos ou fraudulentos;</li>
+      <li>Manter a segurança de acesso ao seu dispositivo móvel e à conta de WhatsApp vinculada.</li>
+    </ul>
+
+    <!-- Seção 10 -->
+    <h2>10. Limitações de Responsabilidade</h2>
+    <p>A Basta. não se responsabiliza por:</p>
+    <ul>
+      <li>Resultados de negociações com Credores, cuja aceitação depende de decisão autônoma de terceiros;</li>
+      <li>Indisponibilidade, erros ou atrasos nos serviços de terceiros, incluindo instituições financeiras, Pluggy, WhatsApp/Meta e Z-API;</li>
+      <li>Dados incorretos ou desatualizados fornecidos pelas instituições financeiras via Open Finance;</li>
+      <li>Prejuízos decorrentes de uso indevido da Plataforma pelo Usuário;</li>
+      <li>Eventos de força maior ou caso fortuito.</li>
+    </ul>
+    <p>A responsabilidade total da Basta. perante o Usuário, em qualquer hipótese, limita-se ao valor efetivamente pago pelo Usuário à Plataforma nos 12 (doze) meses anteriores ao evento que originou a reclamação.</p>
+
+    <!-- Seção 11 -->
+    <h2>11. Propriedade Intelectual</h2>
+    <p>A marca Basta., os algoritmos, a metodologia de análise, o design da interface, os textos, os códigos-fonte e todos os demais elementos da Plataforma são de propriedade exclusiva da Aliado Legal Tecnologia LTDA, protegidos pela legislação brasileira de propriedade intelectual.</p>
+    <p>O uso da Plataforma não confere ao Usuário qualquer direito de propriedade intelectual sobre seus componentes.</p>
+
+    <!-- Seção 12 -->
+    <h2>12. Rescisão e Cancelamento</h2>
+    <p>O Usuário pode cancelar sua conta a qualquer momento, mediante solicitação direta via WhatsApp ou pelo e-mail ola@bastaeponto.com.br. O cancelamento implica:</p>
+    <ul>
+      <li>Interrupção dos serviços em andamento;</li>
+      <li>Revogação do consentimento Open Finance;</li>
+      <li>Retenção dos dados conforme prazos legais aplicáveis (detalhados na Política de Privacidade).</li>
+    </ul>
+    <p>A Basta. reserva-se o direito de suspender ou encerrar o acesso do Usuário em caso de violação destes Termos, uso fraudulento ou conduta que comprometa a segurança da Plataforma.</p>
+    <p>O cancelamento não exime o Usuário de obrigações financeiras já contraídas, incluindo o Success Fee sobre benefícios já concretizados.</p>
+
+    <!-- Seção 13 -->
+    <h2>13. Alterações dos Termos</h2>
+    <p>A Basta. poderá alterar estes Termos de Uso a qualquer tempo, mediante comunicação prévia ao Usuário com antecedência mínima de 15 (quinze) dias. A notificação será realizada por meio do WhatsApp cadastrado e/ou e-mail, quando disponível.</p>
+    <p>O uso continuado da Plataforma após a entrada em vigor das alterações constitui aceitação tácita dos novos Termos. Caso discorde, o Usuário poderá cancelar sua conta conforme a cláusula 12.</p>
+
+    <!-- Seção 14 -->
+    <h2>14. Lei Aplicável e Foro</h2>
+    <p>Estes Termos de Uso são regidos pelas leis da República Federativa do Brasil, em especial a Lei nº 13.709/2018 (LGPD), a Lei nº 8.078/1990 (Código de Defesa do Consumidor), a Lei nº 12.965/2014 (Marco Civil da Internet) e a regulamentação do Banco Central do Brasil sobre Open Finance.</p>
+    <p>As partes se comprometem a buscar a resolução amigável de eventuais controvérsias. Persistindo o impasse, fica eleito o foro da comarca do domicílio do Usuário, nos termos do art. 101, I, do Código de Defesa do Consumidor, com exclusão de qualquer outro, por mais privilegiado que seja.</p>
+
+    <!-- Seção 15 -->
+    <h2>15. Contato</h2>
+    <p>Para dúvidas, solicitações ou reclamações sobre estes Termos de Uso:</p>
+    <p>
+      <strong>Basta.</strong> — Aliado Legal Tecnologia LTDA<br>
+      <strong>CNPJ:</strong> 40.115.118/0001-80<br>
+      <strong>E-mail:</strong> ola@bastaeponto.com.br<br>
+      <strong>Encarregado de Dados (DPO):</strong> ola@bastaeponto.com.br
+    </p>
+
+    <!-- Last Updated -->
+    <p class="last-updated">Última atualização: 31 de março de 2026</p>
+  </article>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <p class="footer-text">&copy; 2026 Aliado Legal Tecnologia LTDA. Todos os direitos reservados.</p>
+      <p class="footer-text"><a href="01_basta-landing.html" class="footer-link">Voltar para home</a></p>
+    </div>
+  </footer>
+</body>
+</html>

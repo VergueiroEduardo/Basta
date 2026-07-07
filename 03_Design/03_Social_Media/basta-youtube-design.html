@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basta. — YouTube Banner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:     #1A1A1A;
+      --white:     #FFFFFF;
+      --off-white: #F5F3EF;
+      --green:     #42b449;
+      --gray-600:  #4A4A4A;
+      --gray-300:  #D4D4D4;
+      --f: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      /* Banner real: 2560 × 1440px
+         Preview a 50%: 1280 × 720px
+         Safe zone TV:      2560 × 1440 (tudo visível)
+         Safe zone Desktop: 1546 × 423  (centralizado)
+         Safe zone Mobile:  1060 × 175  (centralizado) */
+      --scale: 0.5;
+      --banner-w: 1280px;  /* 2560 × 0.5 */
+      --banner-h: 720px;   /* 1440 × 0.5 */
+      /* Desktop safe zone a 50%: 773 × 211px */
+      --desktop-w: 773px;
+      --desktop-h: 211px;
+      /* Mobile safe zone a 50%: 530 × 88px */
+      --mobile-w: 530px;
+      --mobile-h: 88px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--f);
+      background: #E8E5E0;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE LAYOUT ─────────────────────────────────────── */
+    .page-header {
+      padding: 64px 40px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .page-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+    .page-headline {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--black);
+    }
+
+    .section {
+      padding: 0 40px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .section-num {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      white-space: nowrap;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gray-300);
+    }
+    .section-name {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* ── BANNER WRAPPER ──────────────────────────────────── */
+    .banner-wrap {
+      position: relative;
+      width: var(--banner-w);
+      height: var(--banner-h);
+      overflow: hidden;
+      border: 1px solid var(--gray-300);
+    }
+
+    /* ── BANNER DARK ─────────────────────────────────────── */
+    .banner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .banner--dark { background: var(--black); }
+    .banner--light { background: var(--white); }
+    .banner--warm  { background: var(--off-white); }
+
+    /* ── INNER CONTENT (safe zone — texto à esquerda) ──── */
+    .banner-inner {
+      width: var(--desktop-w);
+      height: var(--desktop-h);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 16px;
+      z-index: 2;
+    }
+
+    /* ── TIPOGRAFIA BANNER ───────────────────────────────── */
+    /* Headline: 50px preview = 100px real.
+       Ocupa ~105px em 2 linhas dentro da safe zone de 211px.
+       Proporção Huge Inc.: tipografia que preenche, não flutua. */
+    .banner-headline {
+      font-size: 50px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+    }
+    .banner--dark  .banner-headline { color: var(--white); }
+    .banner--light .banner-headline,
+    .banner--warm  .banner-headline { color: var(--black); }
+
+    /* Tagline + divider suprimidos — apenas header no banner */
+    .banner-tagline,
+    .banner-divider { display: none !important; }
+    .banner--dark  .banner-tagline { color: rgba(255,255,255,0.5); }
+    .banner--light .banner-tagline,
+    .banner--warm  .banner-tagline { color: var(--gray-600); }
+    .banner-tagline-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .banner-tagline-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: #FFFFFF;
+    }
+    .banner--light .banner-tagline-dot,
+    .banner--warm  .banner-tagline-dot { background: #FFFFFF; }
+
+    .banner-divider {
+      width: 32px;
+      height: 1px;
+    }
+    .banner--dark  .banner-divider { background: rgba(255,255,255,0.2); }
+    .banner--light .banner-divider,
+    .banner--warm  .banner-divider { background: var(--gray-300); }
+
+    /* ── LOGO CANTO INFERIOR DIREITO ─────────────────────── */
+    .banner-logo-corner {
+      position: absolute;
+      bottom: 48px;
+      right: 80px;
+      height: 54px;   /* 108px real (a 50% scale) */
+      width: auto;
+      z-index: 2;
+    }
+
+    /* ── SAFE ZONE OVERLAYS ──────────────────────────────── */
+    .safe-zone {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    .safe-zone--desktop {
+      width: var(--desktop-w);
+      height: var(--desktop-h);
+      border: 1px dashed rgba(255,255,255,0.2);
+    }
+    .banner--light .safe-zone--desktop,
+    .banner--warm  .safe-zone--desktop {
+      border-color: rgba(0,0,0,0.15);
+    }
+    .safe-zone--mobile {
+      width: var(--mobile-w);
+      height: var(--mobile-h);
+      border: 1px dashed rgba(255,255,255,0.1);
+    }
+    .banner--light .safe-zone--mobile,
+    .banner--warm  .safe-zone--mobile {
+      border-color: rgba(0,0,0,0.08);
+    }
+    .safe-label {
+      position: absolute;
+      top: -18px;
+      left: 0;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.35;
+      color: var(--white);
+    }
+    .banner--light .safe-label,
+    .banner--warm  .safe-label { color: var(--black); }
+
+    /* ── FUNDO DECORATIVO ────────────────────────────────── */
+    .banner-bg-mark {
+      position: absolute;
+      right: 80px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 400px;
+      width: auto;
+      opacity: 0.04;
+      z-index: 1;
+    }
+
+    /* ── LEGENDA DOS SAFE ZONES ──────────────────────────── */
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin-top: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-swatch {
+      width: 20px;
+      height: 1px;
+    }
+    .legend-swatch--desktop {
+      border-top: 1px dashed var(--gray-600);
+    }
+    .legend-swatch--mobile {
+      border-top: 1px dashed var(--gray-300);
+    }
+
+    /* ── PREVIEW SIMULADO POR DEVICE ─────────────────────── */
+    .previews-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 48px;
+    }
+    .preview-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .preview-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .preview-frame {
+      overflow: hidden;
+      border: 1px solid var(--gray-300);
+      position: relative;
+    }
+    /* Desktop: mostra faixa central 773×211 */
+    .preview-frame--desktop {
+      width: var(--desktop-w);
+      height: var(--desktop-h);
+    }
+    /* Mobile: mostra faixa central 530×88 */
+    .preview-frame--mobile {
+      width: var(--mobile-w);
+      height: var(--mobile-h);
+    }
+    .preview-frame .banner {
+      width: var(--banner-w);
+      height: var(--banner-h);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- SVG DEFS -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="basta-logo" viewBox="0 0 602.25 254.23">
+      <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+      <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+      <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+      <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+    </symbol>
+  </svg>
+
+  <!-- ══════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div class="page-title">YouTube — Arte do Canal</div>
+    <div class="page-headline">Basta<span style="color:inherit">.</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       BANNER 01 — DARK (principal)
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">Banner 01</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Dark</div>
+    <div class="section-desc">
+      Fundo #1A1A1A — tema principal. Preview a 50% do original (2560×1440px).
+    </div>
+
+    <div class="banner-wrap">
+      <div class="banner banner--dark">
+
+        <!-- Conteúdo: texto à esquerda da safe zone -->
+        <div class="banner-inner">
+          <div class="banner-headline">Saia do endividamento<br>de forma justa.</div>
+          <div class="banner-divider"></div>
+          <div class="banner-tagline">
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Pague o justo.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Coloque suas dívidas em trajetória de pagamento real.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Recupere o que foi pago a mais.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Não pague nada antecipadamente.</div>
+          </div>
+        </div>
+
+        <!-- Logo grande, canto inferior direito -->
+        <svg class="banner-logo-corner" viewBox="0 0 602.25 254.23" style="color:#FFFFFF">
+          <use href="#basta-logo"/>
+        </svg>
+
+        <!-- Safe zones (guias visuais) -->
+        <div class="safe-zone safe-zone--desktop">
+          <span class="safe-label">Desktop</span>
+        </div>
+        <div class="safe-zone safe-zone--mobile"></div>
+
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-swatch legend-swatch--desktop"></div>
+        Desktop — 1546×423px
+      </div>
+      <div class="legend-item">
+        <div class="legend-swatch legend-swatch--mobile"></div>
+        Mobile — 1060×175px
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       BANNER 02 — LIGHT
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">Banner 02</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Light</div>
+    <div class="section-desc">
+      Fundo #FFFFFF — variante clara.
+    </div>
+
+    <div class="banner-wrap">
+      <div class="banner banner--light">
+
+        <div class="banner-inner">
+          <div class="banner-headline">Saia do endividamento<br>de forma justa.</div>
+          <div class="banner-divider"></div>
+          <div class="banner-tagline">
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Pague o justo.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Coloque suas dívidas em trajetória de pagamento real.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Recupere o que foi pago a mais.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Não pague nada antecipadamente.</div>
+          </div>
+        </div>
+
+        <svg class="banner-logo-corner" viewBox="0 0 602.25 254.23" style="color:#1A1A1A">
+          <use href="#basta-logo"/>
+        </svg>
+
+        <div class="safe-zone safe-zone--desktop">
+          <span class="safe-label">Desktop</span>
+        </div>
+        <div class="safe-zone safe-zone--mobile"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       BANNER 03 — WARM
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">Banner 03</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Warm</div>
+    <div class="section-desc">
+      Fundo #F5F3EF — variante off-white editorial.
+    </div>
+
+    <div class="banner-wrap">
+      <div class="banner banner--warm">
+
+        <div class="banner-inner">
+          <div class="banner-headline">Saia do endividamento<br>de forma justa.</div>
+          <div class="banner-divider"></div>
+          <div class="banner-tagline">
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Pague o justo.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Coloque suas dívidas em trajetória de pagamento real.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Recupere o que foi pago a mais.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Não pague nada antecipadamente.</div>
+          </div>
+        </div>
+
+        <svg class="banner-logo-corner" viewBox="0 0 602.25 254.23" style="color:#1A1A1A">
+          <use href="#basta-logo"/>
+        </svg>
+
+        <div class="safe-zone safe-zone--desktop">
+          <span class="safe-label">Desktop</span>
+        </div>
+        <div class="safe-zone safe-zone--mobile"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       PREVIEW POR DEVICE — Banner 01 Dark
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">Preview</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Como aparece por device</div>
+    <div class="section-desc">
+      O YouTube recorta o mesmo arquivo de forma diferente por plataforma. O conteúdo crítico deve estar na safe zone central.
+    </div>
+
+    <div class="previews-row">
+
+      <div class="preview-block">
+        <div class="preview-label">Desktop — 1546 × 423px</div>
+        <div class="preview-frame preview-frame--desktop">
+          <div class="banner banner--dark">
+            <div class="banner-inner">
+              <div class="banner-headline">Saia do endividamento<br>de forma justa.</div>
+              <div class="banner-divider"></div>
+              <div class="banner-tagline">
+                <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Pague o justo.</div>
+                <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Coloque suas dívidas em trajetória de pagamento real.</div>
+                <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Recupere o que foi pago a mais.</div>
+            <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Não pague nada antecipadamente.</div>
+              </div>
+            </div>
+            <svg class="banner-logo-corner" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-block">
+        <div class="preview-label">Mobile — 1060 × 175px</div>
+        <div class="preview-frame preview-frame--mobile">
+          <div class="banner banner--dark">
+            <div class="banner-inner">
+              <div class="banner-headline" style="font-size:18px">Saia do endividamento de forma justa.</div>
+              <div class="banner-divider"></div>
+              <div class="banner-tagline">
+                <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Pague o justo.</div>
+                <div class="banner-tagline-item"><div class="banner-tagline-dot"></div>Coloque suas dívidas em trajetória de pagamento real.</div>
+              </div>
+            </div>
+            <svg class="banner-logo-corner" viewBox="0 0 602.25 254.23" style="color:#FFFFFF; height:32px"><use href="#basta-logo"/></svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

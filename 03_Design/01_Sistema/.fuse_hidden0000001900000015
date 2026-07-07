@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Ajuda</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/accordion.css" />
+  <style>
+    /* Hover-only: em devices touch (sem hover real), neutraliza estados hover
+       que ficam "stuck" depois do tap (transform, translate). Cosmética; não toca em color/background. */
+
+    /* ══════════════════════════════════════════════════════════
+       RESET
+       ══════════════════════════════════════════════════════════ */    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* ══════════════════════════════════════════════════════════
+       LAYOUT
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR ──────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { flex: 1; }
+
+    /* ── TOP BAR ──────────────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAGE HEADER
+       ══════════════════════════════════════════════════════════ */
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .accent { color: var(--black); }
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.5; margin-bottom: 28px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CONTENT GRID — left + right rail
+       ══════════════════════════════════════════════════════════ */
+    .help-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .help-main { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+    .help-rail  { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ══════════════════════════════════════════════════════════
+       CARDS (base)
+       ══════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 28px;
+    }
+    .card--wa {
+      background: #eaf7ec;
+      border: 1px solid var(--green);
+    }
+
+    .card__title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black);
+      margin-bottom: 20px;
+    }
+    .card__title--with-icon {
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       STEPS — Como Funciona
+       ══════════════════════════════════════════════════════════ */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+
+    .step {
+      display: flex; gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step:first-child { padding-top: 0; }
+
+    .step__num {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: var(--black); color: var(--white);
+      font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      letter-spacing: 0;
+      margin-top: 1px;
+    }
+
+    .step__body {}
+    .step__title {
+      font-size: 14px; font-weight: 700; color: var(--black);
+      line-height: 1.3; margin-bottom: 4px;
+    }
+    .step__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.6;
+      text-wrap: pretty;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SCREEN LIST — O que cada tela faz
+       ══════════════════════════════════════════════════════════ */
+    .screen-list { display: flex; flex-direction: column; gap: 0; }
+
+    .screen-item {
+      font-size: 13px; color: var(--gray-600); line-height: 1.65;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .screen-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .screen-item:first-child { padding-top: 0; }
+    .screen-item strong { color: var(--black); font-weight: 700; }
+
+    /* ══════════════════════════════════════════════════════════
+       SEARCH BAR
+       ══════════════════════════════════════════════════════════ */
+    .help-search {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .help-search__input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      font-family: var(--f);
+      font-size: 15px;
+      font-weight: 400;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--black);
+      transition: border-color 0.24s;
+    }
+    .help-search__input::placeholder { color: #999; }
+    .help-search__input:focus {
+      outline: none;
+      border-color: var(--black);
+    }
+    .help-search__icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-300);
+      pointer-events: none;
+    }
+    .help-search__empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-600);
+      font-size: 14px;
+      display: none;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       FAQ ACCORDION
+       ══════════════════════════════════════════════════════════ */
+    .faq-item {
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .faq-item:first-child {
+      border-top: 1px solid var(--gray-300);
+    }
+    .faq-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      font-family: var(--f);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      text-align: left;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .faq-trigger__chevron {
+      flex-shrink: 0;
+      transition: transform 0.24s;
+      color: var(--gray-600);
+    }
+    .faq-item--open .faq-trigger__chevron {
+      transform: rotate(180deg);
+    }
+    .faq-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s ease;
+    }
+    .faq-item--open .faq-body {
+      grid-template-rows: 1fr;
+    }
+    .faq-body__inner {
+      overflow: hidden;
+    }
+    .faq-body__content {
+      padding: 0 0 18px;
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+    .faq-item--hidden { display: none; }
+
+    /* ══════════════════════════════════════════════════════════
+       WHATSAPP BUTTON
+       ══════════════════════════════════════════════════════════ */
+    .btn-wa {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; padding: 14px 24px;
+      background: var(--wa); color: var(--white);
+      font-family: var(--f); font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      border: none; border-radius: 4px;
+      transition: background 0.2s ease;
+      margin-top: 4px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn-wa:hover { background: var(--wa-hover); }
+    .btn-wa:active { transform: scale(0.98); }
+
+    /* ══════════════════════════════════════════════════════════
+       SECURITY CHECKLIST
+       ══════════════════════════════════════════════════════════ */
+    .check-list { display: flex; flex-direction: column; gap: 10px; }
+    .check-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13px; color: var(--gray-600); line-height: 1.5;
+    }
+    .check-item__icon {
+      flex-shrink: 0; margin-top: 1px;
+      color: var(--green);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CALLOUT — bloco informativo destacado
+       ══════════════════════════════════════════════════════════ */
+    .callout {
+      background: var(--off-white);
+      border-left: 3px solid var(--green);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+    .callout strong { color: var(--black); }
+
+    /* ══════════════════════════════════════════════════════════
+       PARTNER TAG — selo de parceiro
+       ══════════════════════════════════════════════════════════ */
+    .partner-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+      border: 1px solid var(--gray-300);
+      padding: 5px 10px;
+      margin-top: 14px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAYMENT HIGHLIGHT — zero adiantado
+       ══════════════════════════════════════════════════════════ */
+    .payment-zero {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+    .payment-zero span { color: var(--green); }
+
+    /* ══════════════════════════════════════════════════════════
+       WHATSAPP FAB
+       ══════════════════════════════════════════════════════════ */
+    .fab {
+      position: fixed; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      width: 68px; height: 68px;
+      background: var(--green); border: 2px solid var(--black);
+      border-radius: 0; color: var(--white); box-shadow: none;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .fab:hover { background: var(--black); border-color: var(--black); }
+    .fab__icon { width: 36px; height: 36px; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE-FIRST RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main    { padding: 72px 24px 100px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+    .fab     { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 72px 24px 100px; }
+      .page-title { font-size: 26px; }
+    }
+
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main    { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 1100px; }
+      .page-title { font-size: 28px; }
+      .fab     { width: 80px; height: 80px; bottom: max(36px, env(safe-area-inset-bottom)); right: 36px; }
+      .fab__icon { width: 40px; height: 40px; }
+    }
+
+    @media (min-width: 860px) {
+      .help-grid { flex-direction: row; align-items: flex-start; gap: 20px; }
+      .help-rail { width: 272px; flex-shrink: 0; }
+    }
+
+    @media (min-width: 1200px) {
+      .main { padding: 40px 48px 80px; }
+      .help-rail { width: 292px; }
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main   { padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))); }
+      .fab    { bottom: max(16px, calc(8px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .logout-modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 28px 28px 24px;
+      width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error);
+      margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .logout-modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }    .btn-logout-cancel:active, .btn-logout-confirm:active { transform: scale(0.98); }
+
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">MC</a>
+</div>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </span>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">MC</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Maria Carvalho</div>
+        <div class="sidebar__user-email">maria.c@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ════════════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <h1 class="page-title">Ajuda<span class="accent">.</span></h1>
+    <p class="page-desc">Tudo que você precisa saber para usar o Basta.</p>
+
+    <div class="help-grid">
+
+      <!-- ── LEFT: main content ──────────────────────────── -->
+      <div class="help-main">
+
+        <!-- SEARCH BAR -->
+        <div class="help-search">
+          <svg class="help-search__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" class="help-search__input" id="helpSearch" placeholder="Buscar por palavra-chave..." aria-label="Buscar na ajuda">
+        </div>
+        <div class="help-search__empty" id="searchEmpty">Nenhum resultado encontrado.</div>
+
+        <!-- FAQ ACCORDION -->
+        <div class="card">
+          <div class="card__title">Perguntas Frequentes</div>
+
+          <!-- ITEM 1: Como Funciona -->
+          <div class="faq-item" data-search="como funciona conecta contas bancárias open finance leitura autorizar app banco desconectar requerimentos administrativos assinatura digital whatsapp envia documentos holerites comprovante residência relatórios valida organiza">
+            <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Como funciona o Basta?</span>
+              <svg class="faq-trigger__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body__inner">
+                <div class="faq-body__content">
+                  <div class="steps">
+                    <div class="step">
+                      <div class="step__num">1</div>
+                      <div class="step__body">
+                        <div class="step__title">Você conecta suas contas bancárias</div>
+                        <div class="step__desc">Pelo Open Finance, você autoriza o acesso de leitura aos seus dados bancários. O Basta lê, analisa e identifica o que está errado — colocando você em um caminho concreto para sair do endividamento.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">2</div>
+                      <div class="step__body">
+                        <div class="step__title">Você envia seus documentos e conhece sua situação real</div>
+                        <div class="step__desc">Envie documentos pessoais, de renda e de endividamento e receba sua análise financeira completa, gratuitamente.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">3</div>
+                      <div class="step__body">
+                        <div class="step__title">Você recebe requerimentos que equilibram a relação com seus credores</div>
+                        <div class="step__desc">Preenchemos e enviamos requerimentos que aliviam sua situação financeira e preparam você para renegociar suas dívidas. Você lê e assina digitalmente via ClickSign, nossa parceira em assinatura eletrônica com validade jurídica.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">4</div>
+                      <div class="step__body">
+                        <div class="step__title">Você registra suas tentativas de renegociação</div>
+                        <div class="step__desc">Orientamos você a documentar cada tentativa de renegociação — para demonstrar, formalmente, que buscou condições justas para quitar suas dívidas.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">5</div>
+                      <div class="step__body">
+                        <div class="step__title">Encontramos o melhor caminho para você sair do endividamento</div>
+                        <div class="step__desc">Identificamos crédito em condições melhores que suas operações atuais e analisamos seus dados em busca de indícios de práticas abusivas que podem ser contestadas ou restituídas.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 2: Quando e quanto vou pagar -->
+          <div class="faq-item" data-search="pagamento gratuito grátis custo cobrar pagar adiantado mensalidade taxa resultado dívida êxito redução quanto custa zero free antecipado">
+            <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Quando e quanto vou pagar?</span>
+              <svg class="faq-trigger__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body__inner">
+                <div class="faq-body__content">
+                  <div class="payment-zero">Nenhum <span>pagamento adiantado.</span></div>
+                  <div class="screen-list">
+                    <div class="screen-item">
+                      <strong>Análise financeira</strong> — Gratuita. Diagnóstico completo da sua situação de crédito.
+                    </div>
+                    <div class="screen-item">
+                      <strong>Requerimentos e assinaturas</strong> — Gratuitos. Geramos e enviamos todos os documentos sem custo.
+                    </div>
+                    <div class="screen-item">
+                      <strong>Taxa de êxito</strong> — Cobramos um percentual somente se conseguirmos resultado concreto: redução de dívida, cancelamento de cobranças ou recuperação de valores. Se não houver resultado, você não paga nada.
+                    </div>
+                  </div>
+                  <div class="callout"><strong>Sem surpresas.</strong> O percentual de êxito é acordado antes do início do processo. Nada é cobrado sem sua ciência e aprovação.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 3: O que cada tela faz -->
+          <div class="faq-item" data-search="tela resumo documentos bancos requerimentos contas bancárias open finance assinatura digital progresso status próximos passos holerites comprovante residência relatórios">
+            <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>O que cada tela faz?</span>
+              <svg class="faq-trigger__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body__inner">
+                <div class="faq-body__content">
+                  <div class="screen-list">
+                    <div class="screen-item">
+                      <strong>Resumo</strong> — Visão geral do seu progresso e principal tela de ação. Todos os próximos passos necessários estão aqui.
+                    </div>
+                    <div class="screen-item">
+                      <strong>Meus Documentos</strong> — Onde ficam seus documentos pessoais, de renda e de endividamento. Visualize e baixe tudo em um só lugar.
+                    </div>
+                    <div class="screen-item">
+                      <strong>Contas Bancárias</strong> — Mostra as contas conectadas pelo Open Finance e o status de cada uma.
+                    </div>
+                    <div class="screen-item">
+                      <strong>Requerimentos</strong> — Os requerimentos gerados para cada banco. Visualize, baixe e assine digitalmente via ClickSign.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 4: O que é o Open Finance -->
+          <div class="faq-item" data-search="open finance banco central autorizar compartilhamento app banco próprio banco seguro leitura revogar desconectar senha pluggy dados financeiros regulado criptografia acesso">
+            <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>O que é o Open Finance?</span>
+              <svg class="faq-trigger__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body__inner">
+                <div class="faq-body__content">
+                  <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:16px;">Sistema regulado pelo Banco Central que permite compartilhar seus dados bancários com empresas autorizadas — de forma segura, controlada por você.</p>
+                  <div class="steps">
+                    <div class="step">
+                      <div class="step__num">1</div>
+                      <div class="step__body">
+                        <div class="step__title">Você escolhe o banco na plataforma</div>
+                        <div class="step__desc">Selecione o banco onde estão as operações de crédito que precisam de revisão.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">2</div>
+                      <div class="step__body">
+                        <div class="step__title">Você autoriza o acesso aos seus dados</div>
+                        <div class="step__desc">Dentro da plataforma Basta, via Pluggy — instituição de pagamento autorizada pelo Banco Central —, você autoriza a leitura dos seus dados bancários.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">3</div>
+                      <div class="step__body">
+                        <div class="step__title">O banco libera acesso de leitura</div>
+                        <div class="step__desc">Conseguimos ler histórico de transações, contratos e dados de crédito. Nunca movimentamos valores — isso é bloqueado tecnicamente pelo sistema.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">4</div>
+                      <div class="step__body">
+                        <div class="step__title">Você revoga quando quiser</div>
+                        <div class="step__desc">No app do banco, em "Open Finance" ou "Compartilhamento de dados", você cancela o acesso a qualquer momento — sem precisar falar com a Basta.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="callout"><strong>Regulado pelo Banco Central.</strong> O Open Finance segue normas rígidas. Empresas como a Basta passam por credenciamento e auditoria contínua.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 5: O que são os requerimentos -->
+          <div class="faq-item" data-search="requerimentos administrativos demonstrativo evolução dívida memória cálculo cmn 4790 cancelamento débitos segunda via contratos apólices seguros extratos bancários faturas cartões gpd produtos serviços cpf cobranças revisão análise">
+            <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>O que são os requerimentos?</span>
+              <svg class="faq-trigger__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body__inner">
+                <div class="faq-body__content">
+                  <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:16px;">Documentos administrativos formais endereçados diretamente ao banco. Cada um tem uma função específica para solicitar informações e revisões sobre a sua conta.</p>
+                  <div class="screen-list">
+                    <div class="screen-item">
+                      <strong>Demonstrativo de Evolução da Dívida e Memória de Cálculo</strong> — Solicita ao banco que apresente, em detalhes, como sua dívida chegou ao valor atual. Permite identificar cobranças e encargos que merecem revisão.
+                    </div>
+                    <div class="screen-item">
+                      <strong>Res. CMN 4.790 – Cancelamento de débitos</strong> — Solicita o cancelamento de cobranças irregulares com base na resolução do Banco Central que proíbe práticas abusivas nas relações de crédito.
+                    </div>
+                  </div>
+                  <div class="callout"><strong>Processo administrativo formal.</strong> Os requerimentos são endereçados diretamente ao banco pelos canais adequados. A Basta acompanha cada etapa e orienta os próximos passos com base nas respostas recebidas.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 6: Como funciona a assinatura digital -->
+          <div class="faq-item" data-search="clicksign assinatura digital whatsapp link assinar documento requerimento parceiro comprovante email conferir ler antes seguro autenticado">
+            <button class="faq-trigger" aria-expanded="false" onclick="toggleFaq(this)">
+              <span>Como funciona a assinatura digital?</span>
+              <svg class="faq-trigger__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="faq-body">
+              <div class="faq-body__inner">
+                <div class="faq-body__content">
+                  <div class="steps">
+                    <div class="step">
+                      <div class="step__num">1</div>
+                      <div class="step__body">
+                        <div class="step__title">Você acessa os requerimentos na plataforma</div>
+                        <div class="step__desc">Quando um requerimento está pronto, ele aparece disponível na aba Requerimentos. O link de assinatura também é enviado pelo WhatsApp.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">2</div>
+                      <div class="step__body">
+                        <div class="step__title">Você lê o documento antes de assinar</div>
+                        <div class="step__desc">Abra o link, leia o conteúdo completo. Nunca assine sem entender o que está sendo solicitado ao banco.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">3</div>
+                      <div class="step__body">
+                        <div class="step__title">Assina com um clique</div>
+                        <div class="step__desc">A assinatura é feita pelo celular, sem impressão. Leva menos de 1 minuto.</div>
+                      </div>
+                    </div>
+                    <div class="step">
+                      <div class="step__num">4</div>
+                      <div class="step__body">
+                        <div class="step__title">Você recebe o comprovante por e-mail</div>
+                        <div class="step__desc">A ClickSign envia automaticamente o documento assinado com registro e autenticação digital.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="callout"><strong>ClickSign é parceira do Basta.</strong> Uma das principais plataformas de assinatura digital do Brasil. Cada assinatura é registrada, autenticada e rastreável — com comprovante em seu email.</div>
+                  <span class="partner-tag">Parceiro certificado · ClickSign</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ── RIGHT: rail ─────────────────────────────────── -->
+      <div class="help-rail">
+
+        <!-- FALE COM A GENTE -->
+        <div class="card card--wa">
+          <div class="card__title card__title--with-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--green)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Fale com a gente
+          </div>
+          <p style="font-size:13px; color:var(--gray-600); line-height:1.6; margin-bottom:16px;">O WhatsApp é o canal principal do Basta. Dúvidas, documentos, atualizações — tudo passa por lá.</p>
+          <a href="https://wa.me/5519971795723" class="btn-wa" target="_blank" rel="noopener" aria-label="Abrir WhatsApp">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+
+        <!-- QUANTO CUSTA -->
+        <div class="card">
+          <div class="card__title">Quanto custa</div>
+          <div class="payment-zero" style="font-size:16px; margin-bottom:12px;">Zero <span>adiantado.</span></div>
+          <p style="font-size:13px; color:var(--gray-600); line-height:1.65; margin-bottom:10px;">
+            Análise, requerimentos e assinaturas são <strong style="color:var(--black);">gratuitos</strong>.
+          </p>
+          <p style="font-size:13px; color:var(--gray-600); line-height:1.65;">
+            Cobramos uma taxa de êxito — um percentual sobre o resultado obtido. Sem resultado, sem cobrança.
+          </p>
+        </div>
+
+        <!-- SEGURANÇA -->
+        <div class="card">
+          <div class="card__title">Segurança</div>
+          <div class="check-list">
+            <div class="check-item">
+              <svg class="check-item__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Open Finance regulado pelo Banco Central.</span>
+            </div>
+            <div class="check-item">
+              <svg class="check-item__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Conexão via Pluggy com criptografia bancária.</span>
+            </div>
+            <div class="check-item">
+              <svg class="check-item__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Acesso somente leitura — nunca movimentamos sua conta.</span>
+            </div>
+            <div class="check-item">
+              <svg class="check-item__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Assinaturas digitais autenticadas via ClickSign.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /help-grid -->
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── ACCORDION TOGGLE ─────────────────────────────────────── */
+  function toggleFaq(btn) {
+    var item = btn.closest('.faq-item');
+    var isOpen = item.classList.toggle('faq-item--open');
+    btn.setAttribute('aria-expanded', String(isOpen));
+  }
+
+  /* ── SEARCH FUNCTIONALITY ─────────────────────────────────── */
+  document.getElementById('helpSearch').addEventListener('input', function() {
+    var query = this.value.toLowerCase().trim();
+    var items = document.querySelectorAll('.faq-item');
+    var found = 0;
+
+    items.forEach(function(item) {
+      var text = item.getAttribute('data-search') || item.textContent.toLowerCase();
+      if (!query || text.includes(query)) {
+        item.classList.remove('faq-item--hidden');
+        found++;
+      } else {
+        item.classList.add('faq-item--hidden');
+      }
+    });
+
+    document.getElementById('searchEmpty').style.display = (query && found === 0) ? 'block' : 'none';
+  });
+
+  /* ── LOGOUT MODAL ────────────────────────────────────────── */
+  let lastFocusedElement = null;
+
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutBox = document.querySelector('.logout-modal');
+  const cancelBtn = document.getElementById('logoutCancel');
+  const confirmBtn = document.getElementById('logoutConfirm');
+
+  logoutModal.addEventListener('click', function(e) {
+    if (e.target === this) closeLogout();
+  });
+
+  logoutBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLogout();
+    }
+
+    if (e.key === 'Tab') {
+      const focusableElements = [cancelBtn, confirmBtn];
+      const currentIndex = focusableElements.indexOf(document.activeElement);
+
+      if (e.shiftKey) {
+        e.preventDefault();
+        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        focusableElements[nextIndex].focus();
+      } else {
+        e.preventDefault();
+        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        focusableElements[nextIndex].focus();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

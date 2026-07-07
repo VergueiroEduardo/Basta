@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basta. — Carrossel #1: Apresentação Institucional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ════════════════════════════════════════════════════════════════════
+     DESIGN TOKENS — direto do design-system oficial Basta
+     ════════════════════════════════════════════════════════════════════ */
+  :root {
+    --black:       #1A1A1A;
+    --white:       #FFFFFF;
+    --off-white:   #F5F3EF;
+    --green:       #42b449;
+    --green-dark:  #389d3e;
+    --blue:        #3B9EE8;
+    --blue-dark:   #1A3A8F;
+    --sage:        #bdc0ac;
+    --gray-600:    #4A4A4A;
+    --gray-300:    #D4D4D4;
+    --gray-200:    #EEEEEE;
+    --font:        'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    /* SCALE: cada slide é 1080x1350 (real). Preview escalado: */
+    --scale:       0.444; /* 1080 * 0.444 = 480px preview */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+  body {
+    font-family: var(--font);
+    background: #2a2a2a;
+    color: var(--white);
+    padding: 48px 32px 80px;
+    min-height: 100vh;
+  }
+
+  /* ════════════════════════════════════════════════════════════════════
+     HEADER DE REVISÃO
+     ════════════════════════════════════════════════════════════════════ */
+  .review-header {
+    max-width: 1568px;
+    margin: 0 auto 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 24px;
+  }
+  .review-eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .review-title {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+  .review-meta {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.5);
+  }
+  .review-meta span { color: rgba(255,255,255,0.85); font-weight: 700; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     CARROSSEL — Grid de slides
+     ════════════════════════════════════════════════════════════════════ */
+  .carousel {
+    max-width: 1568px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 480px);
+    gap: 32px 32px;
+    justify-content: center;
+  }
+
+  .slide-frame {
+    position: relative;
+  }
+
+  .slide-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+  .slide-tag-num {
+    color: var(--green);
+  }
+
+  .slide-shell {
+    width: 480px;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  }
+
+  /* O slide em si renderiza em 1080x1350 e escala pra caber no shell */
+  .slide {
+    width: 1080px;
+    height: 1350px;
+    transform: scale(var(--scale));
+    transform-origin: top left;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font);
+  }
+
+  /* ════════════════════════════════════════════════════════════════════
+     COMPONENTES PADRÃO (em px reais — 1080x1350)
+     ════════════════════════════════════════════════════════════════════ */
+  .logo {
+    position: absolute;
+    top: 64px;
+    left: 64px;
+    width: 200px;
+    height: auto;
+    aspect-ratio: 602.25 / 254.23;
+    display: block;
+    z-index: 5;
+  }
+  .logo--dark  { color: var(--white); }
+  .logo--light { color: var(--black); }
+  .logo--dark  path { fill: var(--white) !important; }
+  .logo--light path { fill: var(--black) !important; }
+
+  .accent-bar {
+    width: 120px;
+    height: 6px;
+    background: var(--green);
+    margin-bottom: 56px;
+  }
+
+  .headline {
+    font-family: var(--font);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+  .hl-green { color: var(--green); }
+
+  .subhead {
+    font-family: var(--font);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  .label-up {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* ════════════════════════════════════════════════════════════════════
+     SLIDE 1 — HOOK · T-01 Manifesto · Fundo preto
+     ════════════════════════════════════════════════════════════════════ */
+  .s1 {
+    background: var(--black);
+    color: var(--white);
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .s1 .logo     { position: static; width: 600px; margin-bottom: 40px; }
+  .s1 .headline { font-size: 108px; margin-bottom: 48px; }
+  .s1 .subhead  { font-size: 40px; line-height: 1.32; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     SLIDE 2 — TENSÃO · T-02 Retrato · Foto + máscara funcional
+     ════════════════════════════════════════════════════════════════════ */
+  .s2 {
+    background:
+      linear-gradient(180deg, transparent 0%, transparent 30%, rgba(0,0,0,0.92) 100%),
+      url("pomelli_photoshoot-1.png") center 18% / cover no-repeat,
+      #1a1a1a;
+    color: var(--white);
+    position: relative;
+  }
+  .s2 .text-block {
+    position: absolute;
+    bottom: 64px;
+    left: 64px;
+    right: 64px;
+    z-index: 2;
+  }
+  .s2 .headline { font-size: 78px; margin-bottom: 40px; }
+  .s2 .subhead  { font-size: 40px; line-height: 1.32; color: rgba(255,255,255,0.85); max-width: 95%; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     SLIDE 3 — VIRADA · T-01 Manifesto · Fundo off-white
+     ════════════════════════════════════════════════════════════════════ */
+  .s3 {
+    background: var(--off-white);
+    color: var(--black);
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .s3 .headline { font-size: 116px; margin-bottom: 48px; }
+  .s3 .subhead  { font-size: 36px; line-height: 1.32; color: var(--gray-600); max-width: 95%; }
+  .s3 .subhead strong { color: var(--black); font-weight: 700; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     SLIDE 4 — DIFERENCIAÇÃO · T-01 Manifesto · Fundo preto
+     ════════════════════════════════════════════════════════════════════ */
+  .s4 {
+    background: var(--black);
+    color: var(--white);
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .s4 .headline { font-size: 108px; margin-bottom: 48px; }
+  .s4 .subhead  { font-size: 36px; line-height: 1.32; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     SLIDE 7 — CTA WhatsApp · T-06 · Fundo preto + botão verde
+     ════════════════════════════════════════════════════════════════════ */
+  .s7 {
+    background: var(--black);
+    color: var(--white);
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+  }
+  .s7 .headline { font-size: 116px; margin-top: 220px; margin-bottom: 40px; }
+  .s7 .subhead  { font-size: 38px; line-height: 1.32; color: rgba(255,255,255,0.78); max-width: 95%; margin-bottom: 64px; }
+  .s7 .cta-button {
+    background: var(--green);
+    color: var(--white);
+    padding: 44px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    gap: 24px;
+  }
+  .s7 .wa-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  .s7 .footer-line {
+    margin-top: auto;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ════════════════════════════════════════════════════════════════════
+     ANNOTATIONS — copy + briefing de produção
+     ════════════════════════════════════════════════════════════════════ */
+  .panel {
+    max-width: 1568px;
+    margin: 64px auto 0;
+    background: var(--off-white);
+    color: var(--black);
+    padding: 48px;
+  }
+  .panel-eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 12px;
+  }
+  .panel-title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+  }
+  table.copy-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.copy-table th {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--black);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+  }
+  table.copy-table td {
+    padding: 18px 16px;
+    border-bottom: 1px solid var(--gray-300);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  table.copy-table td:nth-child(1) { width: 60px; font-weight: 800; color: var(--green); }
+  table.copy-table td:nth-child(2) { width: 160px; font-weight: 700; }
+  table.copy-table td:nth-child(3) { width: 200px; color: var(--gray-600); font-size: 12px; }
+  table.copy-table td.copy-cell { font-weight: 500; color: var(--black); }
+  table.copy-table td.copy-cell em { display:block; color: var(--gray-600); font-style: normal; font-size: 12px; margin-top: 6px; }
+
+  .caption-block {
+    margin-top: 40px;
+    background: var(--white);
+    border-left: 6px solid var(--green);
+    padding: 32px;
+  }
+  .caption-block h3 {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 16px;
+  }
+  .caption-block p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
+  .caption-block .hashtags {
+    color: var(--gray-600);
+    font-size: 13px;
+  }
+
+  .notes {
+    margin-top: 32px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--gray-600);
+  }
+  .notes strong { color: var(--black); font-weight: 800; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     LOGO BASTA — SVG <symbol> (single source of truth, oficial)
+     ════════════════════════════════════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<header class="review-header">
+  <div class="review-eyebrow">Carrossel · Semana 1 · Post 01 de 03</div>
+  <h1 class="review-title">Apresentação Institucional</h1>
+  <div class="review-meta">
+    Pilar: <span>Mecanismo Basta</span> &nbsp;·&nbsp;
+    Objetivo: <span>Awareness</span> &nbsp;·&nbsp;
+    CTA: <span>WhatsApp</span> &nbsp;·&nbsp;
+    Formato: <span>1080×1350 (4:5)</span> &nbsp;·&nbsp;
+    Slides: <span>5</span>
+  </div>
+</header>
+
+<div class="carousel">
+
+  <!-- ══════════════════════════════════════ SLIDE 01 ══════════════════════════════════════ -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">01</span> · Hook</span><span>T-01 Manifesto</span></div>
+    <div class="slide-shell">
+      <div class="slide s1">
+        <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline">Não permita<br>que sua renda<br>seja consumida<br>por dívidas.</div>
+        <div class="subhead">Se libertar do endividamento é<br>mais simples do que você imagina.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ SLIDE 02 ══════════════════════════════════════ -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">02</span> · Tensão</span><span>T-02 Retrato</span></div>
+    <div class="slide-shell">
+      <div class="slide s2">
+        <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+        <div class="text-block">
+          <div class="headline">Descontar<br><span class="hl-green">50, 60, 70%</span> do<br>seu salário não<br>pode ser normal.</div>
+          <div class="subhead">Saia do endividamento<br>de forma justa.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ SLIDE 03 ══════════════════════════════════════ -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">03</span> · Virada</span><span>T-01 Manifesto</span></div>
+    <div class="slide-shell">
+      <div class="slide s3">
+        <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline">Suas dívidas<br>têm solução.<br>Justa.</div>
+        <div class="subhead">O Basta lê seus dados financeiros,<br>entrega o diagnóstico e te coloca em<br>igualdade de condições com os credores.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ SLIDE 04 ══════════════════════════════════════ -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">04</span> · Diferenciação</span><span>T-01 Manifesto</span></div>
+    <div class="slide-shell">
+      <div class="slide s4">
+        <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline"><span class="hl-green">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.</div>
+        <div class="subhead">Com clareza,<br>Do seu lado,<br>Sem letras miúdas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ SLIDE 05 ══════════════════════════════════════ -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">05</span> · CTA WhatsApp</span><span>T-06</span></div>
+    <div class="slide-shell">
+      <div class="slide s7">
+        <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+        <div class="headline">Chame agora<br>e mude<br>sua história.</div>
+        <div class="subhead">Gratuito, simples e honesto.<br>Direto no WhatsApp.</div>
+        <div class="cta-button">
+          <span>Falar no WhatsApp</span>
+          <svg class="wa-icon" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 0C7.163 0 0 7.163 0 16c0 2.823.733 5.481 2.018 7.789L0 32l8.434-2.205A15.928 15.928 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333c-2.475 0-4.785-.677-6.77-1.853l-.485-.288-5.013 1.31 1.342-4.886-.317-.504A13.276 13.276 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.317-9.972c-.4-.2-2.367-1.167-2.733-1.3-.367-.133-.633-.2-.9.2s-1.033 1.3-1.267 1.567c-.233.267-.467.3-.867.1-.4-.2-1.69-.622-3.218-1.985-1.19-1.061-1.993-2.372-2.226-2.772-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.323-.778-.652-.673-.9-.685l-.767-.013c-.267 0-.7.1-1.067.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.817 4.301 6.825 6.029.953.412 1.696.658 2.275.842.956.304 1.826.261 2.514.158.767-.115 2.367-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════════════
+     PAINEL DE PRODUÇÃO — copy completa, foto, caption, notas
+     ══════════════════════════════════════════════════════════════════════════════════ -->
+<section class="panel">
+  <div class="panel-eyebrow">Briefing de produção</div>
+  <h2 class="panel-title">Copy slide a slide & assets</h2>
+
+  <table class="copy-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Função / Template</th>
+        <th>Asset visual</th>
+        <th>Copy final</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>01</td>
+        <td>Hook<br><small style="color:var(--gray-600); font-weight:500;">T-01 Manifesto · preto</small></td>
+        <td>Tipográfico puro. Logo + barra verde + headline.</td>
+        <td class="copy-cell">
+          <strong>Não permita que sua renda seja consumida por dívidas.</strong>
+          <em>Se libertar do endividamento pode ser mais simples do que você imagina.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td>Tensão<br><small style="color:var(--gray-600); font-weight:500;">T-02 Retrato</small></td>
+        <td>Foto: <code>pomelli_photoshoot-1.png</code> (homem camiseta preta v-neck, mão em "stop"). Máscara escura inferior pra leitura.</td>
+        <td class="copy-cell">
+          <strong>Descontar <span style="color:var(--green); font-weight:800;">50, 60, 70%</span> do seu salário não pode ser normal.</strong>
+          <em>Saia do endividamento de forma justa.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td>Virada<br><small style="color:var(--gray-600); font-weight:500;">T-01 Manifesto · off-white</small></td>
+        <td>Tipográfico. Apresenta a marca pela primeira vez no copy ("O Basta"). Quebra cromática proposital pra marcar a virada.</td>
+        <td class="copy-cell">
+          <strong>Suas dívidas têm solução. Justa.</strong>
+          <em>O Basta lê seus dados financeiros, entrega o diagnóstico e te coloca em igualdade de condições com os credores.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td>Diferenciação<br><small style="color:var(--gray-600); font-weight:500;">T-01 Manifesto · preto</small></td>
+        <td>Tipográfico. Manifesto vertical (5 linhas) com cadência poética. Derruba a objeção "vai me cobrar pra negociar?".</td>
+        <td class="copy-cell">
+          <strong><span style="color:var(--green);">Resolva sem pagar nada antes.</span> Você só paga uma parte do que ganhar.</strong>
+          <em>Com clareza, do seu lado, sem letras miúdas.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td>CTA<br><small style="color:var(--gray-600); font-weight:500;">T-06 WhatsApp · preto</small></td>
+        <td>Botão verde sólido com ícone WhatsApp. Linka direto pro número wa.me/&lt;número Basta&gt;.</td>
+        <td class="copy-cell">
+          <strong>Chame agora e mude sua história.</strong>
+          <em>Gratuito, simples e honesto.</em>
+          <em>Direto no WhatsApp.</em>
+          <em>Botão: FALAR NO WHATSAPP →</em>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="caption-block">
+    <h3>Caption do post (para a publicação no feed)</h3>
+    <p><strong>Não permita que sua renda seja consumida por dívidas.</strong></p>
+    <p>Descontar 50, 60, 70% do salário não pode ser normal. Suas dívidas têm solução — e ela deve ser justa.</p>
+    <p>O Basta lê seus dados financeiros, entrega o diagnóstico e te coloca em igualdade de condições com os credores. Resolva sem pagar nada antes: você só paga uma parte do que ganhar. Com clareza, do seu lado, sem letras miúdas.</p>
+    <p>Chame agora e mude sua história. Gratuito, simples e honesto. Direto no WhatsApp.</p>
+    <p class="hashtags">#Basta #RenegociaçãoDeDívidas #EducaçãoFinanceira #DignidadeFinanceira #SaiaDoEndividamento</p>
+  </div>
+
+  <div class="notes">
+    <p><strong>Notas de produção</strong></p>
+    <p>· <strong>Slide 02 · foto:</strong> usando <code>pomelli_photoshoot-1.png</code> (homem camiseta preta v-neck, mão em "stop"). A postura cobra atenção e o gesto reforça o "Basta" tácito antes do verbal. Pra trocar a foto, edite o <code>background</code> do <code>.s2</code>.</p>
+    <p>· <strong>Cor azul ausente proposital:</strong> o sistema oficial não usa o gradiente azul radial dos posts antigos. Vamos honrar o brutalismo declarado (zero decoração). Voltaremos a tocar em azul só quando for sinalizar "informativo" no sistema.</p>
+    <p>· <strong>Botão verde do slide 07:</strong> mesmo verde <code>#42b449</code> do produto. Linkar pro mesmo WhatsApp que o site usa pra rastrear o funil consistente.</p>
+    <p>· <strong>Logo:</strong> SVG oficial extraído de <code>01_Sistema/_partials/logo-symbol.html</code> (viewBox 602.25 × 254.23). Embedado como <code>&lt;symbol id="logo-basta"&gt;</code> e referenciado via <code>&lt;use&gt;</code> em todos os slides. Cor herda de <code>currentColor</code> (.logo--dark = branco, .logo--light = preto). Largura padrão 200px no slide real (1080×1350); ajustável em <code>.logo { width }</code>.</p>
+    <p>· <strong>Exportação:</strong> cada <code>.slide</code> é 1080×1350 real. Pra exportar PNG, abrir no Chrome → DevTools → Capture node screenshot no elemento <code>.slide</code>. Ou rodo um script Puppeteer se preferir batch.</p>
+  </div>
+</section>
+
+</body>
+</html>

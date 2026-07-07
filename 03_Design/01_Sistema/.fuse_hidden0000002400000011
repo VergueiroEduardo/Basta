@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Requerimentos</title>
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/custom-select.css" />
+  <style>
+    /* Hover-only: em devices touch (sem hover real), neutraliza estados hover
+       que ficam "stuck" depois do tap (transform, translate). Cosmética; não toca em color/background. */
+
+    /* ═══ RESET ═══ */    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }    /* ═══ LAYOUT ═══ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    .main { flex: 1; }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAGE CONTENT
+       ══════════════════════════════════════════════════════════ */
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .accent { color: var(--black); }
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.5; margin-bottom: 20px;
+    }
+
+    /* ── ClickSign Banner ── */
+    .cs-banner {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 14px 16px; background: var(--white);
+      border-left: 3px solid var(--green);
+      margin-bottom: 24px; font-size: 13px;
+      color: var(--gray-600); line-height: 1.5;
+    }
+    .cs-banner__icon { flex-shrink: 0; width: 18px; height: 18px; color: var(--green); margin-top: 1px; }
+    .cs-banner strong { color: var(--black); font-weight: 700; }
+
+    /* ── Search & Filters ── */
+    .filters {
+      display: flex; gap: 12px; align-items: center;
+      margin-bottom: 28px; flex-wrap: wrap;
+    }
+
+    .search-input {
+      flex: 1; min-width: 200px;
+      padding: 12px 16px 12px 40px;
+      font-family: var(--f); font-size: 15px; font-weight: 400;
+      border: 1px solid var(--gray-300); background: var(--white);
+      color: var(--black); outline: none;
+      transition: border-color var(--t);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234A4A4A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 14px center;
+    }
+    .search-input::placeholder { color: #999; font-weight: 400; }
+    .search-input:focus { border-color: var(--black); }
+
+    /* ── Custom dropdown (substitui <select> nativo) ───────── */
+    .custom-select {
+      position: relative;
+      user-select: none;
+    }
+    .custom-select__trigger {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px;
+      font-family: var(--f); font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1px solid var(--gray-300); background: var(--white);
+      color: var(--black); cursor: pointer;
+      white-space: nowrap;
+      transition: border-color var(--t);
+    }
+    .custom-select__trigger:hover { border-color: var(--black); }
+    .custom-select--open .custom-select__trigger { border-color: var(--black); }
+    .custom-select__chevron {
+      flex-shrink: 0;
+      transition: transform 0.2s;
+      color: var(--gray-600);
+    }
+    .custom-select--open .custom-select__chevron { transform: rotate(180deg); }
+    .custom-select__options {
+      position: absolute; top: calc(100% - 1px); left: 0; right: 0;
+      background: var(--white);
+      border: 1px solid var(--black);
+      border-top: none;
+      z-index: 20;
+      display: none;
+    }
+    .custom-select--open .custom-select__options { display: block; }
+    .custom-select__option {
+      padding: 10px 16px;
+      font-family: var(--f); font-size: 13px; font-weight: 500;
+      color: var(--black); cursor: pointer;
+      transition: background 0.15s;
+    }
+    .custom-select__option:hover { background: var(--off-white); }
+    .custom-select__option--active {
+      font-weight: 700;
+      background: var(--off-white);
+    }
+
+    /* ── Section Label ── */
+    .section-label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black); margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       BANK GROUP
+       ══════════════════════════════════════════════════════════ */
+    .bank-group {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      margin-bottom: 20px;
+    }
+
+    .bank-group__header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-200);
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--t);
+      width: 100%;
+      text-align: left;
+      font-family: var(--f);
+    }
+    .bank-group__header:hover { background: var(--off-white); }
+
+    /* Quando fechado, remove border-bottom do header */
+    .bank-group:not(.bank-group--open) .bank-group__header {
+      border-bottom-color: transparent;
+    }
+
+    .bank-group__badge {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .bank-group__info { flex: 1; min-width: 0; }
+    .bank-group__name { font-weight: 700; font-size: 14px; color: var(--black); line-height: 1.3; }
+    .bank-group__summary {
+      font-size: 11px; color: var(--gray-600); font-weight: 400;
+      text-transform: uppercase; letter-spacing: 0.02em;
+    }
+
+    .bank-group__count {
+      font-weight: 800; font-size: 20px; color: var(--green); line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* Chevron toggle */
+    .bank-group__chevron {
+      width: 20px; height: 20px;
+      flex-shrink: 0;
+      color: var(--gray-300);
+      transition: transform 240ms var(--ease), color 240ms var(--ease);
+    }
+    .bank-group__header:hover .bank-group__chevron { color: var(--black); }
+    .bank-group--open .bank-group__chevron { transform: rotate(180deg); }
+
+    /* Accordion body */
+    .bank-group__body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 280ms var(--ease);
+    }
+    .bank-group--open .bank-group__body {
+      grid-template-rows: 1fr;
+    }
+    .bank-group__body-inner {
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       REQUERIMENTO ROW
+       ══════════════════════════════════════════════════════════ */
+    .req-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      transition: background var(--t);
+    }
+    .req-row:last-child { border-bottom: none; }
+    .req-row:hover { background: var(--off-white); }
+
+    .req-row__content { flex: 1; min-width: 0; }
+    .req-row__title {
+      font-size: 13px; font-weight: 600; color: var(--black);
+      line-height: 1.4; margin-bottom: 2px;
+    }
+    .req-row__meta {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.4;
+    }
+
+    /* Status */
+    .req-row__status {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; flex-shrink: 0; white-space: nowrap;
+    }
+    .req-row__status--signed { color: var(--green); }
+    .req-row__status--pending { color: var(--warning); }
+
+    /* Diferenciação de linhas assinadas */
+    .req-row:has(.req-row__status--signed) {
+      opacity: 0.65;
+    }
+    .req-row:has(.req-row__status--signed):hover {
+      opacity: 1;
+    }
+
+    /* Eye icon */
+    .req-row__eye {
+      color: var(--gray-300); flex-shrink: 0; cursor: pointer;
+      transition: color var(--t);
+    }
+    .req-row__eye:hover { color: var(--black); }
+
+    /* ── Icon action buttons ── */
+    .icon-btn {
+      position: relative;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white); color: var(--gray-600);
+      border: 1px solid var(--gray-300);
+      cursor: pointer; flex-shrink: 0;
+      transition: color var(--t), border-color var(--t), background var(--t);
+    }
+    .icon-btn:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
+
+    /* ── Global tooltip (body-level, never clipped) ── */
+    #basta-tip {
+      position: fixed;
+      z-index: 9999;
+      background: var(--black); color: var(--white);
+      font-size: 11px; font-weight: 700; font-family: var(--f);
+      text-transform: uppercase; letter-spacing: 0.04em;
+      white-space: nowrap; padding: 4px 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    #basta-tip.is-visible {
+      opacity: 1;
+      transform: translateY(0) !important;
+    }
+
+    /* ═══ Actions group (status + eye + button) ═══ */
+    .req-row__actions {
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PREVIEW MODAL
+       ══════════════════════════════════════════════════════════ */
+    .preview-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.7);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .preview-overlay.is-open { opacity: 1; pointer-events: all; }
+    .preview-modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      width: 100%; max-width: 680px;
+      max-height: 90vh;
+      display: flex; flex-direction: column;
+    }
+    .preview-modal__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
+      flex-shrink: 0;
+    }
+    .preview-modal__title {
+      font-size: 13px; font-weight: 700; color: var(--black);
+      line-height: 1.4; margin-right: 16px;
+    }
+    .preview-modal__close {
+      flex-shrink: 0; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-600); cursor: pointer;
+      transition: color var(--t), background var(--t);
+      border: 1px solid var(--gray-300);
+    }
+    .preview-modal__close:hover { color: var(--black); background: var(--off-white); border-color: var(--black); }
+    .preview-modal__body {
+      flex: 1; overflow-y: auto;
+      padding: 32px 40px;
+      background: var(--gray-100);
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+    .preview-doc {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      width: 100%; max-width: 560px;
+      padding: 48px 48px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .preview-doc__header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding-bottom: 24px; margin-bottom: 24px;
+      border-bottom: 2px solid var(--black);
+    }
+    .preview-doc__logo { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; }
+    .preview-doc__meta { font-size: 11px; color: var(--gray-600); text-align: right; line-height: 1.6; }
+    .preview-doc__title { font-size: 15px; font-weight: 800; margin-bottom: 20px; line-height: 1.3; }
+    .preview-doc__line { height: 10px; background: var(--gray-200); margin-bottom: 10px; border-radius: 2px; }
+    .preview-doc__line--short { width: 60%; }
+    .preview-doc__line--med { width: 80%; }
+    .preview-doc__section-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-600); margin: 24px 0 12px; }
+    .preview-doc__footer {
+      margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--gray-200);
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--gray-600);
+    }
+    .preview-modal__footer {
+      padding: 14px 20px; border-top: 1px solid var(--gray-200);
+      display: flex; justify-content: flex-end; gap: 10px; flex-shrink: 0;
+    }
+    .btn-download-modal {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px;
+      background: var(--black); color: var(--white);
+      font-family: var(--f); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: none; cursor: pointer;
+      transition: background var(--t);
+    }
+    .btn-download-modal:hover { background: var(--green); }
+
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar { display: flex; }
+    .main { padding: 84px 24px 100px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+    .search-input { font-size: 16px; } /* previne zoom iOS */
+    .fab { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
+
+    /* Mobile: stack actions vertically */
+    .req-row { flex-wrap: wrap; gap: 10px; }
+    .req-row__actions { width: 100%; justify-content: flex-end; gap: 10px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 84px 24px 100px; }
+      .page-title { font-size: 26px; }
+      .req-row { flex-wrap: nowrap; gap: 16px; }
+      .req-row__actions { width: auto; }
+      .bank-group__header { padding: 18px 24px; }
+      .req-row { padding: 16px 24px; }
+    }
+
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 960px; }
+      .page-title { font-size: 28px; }
+      .req-row__title { font-size: 14px; }
+      .fab { width: 80px; height: 80px; bottom: max(36px, env(safe-area-inset-bottom)); right: 36px; }
+      .fab__icon { width: 40px; height: 40px; }
+    }
+
+    @media (min-width: 1200px) {
+      .main { padding: 40px 48px 80px; }
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))); }
+      .fab { bottom: max(16px, calc(8px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ── Close button ─────────────────────────────────────── */
+    .btn-close {
+      position: fixed; top: 0; right: 0; z-index: 80;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--gray-600);
+      transition: color var(--t), background var(--t);
+    }
+    .btn-close:hover { color: var(--black); background: rgba(0,0,0,0.05); }
+    /* hide avatar — close takes its place on mobile */
+    .topbar__avatar { display: none !important; }
+
+    @media (min-width: 768px) {
+      .btn-close {
+        width: 36px; height: 36px;
+        top: 20px; right: 28px;
+        background: var(--white);
+        border: 1.5px solid var(--gray-300);
+        color: var(--black);
+      }
+      .btn-close:hover { background: var(--off-white); border-color: var(--black); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .logout-modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 28px 28px 24px;
+      width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error);
+      margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .logout-modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ═══ MOBILE TOP BAR ═══ -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">MC</a>
+
+</div>
+
+<a href="12_basta-dashboard.html" class="btn-close" aria-label="Fechar">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</a>
+
+<div class="dashboard">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </span>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">MC</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Maria Carvalho</div>
+        <div class="sidebar__user-email">maria.c@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main">
+
+    <h1 class="page-title">Se defenda em igualdade de condições<span class="accent">.</span></h1>
+    <p class="page-desc">Visualize e baixe os requerimentos gerados para cada conta bancária conectada. <strong>Leia e assine através da Clicksign.</strong></p>
+
+    <!-- ── Search & Filters ── -->
+
+    <!-- ── Search & Filters ── -->
+    <div class="filters">
+      <input type="text" class="search-input" placeholder="Buscar requerimento..." aria-label="Buscar requerimento">
+
+      <div class="custom-select" data-filter="banco" aria-label="Filtrar por banco">
+        <button class="custom-select__trigger" type="button" onclick="toggleSelect(this)">
+          <span class="custom-select__label">Todos os bancos</span>
+          <svg class="custom-select__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="custom-select__options">
+          <div class="custom-select__option custom-select__option--active" onclick="pickOption(this)">Todos os bancos</div>
+          <div class="custom-select__option" onclick="pickOption(this)">Nubank</div>
+          <div class="custom-select__option" onclick="pickOption(this)">Bradesco</div>
+        </div>
+      </div>
+
+      <div class="custom-select" data-filter="status" aria-label="Filtrar por status">
+        <button class="custom-select__trigger" type="button" onclick="toggleSelect(this)">
+          <span class="custom-select__label">Todos os status</span>
+          <svg class="custom-select__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="custom-select__options">
+          <div class="custom-select__option custom-select__option--active" onclick="pickOption(this)">Todos os status</div>
+          <div class="custom-select__option" onclick="pickOption(this)">Pendente</div>
+          <div class="custom-select__option" onclick="pickOption(this)">Assinado</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Section Label ── -->
+    <div class="section-label">Requerimentos disponíveis (12)</div>
+
+    <!-- ══════════════════════════════════════════════════════
+         NUBANK — 6 requerimentos (6 pendentes)
+         ══════════════════════════════════════════════════════ -->
+    <div class="bank-group bank-group--open" id="bank-nubank">
+      <button class="bank-group__header" aria-expanded="true" aria-controls="bank-nubank-body" onclick="toggleBank(this)">
+        <div class="bank-group__badge" style="background: #820AD1;">NU</div>
+        <div class="bank-group__info">
+          <div class="bank-group__name">Nubank</div>
+          <div class="bank-group__summary">6 pendente · 0 assinado</div>
+        </div>
+        <div class="bank-group__count">6</div>
+        <svg class="bank-group__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="bank-group__body" id="bank-nubank-body">
+      <div class="bank-group__body-inner">
+
+      <!-- 1 — Demonstrativo (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Demonstrativo de Evolução da Dívida e Memória de Cálculo</div>
+          <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Demonstrativo de Evolução da Dívida e Memória de Cálculo', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2 — CMN 4.790 (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Res. CMN 4.790 – Cancelamento de débitos</div>
+          <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Res. CMN 4.790 – Cancelamento de débitos', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 — Histórico de Renovações e Alterações (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Histórico de Renovações e Alterações</div>
+          <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Histórico de Renovações e Alterações', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 — Relação Completa de Produtos e Serviços (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Relação Completa de Produtos e Serviços</div>
+          <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Relação Completa de Produtos e Serviços', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 5 — Cópia Íntegra de Autorizações de Débito (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Cópia Íntegra de Autorizações de Débito</div>
+          <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Cópia Íntegra de Autorizações de Débito', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 6 — Comprovante de Serviços e Tarifas (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Comprovante de Serviços e Tarifas</div>
+          <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Comprovante de Serviços e Tarifas', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      </div><!-- /bank-group__body-inner -->
+      </div><!-- /bank-group__body -->
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         BRADESCO — 6 requerimentos (6 pendentes)
+         ══════════════════════════════════════════════════════ -->
+    <div class="bank-group bank-group--open" id="bank-bradesco">
+      <button class="bank-group__header" aria-expanded="true" aria-controls="bank-bradesco-body" onclick="toggleBank(this)">
+        <div class="bank-group__badge" style="background: #CC092F;">BR</div>
+        <div class="bank-group__info">
+          <div class="bank-group__name">Bradesco</div>
+          <div class="bank-group__summary">6 pendente · 0 assinado</div>
+        </div>
+        <div class="bank-group__count">6</div>
+        <svg class="bank-group__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="bank-group__body" id="bank-bradesco-body">
+      <div class="bank-group__body-inner">
+
+      <!-- 5 — Demonstrativo (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Demonstrativo de Evolução da Dívida e Memória de Cálculo</div>
+          <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Demonstrativo de Evolução da Dívida e Memória de Cálculo', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 6 — CMN 4.790 (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Res. CMN 4.790 – Cancelamento de débitos</div>
+          <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Res. CMN 4.790 – Cancelamento de débitos', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 7 — Histórico de Renovações e Alterações (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Histórico de Renovações e Alterações</div>
+          <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Histórico de Renovações e Alterações', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 8 — Relação Completa de Produtos e Serviços (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Relação Completa de Produtos e Serviços</div>
+          <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Relação Completa de Produtos e Serviços', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 9 — Cópia Íntegra de Autorizações de Débito (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Cópia Íntegra de Autorizações de Débito</div>
+          <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Cópia Íntegra de Autorizações de Débito', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 10 — Comprovante de Serviços e Tarifas (PENDENTE) -->
+      <div class="req-row">
+        <div class="req-row__content">
+          <div class="req-row__title">Comprovante de Serviços e Tarifas</div>
+          <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
+        </div>
+        <div class="req-row__actions">
+          <span class="req-row__status req-row__status--pending">Pendente</span>
+          <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Comprovante de Serviços e Tarifas', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar PDF">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      </div><!-- /bank-group__body-inner -->
+      </div><!-- /bank-group__body -->
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PREVIEW MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="preview-overlay" id="previewModal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+  <div class="preview-modal">
+    <div class="preview-modal__header">
+      <div class="preview-modal__title" id="previewTitle">—</div>
+      <button class="preview-modal__close" onclick="closePreview()" aria-label="Fechar preview">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="preview-modal__body">
+      <div class="preview-doc">
+        <div class="preview-doc__header">
+          <div class="preview-doc__logo">Basta.</div>
+          <div class="preview-doc__meta" id="previewMeta">—</div>
+        </div>
+        <div class="preview-doc__title" id="previewDocTitle">—</div>
+        <div class="preview-doc__section-title">Identificação</div>
+        <div class="preview-doc__line"></div>
+        <div class="preview-doc__line preview-doc__line--med"></div>
+        <div class="preview-doc__line preview-doc__line--short"></div>
+        <div class="preview-doc__section-title">Histórico</div>
+        <div class="preview-doc__line"></div>
+        <div class="preview-doc__line preview-doc__line--med"></div>
+        <div class="preview-doc__line"></div>
+        <div class="preview-doc__line preview-doc__line--short"></div>
+        <div class="preview-doc__line preview-doc__line--med"></div>
+        <div class="preview-doc__section-title">Fundamentação Legal</div>
+        <div class="preview-doc__line"></div>
+        <div class="preview-doc__line preview-doc__line--med"></div>
+        <div class="preview-doc__line preview-doc__line--short"></div>
+        <div class="preview-doc__footer">
+          <span>Basta Tecnologia Ltda.</span>
+          <span id="previewDate">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="preview-modal__footer">
+      <button class="btn-logout-cancel" onclick="closePreview()">Fechar</button>
+      <button class="btn-download-modal">↓ Baixar PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- Global tooltip — fixed, never clipped by overflow:hidden -->
+<div id="basta-tip" role="tooltip"></div>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Global Tooltip ────────────────────────────── */
+  (function () {
+    var tip = document.getElementById('basta-tip');
+    var showTimer = null;
+
+    document.addEventListener('mouseenter', function (e) {
+      var btn = e.target.closest('[data-tip]');
+      if (!btn) return;
+      clearTimeout(showTimer);
+      showTimer = setTimeout(function () {
+        var label = btn.getAttribute('data-tip');
+        var r = btn.getBoundingClientRect();
+        tip.textContent = label;
+
+        // Position: prefer below, flip above if no room
+        var spaceBelow = window.innerHeight - r.bottom;
+        var tipH = 26; // approx height
+        var below = spaceBelow >= tipH + 8;
+
+        tip.style.left = (r.left + r.width / 2) + 'px';
+        tip.style.transform = 'translateX(-50%) translateY(' + (below ? '-4px' : '4px') + ')';
+        tip.style.top = below
+          ? (r.bottom + 6) + 'px'
+          : (r.top - tipH - 6) + 'px';
+
+        tip.classList.add('is-visible');
+      }, 280);
+    }, true);
+
+    document.addEventListener('mouseleave', function (e) {
+      var btn = e.target.closest('[data-tip]');
+      if (!btn) return;
+      clearTimeout(showTimer);
+      tip.classList.remove('is-visible');
+    }, true);
+  })();
+
+  /* ── Preview Modal ─────────────────────────────── */
+  function openPreview(title, meta) {
+    document.getElementById('previewTitle').textContent = title;
+    document.getElementById('previewDocTitle').textContent = title;
+    document.getElementById('previewMeta').innerHTML = meta.replace(/·/g, '<br>');
+    document.getElementById('previewDate').textContent = new Date().toLocaleDateString('pt-BR');
+    const overlay = document.getElementById('previewModal');
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePreview() {
+    const overlay = document.getElementById('previewModal');
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('previewModal').addEventListener('click', function(e) {
+    if (e.target === this) closePreview();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('previewModal').classList.contains('is-open')) {
+      closePreview();
+    }
+  });
+
+  /* ── Custom Select ──────────────────────────────── */
+  function toggleSelect(trigger) {
+    var select = trigger.closest('.custom-select');
+    // Fechar outros abertos
+    document.querySelectorAll('.custom-select--open').forEach(function(s) {
+      if (s !== select) s.classList.remove('custom-select--open');
+    });
+    select.classList.toggle('custom-select--open');
+  }
+
+  function pickOption(option) {
+    var select = option.closest('.custom-select');
+    var label = select.querySelector('.custom-select__label');
+    // Atualizar label
+    label.textContent = option.textContent;
+    // Atualizar active
+    select.querySelectorAll('.custom-select__option').forEach(function(o) {
+      o.classList.remove('custom-select__option--active');
+    });
+    option.classList.add('custom-select__option--active');
+    // Fechar
+    select.classList.remove('custom-select--open');
+  }
+
+  // Fechar ao clicar fora
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.custom-select')) {
+      document.querySelectorAll('.custom-select--open').forEach(function(s) {
+        s.classList.remove('custom-select--open');
+      });
+    }
+  });
+
+  // Fechar com Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.custom-select--open').forEach(function(s) {
+        s.classList.remove('custom-select--open');
+      });
+    }
+  });
+
+  /* ── Accordion toggle ─────────────────────────────── */
+  function toggleBank(btn) {
+    var group = btn.closest('.bank-group');
+    var isOpen = group.classList.contains('bank-group--open');
+    group.classList.toggle('bank-group--open');
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+
+  let lastFocusedElement = null;
+
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Mover foco para o primeiro botão
+    document.getElementById('logoutCancel').focus();
+  }
+
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Restaurar foco ao elemento que abriu o modal
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  // Focus trap e Escape para fechar
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutBox = document.querySelector('.logout-modal');
+  const cancelBtn = document.getElementById('logoutCancel');
+  const confirmBtn = document.getElementById('logoutConfirm');
+
+  logoutModal.addEventListener('click', function(e) {
+    if (e.target === this) closeLogout();
+  });
+
+  logoutBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLogout();
+    }
+
+    if (e.key === 'Tab') {
+      const focusableElements = [cancelBtn, confirmBtn];
+      const currentIndex = focusableElements.indexOf(document.activeElement);
+
+      if (e.shiftKey) {
+        // Shift + Tab (backward)
+        e.preventDefault();
+        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        focusableElements[nextIndex].focus();
+      } else {
+        // Tab (forward)
+        e.preventDefault();
+        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        focusableElements[nextIndex].focus();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

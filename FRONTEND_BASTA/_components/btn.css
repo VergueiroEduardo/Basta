@@ -1,0 +1,158 @@
+/* ============================================================================
+   BUTTON COMPONENT — Basta
+   Convenção única: BEM duplo-traço.  btn + btn--variant
+   Variantes: primary | ghost | outline-black | outline-white | error | wa | retry
+   ============================================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  font-size: var(--fs-xs);
+  padding: 18px 36px;
+  min-height: 56px;
+  transition: background var(--transition), color var(--transition),
+              border-color var(--transition), transform var(--transition),
+              box-shadow var(--transition);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .btn {
+    font-size: var(--fs-sm);
+    padding: 20px 48px;
+    min-height: 60px;
+  }
+}
+
+.btn--sm {
+  font-size: var(--fs-xs);
+  padding: 12px 20px;
+  min-height: 44px;       /* WCAG 2.5.5 + iOS HIG mínimo */
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Primary — Verde brand */
+.btn--primary {
+  background: var(--green);
+  color: var(--white);
+  border: var(--border-width-thick) solid var(--green);
+}
+.btn--primary:hover {
+  background: var(--green-hover);
+  border-color: var(--green-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(66, 180, 73, 0.28);
+}
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+/* Ghost — neutro, baixa hierarquia */
+.btn--ghost {
+  background: transparent;
+  color: var(--gray-600);
+  border: var(--border-width-thin) solid var(--gray-300);
+}
+.btn--ghost:hover {
+  color: var(--black);
+  border-color: var(--black);
+  background: var(--off-white);
+}
+
+/* Outline preto */
+.btn--outline-black {
+  background: transparent;
+  color: var(--black);
+  border: var(--border-width-thick) solid var(--black);
+}
+.btn--outline-black:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Outline branco (sobre fundo escuro) */
+.btn--outline-white {
+  background: transparent;
+  color: var(--white);
+  border: var(--border-width-thick) solid var(--white);
+}
+.btn--outline-white:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+/* Outline branco que vira verde no hover */
+.btn--outline-white-green {
+  background: transparent;
+  color: var(--white);
+  border: var(--border-width-thick) solid var(--white);
+}
+.btn--outline-white-green:hover {
+  background: transparent;
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* Error — destrutivo */
+.btn--error {
+  background: var(--error);
+  color: var(--white);
+  border: var(--border-width-thick) solid var(--error);
+}
+.btn--error:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+/* WhatsApp */
+.btn--wa {
+  background: var(--wa);
+  color: var(--white);
+  border: var(--border-width-thick) solid var(--wa);
+}
+.btn--wa:hover {
+  background: var(--wa-hover);
+  border-color: var(--wa-hover);
+}
+
+/* Retry — alias semântico de primary, para clarity em telas de erro */
+.btn--retry {
+  background: var(--green);
+  color: var(--white);
+  border: var(--border-width-thick) solid var(--green);
+}
+.btn--retry:hover {
+  background: var(--green-hover);
+  border-color: var(--green-hover);
+}
+
+/* === ALIASES DE LEGADO (DEPRECATED) ===
+   Mantém compatibilidade com classes antigas durante a migração.
+   Remover quando todos os arquivos forem padronizados. */
+.btn-primary           { background: var(--green); color: var(--white); border: var(--border-width-thick) solid var(--green); }
+.btn-primary:hover     { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(66, 180, 73, 0.28); }
+.btn-outline-black     { background: transparent; color: var(--black); border: var(--border-width-thick) solid var(--black); }
+.btn-outline-black:hover { background: var(--black); color: var(--white); }
+.btn-outline-white     { background: transparent; color: var(--white); border: var(--border-width-thick) solid var(--white); }
+.btn-outline-white:hover { background: var(--white); color: var(--black); }
+.btn-error             { background: var(--error); color: var(--white); border: var(--border-width-thick) solid var(--error); }

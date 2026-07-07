@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basta. — TikTok</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black:     #1A1A1A;
+      --white:     #FFFFFF;
+      --off-white: #F5F3EF;
+      --green:     #42b449;
+      --gray-600:  #4A4A4A;
+      --gray-300:  #D4D4D4;
+      --f: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+      /*
+        FORMATOS TIKTOK
+        ─────────────────────────────────────────────────────
+        01 · Foto de perfil
+            200 × 200px — exibida circular
+
+        02 · Frame de abertura
+            1080 × 1920px (9:16)
+            Preview: 270 × 480px (escala 25%)
+            Safe zone: evitar 80px topo (UI TikTok) e 250px base (CTA/username)
+
+        03 · Frame de encerramento
+            1080 × 1920px (9:16)
+            Preview: 270 × 480px (escala 25%)
+
+        04 · Lower third
+            Faixa sobreposta ao vídeo — 1080 × ~200px
+            Preview: 270 × 50px (escala 25%)
+      */
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--f);
+      background: #E8E5E0;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE LAYOUT ─────────────────────────────────────── */
+    .page-header {
+      padding: 64px 40px 48px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .page-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+    .page-headline {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--black);
+    }
+
+    .section {
+      padding: 0 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .section-num {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      white-space: nowrap;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gray-300);
+    }
+    .section-name {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+    .section-spec {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 36px;
+      line-height: 1.6;
+      max-width: 600px;
+    }
+
+    /* ════════════════════════════════════════════════════════
+       01 · FOTO DE PERFIL  200 × 200px
+    ════════════════════════════════════════════════════════ */
+    .profile-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .profile-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .profile-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+    .profile-sq {
+      width: 200px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--gray-300);
+    }
+    .profile-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid var(--gray-300);
+    }
+    .profile-sq--dark,
+    .profile-circle--dark  { background: var(--black); }
+    .profile-sq--light,
+    .profile-circle--light { background: var(--white); }
+    .profile-sq--warm,
+    .profile-circle--warm  { background: var(--off-white); }
+    .profile-logo { height: 52px; width: auto; }
+
+    /* Feed preview */
+    .profile-circle--sm {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px solid #FE2C55; /* TikTok red border */
+    }
+    .profile-logo--sm { height: 12px; width: auto; }
+
+    /* ════════════════════════════════════════════════════════
+       02-03 · FRAMES DE VÍDEO  1080 × 1920px @ 25%
+    ════════════════════════════════════════════════════════ */
+    .frames-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .frame-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .frame-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+    }
+
+    /* Frame 270×480 (1080×1920 @ 25%) */
+    .frame {
+      width: 270px;
+      height: 480px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--gray-300);
+    }
+    .frame--dark  { background: var(--black); }
+    .frame--light { background: var(--white); }
+    .frame--warm  { background: var(--off-white); }
+
+    /* ── UI TikTok simulada ──────────────────────────────── */
+    .tiktok-ui {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    /* Barra de topo: busca + live */
+    .tiktok-topbar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 12px;
+    }
+    .tiktok-topbar-tab {
+      font-size: 7px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+    }
+    .tiktok-topbar-tab--active {
+      color: #FFFFFF;
+      border-bottom: 1px solid #FFFFFF;
+      padding-bottom: 1px;
+    }
+    /* Barra de base: username, descrição, hashtags, ações */
+    .tiktok-bottombar {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      padding: 8px 10px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 3px;
+    }
+    .tiktok-username {
+      font-size: 7.5px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+    .tiktok-desc {
+      font-size: 6.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.4;
+    }
+    /* Ações direita */
+    .tiktok-actions {
+      position: absolute;
+      right: 8px;
+      bottom: 88px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .tiktok-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .tiktok-action-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .tiktok-action-count {
+      font-size: 5.5px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 600;
+    }
+
+    /* ── Safe zones ──────────────────────────────────────── */
+    .safe-zone-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 20px; /* UI topo */
+      border-bottom: 1px dashed rgba(255,255,255,0.15);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .safe-zone-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px; /* UI base */
+      border-top: 1px dashed rgba(255,255,255,0.15);
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* ── Conteúdo do frame ───────────────────────────────── */
+    .frame-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 28px 20px;
+      z-index: 2;
+    }
+
+    /* Frame abertura */
+    .frame-eyebrow {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .frame--dark  .frame-eyebrow { color: var(--green); }
+    .frame--light .frame-eyebrow,
+    .frame--warm  .frame-eyebrow { color: var(--gray-600); }
+
+    .frame-logo {
+      height: 32px;
+      width: auto;
+      margin-bottom: 16px;
+    }
+
+    .frame-headline {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .frame--dark  .frame-headline { color: var(--white); }
+    .frame--light .frame-headline,
+    .frame--warm  .frame-headline { color: var(--black); }
+
+    .frame-body {
+      font-size: 9px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+    .frame--dark  .frame-body { color: rgba(255,255,255,0.55); }
+    .frame--light .frame-body,
+    .frame--warm  .frame-body { color: var(--gray-600); }
+
+    .frame-divider {
+      width: 20px;
+      height: 1px;
+      margin-bottom: 12px;
+    }
+    .frame--dark  .frame-divider { background: rgba(255,255,255,0.2); }
+    .frame--light .frame-divider,
+    .frame--warm  .frame-divider { background: var(--gray-300); }
+
+    /* Frame encerramento */
+    .frame-cta-block {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .frame-cta-label {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .frame--dark  .frame-cta-label { color: rgba(255,255,255,0.4); }
+    .frame--light .frame-cta-label,
+    .frame--warm  .frame-cta-label { color: var(--gray-600); }
+
+    .frame-cta-value {
+      font-size: 10px;
+      font-weight: 500;
+    }
+    .frame--dark  .frame-cta-value { color: var(--white); }
+    .frame--light .frame-cta-value,
+    .frame--warm  .frame-cta-value { color: var(--black); }
+
+    /* Logo watermark */
+    .frame-logo-watermark {
+      position: absolute;
+      bottom: 88px;
+      left: 20px;
+      height: 15px;
+      width: auto;
+      opacity: 0.15;
+      z-index: 2;
+    }
+
+    /* Bullets no frame de abertura */
+    .frame-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .frame-bullet {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .frame-bullet-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 4px;
+      background: #FFFFFF;
+    }
+    .frame-bullet-text {
+      font-size: 7.5px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+    .frame--dark  .frame-bullet-text { color: rgba(255,255,255,0.65); }
+    .frame--light .frame-bullet-text,
+    .frame--warm  .frame-bullet-text { color: var(--gray-600); }
+
+    /* ════════════════════════════════════════════════════════
+       04 · LOWER THIRD  1080 × ~200px @ 25%
+    ════════════════════════════════════════════════════════ */
+    .lower-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .lower-wrap {
+      width: 270px;
+      background: transparent;
+      position: relative;
+    }
+    /* Fundo simulado do vídeo */
+    .lower-video-bg {
+      width: 270px;
+      height: 100px;
+      background: #2a2a2a;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Lower third overlay */
+    .lower-third {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 14px 12px;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+    }
+    .lower-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+    .lower-subtitle {
+      font-size: 7.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+    }
+    .lower-accent {
+      width: 16px;
+      height: 2px;
+      background: var(--green);
+      margin-bottom: 5px;
+    }
+
+    /* Variante card sólido */
+    .lower-card {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 8px 14px 10px;
+      background: var(--black);
+      border-top: 2px solid var(--green);
+    }
+    .lower-card-title {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+      margin-bottom: 2px;
+    }
+    .lower-card-sub {
+      font-size: 7.5px;
+      color: rgba(255,255,255,0.5);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- SVG DEFS -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="basta-logo" viewBox="0 0 602.25 254.23">
+      <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+      <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+      <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+      <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+    </symbol>
+  </svg>
+
+  <!-- ══════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div class="page-title">TikTok — Arte do Canal</div>
+    <div class="page-headline">Basta<span style="color:inherit">.</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       01 · FOTO DE PERFIL
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Foto de Perfil</div>
+    <div class="section-spec">200 × 200px · exibida circular</div>
+    <div class="section-desc">Avatar que aparece no perfil, nos vídeos e no feed. O TikTok aplica borda vermelha quando há story ativo. Exportar como quadrado.</div>
+
+    <div class="profile-row">
+      <div class="profile-block">
+        <div class="profile-tag">Dark — quadrado</div>
+        <div class="profile-sq profile-sq--dark">
+          <svg class="profile-logo" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+      <div class="profile-block">
+        <div class="profile-tag">Dark — circular</div>
+        <div class="profile-circle profile-circle--dark">
+          <svg class="profile-logo" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+      <div class="profile-block">
+        <div class="profile-tag">Light — quadrado</div>
+        <div class="profile-sq profile-sq--light">
+          <svg class="profile-logo" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+      <div class="profile-block">
+        <div class="profile-tag">Light — circular</div>
+        <div class="profile-circle profile-circle--light">
+          <svg class="profile-logo" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+      <div class="profile-block" style="margin-left:32px">
+        <div class="profile-tag">No feed</div>
+        <div style="display:flex; gap:10px; align-items:center; margin-top:8px">
+          <div class="profile-circle--sm" style="background:var(--black)">
+            <svg class="profile-logo--sm" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+          </div>
+          <div style="font-size:12px; font-weight:700; color:var(--black)">@bastaponto</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       02 · FRAME DE ABERTURA
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Frame de Abertura</div>
+    <div class="section-spec">1080 × 1920px · preview a 25% (270 × 480px)</div>
+    <div class="section-desc">Primeiro frame do vídeo — aparece como thumbnail no feed antes do play. Define a identidade visual do conteúdo. Manter logo e título fora das safe zones (UI do TikTok ocupa topo e base).</div>
+
+    <div class="frames-row">
+
+      <!-- Dark -->
+      <div class="frame-block">
+        <div class="frame-tag">Dark</div>
+        <div class="frame frame--dark">
+          <div class="frame-content">
+            <svg class="frame-logo" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+            <div class="frame-divider"></div>
+            <div class="frame-headline">Saia do<br>endividamento<br>de forma justa.</div>
+            <div class="frame-bullets">
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Pague o justo.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Suas dívidas em trajetória de pagamento.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Recupere o que foi pago a mais.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Não pague nada antecipadamente.</div></div>
+            </div>
+          </div>
+          <svg class="frame-logo-watermark" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+          <!-- Safe zones -->
+          <div class="safe-zone-top"></div>
+          <div class="safe-zone-bottom"></div>
+          <!-- UI TikTok simulada -->
+          <div class="tiktok-ui">
+            <div class="tiktok-topbar">
+              <span class="tiktok-topbar-tab">Seguindo</span>
+              <span class="tiktok-topbar-tab tiktok-topbar-tab--active">Para você</span>
+              <span class="tiktok-topbar-tab">Ao vivo</span>
+            </div>
+            <div class="tiktok-bottombar">
+              <div class="tiktok-username">@bastaponto</div>
+              <div class="tiktok-desc">Saia do endividamento de forma justa. #dividas #financas #openfinance</div>
+            </div>
+            <div class="tiktok-actions">
+              <div class="tiktok-action">
+                <div class="tiktok-action-icon">♥</div>
+                <div class="tiktok-action-count">12k</div>
+              </div>
+              <div class="tiktok-action">
+                <div class="tiktok-action-icon">💬</div>
+                <div class="tiktok-action-count">84</div>
+              </div>
+              <div class="tiktok-action">
+                <div class="tiktok-action-icon">↗</div>
+                <div class="tiktok-action-count">320</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Light -->
+      <div class="frame-block">
+        <div class="frame-tag">Light</div>
+        <div class="frame frame--light">
+          <div class="frame-content">
+            <svg class="frame-logo" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+            <div class="frame-divider"></div>
+            <div class="frame-headline">Saia do<br>endividamento<br>de forma justa.</div>
+            <div class="frame-bullets">
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Pague o justo.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Suas dívidas em trajetória de pagamento.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Recupere o que foi pago a mais.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Não pague nada antecipadamente.</div></div>
+            </div>
+          </div>
+          <svg class="frame-logo-watermark" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+          <div class="safe-zone-top" style="border-color:rgba(0,0,0,0.1)"></div>
+          <div class="safe-zone-bottom" style="border-color:rgba(0,0,0,0.1)"></div>
+          <div class="tiktok-ui">
+            <div class="tiktok-topbar">
+              <span class="tiktok-topbar-tab">Seguindo</span>
+              <span class="tiktok-topbar-tab tiktok-topbar-tab--active">Para você</span>
+              <span class="tiktok-topbar-tab">Ao vivo</span>
+            </div>
+            <div class="tiktok-bottombar">
+              <div class="tiktok-username">@bastaponto</div>
+              <div class="tiktok-desc">Saia do endividamento de forma justa. #dividas #financas #openfinance</div>
+            </div>
+            <div class="tiktok-actions">
+              <div class="tiktok-action"><div class="tiktok-action-icon">♥</div><div class="tiktok-action-count">12k</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">💬</div><div class="tiktok-action-count">84</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">↗</div><div class="tiktok-action-count">320</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warm -->
+      <div class="frame-block">
+        <div class="frame-tag">Warm</div>
+        <div class="frame frame--warm">
+          <div class="frame-content">
+            <svg class="frame-logo" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+            <div class="frame-divider"></div>
+            <div class="frame-headline">Saia do<br>endividamento<br>de forma justa.</div>
+            <div class="frame-bullets">
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Pague o justo.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Suas dívidas em trajetória de pagamento.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Recupere o que foi pago a mais.</div></div>
+              <div class="frame-bullet"><div class="frame-bullet-dot"></div><div class="frame-bullet-text">Não pague nada antecipadamente.</div></div>
+            </div>
+          </div>
+          <svg class="frame-logo-watermark" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+          <div class="safe-zone-top" style="border-color:rgba(0,0,0,0.1)"></div>
+          <div class="safe-zone-bottom" style="border-color:rgba(0,0,0,0.1)"></div>
+          <div class="tiktok-ui">
+            <div class="tiktok-topbar">
+              <span class="tiktok-topbar-tab">Seguindo</span>
+              <span class="tiktok-topbar-tab tiktok-topbar-tab--active">Para você</span>
+              <span class="tiktok-topbar-tab">Ao vivo</span>
+            </div>
+            <div class="tiktok-bottombar">
+              <div class="tiktok-username">@bastaponto</div>
+              <div class="tiktok-desc">Saia do endividamento de forma justa. #dividas #financas #openfinance</div>
+            </div>
+            <div class="tiktok-actions">
+              <div class="tiktok-action"><div class="tiktok-action-icon">♥</div><div class="tiktok-action-count">12k</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">💬</div><div class="tiktok-action-count">84</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">↗</div><div class="tiktok-action-count">320</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       03 · FRAME DE ENCERRAMENTO
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Frame de Encerramento</div>
+    <div class="section-spec">1080 × 1920px · preview a 25% (270 × 480px)</div>
+    <div class="section-desc">Último frame do vídeo. CTA direto para contato ou próximo passo. Reforça a marca e converte atenção em ação.</div>
+
+    <div class="frames-row">
+
+      <!-- Dark -->
+      <div class="frame-block">
+        <div class="frame-tag">Dark</div>
+        <div class="frame frame--dark">
+          <div class="frame-content">
+            <svg class="frame-logo" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+            <div class="frame-divider" style="margin-top:14px"></div>
+            <div class="frame-headline" style="font-size:16px; margin-bottom:0">Seus dados a seu favor,<br>pela primeira vez.</div>
+            <div class="frame-cta-block">
+              <div>
+                <div class="frame-cta-label">WhatsApp</div>
+                <div class="frame-cta-value">(19) 97179-5723</div>
+              </div>
+              <div>
+                <div class="frame-cta-label">Email</div>
+                <div class="frame-cta-value">ola@basta.com.br</div>
+              </div>
+              <div>
+                <div class="frame-cta-label">Site</div>
+                <div class="frame-cta-value">basta.com.br</div>
+              </div>
+            </div>
+          </div>
+          <svg class="frame-logo-watermark" viewBox="0 0 602.25 254.23" style="color:#FFFFFF"><use href="#basta-logo"/></svg>
+          <div class="safe-zone-top"></div>
+          <div class="safe-zone-bottom"></div>
+          <div class="tiktok-ui">
+            <div class="tiktok-topbar">
+              <span class="tiktok-topbar-tab">Seguindo</span>
+              <span class="tiktok-topbar-tab tiktok-topbar-tab--active">Para você</span>
+              <span class="tiktok-topbar-tab">Ao vivo</span>
+            </div>
+            <div class="tiktok-bottombar">
+              <div class="tiktok-username">@bastaponto</div>
+              <div class="tiktok-desc">Link na bio. ola@basta.com.br</div>
+            </div>
+            <div class="tiktok-actions">
+              <div class="tiktok-action"><div class="tiktok-action-icon">♥</div><div class="tiktok-action-count">12k</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">💬</div><div class="tiktok-action-count">84</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">↗</div><div class="tiktok-action-count">320</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Warm -->
+      <div class="frame-block">
+        <div class="frame-tag">Warm</div>
+        <div class="frame frame--warm">
+          <div class="frame-content">
+            <svg class="frame-logo" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+            <div class="frame-divider" style="margin-top:14px"></div>
+            <div class="frame-headline" style="font-size:16px; margin-bottom:0">Seus dados a seu favor,<br>pela primeira vez.</div>
+            <div class="frame-cta-block">
+              <div>
+                <div class="frame-cta-label">WhatsApp</div>
+                <div class="frame-cta-value">(19) 97179-5723</div>
+              </div>
+              <div>
+                <div class="frame-cta-label">Email</div>
+                <div class="frame-cta-value">ola@basta.com.br</div>
+              </div>
+              <div>
+                <div class="frame-cta-label">Site</div>
+                <div class="frame-cta-value">basta.com.br</div>
+              </div>
+            </div>
+          </div>
+          <svg class="frame-logo-watermark" viewBox="0 0 602.25 254.23" style="color:#1A1A1A"><use href="#basta-logo"/></svg>
+          <div class="safe-zone-top" style="border-color:rgba(0,0,0,0.1)"></div>
+          <div class="safe-zone-bottom" style="border-color:rgba(0,0,0,0.1)"></div>
+          <div class="tiktok-ui">
+            <div class="tiktok-topbar">
+              <span class="tiktok-topbar-tab">Seguindo</span>
+              <span class="tiktok-topbar-tab tiktok-topbar-tab--active">Para você</span>
+              <span class="tiktok-topbar-tab">Ao vivo</span>
+            </div>
+            <div class="tiktok-bottombar">
+              <div class="tiktok-username">@bastaponto</div>
+              <div class="tiktok-desc">Link na bio. ola@basta.com.br</div>
+            </div>
+            <div class="tiktok-actions">
+              <div class="tiktok-action"><div class="tiktok-action-icon">♥</div><div class="tiktok-action-count">12k</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">💬</div><div class="tiktok-action-count">84</div></div>
+              <div class="tiktok-action"><div class="tiktok-action-icon">↗</div><div class="tiktok-action-count">320</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       04 · LOWER THIRD
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="section-name">Lower Third</div>
+    <div class="section-spec">1080 × ~200px · sobreposto ao vídeo · preview a 25%</div>
+    <div class="section-desc">Faixa de texto sobreposta à parte inferior do vídeo durante o conteúdo. Identifica o tema, o nome do apresentador ou um dado de impacto. Dois estilos: gradiente (mais sutil) e card sólido (mais legível).</div>
+
+    <!-- Variante gradiente -->
+    <div class="lower-block">
+      <div class="frame-tag">Gradiente — sobre vídeo escuro</div>
+      <div class="lower-wrap">
+        <div class="lower-video-bg" style="background:#2a2a2a">
+          <div class="lower-third">
+            <div class="lower-accent"></div>
+            <div class="lower-title">Seus dados a seu favor, pela primeira vez.</div>
+            <div class="lower-subtitle">Open Finance · Diagnóstico financeiro gratuito</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variante card sólido -->
+    <div class="lower-block">
+      <div class="frame-tag">Card sólido — legível em qualquer fundo</div>
+      <div class="lower-wrap">
+        <div class="lower-video-bg" style="background:#6a6a6a">
+          <div class="lower-card">
+            <div class="lower-card-title">Seus dados a seu favor, pela primeira vez.</div>
+            <div class="lower-card-sub">Basta. · Open Finance · basta.com.br</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variante warm -->
+    <div class="lower-block">
+      <div class="frame-tag">Card warm — tema editorial</div>
+      <div class="lower-wrap">
+        <div class="lower-video-bg" style="background:#8a8a6a">
+          <div class="lower-card" style="background:var(--off-white); border-color:var(--green)">
+            <div class="lower-card-title" style="color:var(--black)">Seus dados a seu favor, pela primeira vez.</div>
+            <div class="lower-card-sub" style="color:var(--gray-600)">Basta. · Open Finance · basta.com.br</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+/* ============================================================================
+   SIDEBAR (autenticada) — Basta
+   Usado em 12-17. Width via --sidebar-w.
+   Mobile (≤900px): escondida; mostra topbar.
+   ============================================================================ */
+
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  border-right: var(--border-width-thin) solid var(--gray-300);
+  padding: var(--space-2xl) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+}
+
+.sidebar__header {
+  margin-bottom: var(--space-3xl);
+}
+
+.sidebar__logo {
+  height: 72px;       /* referência: 12_basta-dashboard */
+  width: auto;
+  display: block;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 12px var(--space-md);
+  font-size: var(--fs-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-600);
+  border-left: 2px solid transparent;
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
+}
+.nav-item:hover {
+  color: var(--black);
+  background: var(--off-white);
+}
+.nav-item--active,
+.nav-item[aria-current="page"] {
+  color: var(--black);
+  border-left-color: var(--green);
+  font-weight: var(--font-weight-bold);
+}
+
+.nav-item__icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.sidebar__user {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding-top: var(--space-lg);
+  border-top: var(--border-width-thin) solid var(--gray-300);
+}
+
+.sidebar__avatar {
+  width: 36px;
+  height: 36px;
+  background: var(--black);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-wider);
+}
+
+.sidebar__user-info {
+  min-width: 0;
+}
+.sidebar__user-name {
+  font-size: var(--fs-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--black);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar__user-email {
+  font-size: 11px;
+  color: var(--gray-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__logout {
+  background: none;
+  border: none;
+  padding: var(--space-sm);
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: color var(--transition);
+  display: flex;
+}
+.sidebar__logout:hover { color: var(--error); }

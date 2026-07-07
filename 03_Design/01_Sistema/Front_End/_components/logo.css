@@ -1,0 +1,35 @@
+/* ============================================================================
+   LOGO COLOR CONTEXT — Basta
+   O <symbol id="logo-basta"> usa fill="currentColor".
+   Estas classes setam a cor por contexto, com fallback robusto.
+   ============================================================================ */
+
+/* Cor via currentColor (preferido — herda) */
+.logo--on-dark  { color: var(--white); }
+.logo--on-light { color: var(--black); }
+
+/* Aspect ratio do logo Basta — força o SVG a respeitar o viewBox do symbol
+   mesmo quando o host não declara viewBox próprio. */
+.logo--on-dark,
+.logo--on-light,
+.sidebar__logo,
+.topbar__logo,
+.hero-logo,
+.footer-logo-svg,
+.logo-svg-lg {
+  aspect-ratio: 602.25 / 254.23;
+  display: block;
+}
+
+/* Reforço: força o fill em todos os paths do symbol referenciado.
+   Vence atributos inline em browsers que resolvem `currentColor` de modo
+   inconsistente dentro de shadow DOM via <use>. */
+.logo--on-dark  path,
+.logo--on-dark  use { fill: var(--white) !important; color: var(--white); }
+.logo--on-light path,
+.logo--on-light use { fill: var(--black) !important; color: var(--black); }
+
+/* Compatibilidade: alguns SVGs originais usavam classes .logo-fill / .logo-dot.
+   Mantém a regra para herança caso ainda apareçam em algum arquivo. */
+.logo-fill { fill: currentColor; }
+.logo-dot  { fill: currentColor; }

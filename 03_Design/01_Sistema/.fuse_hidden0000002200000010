@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Contas Bancárias</title>
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/bank-card.css" />
+  <style>
+    /* Hover-only: em devices touch (sem hover real), neutraliza estados hover
+       que ficam "stuck" depois do tap (transform, translate). Cosmética; não toca em color/background. */
+
+    /* ══════════════════════════════════════════════════════════
+       RESET
+       ══════════════════════════════════════════════════════════ */    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* ══════════════════════════════════════════════════════════
+       LAYOUT — sidebar + main
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR ──────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { flex: 1; }
+
+    /* ── TOP BAR ──────────────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAGE HEADER
+       ══════════════════════════════════════════════════════════ */
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .accent { color: var(--black); }
+
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.5; margin-bottom: 32px;
+    }
+
+    /* ── CTA Conectar nova conta ──────────────────────────── */
+    .btn-connect {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 18px 24px;
+      background: var(--green); color: var(--white);
+      font-family: var(--f); font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 2px solid var(--black);
+      margin-top: 24px;
+      transition: background var(--t), color var(--t);
+    }
+    .btn-connect:hover { background: var(--black); color: var(--white); }
+    .btn-connect:active { transform: scale(0.98); }
+    .btn-connect__plus {
+      font-size: 16px; font-weight: 700; line-height: 1;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SECTION LABEL
+       ══════════════════════════════════════════════════════════ */
+    .section-label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black); margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       ACCOUNT CARD
+       ══════════════════════════════════════════════════════════ */
+    .account-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .account-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: -1px;
+      transition: background var(--t);
+    }
+
+    .account-card:first-child {
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .account-card:hover {
+      background: var(--off-white);
+    }
+
+    /* Bank badge */
+    .bank-badge {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: var(--white);
+      flex-shrink: 0; letter-spacing: 0.02em;
+    }
+
+    /* Bank info */
+    .account-card__info { flex: 1; min-width: 0; }
+
+    .account-card__name {
+      font-weight: 700; font-size: 14px; color: var(--black); line-height: 1.3;
+    }
+
+    .account-card__details {
+      font-size: 12px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.4; margin-top: 2px;
+    }
+
+    /* Status */
+    .account-card__status {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 2px; flex-shrink: 0;
+    }
+
+    .account-card__status-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--green);
+    }
+
+    .account-card__status-sub {
+      font-size: 11px; color: var(--gray-600); font-weight: 400;
+      text-transform: uppercase; letter-spacing: 0.02em;
+    }
+
+    /* ── Icon action buttons + tooltip (padrão unificado) ── */
+    .icon-btn {
+      position: relative;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white); color: var(--gray-600);
+      border: 1px solid var(--gray-300);
+      cursor: pointer; flex-shrink: 0;
+      transition: color var(--t), border-color var(--t), background var(--t);
+    }
+    .icon-btn:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
+    .icon-btn--danger:hover { color: var(--error); border-color: var(--error); background: var(--white); }
+    .icon-btn::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%; transform: translateX(-50%);
+      background: var(--black); color: var(--white);
+      font-size: 11px; font-weight: 700; font-family: var(--f);
+      text-transform: uppercase; letter-spacing: 0.04em;
+      white-space: nowrap;
+      padding: 4px 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    .icon-btn:hover::after { opacity: 1; }
+
+    /* Account card removal animation */
+    .account-card.account-removing {
+      opacity: 0;
+      transform: translateX(-20px);
+      pointer-events: none;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       CONFIRMATION MODAL
+       ══════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .modal-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 32px;
+      width: 100%; max-width: 400px;
+    }
+    .modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error); margin-bottom: 10px;
+    }
+    .modal__title {
+      font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.2; margin-bottom: 10px;
+    }
+    .modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 28px; text-wrap: pretty;
+    }
+    .modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    .btn-modal-cancel {
+      padding: 10px 20px; font-family: var(--f); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;
+      background: transparent; color: var(--black);
+      border: 2px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-modal-cancel:hover { border-color: var(--black); background: var(--off-white); }
+
+    .btn-modal-confirm {
+      padding: 10px 20px; font-family: var(--f); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;
+      background: var(--error); color: var(--white);
+      border: 2px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }
+    .btn-modal-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
+
+    /* ══════════════════════════════════════════════════════════
+       WHATSAPP FAB
+       ══════════════════════════════════════════════════════════ */
+    .fab {
+      position: fixed; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      width: 68px; height: 68px;
+      background: var(--green); border: 2px solid var(--black);
+      border-radius: 0; color: var(--white); box-shadow: none;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .fab:hover { background: var(--black); border-color: var(--black); }
+    .fab__icon { width: 36px; height: 36px; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE-FIRST RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar { display: flex; }
+    .main { padding: 84px 24px 100px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+    .fab { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
+
+    /* Mobile: account card compact */
+    .account-card { padding: 16px; gap: 12px; }
+    .bank-badge { width: 40px; height: 40px; font-size: 11px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 84px 24px 100px; }
+      .page-title { font-size: 26px; }
+      .account-card { padding: 20px 24px; gap: 16px; }
+      .bank-badge { width: 44px; height: 44px; font-size: 11px; }
+    }
+
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 960px; }
+      .page-title { font-size: 28px; }
+      .account-card__name { font-size: 15px; }
+      .account-card__details { font-size: 13px; }
+      .fab { width: 80px; height: 80px; bottom: max(36px, env(safe-area-inset-bottom)); right: 36px; }
+      .fab__icon { width: 40px; height: 40px; }
+    }
+
+    @media (min-width: 1200px) {
+      .main { padding: 40px 48px 80px; }
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))); }
+      .fab { bottom: max(16px, calc(8px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ── Close button ─────────────────────────────────────── */
+    .btn-close {
+      position: fixed; top: 0; right: 0; z-index: 80;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--gray-600);
+      transition: color var(--t), background var(--t);
+    }
+    .btn-close:hover { color: var(--black); background: rgba(0,0,0,0.05); }
+    /* hide avatar — close takes its place on mobile */
+    .topbar__avatar { display: none !important; }
+
+    @media (min-width: 768px) {
+      .btn-close {
+        width: 36px; height: 36px;
+        top: 20px; right: 28px;
+        background: var(--white);
+        border: 1.5px solid var(--gray-300);
+        color: var(--black);
+      }
+      .btn-close:hover { background: var(--off-white); border-color: var(--black); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .logout-modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 28px 28px 24px;
+      width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error);
+      margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .logout-modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }    .btn-modal-cancel:active, .btn-modal-confirm:active, .btn-close:active, .btn-logout-cancel:active, .btn-logout-confirm:active { transform: scale(0.98); }
+
+
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">MC</a>
+
+</div>
+
+<a href="12_basta-dashboard.html" class="btn-close" aria-label="Fechar">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</a>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </span>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">MC</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Maria Carvalho</div>
+        <div class="sidebar__user-email">maria.c@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ════════════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <h1 class="page-title">Suas Contas Conectadas<span class="accent">.</span></h1>
+    <p class="page-desc">Essas são suas contas que estão sendo verificadas.</p>
+
+    <!-- ── Section label ────────────────────────────────── -->
+    <div class="section-label">Contas conectadas</div>
+
+    <!-- ── Account cards ────────────────────────────────── -->
+    <div class="account-list">
+
+      <!-- Banco do Brasil -->
+      <div class="account-card">
+        <div class="bank-badge" style="background: #CC092F;">BA</div>
+        <div class="account-card__info">
+          <div class="account-card__name">BANCO DO BRASIL S/A</div>
+          <div class="account-card__details">Ag. - · Conta 00006850-0 · Conta Corrente</div>
+        </div>
+        <div class="account-card__status">
+          <span class="account-card__status-label">Conectada</span>
+          <span class="account-card__status-sub">Sincronizado</span>
+        </div>
+        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Banco do Brasil" onclick="openConfirm('Banco do Brasil S/A')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+
+      <!-- Ourocard Visa International -->
+      <div class="account-card">
+        <div class="bank-badge" style="background: #820AD1;">OU</div>
+        <div class="account-card__info">
+          <div class="account-card__name">OUROCARD VISA INTERNATIONAL</div>
+          <div class="account-card__details">Ag. - · Conta 7685 · Cartão de Crédito</div>
+        </div>
+        <div class="account-card__status">
+          <span class="account-card__status-label">Conectada</span>
+          <span class="account-card__status-sub">Sincronizado</span>
+        </div>
+        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Ourocard Visa" onclick="openConfirm('Ourocard Visa International')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+
+      <!-- Ourocard Mastercard International -->
+      <div class="account-card">
+        <div class="bank-badge" style="background: #820AD1;">OU</div>
+        <div class="account-card__info">
+          <div class="account-card__name">OUROCARD MASTERCARD INTERNATIONAL</div>
+          <div class="account-card__details">Ag. - · Conta 0494 · Cartão de Crédito</div>
+        </div>
+        <div class="account-card__status">
+          <span class="account-card__status-label">Conectada</span>
+          <span class="account-card__status-sub">Sincronizado</span>
+        </div>
+        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Ourocard Mastercard" onclick="openConfirm('Ourocard Mastercard International')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ── CTA Conectar nova conta ─────────────────────── -->
+    <a href="07_basta-of-selecao-banco.html" class="btn-connect">
+      <span class="btn-connect__plus">+</span>
+      Conectar nova conta bancária via Open Finance
+    </a>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     CONFIRMATION MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal__eyebrow">Atenção</div>
+    <h2 class="modal__title" id="modalTitle">Desconectar <span id="modalBankName"></span>?</h2>
+    <p class="modal__desc">Ao desconectar, os dados desta conta não serão mais atualizados via Open Finance.</p>
+    <div class="modal__actions">
+      <button class="btn-modal-cancel" id="confirmCancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-modal-confirm" id="confirmConfirm" onclick="confirmDisconnect()">Desconectar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let lastFocusedElementConfirm = null;
+  let cardToRemove = null;
+
+  function openConfirm(bankName) {
+    lastFocusedElementConfirm = document.activeElement;
+    // Guardar referência ao card que será removido
+    cardToRemove = lastFocusedElementConfirm.closest('.account-card');
+    document.getElementById('modalBankName').textContent = bankName;
+    const modal = document.getElementById('confirmModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Mover foco para o primeiro botão
+    document.getElementById('confirmCancel').focus();
+  }
+
+  function confirmDisconnect() {
+    if (cardToRemove) {
+      // Adicionar classe de remoção para animação
+      cardToRemove.classList.add('account-removing');
+      // Remover do DOM após animação
+      setTimeout(function() {
+        cardToRemove.remove();
+        // Verificar se ainda há cards
+        cardToRemove = null;
+      }, 300);
+    }
+    closeConfirm();
+  }
+
+  function closeConfirm() {
+    const modal = document.getElementById('confirmModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Restaurar foco ao elemento que abriu o modal
+    if (lastFocusedElementConfirm) {
+      lastFocusedElementConfirm.focus();
+    }
+  }
+
+  // Focus trap e Escape para fechar
+  const confirmModal = document.getElementById('confirmModal');
+  const confirmBox = confirmModal.querySelector('.modal');
+  const confirmCancelBtn = document.getElementById('confirmCancel');
+  const confirmConfirmBtn = document.getElementById('confirmConfirm');
+
+  confirmModal.addEventListener('click', function(e) {
+    if (e.target === this) closeConfirm();
+  });
+
+  confirmBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeConfirm();
+    }
+
+    if (e.key === 'Tab') {
+      const focusableElements = [confirmCancelBtn, confirmConfirmBtn];
+      const currentIndex = focusableElements.indexOf(document.activeElement);
+
+      if (e.shiftKey) {
+        // Shift + Tab (backward)
+        e.preventDefault();
+        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        focusableElements[nextIndex].focus();
+      } else {
+        // Tab (forward)
+        e.preventDefault();
+        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        focusableElements[nextIndex].focus();
+      }
+    }
+  });
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let lastFocusedElement = null;
+
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Mover foco para o primeiro botão
+    document.getElementById('logoutCancel').focus();
+  }
+
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Restaurar foco ao elemento que abriu o modal
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  // Focus trap e Escape para fechar
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutBox = document.querySelector('.logout-modal');
+  const cancelBtn = document.getElementById('logoutCancel');
+  const confirmBtn = document.getElementById('logoutConfirm');
+
+  logoutModal.addEventListener('click', function(e) {
+    if (e.target === this) closeLogout();
+  });
+
+  logoutBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLogout();
+    }
+
+    if (e.key === 'Tab') {
+      const focusableElements = [cancelBtn, confirmBtn];
+      const currentIndex = focusableElements.indexOf(document.activeElement);
+
+      if (e.shiftKey) {
+        // Shift + Tab (backward)
+        e.preventDefault();
+        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        focusableElements[nextIndex].focus();
+      } else {
+        // Tab (forward)
+        e.preventDefault();
+        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        focusableElements[nextIndex].focus();
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

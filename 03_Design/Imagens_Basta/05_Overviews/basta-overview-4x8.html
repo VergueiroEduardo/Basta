@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basta. — Overview · C06–C09 · 4×8 · 1080×1350</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ─── TOKENS ─── */
+  :root {
+    --black:     #1A1A1A;
+    --white:     #FFFFFF;
+    --off-white: #F5F3EF;
+    --green:     #42b449;
+    --amber:     #F59E0B;
+    --gray-600:  #4A4A4A;
+    --font:      'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--font); background: #111; color: var(--white); padding: 48px 48px 96px; }
+
+  /* ─── OVERVIEW HEADER ─── */
+  .overview-header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    padding-bottom: 24px;
+  }
+  .overview-eyebrow {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--green); margin-bottom: 10px;
+  }
+  .overview-title {
+    font-size: 28px; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px;
+  }
+  .overview-meta {
+    font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: rgba(255,255,255,0.45);
+  }
+  .overview-meta span { color: rgba(255,255,255,0.8); font-weight: 700; }
+
+  /* ─── GRID ─── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 148px repeat(8, 1080px);
+    column-gap: 24px;
+    row-gap: 10px;
+    align-items: start;
+  }
+
+  .row-spacer {
+    grid-column: 1 / -1;
+    height: 56px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 16px;
+  }
+
+  .row-label {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    display: flex; align-items: center; justify-content: flex-end;
+    padding-bottom: 8px;
+    height: 1350px;
+    line-height: 1.4;
+  }
+  .row-label em {
+    display: block; font-style: normal; color: var(--green); margin-bottom: 8px;
+  }
+
+  /* ─── SLIDE SHELL ─── */
+  .slide-shell {
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  }
+  .slide {
+    width: 1080px;
+    height: 1350px;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font);
+  }
+  .slide-placeholder {
+    width: 1080px;
+    height: 1350px;
+    border: 1px dashed rgba(255,255,255,0.08);
+  }
+
+  /* ─── GLOBAL UTILITIES (shared across all slides) ─── */
+  .logo {
+    position: absolute; top: 64px; left: 64px;
+    width: 200px; height: auto;
+    aspect-ratio: 602.25 / 254.23;
+    display: block; z-index: 5;
+  }
+  .logo--dark  { color: var(--white); }
+  .logo--light { color: var(--black); }
+  .logo--dark  path { fill: var(--white) !important; }
+  .logo--light path { fill: var(--black) !important; }
+
+  .accent-bar { width: 120px; height: 6px; background: var(--green); margin-bottom: 56px; }
+  .headline   { font-family: var(--font); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; }
+  .subhead    { font-family: var(--font); font-weight: 400; line-height: 1.4; }
+  .label-up   { font-size: 22px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 32px; }
+  .hl-green   { color: var(--green); }
+
+  .cta-button {
+    background: var(--green); color: var(--white);
+    padding: 44px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 32px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 24px; gap: 24px;
+  }
+  .wa-icon { width: 48px; height: 48px; flex-shrink: 0; }
+
+  /* ═══════════════════════════════════════════════════════
+     C06 — CANCELAMENTO DE DÉBITOS AUTOMÁTICOS (8 slides)
+     ═══════════════════════════════════════════════════════ */
+
+  .c6s1 { background: var(--black); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s1 .logo     { position: static; width: 600px; margin-bottom: 40px; }
+  .c6s1 .headline { font-size: 124px; margin-bottom: 48px; }
+  .c6s1 .subhead  { font-size: 44px; line-height: 1.32; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  .c6s2 { background: var(--off-white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s2 .label-up { color: var(--green); }
+  .c6s2 .headline { font-size: 96px; margin-bottom: 40px; }
+  .c6s2 .subhead  { font-size: 36px; line-height: 1.32; color: var(--gray-600); max-width: 95%; }
+
+  .c6s3 { background: var(--amber); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s3 .accent-bar { background: var(--black); }
+  .c6s3 .headline { font-size: 92px; margin-bottom: 40px; }
+  .c6s3 .subhead  { font-size: 38px; line-height: 1.32; color: var(--black); max-width: 95%; }
+
+  .c6s4 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s4 .headline { font-size: 108px; margin-bottom: 40px; }
+  .c6s4 .subhead  { font-size: 36px; line-height: 1.32; color: var(--gray-600); max-width: 95%; }
+  .c6s4 .subhead strong { color: var(--black); font-weight: 700; }
+
+  .c6s5 { background: var(--green); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s5 .accent-bar { background: var(--white); }
+  .c6s5 .headline { font-size: 84px; margin-bottom: 40px; color: var(--white); }
+  .c6s5 .subhead  { font-size: 38px; line-height: 1.32; color: rgba(255,255,255,0.92); max-width: 95%; }
+
+  .c6s6 { background: var(--black); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s6 .label-up { color: var(--green); }
+  .c6s6 .headline { font-size: 156px; margin-bottom: 32px; letter-spacing: -0.045em; }
+  .c6s6 .subhead  { font-size: 32px; line-height: 1.32; color: rgba(255,255,255,0.65); max-width: 95%; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+
+  .c6s7 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c6s7 .headline { font-size: 108px; margin-bottom: 48px; }
+  .c6s7 .subhead  { font-size: 36px; line-height: 1.45; color: var(--gray-600); max-width: 95%; }
+
+  .c6s8 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; }
+  .c6s8 .headline { font-size: 116px; margin-top: 220px; margin-bottom: 40px; }
+  .c6s8 .subhead  { font-size: 38px; line-height: 1.32; color: var(--gray-600); max-width: 95%; margin-bottom: 64px; }
+
+  /* ═══════════════════════════════════════════════════════
+     C07 — DEMONSTRATIVO DE EVOLUÇÃO DA DÍVIDA (7 slides)
+     ═══════════════════════════════════════════════════════ */
+
+  .c7s1 { background: var(--black); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c7s1 .logo     { position: static; width: 600px; margin-bottom: 40px; }
+  .c7s1 .headline { font-size: 88px; margin-bottom: 48px; }
+  .c7s1 .subhead  { font-size: 40px; line-height: 1.32; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  .c7s2 { background: var(--off-white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c7s2 .label-up { color: var(--green); }
+  .c7s2 .headline { font-size: 84px; margin-bottom: 32px; }
+  .c7s2 .subhead  { font-size: 32px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+  .c7s2 .subhead strong { color: var(--black); font-weight: 700; }
+
+  .c7s3 { background: var(--amber); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c7s3 .accent-bar { background: var(--black); }
+  .c7s3 .headline { font-size: 108px; margin-bottom: 40px; }
+  .c7s3 .subhead  { font-size: 38px; line-height: 1.32; color: var(--black); max-width: 95%; }
+
+  .c7s4 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c7s4 .headline { font-size: 96px; margin-bottom: 40px; }
+  .c7s4 .subhead  { font-size: 34px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+  .c7s4 .subhead strong { color: var(--black); font-weight: 700; }
+
+  .c7s5 { background: var(--green); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c7s5 .accent-bar { background: var(--white); }
+  .c7s5 .headline { font-size: 116px; margin-bottom: 40px; color: var(--white); }
+  .c7s5 .subhead  { font-size: 40px; line-height: 1.32; color: rgba(255,255,255,0.92); max-width: 95%; }
+
+  .c7s6 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c7s6 .headline { font-size: 108px; margin-bottom: 48px; }
+  .c7s6 .subhead  { font-size: 36px; line-height: 1.45; color: var(--gray-600); max-width: 95%; }
+
+  .c7s7 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; }
+  .c7s7 .headline { font-size: 116px; margin-top: 220px; margin-bottom: 40px; }
+  .c7s7 .subhead  { font-size: 38px; line-height: 1.32; color: var(--gray-600); max-width: 95%; margin-bottom: 64px; }
+
+  /* ═══════════════════════════════════════════════════════
+     C08 — HISTÓRICO DE RENOVAÇÕES E ALTERAÇÕES (8 slides)
+     ═══════════════════════════════════════════════════════ */
+
+  .c8s1 { background: var(--black); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s1 .logo     { position: static; width: 600px; margin-bottom: 40px; }
+  .c8s1 .headline { font-size: 88px; margin-bottom: 48px; }
+  .c8s1 .subhead  { font-size: 36px; line-height: 1.42; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  .c8s2 { background: var(--off-white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s2 .label-up { color: var(--green); }
+  .c8s2 .headline { font-size: 84px; margin-bottom: 40px; }
+  .c8s2 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+
+  .c8s3 { background: var(--amber); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s3 .accent-bar { background: var(--black); }
+  .c8s3 .headline { font-size: 88px; margin-bottom: 40px; }
+  .c8s3 .subhead  { font-size: 36px; line-height: 1.42; color: var(--black); max-width: 95%; }
+
+  .c8s4 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s4 .headline { font-size: 100px; margin-bottom: 40px; }
+  .c8s4 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+  .c8s4 .subhead strong { color: var(--black); font-weight: 700; }
+
+  .c8s5 { background: var(--green); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s5 .accent-bar { background: var(--white); }
+  .c8s5 .headline { font-size: 108px; margin-bottom: 40px; color: var(--white); }
+  .c8s5 .subhead  { font-size: 36px; line-height: 1.42; color: rgba(255,255,255,0.92); max-width: 95%; }
+
+  .c8s6 { background: var(--black); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s6 .label-up { color: var(--green); }
+  .c8s6 .headline { font-size: 156px; margin-bottom: 32px; letter-spacing: -0.045em; }
+  .c8s6 .subhead  { font-size: 32px; line-height: 1.32; color: rgba(255,255,255,0.65); max-width: 95%; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; }
+
+  .c8s7 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c8s7 .headline { font-size: 108px; margin-bottom: 48px; }
+  .c8s7 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+
+  .c8s8 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; }
+  .c8s8 .headline { font-size: 116px; margin-top: 220px; margin-bottom: 40px; }
+  .c8s8 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; margin-bottom: 64px; }
+
+  /* ═══════════════════════════════════════════════════════
+     C09 — COMPROVANTE DE SERVIÇOS PRESTADOS E TARIFAS (7 slides)
+     ═══════════════════════════════════════════════════════ */
+
+  .c9s1 { background: var(--black); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c9s1 .logo     { position: static; width: 600px; margin-bottom: 40px; }
+  .c9s1 .headline { font-size: 96px; margin-bottom: 48px; }
+  .c9s1 .subhead  { font-size: 36px; line-height: 1.42; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  .c9s2 { background: var(--off-white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c9s2 .label-up { color: var(--green); }
+  .c9s2 .headline { font-size: 80px; margin-bottom: 40px; }
+  .c9s2 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+
+  .c9s3 { background: var(--amber); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c9s3 .accent-bar { background: var(--black); }
+  .c9s3 .headline { font-size: 88px; margin-bottom: 40px; }
+  .c9s3 .subhead  { font-size: 36px; line-height: 1.42; color: var(--black); max-width: 95%; }
+
+  .c9s4 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c9s4 .headline { font-size: 116px; margin-bottom: 40px; }
+  .c9s4 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+  .c9s4 .subhead strong { color: var(--black); font-weight: 700; }
+
+  .c9s5 { background: var(--green); color: var(--white); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c9s5 .accent-bar { background: var(--white); }
+  .c9s5 .headline { font-size: 96px; margin-bottom: 40px; color: var(--white); }
+  .c9s5 .subhead  { font-size: 36px; line-height: 1.42; color: rgba(255,255,255,0.92); max-width: 95%; }
+  .c9s5 .subhead strong { color: var(--white); font-weight: 700; }
+
+  .c9s6 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .c9s6 .headline { font-size: 108px; margin-bottom: 48px; }
+  .c9s6 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+
+  .c9s7 { background: var(--white); color: var(--black); padding: 64px; display: flex; flex-direction: column; }
+  .c9s7 .headline { font-size: 116px; margin-top: 220px; margin-bottom: 40px; }
+  .c9s7 .subhead  { font-size: 36px; line-height: 1.42; color: var(--gray-600); max-width: 95%; margin-bottom: 64px; }
+</style>
+</head>
+<body>
+
+<!-- ─── SINGLE LOGO SYMBOL ─── -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ─── HEADER ─── -->
+<header class="overview-header">
+  <div class="overview-eyebrow">Basta. · Série Educativa "Direitos do Devedor" · Overview</div>
+  <h1 class="overview-title">Carrosséis C06 – C09 · 4 linhas × 8 colunas</h1>
+  <div class="overview-meta">
+    Formato: <span>1080 × 1350px · 1:1</span> &nbsp;·&nbsp;
+    C06: <span>8 slides</span> &nbsp;·&nbsp;
+    C07: <span>7 slides</span> &nbsp;·&nbsp;
+    C08: <span>8 slides</span> &nbsp;·&nbsp;
+    C09: <span>7 slides</span>
+  </div>
+</header>
+
+<!-- ─── OVERVIEW GRID ─── -->
+<div class="overview-grid">
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW C06 · Cancelamento de Débitos Automáticos (8 slides)
+       ══════════════════════════════════════════════════════ -->
+  <div class="row-label"><em>C06</em>Cancelamento de Débitos Automáticos</div>
+
+  <!-- C06 · S01 · Hook · Preto -->
+  <div class="slide-shell">
+    <div class="slide c6s1">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Quem decide<br>o que sai<br>da sua conta?</div>
+      <div class="subhead">Deveria ser você. É?</div>
+    </div>
+  </div>
+
+  <!-- C06 · S02 · O que é · Off-white -->
+  <div class="slide-shell">
+    <div class="slide c6s2">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="headline">Cancelamento<br>de Débitos<br>Automáticos.</div>
+      <div class="subhead">Um requerimento simples que devolve<br>o controle do que é debitado em<br>sua conta para você.</div>
+    </div>
+  </div>
+
+  <!-- C06 · S03 · Por que importa · Amber -->
+  <div class="slide-shell">
+    <div class="slide c6s3">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Hoje, parcelas,<br>seguros e serviços<br>são debitados direto<br>da sua conta.</div>
+      <div class="subhead">Por vezes, sem você perceber<br>ou sem conseguir cancelar.</div>
+    </div>
+  </div>
+
+  <!-- C06 · S04 · O que faz · Branco -->
+  <div class="slide-shell">
+    <div class="slide c6s4">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">O segredo é<br>exigir do<br>jeito certo.</div>
+      <div class="subhead"><strong>Não permita débitos em sua conta<br>sem sua autorização expressa.</strong></div>
+    </div>
+  </div>
+
+  <!-- C06 · S05 · Metáfora · Verde -->
+  <div class="slide-shell">
+    <div class="slide c6s5">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Troque a sensação<br>de impotência<br>por controle,<br>autonomia e comando.</div>
+      <div class="subhead"><strong>A conta é sua.</strong><br>Você é quem determina<br>o que deve ser cobrado.</div>
+    </div>
+  </div>
+
+  <!-- C06 · S06 · Base Legal · Preto -->
+  <div class="slide-shell">
+    <div class="slide c6s6">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="label-up" style="text-transform: none; letter-spacing: -0.01em; font-size: 40px;">Se apoie na</div>
+      <div class="headline">Resolução<br>CMN 4.790</div>
+      <div class="subhead">Banco Central do Brasil · vigente</div>
+    </div>
+  </div>
+
+  <!-- C06 · S07 · Diferenciação · Branco -->
+  <div class="slide-shell">
+    <div class="slide c6s7">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline"><span class="hl-green">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.</div>
+      <div class="subhead">Com clareza,<br>Do seu lado,<br>Sem letras miúdas.</div>
+    </div>
+  </div>
+
+  <!-- C06 · S08 · CTA · Branco -->
+  <div class="slide-shell">
+    <div class="slide c6s8">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="headline">Chame agora<br>e mude<br>sua história.</div>
+      <div class="subhead">Gratuito, simples e honesto.<br>Direto no WhatsApp.</div>
+      <div class="cta-button">
+        <span>Falar no WhatsApp</span>
+        <svg class="wa-icon" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.823.733 5.481 2.018 7.789L0 32l8.434-2.205A15.928 15.928 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333c-2.475 0-4.785-.677-6.77-1.853l-.485-.288-5.013 1.31 1.342-4.886-.317-.504A13.276 13.276 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.317-9.972c-.4-.2-2.367-1.167-2.733-1.3-.367-.133-.633-.2-.9.2s-1.033 1.3-1.267 1.567c-.233.267-.467.3-.867.1-.4-.2-1.69-.622-3.218-1.985-1.19-1.061-1.993-2.372-2.226-2.772-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.323-.778-.652-.673-.9-.685l-.767-.013c-.267 0-.7.1-1.067.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.817 4.301 6.825 6.029.953.412 1.696.658 2.275.842.956.304 1.826.261 2.514.158.767-.115 2.367-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPACER -->
+  <div class="row-spacer"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW C07 · Demonstrativo de Evolução da Dívida (7 slides)
+       ══════════════════════════════════════════════════════ -->
+  <div class="row-label"><em>C07</em>Demonstrativo de Evolução da Dívida</div>
+
+  <!-- C07 · S01 · Hook · Preto -->
+  <div class="slide-shell">
+    <div class="slide c7s1">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Você sabe<br>como chegou<br>na sua situação<br>de endividamento atual?</div>
+      <div class="subhead">Você pode exigir uma explicação.</div>
+    </div>
+  </div>
+
+  <!-- C07 · S02 · O que é · Off-white -->
+  <div class="slide-shell">
+    <div class="slide c7s2">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="label-up" style="text-transform: none; letter-spacing: -0.01em; font-size: 40px;">Se apoie no:</div>
+      <div class="headline">Demonstrativo de<br>Evolução da Dívida</div>
+      <div class="subhead"><strong>Exija a memória<br>de cálculo completa.</strong><br>Aberta. Auditável.</div>
+    </div>
+  </div>
+
+  <!-- C07 · S03 · Por que importa · Amber -->
+  <div class="slide-shell">
+    <div class="slide c7s3">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">A dívida<br>cresce<br>no escuro.</div>
+      <div class="subhead">Raramente, as pessoas sabem<br>o caminho que as levou ao<br>endividamento que aprisiona.</div>
+    </div>
+  </div>
+
+  <!-- C07 · S04 · O que faz · Branco -->
+  <div class="slide-shell">
+    <div class="slide c7s4">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">O demonstrativo<br>abre a caixa-preta.</div>
+      <div class="subhead">O banco é obrigado a mostrar <strong>número por número</strong>: quanto você pegou emprestado, quanto já pagou, quanto de juros incidiu, e como chegaram no saldo atual.</div>
+    </div>
+  </div>
+
+  <!-- C07 · S05 · Metáfora · Verde -->
+  <div class="slide-shell">
+    <div class="slide c7s5">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">É o raio-X<br>da sua dívida.</div>
+      <div class="subhead">Entender a evolução da dívida<br>é fundamental para criar<br>um caminho concreto<br>para sair do endividamento.</div>
+    </div>
+  </div>
+
+  <!-- C07 · S06 · Diferenciação · Branco -->
+  <div class="slide-shell">
+    <div class="slide c7s6">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline"><span class="hl-green">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.</div>
+      <div class="subhead">Com clareza,<br>Do seu lado,<br>Sem letras miúdas.</div>
+    </div>
+  </div>
+
+  <!-- C07 · S07 · CTA · Branco -->
+  <div class="slide-shell">
+    <div class="slide c7s7">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="headline">Chame agora<br>e mude<br>sua história.</div>
+      <div class="subhead">Gratuito, simples e honesto.<br>Direto no WhatsApp.</div>
+      <div class="cta-button">
+        <span>Falar no WhatsApp</span>
+        <svg class="wa-icon" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.823.733 5.481 2.018 7.789L0 32l8.434-2.205A15.928 15.928 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333c-2.475 0-4.785-.677-6.77-1.853l-.485-.288-5.013 1.31 1.342-4.886-.317-.504A13.276 13.276 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.317-9.972c-.4-.2-2.367-1.167-2.733-1.3-.367-.133-.633-.2-.9.2s-1.033 1.3-1.267 1.567c-.233.267-.467.3-.867.1-.4-.2-1.69-.622-3.218-1.985-1.19-1.061-1.993-2.372-2.226-2.772-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.323-.778-.652-.673-.9-.685l-.767-.013c-.267 0-.7.1-1.067.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.817 4.301 6.825 6.029.953.412 1.696.658 2.275.842.956.304 1.826.261 2.514.158.767-.115 2.367-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- C07 empty 8th column placeholder -->
+  <div class="slide-placeholder"></div>
+
+  <!-- SPACER -->
+  <div class="row-spacer"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW C08 · Histórico de Renovações e Alterações Contratuais (8 slides)
+       ══════════════════════════════════════════════════════ -->
+  <div class="row-label"><em>C08</em>Histórico de Renovações e Alterações Contratuais</div>
+
+  <!-- C08 · S01 · Hook · Preto -->
+  <div class="slide-shell">
+    <div class="slide c8s1">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Quantas vezes<br>seu <span class="hl-green">contrato de<br>crédito</span> foi renovado<br>sem você saber?</div>
+      <div class="subhead">Você pode exigir essa informação. Por escrito.</div>
+    </div>
+  </div>
+
+  <!-- C08 · S02 · O que é · Off-white -->
+  <div class="slide-shell">
+    <div class="slide c8s2">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="label-up">Seu direito</div>
+      <div class="headline">Histórico de<br>Renovações<br>e Alterações<br>Contratuais.</div>
+      <div class="subhead">Renovações. Refinanciamentos. Portabilidades. Mudanças de limite. <strong>Tudo documentado.</strong></div>
+    </div>
+  </div>
+
+  <!-- C08 · S03 · Por que importa · Amber -->
+  <div class="slide-shell">
+    <div class="slide c8s3">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Cada renovação<br>pode esconder<br>uma cobrança<br>duplicada.</div>
+      <div class="subhead">Tarifa de cadastro, por exemplo, só pode ser cobrada uma vez — mas pode reaparecer a cada renovação.</div>
+    </div>
+  </div>
+
+  <!-- C08 · S04 · O que faz · Branco -->
+  <div class="slide-shell">
+    <div class="slide c8s4">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">O histórico<br>expõe cada<br>alteração.</div>
+      <div class="subhead">Renovações, refinanciamentos, portabilidades, mudanças de limite e condições. <strong>Cada uma com data, valor e motivo.</strong></div>
+    </div>
+  </div>
+
+  <!-- C08 · S05 · Metáfora · Verde -->
+  <div class="slide-shell">
+    <div class="slide c8s5">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">É a linha do tempo<br>do seu contrato.</div>
+      <div class="subhead">Cada alteração com data, valor e motivo. Auditável.</div>
+    </div>
+  </div>
+
+  <!-- C08 · S06 · Base Legal · Preto -->
+  <div class="slide-shell">
+    <div class="slide c8s6">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="label-up" style="text-transform: none; letter-spacing: -0.01em; font-size: 40px;">Se apoie na:</div>
+      <div class="headline">Súmula<br>539/STJ</div>
+      <div class="subhead">Superior Tribunal de Justiça · vigente</div>
+    </div>
+  </div>
+
+  <!-- C08 · S07 · Diferenciação · Branco -->
+  <div class="slide-shell">
+    <div class="slide c8s7">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline"><span class="hl-green">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.</div>
+      <div class="subhead">Com clareza,<br>Do seu lado,<br>Sem letras miúdas.</div>
+    </div>
+  </div>
+
+  <!-- C08 · S08 · CTA · Branco -->
+  <div class="slide-shell">
+    <div class="slide c8s8">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="headline">Chame agora<br>e mude<br>sua história.</div>
+      <div class="subhead">Gratuito, simples e honesto.<br>Direto no WhatsApp.</div>
+      <div class="cta-button">
+        <span>Falar no WhatsApp</span>
+        <svg class="wa-icon" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.823.733 5.481 2.018 7.789L0 32l8.434-2.205A15.928 15.928 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333c-2.475 0-4.785-.677-6.77-1.853l-.485-.288-5.013 1.31 1.342-4.886-.317-.504A13.276 13.276 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.317-9.972c-.4-.2-2.367-1.167-2.733-1.3-.367-.133-.633-.2-.9.2s-1.033 1.3-1.267 1.567c-.233.267-.467.3-.867.1-.4-.2-1.69-.622-3.218-1.985-1.19-1.061-1.993-2.372-2.226-2.772-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.323-.778-.652-.673-.9-.685l-.767-.013c-.267 0-.7.1-1.067.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.817 4.301 6.825 6.029.953.412 1.696.658 2.275.842.956.304 1.826.261 2.514.158.767-.115 2.367-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPACER -->
+  <div class="row-spacer"></div>
+
+  <!-- ══════════════════════════════════════════════════════
+       ROW C09 · Comprovante de Serviços Prestados e Tarifas (7 slides)
+       ══════════════════════════════════════════════════════ -->
+  <div class="row-label"><em>C09</em>Comprovante de Serviços Prestados e Tarifas</div>
+
+  <!-- C09 · S01 · Hook · Preto -->
+  <div class="slide-shell">
+    <div class="slide c9s1">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Você sabe que<br>cobraram a tarifa,<br>mas sabe se o serviço<br>foi prestado?</div>
+      <div class="subhead">Tarifa sem serviço é cobrança indevida.<br>Você pode exigir comprovação.</div>
+    </div>
+  </div>
+
+  <!-- C09 · S02 · O que é · Off-white -->
+  <div class="slide-shell">
+    <div class="slide c9s2">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="headline">Comprovante<br>de Serviços<br>Prestados<br>e Tarifas.</div>
+      <div class="subhead">Pra cada tarifa cobrada, você deve exigir<br>a comprovação de que o serviço foi feito.</div>
+    </div>
+  </div>
+
+  <!-- C09 · S03 · Por que importa · Amber -->
+  <div class="slide-shell">
+    <div class="slide c9s3">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Muitas tarifas<br>são cobradas<br>de sua conta.</div>
+      <div class="subhead">Nem todas podem ter serviço vinculado.<br>É preciso checar.</div>
+    </div>
+  </div>
+
+  <!-- C09 · S04 · O que faz · Branco -->
+  <div class="slide-shell">
+    <div class="slide c9s4">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Você deve exigir<br>a comprovação.</div>
+      <div class="subhead">Pra cada tarifa cobrada, o banco precisa apresentar laudos, contratos com terceiros e a norma que autoriza a cobrança. <strong>Nada genérico. Tudo específico.</strong></div>
+    </div>
+  </div>
+
+  <!-- C09 · S05 · Metáfora · Verde -->
+  <div class="slide-shell">
+    <div class="slide c9s5">
+      <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline">Sem prestação<br>de serviço,<br>sem cobranças.</div>
+      <div class="subhead">Sem comprovante, sem cobrança.<br><strong>Você pode exigir a devolução<br>dos valores pagos.</strong></div>
+    </div>
+  </div>
+
+  <!-- C09 · S06 · Diferenciação · Branco -->
+  <div class="slide-shell">
+    <div class="slide c9s6">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="accent-bar"></div>
+      <div class="headline"><span class="hl-green">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.</div>
+      <div class="subhead">Com clareza,<br>Do seu lado,<br>Sem letras miúdas.</div>
+    </div>
+  </div>
+
+  <!-- C09 · S07 · CTA · Branco -->
+  <div class="slide-shell">
+    <div class="slide c9s7">
+      <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+      <div class="headline">Chame agora<br>e mude<br>sua história.</div>
+      <div class="subhead">Gratuito, simples e honesto.<br>Direto no WhatsApp.</div>
+      <div class="cta-button">
+        <span>Falar no WhatsApp</span>
+        <svg class="wa-icon" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 0C7.163 0 0 7.163 0 16c0 2.823.733 5.481 2.018 7.789L0 32l8.434-2.205A15.928 15.928 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333c-2.475 0-4.785-.677-6.77-1.853l-.485-.288-5.013 1.31 1.342-4.886-.317-.504A13.276 13.276 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.317-9.972c-.4-.2-2.367-1.167-2.733-1.3-.367-.133-.633-.2-.9.2s-1.033 1.3-1.267 1.567c-.233.267-.467.3-.867.1-.4-.2-1.69-.622-3.218-1.985-1.19-1.061-1.993-2.372-2.226-2.772-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.323-.778-.652-.673-.9-.685l-.767-.013c-.267 0-.7.1-1.067.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.817 4.301 6.825 6.029.953.412 1.696.658 2.275.842.956.304 1.826.261 2.514.158.767-.115 2.367-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- C09 empty 8th column placeholder -->
+  <div class="slide-placeholder"></div>
+
+</div><!-- /overview-grid -->
+
+</body>
+</html>

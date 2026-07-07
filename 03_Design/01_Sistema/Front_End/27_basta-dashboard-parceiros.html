@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Painel do parceiro</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/progress.css" />
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       RESET
+       ══════════════════════════════════════════════════════════ */    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* ══════════════════════════════════════════════════════════
+       LAYOUT — sidebar + main
+       ══════════════════════════════════════════════════════════ */
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* ── SIDEBAR ──────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--black);
+      border-right: 1px solid var(--black);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 50;
+    }
+
+    .sidebar__header {
+      padding: 28px 24px 32px;
+    }
+
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+
+    /* Navegação */
+    .sidebar__nav {
+      flex: 1;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      transition: background var(--t);
+      margin-bottom: 2px;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Especificidade .sidebar para vencer sidebar.css (.nav-item[aria-current]) */
+    .sidebar .nav-item--active {
+      font-weight: 800;
+      color: var(--green);
+    }
+
+    /* Estado ativo sinalizado pela tipografia verde + barra verde */
+    .nav-item--active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--green);
+    }
+
+    .nav-item__icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: var(--white);
+    }
+
+    .nav-item--active .nav-item__icon { color: var(--green); }
+
+    /* Perfil sidebar */
+    .sidebar__user {
+      padding: 20px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar__avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--green);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .sidebar__user-info { flex: 1; min-width: 0; }
+
+    .sidebar__user-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .sidebar__user-email {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 400;
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sidebar__logout {
+      color: rgba(255, 255, 255, 0.5);
+      transition: color var(--t);
+    }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+    }
+
+    /* ── TOP BAR (mobile default, hidden by media query on desktop) */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 14px 20px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .topbar__logo { height: 48px; width: auto; }
+
+    .topbar__avatar {
+      width: 28px;
+      height: 28px;
+      background: var(--green);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       EYEBROW / GREETING
+       ══════════════════════════════════════════════════════════ */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+
+    .greeting {
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--black);
+    }
+    .greeting .accent { color: var(--black); }
+    .greeting-sub {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--gray-600);
+      font-weight: 400;
+      margin-bottom: 28px;
+      max-width: 64ch;
+    }
+
+    /* ── CABEÇALHO + AÇÃO DE PÁGINA (atualizar dados) ─────── */
+    .dash-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px 24px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .dash-header__text { flex: 1; min-width: 260px; }
+    .dash-header .greeting-sub { margin-bottom: 0; }   /* respiro fica por conta dos stats */
+
+    .refresh { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .btn-refresh {
+      display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--black); background: var(--white); border: 1.5px solid var(--black);
+      cursor: pointer; transition: background var(--t), color var(--t); white-space: nowrap;
+    }
+    .btn-refresh:hover { background: var(--off-white); }
+    .btn-refresh svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .btn-refresh.is-loading { pointer-events: none; opacity: 0.65; }
+    .btn-refresh.is-loading svg { animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .refresh__stamp { font-size: 11px; font-weight: 600; color: var(--gray-600); }
+
+    @media (max-width: 639px) {
+      .refresh { align-items: flex-start; width: 100%; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       HIGHLIGHT CARD (fichas a analisar)
+       ══════════════════════════════════════════════════════════ */
+    .progress-card {
+      background: var(--white);
+      border: 2px solid var(--green);
+      margin-bottom: 24px;
+    }
+
+    .progress-card__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .progress-card__info { flex: 1; }
+
+    .progress-card__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+
+    .progress-card__title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+
+    .progress-card__subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gray-600);
+    }
+
+    .progress-card__pct {
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    .progress-card__bar {
+      width: 100%;
+      height: 4px;
+      background: var(--gray-200);
+    }
+
+    .progress-card__fill {
+      height: 100%;
+      background: var(--green);
+      transition: width 1.2s var(--ease);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       STATS GRID
+       ══════════════════════════════════════════════════════════ */
+    .stats {
+      display: grid;
+      margin-bottom: 40px;
+    }
+
+    .stat {
+      background: var(--white);
+      border: 2px solid var(--black);
+      display: flex;
+      gap: 8px;
+      text-decoration: none;
+      transition: background var(--t), transform var(--t);
+      cursor: pointer;
+    }
+
+    .stat:hover {
+      background: var(--off-white);
+      transform: translateY(-2px);
+    }
+
+    .stat:active {
+      transform: translateY(0);
+    }
+
+    .stat__label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-600);
+    }
+
+    .stat__value {
+      font-weight: 800;
+      line-height: 1;
+      color: var(--black);
+      letter-spacing: -0.025em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat--debt .stat__value { color: var(--error); }
+
+    .stat__detail {
+      font-size: 12px;
+      color: var(--gray-600);
+      font-weight: 400;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SECTION
+       ══════════════════════════════════════════════════════════ */
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section__header {
+      margin-bottom: 16px;
+    }
+
+    .section__heading {
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .section__desc {
+      font-size: 13px;
+      color: var(--gray-600);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .section__link {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color var(--t);
+    }
+    .section__link:hover { color: var(--black); }
+
+    /* ══════════════════════════════════════════════════════════
+       LISTA DE FICHAS / ATIVIDADE (ghost number editorial)
+       ══════════════════════════════════════════════════════════ */
+    .steps-list { display: flex; flex-direction: column; }
+
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px 20px;
+      margin-left: -20px;
+      margin-right: -20px;
+      border-bottom: 1px solid var(--gray-300);
+      transition: background 0.2s var(--ease);
+      position: relative;
+      opacity: 0;
+      transform: translateY(24px);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .step-card--visible { animation: stepIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .step-card:first-child { border-top: 1px solid var(--gray-300); }
+    .step-card:hover { background: var(--off-white); }
+    .step-card:hover .step-card__number { color: var(--green); }
+    .step-card:hover .step-card__cta { color: var(--black); }
+    .step-card:hover .step-card__cta-arrow { transform: translateX(4px); }
+
+    .step-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--green);
+      opacity: 0;
+      transition: opacity 0.2s var(--ease);
+    }
+    .step-card:hover::before { opacity: 1; }
+
+    .step-card__number {
+      font-weight: 800;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.08);
+      letter-spacing: -0.03em;
+      flex-shrink: 0;
+      text-align: right;
+      transition: color 0.2s var(--ease);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .step-card__content { flex: 1; min-width: 0; padding-top: 6px; }
+
+    .step-card__title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .step-card__title { font-weight: 700; color: var(--black); line-height: 1.3; }
+
+    .step-card__badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 3px 8px;
+      border: 1.5px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .step-card__badge--pending { color: var(--warning); border-color: var(--warning); }
+    .step-card__badge--new { color: var(--green); border-color: var(--green); }
+    .step-card__badge--done { color: var(--gray-300); border-color: var(--gray-300); }
+
+    .step-card__desc {
+      color: var(--gray-600);
+      font-weight: 400;
+      margin-bottom: 10px;
+      max-width: 560px;
+      text-wrap: pretty;
+    }
+    .step-card__desc .num { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--black); }
+
+    .step-card__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      color: var(--green);
+      transition: color 0.2s var(--ease);
+    }
+    .step-card__cta:hover { color: var(--black); }
+    .step-card__cta-arrow { transition: transform 0.2s var(--ease); }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE-FIRST
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+
+    .main {
+      margin-left: 0;
+      padding: 84px 20px 80px;
+      max-width: 100%;
+    }
+
+    .greeting { font-size: clamp(28px, 6vw, 40px); margin-bottom: 8px; }
+    .progress-card { padding: 20px 20px 16px; }
+    .progress-card__header { flex-direction: row; align-items: flex-start; gap: 12px; }
+    .progress-card__pct { font-size: 44px; align-self: flex-start; }
+
+    .stats { grid-template-columns: 1fr; gap: 10px; }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 16px 18px;
+    }
+    .stat__value { font-size: 30px; }
+
+    .step-card {
+      gap: 12px;
+      padding: 16px 16px;
+      margin-left: -16px;
+      margin-right: -16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .step-card__number { font-size: 36px; width: 44px; min-width: 44px; }
+    .step-card__title { font-size: 14px; }
+    .step-card__desc { font-size: 12px; line-height: 1.5; }
+    .step-card__cta { font-size: 12px; }
+    .section__heading { font-size: 18px; }
+
+    /* ── Tablet (≥ 640px) ─────────────────────────────────── */
+    @media (min-width: 640px) {
+      .main { padding: 84px 24px 80px; }
+      .progress-card { padding: 24px 24px 20px; }
+      .progress-card__pct { font-size: 48px; }
+
+      .stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat { padding: 16px 20px; }
+      .stat__value { font-size: 32px; }
+
+      .step-card { gap: 16px; padding: 18px 20px; margin-left: -20px; margin-right: -20px; }
+      .step-card__number { font-size: 40px; width: 44px; min-width: 44px; }
+      .step-card__title { font-size: 15px; }
+      .step-card__desc { font-size: 13px; }
+      .step-card__cta { font-size: 13px; }
+    }
+
+    /* ── Desktop (≥ 960px) — sidebar visível ──────────────── */
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+
+      .main {
+        margin-left: var(--sidebar-w);
+        padding: 40px 40px 80px;
+        max-width: 1180px;
+      }
+
+      .greeting { font-size: clamp(28px, 6vw, 40px); }
+      .progress-card { padding: 28px 32px 24px; }
+      .progress-card__header { flex-direction: row; gap: 24px; }
+      .progress-card__pct { font-size: 56px; }
+
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .stat { padding: 20px 24px; }
+      .stat__value { font-size: 36px; }
+
+      .step-card { gap: 20px; padding: 20px 20px; }
+      .step-card__number { font-size: 48px; width: 56px; min-width: 56px; }
+      .section__heading { font-size: 20px; }
+    }
+
+    @media (min-width: 1200px) {
+      .main { padding: 40px 48px 80px; }
+    }
+
+    /* ── Safe area ────────────────────────────────────────── */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(80px, calc(64px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       BUSCA
+       ══════════════════════════════════════════════════════════ */
+    .search { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    @media (min-width: 640px) { .search { flex-direction: row; align-items: stretch; } }
+    .search__field { position: relative; flex: 1; }
+    .search__icon {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      width: 18px; height: 18px; color: var(--gray-600); pointer-events: none;
+    }
+    .search__input {
+      width: 100%; padding: 15px 16px 15px 46px;
+      font-family: var(--f); font-size: 15px;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t);
+    }
+    .search__input:focus { border-color: var(--black); outline: none; }
+    .search__input::placeholder { color: var(--gray-300); }
+    .search__submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: var(--f); font-size: 13px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 15px 32px; min-height: 52px;
+      background: var(--green); color: var(--white);
+      border: 2px solid var(--green); cursor: pointer;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      white-space: nowrap;
+    }
+    .search__submit:hover { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-2px); }
+    .search__submit:active { transform: translateY(0); }
+
+    /* ══════════════════════════════════════════════════════════
+       LISTA DE CLIENTES — tabela
+       ══════════════════════════════════════════════════════════ */
+    .clients { background: var(--white); border: 1px solid var(--gray-300); }
+    .clients__bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; padding: 14px 16px; border-bottom: 1px solid var(--gray-300);
+    }
+    .clients__bar-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .clients__heading {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--black);
+    }
+    .clients__count {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+    }
+    .clients__count b { color: var(--green); }
+
+    /* Selo de revisão */
+    .rev-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 4px 8px; border: 1px solid; white-space: nowrap;
+    }
+    .rev-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .rev-badge--ok { color: var(--green); border-color: var(--green); }
+    .rev-badge--no { color: var(--gray-600); border-color: var(--gray-300); }
+
+    /* Coluna "Avaliado em" — data da última avaliação */
+    .c-eval {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px; font-weight: 600; color: var(--gray-600); white-space: nowrap;
+    }
+    .c-eval svg { width: 13px; height: 13px; color: var(--green); flex-shrink: 0; }
+
+    /* Mostra ~10 linhas; o restante (até 20) acessa por rolagem vertical */
+    .table-scroll { overflow-x: auto; overflow-y: auto; max-height: 540px; -webkit-overflow-scrolling: touch; }
+    table.clients-table {
+      width: 100%; border-collapse: collapse; min-width: 680px;
+      font-variant-numeric: tabular-nums;
+    }
+    .clients-table thead th {
+      text-align: left; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-600);
+      padding: 12px 16px; border-bottom: 2px solid var(--black);
+      background: var(--off-white); white-space: nowrap;
+      position: sticky; top: 0; z-index: 2;   /* cabeçalho fixo ao rolar */
+    }
+    .clients-table th.num, .clients-table td.num { text-align: right; }
+
+    /* Cabeçalho ordenável */
+    .clients-table th.sortable { cursor: pointer; transition: color var(--t); }
+    .clients-table th.sortable:hover { color: var(--black); }
+    .th-sort { display: inline-flex; align-items: center; gap: 6px; }
+    .th-sort__caret { width: 11px; height: 11px; opacity: 0.3; transition: opacity var(--t), transform var(--t); }
+    .clients-table th[aria-sort="ascending"]  { color: var(--black); }
+    .clients-table th[aria-sort="descending"] { color: var(--black); }
+    .clients-table th[aria-sort="ascending"]  .th-sort__caret { opacity: 1; transform: rotate(180deg); }
+    .clients-table th[aria-sort="descending"] .th-sort__caret { opacity: 1; transform: rotate(0deg); }
+    .clients-table tbody td {
+      padding: 16px; border-bottom: 1px solid var(--gray-200);
+      font-size: 14px; vertical-align: middle;
+    }
+    .clients-table tbody tr:last-child td { border-bottom: none; }
+    .clients-table tbody tr { cursor: pointer; transition: background var(--t); }
+    .clients-table tbody tr:hover td { background: var(--off-white); }
+    .clients-table td.c-idx { color: var(--gray-600); font-weight: 800; font-variant-numeric: tabular-nums; }
+    .c-name { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 160px; }
+    .c-cpf, .c-date {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 13px; font-weight: 600; color: var(--gray-600); white-space: nowrap;
+    }
+    .c-debt { font-weight: 800; color: var(--error); white-space: nowrap; }
+    .clients__empty {
+      display: none; padding: 28px 16px; text-align: center;
+      font-size: 13px; font-weight: 700; color: var(--gray-600);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       FILTRO DE PERÍODO DE REVISÃO
+       ══════════════════════════════════════════════════════════ */
+    .period {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 14px;
+      margin-bottom: 16px;
+    }
+    .period__label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gray-600);
+    }
+
+    /* Segmented control — cantos retos, conectado */
+    .period__seg {
+      display: inline-flex;
+      border: 1.5px solid var(--black);
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .period__btn {
+      font-family: var(--f);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      padding: 9px 16px;
+      background: var(--white);
+      color: var(--black);
+      cursor: pointer;
+      border: none;
+      border-right: 1.5px solid var(--black);
+      transition: background var(--t), color var(--t);
+      white-space: nowrap;
+    }
+    .period__seg .period__btn:last-child { border-right: none; }
+    .period__btn:hover { background: var(--off-white); }
+    .period__btn--active,
+    .period__btn--active:hover { background: var(--green); color: var(--white); }
+
+    /* Dois segmentos lado a lado: filtro por dias + lentes (Todos/Não avaliados) */
+    .period__group { display: inline-flex; align-items: stretch; gap: 8px; max-width: 100%; flex-wrap: wrap; }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+    .logout-modal { background: var(--white); border: 2px solid var(--black); padding: 28px 28px 24px; width: 100%; max-width: 360px; }
+    .logout-modal__eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px; }
+    .logout-modal__title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 8px; }
+    .logout-modal__desc { font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 24px; }
+    .logout-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-logout-cancel { padding: 10px 18px; font-family: var(--f); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: transparent; color: var(--black); cursor: pointer; border: 1.5px solid var(--gray-300); transition: border-color var(--t), background var(--t); }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm { padding: 10px 18px; font-family: var(--f); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--error); color: var(--white); cursor: pointer; border: 1.5px solid var(--error); transition: background var(--t), border-color var(--t); }
+    .btn-logout-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="27_basta-dashboard-parceiros.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="27_basta-parceiro-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">CS</a>
+</div>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="27_basta-dashboard-parceiros.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-dark" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </span>
+      <a href="27_basta-parceiro-consulta-cpf.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        Crédito
+      </a>
+      <a href="27_basta-parceiro-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">CS</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Crédito Sul Financeira</div>
+        <div class="sidebar__user-email">parceria@creditosul.com.br</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT — RESUMO
+       ════════════════════════════════════════════════════════ -->
+  <main class="main" id="resumo">
+
+    <!-- Greeting + ação de página -->
+    <div class="dash-header">
+      <div class="dash-header__text">
+        <h1 class="greeting">Olá, Crédito Sul<span class="accent">.</span></h1>
+        <p class="greeting-sub">Aqui você acompanha os clientes com oportunidades para que você proponha uma reestruturação de crédito completa que melhore a vida destas pessoas.</p>
+      </div>
+      <div class="refresh">
+        <button type="button" class="btn-refresh" id="refreshBtn" onclick="refreshData()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          <span class="btn-refresh__label">Atualizar dados</span>
+        </button>
+        <span class="refresh__stamp" id="refreshStamp" aria-live="polite">Atualizado hoje às 08:42</span>
+      </div>
+    </div>
+
+    <!-- ── STATS ──────────────────────────────────────────── -->
+    <div class="stats">
+      <div class="stat stat--debt">
+        <span class="stat__label">Total de endividamento</span>
+        <span class="stat__value" id="statDebt">R$ 1.492.435</span>
+        <span class="stat__detail">saldo devedor da carteira</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Total de clientes</span>
+        <span class="stat__value" id="statClients" data-target="20">0</span>
+        <span class="stat__detail">com compartilhamento ativo</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Operações de crédito</span>
+        <span class="stat__value" id="statOps" data-target="101">0</span>
+        <span class="stat__detail">contratos na carteira</span>
+      </div>
+    </div>
+
+    <!-- ── FILTRO DE AVALIAÇÃO ────────────────────────────── -->
+    <div class="period" role="group" aria-label="Filtrar por antiguidade na base">
+      <span class="period__label">Avaliados há mais de</span>
+      <div class="period__group">
+        <div class="period__seg">
+          <button type="button" class="period__btn" onclick="setPeriod('7', this)">7 dias</button>
+          <button type="button" class="period__btn" onclick="setPeriod('30', this)">30 dias</button>
+          <button type="button" class="period__btn" onclick="setPeriod('60', this)">60 dias</button>
+          <button type="button" class="period__btn" onclick="setPeriod('90', this)">90 dias</button>
+          <button type="button" class="period__btn" onclick="setPeriod('120', this)">120 dias</button>
+        </div>
+        <div class="period__seg">
+          <button type="button" class="period__btn period__btn--active" onclick="setPeriod('todos', this)">Todos</button>
+          <button type="button" class="period__btn" onclick="setPeriod('naoavaliados', this)">Não avaliados</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BUSCA ──────────────────────────────────────────── -->
+    <div class="search">
+      <div class="search__field">
+        <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="clientSearch" class="search__input" type="search" placeholder="Buscar por nome ou CPF…" autocomplete="off" oninput="filterClients()" aria-label="Buscar clientes" />
+      </div>
+      <button type="button" class="search__submit" onclick="filterClients()">
+        Buscar
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+    <!-- ── LISTA DE CLIENTES ──────────────────────────────── -->
+    <div class="clients">
+      <div class="clients__bar">
+        <div class="clients__bar-left">
+          <span class="clients__heading">Clientes</span>
+          <span class="clients__count"><b id="clientCount">20</b> de 20</span>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table class="clients-table">
+          <colgroup>
+            <col style="width: 5%" />    <!-- # -->
+            <col style="width: 27%" />   <!-- Nome -->
+            <col style="width: 18%" />   <!-- CPF -->
+            <col style="width: 20%" />   <!-- Endividamento total -->
+            <col style="width: 15%" />   <!-- Data -->
+            <col style="width: 15%" />   <!-- Avaliado em -->
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="c-idx">#</th>
+              <th class="sortable" data-key="name" onclick="sortClients('name')">
+                <span class="th-sort">Nome
+                  <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+              </th>
+              <th>CPF</th>
+              <th class="sortable" data-key="debt" onclick="sortClients('debt')">
+                <span class="th-sort">Endividamento total
+                  <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+              </th>
+              <th class="sortable" data-key="date" onclick="sortClients('date')">
+                <span class="th-sort">Data
+                  <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+              </th>
+              <th>Avaliado em</th>
+            </tr>
+          </thead>
+          <tbody id="clientRows">
+            <tr data-reviewed="1" data-search="maria aparecida da silva 00181469103" data-name="maria aparecida da silva" data-debt="124400.00" data-date="2026-03-12" data-ops="5" onclick="openClient(this)">
+              <td class="c-idx">1</td>
+              <td class="c-name">Maria Aparecida da Silva</td>
+              <td class="c-cpf">001.814.691-03</td>
+              <td class="c-debt">R$ 124.400,00</td>
+              <td class="c-date">12/03/2026</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>12/03/2026</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="jose carlos ferreira 04822190577" data-name="josé carlos ferreira" data-debt="113890.70" data-date="2026-01-28" data-ops="8" onclick="openClient(this)">
+              <td class="c-idx">2</td>
+              <td class="c-name">José Carlos Ferreira</td>
+              <td class="c-cpf">048.221.905-77</td>
+              <td class="c-debt">R$ 113.890,70</td>
+              <td class="c-date">28/01/2026</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>28/01/2026</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="antonia souza lima 13255630019" data-name="antônia souza lima" data-debt="38200.00" data-date="2025-11-05" data-ops="3" onclick="openClient(this)">
+              <td class="c-idx">3</td>
+              <td class="c-name">Antônia Souza Lima</td>
+              <td class="c-cpf">132.556.300-19</td>
+              <td class="c-debt">R$ 38.200,00</td>
+              <td class="c-date">05/11/2025</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="paulo henrique mendes 20791844350" data-name="paulo henrique mendes" data-debt="61540.30" data-date="2026-02-19" data-ops="6" onclick="openClient(this)">
+              <td class="c-idx">4</td>
+              <td class="c-name">Paulo Henrique Mendes</td>
+              <td class="c-cpf">207.918.443-50</td>
+              <td class="c-debt">R$ 61.540,30</td>
+              <td class="c-date">19/02/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="rita de cassia oliveira 33910487266" data-name="rita de cássia oliveira" data-debt="19870.00" data-date="2025-09-30" data-ops="2" onclick="openClient(this)">
+              <td class="c-idx">5</td>
+              <td class="c-name">Rita de Cássia Oliveira</td>
+              <td class="c-cpf">339.104.872-66</td>
+              <td class="c-debt">R$ 19.870,00</td>
+              <td class="c-date">30/09/2025</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="carlos eduardo ramos 41566723008" data-name="carlos eduardo ramos" data-debt="87215.45" data-date="2026-06-14" data-ops="7" onclick="openClient(this)">
+              <td class="c-idx">6</td>
+              <td class="c-name">Carlos Eduardo Ramos</td>
+              <td class="c-cpf">415.667.230-08</td>
+              <td class="c-debt">R$ 87.215,45</td>
+              <td class="c-date">14/06/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="fernanda alves costa 52390111840" data-name="fernanda alves costa" data-debt="45230.00" data-date="2025-08-22" data-ops="4" onclick="openClient(this)">
+              <td class="c-idx">7</td>
+              <td class="c-name">Fernanda Alves Costa</td>
+              <td class="c-cpf">523.901.118-40</td>
+              <td class="c-debt">R$ 45.230,00</td>
+              <td class="c-date">22/08/2025</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>22/08/2025</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="ricardo gomes pereira 61045233792" data-name="ricardo gomes pereira" data-debt="98760.15" data-date="2026-04-03" data-ops="9" onclick="openClient(this)">
+              <td class="c-idx">8</td>
+              <td class="c-name">Ricardo Gomes Pereira</td>
+              <td class="c-cpf">610.452.337-92</td>
+              <td class="c-debt">R$ 98.760,15</td>
+              <td class="c-date">03/04/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="juliana martins rocha 27411890563" data-name="juliana martins rocha" data-debt="32115.80" data-date="2025-12-17" data-ops="3" onclick="openClient(this)">
+              <td class="c-idx">9</td>
+              <td class="c-name">Juliana Martins Rocha</td>
+              <td class="c-cpf">274.118.905-63</td>
+              <td class="c-debt">R$ 32.115,80</td>
+              <td class="c-date">17/12/2025</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>17/12/2025</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="anderson luiz barbosa 38872601455" data-name="anderson luiz barbosa" data-debt="154300.00" data-date="2026-05-21" data-ops="8" onclick="openClient(this)">
+              <td class="c-idx">10</td>
+              <td class="c-name">Anderson Luiz Barbosa</td>
+              <td class="c-cpf">388.726.014-55</td>
+              <td class="c-debt">R$ 154.300,00</td>
+              <td class="c-date">21/05/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="patricia nunes cardoso 49120387618" data-name="patrícia nunes cardoso" data-debt="27640.50" data-date="2025-10-09" data-ops="2" onclick="openClient(this)">
+              <td class="c-idx">11</td>
+              <td class="c-name">Patrícia Nunes Cardoso</td>
+              <td class="c-cpf">491.203.876-18</td>
+              <td class="c-debt">R$ 27.640,50</td>
+              <td class="c-date">09/10/2025</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>09/10/2025</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="marcos vinicius teixeira 56284719037" data-name="marcos vinícius teixeira" data-debt="73980.25" data-date="2026-03-30" data-ops="5" onclick="openClient(this)">
+              <td class="c-idx">12</td>
+              <td class="c-name">Marcos Vinícius Teixeira</td>
+              <td class="c-cpf">562.847.190-37</td>
+              <td class="c-debt">R$ 73.980,25</td>
+              <td class="c-date">30/03/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="sandra regina lopes 14569032874" data-name="sandra regina lopes" data-debt="51200.00" data-date="2025-07-14" data-ops="4" onclick="openClient(this)">
+              <td class="c-idx">13</td>
+              <td class="c-name">Sandra Regina Lopes</td>
+              <td class="c-cpf">145.690.328-74</td>
+              <td class="c-debt">R$ 51.200,00</td>
+              <td class="c-date">14/07/2025</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>14/07/2025</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="eduardo santos almeida 70351864209" data-name="eduardo santos almeida" data-debt="119450.90" data-date="2026-02-06" data-ops="7" onclick="openClient(this)">
+              <td class="c-idx">14</td>
+              <td class="c-name">Eduardo Santos Almeida</td>
+              <td class="c-cpf">703.518.642-09</td>
+              <td class="c-debt">R$ 119.450,90</td>
+              <td class="c-date">06/02/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="camila ferreira dias 25608347126" data-name="camila ferreira dias" data-debt="18790.00" data-date="2026-06-02" data-ops="2" onclick="openClient(this)">
+              <td class="c-idx">15</td>
+              <td class="c-name">Camila Ferreira Dias</td>
+              <td class="c-cpf">256.083.471-26</td>
+              <td class="c-debt">R$ 18.790,00</td>
+              <td class="c-date">02/06/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="roberto carlos pinto 83721456081" data-name="roberto carlos pinto" data-debt="64310.70" data-date="2025-11-28" data-ops="6" onclick="openClient(this)">
+              <td class="c-idx">16</td>
+              <td class="c-name">Roberto Carlos Pinto</td>
+              <td class="c-cpf">837.214.560-81</td>
+              <td class="c-debt">R$ 64.310,70</td>
+              <td class="c-date">28/11/2025</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>28/11/2025</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="leticia oliveira ramos 41967523044" data-name="letícia oliveira ramos" data-debt="39850.00" data-date="2026-01-12" data-ops="3" onclick="openClient(this)">
+              <td class="c-idx">17</td>
+              <td class="c-name">Letícia Oliveira Ramos</td>
+              <td class="c-cpf">419.675.230-44</td>
+              <td class="c-debt">R$ 39.850,00</td>
+              <td class="c-date">12/01/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="1" data-search="gustavo henrique moraes 58034291763" data-name="gustavo henrique moraes" data-debt="207130.00" data-date="2025-09-05" data-ops="9" onclick="openClient(this)">
+              <td class="c-idx">18</td>
+              <td class="c-name">Gustavo Henrique Moraes</td>
+              <td class="c-cpf">580.342.917-63</td>
+              <td class="c-debt">R$ 207.130,00</td>
+              <td class="c-date">05/09/2025</td>
+              <td><span class="c-eval"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>05/09/2025</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="vanessa cristina souza 31276408590" data-name="vanessa cristina souza" data-debt="28940.35" data-date="2026-04-19" data-ops="3" onclick="openClient(this)">
+              <td class="c-idx">19</td>
+              <td class="c-name">Vanessa Cristina Souza</td>
+              <td class="c-cpf">312.764.085-90</td>
+              <td class="c-debt">R$ 28.940,35</td>
+              <td class="c-date">19/04/2026</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+            <tr data-reviewed="0" data-search="felipe augusto carvalho 64819052317" data-name="felipe augusto carvalho" data-debt="85620.00" data-date="2025-12-30" data-ops="5" onclick="openClient(this)">
+              <td class="c-idx">20</td>
+              <td class="c-name">Felipe Augusto Carvalho</td>
+              <td class="c-cpf">648.190.523-17</td>
+              <td class="c-debt">R$ 85.620,00</td>
+              <td class="c-date">30/12/2025</td>
+              <td><span class="rev-badge rev-badge--no">Não avaliado</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="clients__empty" id="clientEmpty">Nenhum cliente encontrado.</div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar o painel do parceiro.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='05_basta-login-parceiros.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let lastFocusedElement = null;
+
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutBox = document.querySelector('.logout-modal');
+  const cancelBtn = document.getElementById('logoutCancel');
+  const confirmBtn = document.getElementById('logoutConfirm');
+
+  logoutModal.addEventListener('click', function(e) {
+    if (e.target === this) closeLogout();
+  });
+
+  logoutBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { e.preventDefault(); closeLogout(); }
+    if (e.key === 'Tab') {
+      const els = [cancelBtn, confirmBtn];
+      const i = els.indexOf(document.activeElement);
+      e.preventDefault();
+      if (e.shiftKey) els[i === 0 ? els.length - 1 : i - 1].focus();
+      else els[i === els.length - 1 ? 0 : i + 1].focus();
+    }
+  });
+
+  /* ── ABRIR FICHA DO CLIENTE ──────────────────────────── */
+  function openClient() {
+    /* INTEGRAÇÃO: usar o CPF da linha para abrir a consulta do cliente. */
+    window.location.href = '27_basta-parceiro-consulta-cpf.html';
+  }
+
+  /* ── FILTRO DE AVALIAÇÃO (seleção única) ─────────────── */
+  /* Lentes: 'todos' | 'naoavaliados' | dias ('7'…'120' = avaliados há mais de N dias).
+     "Todos" ativo por padrão. */
+  var period = { preset: 'todos', cutoff: null };
+
+  function isoOf(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+
+  /* "há mais de N dias" → entrada anterior a (hoje − N): data <= corte */
+  function staleCutoff(days) {
+    var d = new Date(); d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - days);
+    return isoOf(d);
+  }
+
+  function setPeriod(preset, btn) {
+    document.querySelectorAll('.period__btn').forEach(function (b) {
+      b.classList.remove('period__btn--active');
+    });
+    btn.classList.add('period__btn--active');
+
+    period.preset = preset;
+    period.cutoff = (preset === 'todos' || preset === 'naoavaliados')
+      ? null
+      : staleCutoff(parseInt(preset, 10));
+    filterClients();
+  }
+
+  function fmtBRL(n) {
+    return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
+  }
+
+  /* ── ATUALIZAR DADOS (re-sync Open Finance) ──────────── */
+  function refreshData() {
+    var btn = document.getElementById('refreshBtn');
+    if (btn.classList.contains('is-loading')) return;     /* evita clique duplo */
+    var label = btn.querySelector('.btn-refresh__label');
+    var prev = label.textContent;
+
+    btn.classList.add('is-loading');
+    label.textContent = 'Atualizando…';
+
+    /* INTEGRAÇÃO: disparar o re-sync via Open Finance e recarregar os dados. */
+    setTimeout(function () {
+      btn.classList.remove('is-loading');
+      label.textContent = prev;
+      var n = new Date();
+      var hh = String(n.getHours()).padStart(2, '0');
+      var mm = String(n.getMinutes()).padStart(2, '0');
+      document.getElementById('refreshStamp').textContent = 'Atualizado hoje às ' + hh + ':' + mm;
+    }, 1200);
+  }
+
+  /* ── BUSCA + LENTE DE AVALIAÇÃO ──────────────────────── */
+  function filterClients() {
+    var q = document.getElementById('clientSearch').value
+      .toLowerCase().replace(/[.\-\s()]/g, '');
+    var rows = document.querySelectorAll('#clientRows tr');
+    var visible = 0;
+    var totalDebt = 0;
+    var totalOps = 0;
+    rows.forEach(function(row) {
+      var hay = (row.getAttribute('data-search') || '').replace(/\s/g, '');
+      var searchMatch = q === '' || hay.indexOf(q) !== -1;
+
+      var reviewed = row.getAttribute('data-reviewed') === '1';
+      var d = row.getAttribute('data-date');
+
+      /* Regra de cada lente */
+      var lensMatch;
+      if (period.preset === 'todos') {
+        lensMatch = true;
+      } else if (period.preset === 'naoavaliados') {
+        lensMatch = !reviewed;
+      } else {
+        /* dias: avaliados (Sim) que entraram há mais de N dias */
+        lensMatch = reviewed && d <= period.cutoff;
+      }
+
+      var show = searchMatch && lensMatch;
+      row.style.display = show ? '' : 'none';
+      if (show) {
+        visible++;
+        totalDebt += parseFloat(row.getAttribute('data-debt')) || 0;
+        totalOps += parseInt(row.getAttribute('data-ops'), 10) || 0;
+      }
+    });
+    document.getElementById('clientCount').textContent = visible;
+    document.getElementById('clientEmpty').style.display = visible === 0 ? 'block' : 'none';
+
+    /* Cards principais refletem o recorte filtrado */
+    document.getElementById('statClients').textContent = visible;
+    document.getElementById('statDebt').textContent = fmtBRL(totalDebt);
+    document.getElementById('statOps').textContent = totalOps;
+
+    renumberClients();
+  }
+
+  /* Numeração posicional (#) — segue a ordem/visibilidade atual */
+  function renumberClients() {
+    var n = 0;
+    document.querySelectorAll('#clientRows tr').forEach(function (row) {
+      if (row.style.display === 'none') return;
+      var idx = row.querySelector('.c-idx');
+      if (idx) idx.textContent = ++n;
+    });
+  }
+
+  /* "Todos" ativo por padrão → toda a base visível */
+
+  /* ── ORDENAÇÃO DA TABELA ─────────────────────────────── */
+  var sortState = { key: null, dir: 1 };
+  function sortClients(key) {
+    var tbody = document.getElementById('clientRows');
+    var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+
+    if (sortState.key === key) { sortState.dir *= -1; }
+    else { sortState.key = key; sortState.dir = 1; }
+    var dir = sortState.dir;
+
+    rows.sort(function (a, b) {
+      if (key === 'debt') {
+        return (parseFloat(a.dataset.debt) - parseFloat(b.dataset.debt)) * dir;
+      }
+      if (key === 'date') {
+        return (a.dataset.date < b.dataset.date ? -1 : a.dataset.date > b.dataset.date ? 1 : 0) * dir;
+      }
+      return a.dataset.name.localeCompare(b.dataset.name, 'pt') * dir;
+    });
+
+    rows.forEach(function (r) { tbody.appendChild(r); });
+
+    document.querySelectorAll('.clients-table th.sortable').forEach(function (th) {
+      th.removeAttribute('aria-sort');
+    });
+    var active = document.querySelector('.clients-table th[data-key="' + key + '"]');
+    if (active) active.setAttribute('aria-sort', dir === 1 ? 'ascending' : 'descending');
+
+    renumberClients();   /* renumera após reordenar */
+  }
+
+  /* ── CONTADOR DE ENTRADA (Total de clientes) ─────────── */
+  (function() {
+    var DURATION = 1100;
+    var DELAY = 300;
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        document.querySelectorAll('.stat__value[data-target]').forEach(function(el) {
+          var target = parseInt(el.getAttribute('data-target'), 10);
+          if (!target) return;
+          var start = performance.now();
+          function tick(now) {
+            var progress = Math.min((now - start) / DURATION, 1);
+            el.textContent = Math.round(easeOutCubic(progress) * target);
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        });
+      }, DELAY);
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+/* ============================================================================
+   MODAL / DIALOG — Basta
+   ============================================================================ */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.82);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+}
+.modal-overlay.is-open,
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--white);
+  padding: var(--space-3xl);
+  max-width: 500px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  animation: modalSlideUp var(--duration-normal) var(--ease-out);
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.modal-label {
+  font-size: var(--fs-xs);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--gray-600);
+  margin-bottom: var(--space-md);
+  display: block;
+}
+
+.modal-heading {
+  font-size: var(--fs-3xl);
+  font-weight: var(--font-weight-black);
+  color: var(--black);
+  margin-bottom: var(--space-lg);
+}
+
+.modal-body {
+  font-size: var(--fs-sm);
+  color: var(--gray-600);
+  line-height: var(--lh-normal);
+  margin-bottom: var(--space-2xl);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-direction: column-reverse;
+}
+@media (min-width: 640px) {
+  .modal-actions {
+    flex-direction: row;
+  }
+}

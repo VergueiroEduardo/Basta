@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Redefinir Senha</title>
+  <meta name="description" content="Crie uma nova senha e recupere o acesso à sua conta Basta." />
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/form.css" />
+  <style>
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
+    body {
+      font-family: var(--f);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; }
+    :where(button, a, input, select, textarea) { border-radius: 0; -webkit-appearance: none; }
+
+    /* ── ACESSIBILIDADE ─────────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: -6rem; left: 24px;
+      background: var(--green); color: var(--white);
+      font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 14px 24px; z-index: 9999; transition: top var(--t);
+    }
+    .skip-link:focus { top: 1rem; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    /* ── LAYOUT PRINCIPAL ───────────────────────────────────── */
+    .register-page {
+      display: flex;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* ── SIDEBAR ────────────────────────────────────────────── */
+    .sidebar {
+      width: 440px;
+      background: var(--black);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar__logo { margin-bottom: 48px; }
+
+    .sidebar__headline {
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+
+    .sidebar__headline-accent { color: var(--white); }
+
+    .sidebar__subtext {
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .sidebar::after { display: none; }
+
+    /* ── FORM AREA ──────────────────────────────────────────── */
+    .form-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 64px;
+      background: var(--white);
+      overflow-y: auto;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    /* ── FORM HEADER ────────────────────────────────────────── */
+    .form-header { margin-bottom: 16px; }
+
+    .form-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .form-subtitle {
+      font-size: 15px;
+      color: var(--gray-600);
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    /* ── FORM CORE ──────────────────────────────────────────── */
+    .form-core {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── FORM ELEMENTS ──────────────────────────────────────── */
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-child { margin-bottom: 0; }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: var(--f);
+      font-size: 16px;
+      font-weight: 400;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--black);
+      transition: border-color var(--t);
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--black);
+    }
+
+    .form-input::placeholder { color: #999; font-weight: 400; }
+
+    /* ── FORM VALIDATION ───────────────────────────────────── */
+    .form-input--error {
+      border-color: var(--error) !important;
+    }
+    .form-error {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 6px;
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .form-error__icon {
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+      margin-top: 1px;
+    }
+    .form-error[hidden] { display: none; }
+
+    /* ── PASSWORD TOGGLE ────────────────────────────────────── */
+    .input-password-wrap {
+      position: relative;
+    }
+
+    .input-password-wrap .form-input {
+      padding-right: 48px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #999;
+      transition: color var(--t);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-toggle:hover { color: var(--black); }
+
+    .toggle-icon-hide { display: none; }
+    .password-toggle.is-visible .toggle-icon-show { display: none; }
+    .password-toggle.is-visible .toggle-icon-hide { display: block; }
+
+    /* ── BOTÃO FECHAR ────────────────────────────────────────── */
+    .btn-close {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 80;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .btn-close:hover {
+      color: var(--black);
+      background: rgba(0,0,0,0.05);
+      border-radius: 50%;
+    }
+    .btn-close:active {
+      transform: scale(0.98);
+    }
+
+    /* ── FORM FIELDS BLOCK ─────────────────────────────────── */
+    .form-fields-block {
+      border: 1px solid var(--gray-300);
+      padding: 20px 20px 4px;
+    }
+
+    .form-fields-block .form-group { margin-bottom: 16px; }
+
+    /* ── ESTADO: SUCESSO ────────────────────────────────────── */
+    .state-success { display: none; }
+    .state-success.is-active { display: block; }
+    .state-form.is-hidden { display: none; }
+
+    /* ── ESTADO: TOKEN EXPIRADO ─────────────────────────────── */
+    .state-expired { display: none; }
+    .state-expired.is-active { display: block; }
+
+    .status-icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .status-icon--green { background: var(--green); }
+    .status-icon--error { background: var(--error); }
+
+    .status-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .status-title span { color: var(--green); }
+
+    .status-text {
+      font-size: 15px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* ── CTA ─────────────────────────────────────────────────── */
+    .form-cta { margin-top: 24px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--f);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 18px 36px;
+      min-height: 56px;
+      border: none;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background var(--t), color var(--t), transform var(--t), border-color var(--t);
+      width: 100%;
+    }
+
+    .btn-primary { background: var(--green); color: var(--white); }
+    .btn-primary:hover { background: var(--black); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn__arrow { font-size: 1.2em; transition: transform var(--t); }
+    .btn-primary:hover .btn__arrow { transform: translateX(3px); }
+
+    /* ── LINK FOOTER ────────────────────────────────────────── */
+    .form-login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .form-login-link a {
+      color: var(--black);
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 2px solid var(--green);
+      padding-bottom: 1px;
+      transition: color var(--t);
+    }
+
+    .form-login-link a:hover { color: var(--green); }
+
+    /* ── LOADING STATE ──────────────────────────────────────── */
+    .btn--loading {
+      pointer-events: none;
+      position: relative;
+      color: transparent;
+    }
+
+    .btn--loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ══════════════════════════════════════════════════════════
+       RESPONSIVO
+       ══════════════════════════════════════════════════════════ */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .sidebar { width: 360px; padding: 40px; }
+      .form-area { padding: 40px 48px; }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .register-page { flex-direction: column; }
+
+      .sidebar {
+        width: 100%;
+        padding: 24px 20px;
+        min-height: auto;
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .sidebar__logo { margin-bottom: 0; flex-shrink: 0; max-width: 120px; }
+      .sidebar__logo svg { width: 100%; height: auto; }
+
+      .sidebar::after { display: none; }
+
+      .form-area {
+        flex: 1;
+        padding: 24px 20px 40px;
+        align-items: flex-start;
+      }
+
+      .form-container { max-width: 100%; }
+
+      .form-header { margin-bottom: 12px; }
+      .form-title { font-size: 22px; margin-bottom: 4px; }
+
+      .form-fields-block { padding: 16px 16px 4px; }
+
+      .form-input { padding: 12px 14px; font-size: 16px; }
+      .input-password-wrap .form-input { padding-right: 44px; }
+
+      .btn {
+        font-size: 14px;
+        padding: 16px 24px;
+        min-height: 52px;
+      }
+
+      .status-title { font-size: 22px; }
+      .form-login-link { font-size: 13px; }
+    }
+
+    /* Small mobile */
+    @media (max-width: 380px) {
+      .sidebar { padding: 20px 16px; gap: 12px; }
+
+      .form-area { padding: 20px 16px 32px; }
+      .form-fields-block { padding: 14px 12px 4px; }
+    }
+
+    /* Landscape mobile */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .register-page { flex-direction: row; }
+
+      .sidebar {
+        width: 280px;
+        padding: 24px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+      }
+
+      .sidebar__logo { margin-bottom: 24px; }
+      .sidebar__logo svg { max-width: 160px; width: 100%; height: auto; }
+
+      .form-area { padding: 24px 32px; overflow-y: auto; }
+    }
+
+    /* Safe area */
+    @supports (padding: env(safe-area-inset-top)) {
+      .sidebar { padding-top: max(24px, env(safe-area-inset-top)); }
+      .form-area {
+        padding-bottom: max(40px, env(safe-area-inset-bottom));
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<a href="01_basta-landing.html" class="btn-close" aria-label="Fechar">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>
+</a>
+
+<a href="#form-redefinir" class="skip-link">Pular para o formulário</a>
+
+<div class="register-page">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <svg style="color: var(--white)" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    </div>
+
+  </aside>
+
+  <!-- ── FORM AREA ───────────────────────────────────────── -->
+  <main class="form-area" id="form-redefinir">
+    <div class="form-container">
+
+      <!-- ── ESTADO 1: FORMULÁRIO ──────────────────────────── -->
+      <div class="state-form">
+
+        <div class="form-header">
+          <h1 class="form-title">Estamos quase lá.</h1>
+          <p class="form-subtitle">Crie uma nova senha e volte a acessar sua conta.</p>
+        </div>
+
+        <form novalidate id="reset-form" onsubmit="event.preventDefault(); if(validatePasswordReset()) handlePasswordReset()">
+          <div class="form-core">
+
+            <div class="form-fields-block">
+
+              <div class="form-group">
+                <label class="form-label" for="nova-senha">Nova senha</label>
+                <div class="input-password-wrap">
+                  <input
+                    type="password"
+                    id="nova-senha"
+                    class="form-input"
+                    placeholder="Mínimo 8 caracteres"
+                    autocomplete="new-password"
+                  >
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    id="toggle-nova"
+                    aria-label="Mostrar senha"
+                    onclick="togglePassword('nova-senha', 'toggle-nova')"
+                  >
+                    <!-- Olho fechado (mostrar) -->
+                    <svg class="toggle-icon-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <!-- Olho riscado (ocultar) -->
+                    <svg class="toggle-icon-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="form-error" id="nova-senha-error" hidden>
+                  <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>Mínimo de 8 caracteres.</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="confirmar-senha">Confirmar nova senha</label>
+                <div class="input-password-wrap">
+                  <input
+                    type="password"
+                    id="confirmar-senha"
+                    class="form-input"
+                    placeholder="Repita a senha"
+                    autocomplete="new-password"
+                  >
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    id="toggle-confirmar"
+                    aria-label="Mostrar senha"
+                    onclick="togglePassword('confirmar-senha', 'toggle-confirmar')"
+                  >
+                    <svg class="toggle-icon-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg class="toggle-icon-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="form-error" id="confirmar-senha-error" hidden>
+                  <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>As senhas não coincidem.</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="form-cta">
+              <button type="submit" class="btn btn-primary" id="submit-btn" aria-disabled="false">
+                <span class="btn__text">Redefinir senha <span class="btn__arrow">&rarr;</span></span>
+              </button>
+            </div>
+
+          </div>
+        </form>
+
+        <p class="form-login-link">
+          Lembrou a senha? <a href="03_basta-login.html">Entrar</a>
+        </p>
+
+      </div>
+
+      <!-- ── ESTADO 2: SENHA REDEFINIDA ─────────────────────── -->
+      <div class="state-success">
+
+        <div class="status-icon status-icon--green">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+
+        <h2 class="status-title">Senha redefinida<span>.</span></h2>
+        <p class="status-text">
+          Sua nova senha foi salva com sucesso. Agora é só entrar na sua conta.
+        </p>
+
+        <a href="03_basta-login.html" class="btn btn-primary">
+          Entrar na conta <span class="btn__arrow">&rarr;</span>
+        </a>
+
+      </div>
+
+      <!-- ── ESTADO 3: LINK EXPIRADO ────────────────────────── -->
+      <div class="state-expired">
+
+        <div class="status-icon status-icon--error">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </div>
+
+        <h2 class="status-title" style="margin-bottom: 12px;">Link expirado.</h2>
+        <p class="status-text">
+          Este link de redefinição não é mais válido. Links expiram após 15 minutos por segurança.
+        </p>
+
+        <a href="04_basta-recuperar-senha.html" class="btn btn-primary">
+          Solicitar novo link <span class="btn__arrow">&rarr;</span>
+        </a>
+
+        <p class="form-login-link">
+          Lembrou a senha? <a href="03_basta-login.html">Entrar</a>
+        </p>
+
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  /* ── FORM VALIDATION ────────────────────────────────────── */
+  function validateField(fieldId, isValid, errorMsg = '') {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById(fieldId + '-error');
+
+    if (!isValid) {
+      field.classList.add('form-input--error');
+      if (errorEl) {
+        errorEl.removeAttribute('hidden');
+        if (errorMsg) errorEl.querySelector('span').textContent = errorMsg;
+      }
+      return false;
+    } else {
+      field.classList.remove('form-input--error');
+      if (errorEl) errorEl.setAttribute('hidden', '');
+      return true;
+    }
+  }
+
+  function validatePasswordReset() {
+    const novaSenha = document.getElementById('nova-senha').value;
+    const confirmar = document.getElementById('confirmar-senha').value;
+
+    let isValid = true;
+
+    isValid = validateField('nova-senha', novaSenha.length >= 8, 'Mínimo de 8 caracteres.') && isValid;
+    isValid = validateField('confirmar-senha', novaSenha === confirmar && novaSenha.length >= 8, 'As senhas não coincidem.') && isValid;
+
+    return isValid;
+  }
+
+  // Validação no blur de cada campo
+  document.getElementById('nova-senha')?.addEventListener('blur', function() {
+    if (this.value) {
+      validateField('nova-senha', this.value.length >= 8, 'Mínimo de 8 caracteres.');
+    }
+  });
+
+  document.getElementById('confirmar-senha')?.addEventListener('blur', function() {
+    const novaSenha = document.getElementById('nova-senha').value;
+    if (this.value) {
+      validateField('confirmar-senha', novaSenha === this.value && novaSenha.length >= 8, 'As senhas não coincidem.');
+    }
+  });
+
+  /* ── PASSWORD TOGGLE ──────────────────────────────────────── */
+  function togglePassword(inputId, toggleId) {
+    const input = document.getElementById(inputId);
+    const btn = document.getElementById(toggleId);
+    const isVisible = input.type === 'text';
+
+    input.type = isVisible ? 'password' : 'text';
+    btn.classList.toggle('is-visible', !isVisible);
+    btn.setAttribute('aria-label', isVisible ? 'Mostrar senha' : 'Ocultar senha');
+  }
+
+  /* ── FORM SUBMIT ──────────────────────────────────────────── */
+  const form = document.getElementById('reset-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const stateForm = document.querySelector('.state-form');
+  const stateSuccess = document.querySelector('.state-success');
+
+  function handlePasswordReset() {
+    // Loading
+    submitBtn.classList.add('btn--loading');
+    submitBtn.disabled = true;
+
+    // Simula chamada de API (1.2s)
+    setTimeout(() => {
+      stateForm.classList.add('is-hidden');
+      stateSuccess.classList.add('is-active');
+    }, 1200);
+  }
+
+  /* ── SIMULAÇÃO: estado de link expirado (para testes) ──────
+     Para testar o estado de link expirado, adicione ?expired=1 na URL.
+     Ex: 05_basta-redefinir-senha.html?expired=1
+  ──────────────────────────────────────────────────────────── */
+  (function checkToken() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('expired') === '1') {
+      stateForm.classList.add('is-hidden');
+      document.querySelector('.state-expired').classList.add('is-active');
+    }
+  })();
+</script>
+
+</body>
+</html>

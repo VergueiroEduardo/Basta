@@ -1,0 +1,2434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — CRM</title>
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       RESET LOCAL
+       ══════════════════════════════════════════════════════════ */    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* ══════════════════════════════════════════════════════════
+       LAYOUT (mesma sidebar do design system)
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+      overflow-y: auto;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+
+    .sidebar__section-title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--gray-600);
+      padding: 24px 16px 8px; margin-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    .main { flex: 1; }
+
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAGE HEADER
+       ══════════════════════════════════════════════════════════ */
+    .page-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .page-title .accent { color: var(--green); }
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400; line-height: 1.5;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       SCORECARD STRIP — KPIs do funil
+       ══════════════════════════════════════════════════════════ */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (min-width: 720px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+    .kpi {
+      background: var(--white); border: 1px solid var(--gray-300);
+      padding: 16px;
+    }
+    .kpi__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+    }
+    .kpi__value {
+      font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.05; margin: 4px 0 4px;
+      color: var(--black); font-variant-numeric: tabular-nums;
+    }
+    .kpi__delta {
+      font-size: 11px; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .kpi__delta--up { color: var(--green); }
+    .kpi__delta--down { color: var(--error); }
+    .kpi__delta--flat { color: var(--gray-600); }
+
+    /* ══════════════════════════════════════════════════════════
+       FILTER BAR
+       ══════════════════════════════════════════════════════════ */
+    .filters {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .filter-search {
+      position: relative; flex: 1; min-width: 220px;
+    }
+    .filter-search__input {
+      width: 100%; padding: 10px 12px 10px 38px;
+      font-family: var(--f); font-size: 13px;
+      border: 1px solid var(--gray-300); background: var(--white);
+      transition: border-color var(--t);
+    }
+    .filter-search__input:focus { outline: none; border-color: var(--black); }
+    .filter-search__icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--gray-300); pointer-events: none;
+    }
+    .filter-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--gray-600);
+      border: 1.5px solid var(--gray-300);
+      transition: all var(--t); cursor: pointer; white-space: nowrap;
+    }
+    .filter-pill:hover { color: var(--black); border-color: var(--black); }
+    .filter-pill--active {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .filter-pill svg { width: 12px; height: 12px; }
+
+    .filter-divider {
+      display: inline-block;
+      width: 1px; height: 20px;
+      background: var(--gray-300);
+      margin: 0 4px;
+    }
+    .health-dot {
+      display: inline-block;
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .health-dot--ok { background: var(--green); }
+    .health-dot--watch { background: var(--warning); }
+    .health-dot--cold { background: var(--error); }
+    .filter-pill[data-group="health"].filter-pill--active .health-dot--ok { box-shadow: 0 0 0 2px rgba(255,255,255,0.6); }
+    .filter-pill[data-group="health"].filter-pill--active { /* mantém pill com fundo preto, dot mais legível */ }
+
+    /* Drag-and-drop states */
+    .lead-card[draggable="true"] { cursor: grab; user-select: none; }
+    .lead-card[draggable="true"]:active { cursor: grabbing; }
+    .lead-card.is-dragging {
+      opacity: 0.4;
+      transform: scale(0.98);
+    }
+    .col.is-drop-target {
+      outline: 2px dashed var(--green);
+      outline-offset: -2px;
+    }
+    .col.is-drop-target .col__body {
+      background: rgba(66,180,73,0.06);
+    }
+
+    .view-toggle {
+      display: inline-flex; border: 1.5px solid var(--gray-300);
+    }
+    .view-toggle__btn {
+      padding: 8px 12px;
+      font-family: var(--f); font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--gray-600);
+      cursor: pointer; transition: all var(--t);
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .view-toggle__btn:hover { color: var(--black); }
+    .view-toggle__btn--active { background: var(--black); color: var(--white); }
+    .view-toggle__btn svg { width: 12px; height: 12px; }
+
+    /* ══════════════════════════════════════════════════════════
+       KANBAN BOARD
+       ══════════════════════════════════════════════════════════ */
+    .board-wrap {
+      /* SCROLL HORIZONTAL aqui (passa entre colunas) — vertical fica nas colunas */
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin: 0 -16px;
+      padding: 0 16px 16px;
+      /* altura fixa do board → o scroll vertical fica obrigatoriamente dentro de cada coluna */
+      height: calc(100vh - 320px);
+      height: calc(100dvh - 320px);
+      min-height: 520px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gray-300) transparent;
+    }
+    .board-wrap::-webkit-scrollbar { height: 10px; }
+    .board-wrap::-webkit-scrollbar-track {
+      background: var(--off-white);
+      border-top: 1px solid var(--gray-200);
+    }
+    .board-wrap::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 4px;
+    }
+    .board-wrap::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
+
+    @media (min-width: 960px) {
+      .board-wrap {
+        margin: 0;
+        padding: 0 0 16px;
+        height: calc(100vh - 260px);
+        height: calc(100dvh - 260px);
+      }
+    }
+
+    .board {
+      display: flex;
+      flex-direction: row;
+      gap: 18px;
+      align-items: stretch;         /* colunas alinhadas no grid — mesma altura */
+      height: 100%;
+      padding-right: 40px;          /* respiro após a última coluna no fim do scroll —
+                                       em flex-row, padding-right é parte do conteúdo
+                                       rolável (cross-browser, ao contrário do grid) */
+    }
+    /* sentinela explícita: garante o respiro mesmo se o padding-right
+       for ignorado por algum container ancestor */
+    .board__end-spacer {
+      flex: 0 0 1px;
+      width: 1px;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .col {
+      display: flex; flex-direction: column;
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      height: 100%;
+      min-height: 0;               /* essencial para o overflow do filho funcionar */
+      flex: 0 0 300px;             /* largura fixa de 300px, sem encolher nem crescer */
+    }
+    .col__head {
+      padding: 16px 16px 14px;
+      border-bottom: 2px solid var(--black);
+      background: var(--white);
+      position: sticky; top: 0; z-index: 2;
+      flex-shrink: 0;              /* header fixo não encolhe sob pressão */
+    }
+    .col__top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-bottom: 6px;
+    }
+    .col__num {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--gray-600);
+      font-variant-numeric: tabular-nums;
+    }
+    .col__count {
+      font-size: 11px; font-weight: 800;
+      color: var(--white); background: var(--black);
+      padding: 2px 8px;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+    .col__title {
+      font-size: 13px; font-weight: 800;
+      letter-spacing: -0.01em; color: var(--black);
+      line-height: 1.2;
+    }
+    .col__sub {
+      font-size: 10px; color: var(--gray-600); font-weight: 600;
+      margin-top: 4px; letter-spacing: 0.02em;
+    }
+    .col__sub strong { color: var(--black); font-weight: 800; }
+
+    /* color accent per stage */
+    .col[data-stage="1"] .col__head { border-bottom-color: var(--blue); }
+    .col[data-stage="2"] .col__head { border-bottom-color: var(--blue); }
+    .col[data-stage="3"] .col__head { border-bottom-color: var(--warning); }
+    .col[data-stage="4"] .col__head { border-bottom-color: var(--warning); }
+    .col[data-stage="5"] .col__head { border-bottom-color: var(--warning); }
+    .col[data-stage="6"] .col__head { border-bottom-color: var(--warning); }
+    .col[data-stage="7"] .col__head { border-bottom-color: var(--sage); }
+    .col[data-stage="8"] .col__head { border-bottom-color: var(--sage); }
+    .col[data-stage="9"] .col__head { border-bottom-color: var(--green); }
+
+    .col__body {
+      padding: 14px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex; flex-direction: column; gap: 12px;
+      flex: 1;
+      min-height: 0;               /* dispara o scroll interno em flex */
+      background: var(--off-white);
+      scrollbar-width: thin;
+      scrollbar-color: var(--gray-300) transparent;
+    }
+    .col__body::-webkit-scrollbar { width: 6px; }
+    .col__body::-webkit-scrollbar-track { background: transparent; }
+    .col__body::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 3px;
+    }
+    .col__body::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
+
+    /* ── CARD DE LEAD ──────────────────────────────────────── */
+    .lead-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 12px;
+      display: flex; flex-direction: column; gap: 8px;
+      cursor: grab;
+      transition: border-color var(--t), transform var(--t);
+      flex-shrink: 0;               /* card mantém altura natural — nunca encolhe pra caber */
+    }
+    .lead-card:hover { border-color: var(--black); }
+    .lead-card:active { cursor: grabbing; transform: scale(0.99); }
+
+    .lead-card__top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 8px;
+    }
+    .lead-card__name {
+      font-size: 13px; font-weight: 800;
+      color: var(--black); letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .lead-card__phone {
+      font-size: 11px; color: var(--gray-600); font-weight: 600;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .lead-card__health {
+      width: 8px; height: 8px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 4px;
+    }
+    .lead-card__health--ok    { background: var(--green); }
+    .lead-card__health--watch { background: var(--warning); }
+    .lead-card__health--cold  { background: var(--error); }
+
+    .lead-card__meta {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      font-size: 10px; color: var(--gray-600); font-weight: 600;
+      padding-top: 8px; border-top: 1px dashed var(--gray-200);
+    }
+    .lead-card__meta-item {
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .lead-card__meta-item svg { width: 10px; height: 10px; }
+    .lead-card__meta-item strong {
+      color: var(--black); font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .lead-card__actions {
+      display: flex; gap: 6px; margin-top: 4px;
+    }
+    .lead-card__btn {
+      flex: 1;
+      padding: 7px 10px;
+      font-family: var(--f); font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1px solid var(--gray-300);
+      transition: all var(--t); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    }
+    .lead-card__btn:hover { border-color: var(--black); background: var(--off-white); }
+    .lead-card__btn--primary {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .lead-card__btn--primary:hover { background: var(--green); border-color: var(--green); }
+    .lead-card__btn svg { width: 10px; height: 10px; }
+
+    .lead-card__source {
+      display: inline-block;
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-600);
+      padding: 2px 6px;
+      border: 1px solid var(--gray-300);
+    }
+
+    /* placeholder de coluna vazia */
+    .col__empty {
+      padding: 20px 12px;
+      text-align: center;
+      font-size: 11px; color: var(--gray-600);
+      border: 1px dashed var(--gray-300);
+      background: var(--white);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LIST VIEW — visão complementar ao Kanban
+       ══════════════════════════════════════════════════════════ */
+    .list-view {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      overflow: hidden;
+    }
+    .list-scroll {
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    .list-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1080px;
+    }
+    .list-table thead th {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+      text-align: left;
+      padding: 14px 16px;
+      background: var(--off-white);
+      border-bottom: 1px solid var(--gray-300);
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .list-table thead th.is-sortable { cursor: pointer; user-select: none; }
+    .list-table thead th.is-sortable:hover { color: var(--black); }
+    .list-table thead th.is-sortable svg {
+      width: 10px; height: 10px; vertical-align: -1px;
+      margin-left: 3px; opacity: 0.5;
+    }
+    .list-table thead th.col-check { width: 36px; padding-right: 0; }
+    .list-table thead th.col-actions { width: 40px; }
+
+    .list-table tbody tr {
+      border-bottom: 1px solid var(--gray-200);
+      transition: background var(--t);
+    }
+    .list-table tbody tr:last-child { border-bottom: none; }
+    .list-table tbody tr:hover { background: var(--off-white); }
+    .list-table tbody tr.is-selected {
+      background: rgba(66,180,73,0.06);
+      box-shadow: inset 3px 0 0 var(--green);
+    }
+    .list-table tbody td {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--black);
+      vertical-align: middle;
+    }
+
+    /* Section divider rows (etapa headers when sorted/grouped) */
+    .list-section-row td {
+      padding: 18px 16px 8px;
+      background: var(--off-white);
+      border-top: 2px solid var(--black);
+      border-bottom: none;
+    }
+    .list-section-row td > div {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--black);
+    }
+    .list-section-row__num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px;
+      background: var(--white); border: 1.5px solid var(--black);
+      font-size: 10px; font-variant-numeric: tabular-nums;
+    }
+    .list-section-row__count {
+      margin-left: auto;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--gray-600);
+    }
+
+    /* Lead cell (avatar + name + phone) */
+    .lead-cell {
+      display: flex; align-items: center; gap: 12px;
+      min-width: 220px;
+    }
+    .lead-cell__avatar {
+      position: relative;
+      width: 32px; height: 32px;
+      background: var(--gray-200); color: var(--black);
+      font-size: 10px; font-weight: 800; letter-spacing: 0.02em;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .lead-cell__health-dot {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 10px; height: 10px;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+    .lead-cell__health-dot--ok { background: var(--green); }
+    .lead-cell__health-dot--watch { background: var(--warning); }
+    .lead-cell__health-dot--cold { background: var(--error); }
+
+    .lead-cell__body { min-width: 0; }
+    .lead-cell__name {
+      font-size: 13px; font-weight: 700; color: var(--black);
+      line-height: 1.25;
+    }
+    .lead-cell__phone {
+      font-size: 11px; color: var(--gray-600); font-weight: 600;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Stage chip (mini, in list) */
+    .stage-chip-list {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 8px 4px 4px;
+      font-size: 11px; font-weight: 700;
+      color: var(--black);
+      background: var(--off-white);
+      border: 1px solid var(--gray-300);
+      max-width: 100%;
+    }
+    .stage-chip-list__num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      font-size: 9px; font-weight: 800;
+      background: var(--white); border: 1px solid var(--gray-300);
+      color: var(--black);
+    }
+    .stage-chip-list__name {
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .stage-chip-list[data-stage="1"] .stage-chip-list__num,
+    .stage-chip-list[data-stage="2"] .stage-chip-list__num { border-color: var(--blue); color: var(--blue); }
+    .stage-chip-list[data-stage="3"] .stage-chip-list__num,
+    .stage-chip-list[data-stage="4"] .stage-chip-list__num,
+    .stage-chip-list[data-stage="5"] .stage-chip-list__num,
+    .stage-chip-list[data-stage="6"] .stage-chip-list__num { border-color: var(--warning); color: var(--warning); }
+    .stage-chip-list[data-stage="7"] .stage-chip-list__num,
+    .stage-chip-list[data-stage="8"] .stage-chip-list__num { border-color: var(--sage); color: #6B7048; }
+    .stage-chip-list[data-stage="9"] .stage-chip-list__num { background: var(--green); border-color: var(--green); color: var(--white); }
+
+    /* Source pill */
+    .source-pill {
+      display: inline-block;
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-600);
+      padding: 2px 7px;
+      border: 1px solid var(--gray-300);
+      white-space: nowrap;
+    }
+
+    /* Time / activity */
+    .time-cell {
+      font-size: 12px; color: var(--gray-600); font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .time-cell strong { color: var(--black); font-weight: 700; }
+    .time-cell--alert strong { color: var(--warning); }
+    .time-cell--cold strong { color: var(--error); }
+
+    .activity-cell {
+      display: flex; flex-direction: column; gap: 2px;
+      min-width: 180px;
+    }
+    .activity-cell__what {
+      font-size: 12px; color: var(--black); font-weight: 600;
+      line-height: 1.35;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      max-width: 220px;
+    }
+    .activity-cell__when {
+      font-size: 10px; color: var(--gray-600); font-weight: 600;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+
+    /* Assignee */
+    .assignee {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700;
+      color: var(--black);
+    }
+    .assignee__dot {
+      width: 18px; height: 18px;
+      background: var(--gray-200); color: var(--black);
+      font-size: 9px; font-weight: 800; letter-spacing: 0.02em;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .assignee__dot--admin { background: var(--black); color: var(--white); }
+    .assignee__dot--bot { background: var(--blue); color: var(--white); }
+    .assignee--none { color: var(--gray-600); font-weight: 500; font-style: italic; }
+
+    /* Checkbox (re-used pattern) */
+    .row-check { width: 36px; padding-right: 0; }
+    .check {
+      appearance: none;
+      width: 16px; height: 16px;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white);
+      cursor: pointer;
+      position: relative;
+      transition: border-color var(--t), background var(--t);
+      vertical-align: middle;
+    }
+    .check:hover { border-color: var(--black); }
+    .check:checked {
+      background: var(--black); border-color: var(--black);
+    }
+    .check:checked::after {
+      content: '';
+      position: absolute; left: 4px; top: 1px;
+      width: 5px; height: 9px;
+      border: solid var(--white);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* Kebab (mini, re-used) */
+    .kebab-mini {
+      width: 32px; height: 32px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: 1px solid transparent;
+      color: var(--gray-600); cursor: pointer;
+      transition: all var(--t);
+    }
+    .kebab-mini:hover { border-color: var(--gray-300); color: var(--black); background: var(--white); }
+    .kebab-mini svg { width: 16px; height: 16px; }
+
+    /* Pagination */
+    .list-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 14px 16px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 12px; color: var(--gray-600);
+      flex-wrap: wrap;
+      background: var(--off-white);
+    }
+    .list-foot strong { color: var(--black); font-weight: 700; }
+    .list-foot__nav { display: flex; gap: 4px; }
+    .list-foot__btn {
+      padding: 6px 10px;
+      font-family: var(--f); font-size: 11px; font-weight: 700;
+      background: var(--white); color: var(--black);
+      border: 1px solid var(--gray-300);
+      cursor: pointer; transition: all var(--t);
+      min-width: 32px;
+    }
+    .list-foot__btn:hover { border-color: var(--black); }
+    .list-foot__btn--active {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .list-foot__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Group toggle (Agrupar por etapa) */
+    .group-toggle {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 12px;
+      font-family: var(--f); font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      cursor: pointer; transition: all var(--t);
+    }
+    .group-toggle:hover { border-color: var(--black); }
+    .group-toggle.is-active { background: var(--black); color: var(--white); border-color: var(--black); }
+    .group-toggle svg { width: 11px; height: 11px; }
+
+    /* List header bar */
+    .list-head-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 14px 16px;
+      border-bottom: 1px solid var(--gray-300);
+      background: var(--white);
+      flex-wrap: wrap;
+    }
+    .list-head-bar__title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+    }
+    .list-head-bar__title strong { color: var(--black); font-weight: 800; }
+    .list-head-bar__right { display: flex; gap: 8px; }
+
+    /* Group rows hidden when not grouped */
+    .list-table[data-grouped="false"] .list-section-row { display: none; }
+
+    /* View pane visibility */
+    [data-view-pane] { display: block; }
+    [data-view-pane].is-hidden { display: none; }
+
+    /* Mobile: list scrolls horizontally */
+    @media (max-width: 720px) {
+      .list-head-bar { padding: 12px 14px; }
+      .group-toggle { padding: 6px 10px; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE-FIRST RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main    { padding: 72px 16px 60px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 72px 24px 80px; }
+      .page-title { font-size: 26px; }
+    }
+
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main    { margin-left: var(--sidebar-w); padding: 32px 32px 60px; max-width: 100%; }
+      .page-title { font-size: 28px; }
+    }
+
+    @media (min-width: 1280px) {
+      .main { padding: 32px 40px 60px; }
+      /* board mantém largura fixa de coluna (300px) e scroll horizontal —
+         9 etapas não cabem em uma viewport sem espremer cards */
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main   { padding-bottom: max(60px, calc(40px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+    .logout-modal {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 28px 28px 24px; width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 24px;
+    }
+    .logout-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }    /* nav-item placeholder "em breve" — sem destino ainda */
+    .nav-item--soon { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .nav-item--soon::after {
+      content: "Em breve";
+      margin-left: auto;
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--gray-600);
+      border: 1px solid var(--gray-300); padding: 2px 6px;
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- MOBILE TOP BAR -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">EV</a>
+</div>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+
+      <div class="sidebar__section-title">Admin</div>
+
+      <a href="18_basta-hoje.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Hoje
+      </a>
+      <a href="19_basta-admin-conversas.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversas
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        CRM
+      </span>
+      <a href="23_basta-diagnostico-admin.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 5c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+        Diagnóstico
+      </a>
+      <a href="21_basta-admin-templates.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Templates
+      </a>
+      <a href="22_basta-admin-usuarios.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Usuários
+      </a>
+      <a href="#" class="nav-item nav-item--soon" aria-disabled="true" tabindex="-1" title="Em breve">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Consulta Extrato
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">EV</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Eduardo Vergueiro</div>
+        <div class="sidebar__user-email">eavergueiro@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">CRM<span class="accent">.</span></h1>
+        <p class="page-desc">Onde cada lead está no fluxo. Da primeira conversa ao requerimento concluído.</p>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi__label">Total de leads</div>
+        <div class="kpi__value">187</div>
+        <div class="kpi__delta kpi__delta--up">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +18 esta semana
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Concluídos</div>
+        <div class="kpi__value">23</div>
+        <div class="kpi__delta kpi__delta--up">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +6 vs mês anterior
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Tempo Médio Atendimento</div>
+        <div class="kpi__value">9d</div>
+        <div class="kpi__delta kpi__delta--up">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          -2d (mais rápido)
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Perdidos</div>
+        <div class="kpi__value">22</div>
+        <div class="kpi__delta kpi__delta--down">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +3 vs mês anterior
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="filter-search">
+        <svg class="filter-search__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="filter-search__input" placeholder="Buscar lead por nome, telefone ou CPF…" aria-label="Buscar lead" />
+      </div>
+
+      <button class="filter-pill filter-pill--active" data-group="period">Ativos 7d</button>
+      <button class="filter-pill" data-group="period">Ativos 30d</button>
+      <button class="filter-pill" data-group="period">Todos</button>
+
+      <span class="filter-divider" aria-hidden="true"></span>
+
+      <button class="filter-pill" data-group="health" data-health="ok">
+        <span class="health-dot health-dot--ok"></span>
+        Saudáveis · 98
+      </button>
+      <button class="filter-pill" data-group="health" data-health="watch">
+        <span class="health-dot health-dot--watch"></span>
+        Atenção · 32
+      </button>
+      <button class="filter-pill" data-group="health" data-health="cold">
+        <span class="health-dot health-dot--cold"></span>
+        Frios · 12
+      </button>
+
+      <div class="view-toggle" role="tablist" aria-label="Visualização">
+        <button class="view-toggle__btn view-toggle__btn--active" role="tab" data-view="kanban">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="6" height="18"/><rect x="11" y="3" width="6" height="12"/><rect x="19" y="3" width="2" height="6"/></svg>
+          Kanban
+        </button>
+        <button class="view-toggle__btn" role="tab" data-view="lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Lista
+        </button>
+      </div>
+    </div>
+
+    <!-- BOARD (Kanban) -->
+    <div class="board-wrap" data-view-pane="kanban">
+      <div class="board">
+
+        <!-- ── 01 ATENDIMENTO ────────────────────────────── -->
+        <section class="col" data-stage="1">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">01</span>
+              <span class="col__count">38</span>
+            </div>
+            <div class="col__title">Atendimento</div>
+            <div class="col__sub">Primeiro contato · <strong>2d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Roberta Nunes</div>
+                  <div class="lead-card__phone">+55 11 9•••• 4421</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok" title="Saudável"></span>
+              </div>
+              <span class="lead-card__source">Instagram Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>3h</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  Agente
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">João da Silva</div>
+                  <div class="lead-card__phone">+55 21 9•••• 7782</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Agente</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Beatriz Almeida</div>
+                  <div class="lead-card__phone">+55 31 9•••• 1102</div>
+                </div>
+                <span class="lead-card__health lead-card__health--watch" title="Atenção"></span>
+              </div>
+              <span class="lead-card__source">Google Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>3d</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Sem resposta</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 35 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 02 PESSOAIS ──────────────────────────────────── -->
+        <section class="col" data-stage="2">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">02</span>
+              <span class="col__count">24</span>
+            </div>
+            <div class="col__title">Pessoais</div>
+            <div class="col__sub">Coleta de docs · <strong>1d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Pedro Lima</div>
+                  <div class="lead-card__phone">+55 47 9•••• 3382</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Instagram Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>5h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Carla Bittencourt</div>
+                  <div class="lead-card__phone">+55 11 9•••• 5544</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Orgânico</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Camila Ribas</div>
+                  <div class="lead-card__phone">+55 11 9•••• 6630</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>8h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 21 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 03 HOLERITE ──────────────────────────────────── -->
+        <section class="col" data-stage="3">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">03</span>
+              <span class="col__count">16</span>
+            </div>
+            <div class="col__title">Holerite</div>
+            <div class="col__sub">Comprovante de renda · <strong>1d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Rafael Costa</div>
+                  <div class="lead-card__phone">+55 21 9•••• 4471</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Indicação</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>6h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Juliana Mendes</div>
+                  <div class="lead-card__phone">+55 31 9•••• 8820</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Google Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 14 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 04 SCR ───────────────────────────────────────── -->
+        <section class="col" data-stage="4">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">04</span>
+              <span class="col__count">12</span>
+            </div>
+            <div class="col__title">SCR</div>
+            <div class="col__sub">Consulta Bacen · <strong>1d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Marcos Andrade</div>
+                  <div class="lead-card__phone">+55 51 9•••• 1129</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Orgânico</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>4h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Patrícia Souza</div>
+                  <div class="lead-card__phone">+55 11 9•••• 3367</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Indicação</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>14h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 10 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 05 PESQUISA ──────────────────────────────────── -->
+        <section class="col" data-stage="5">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">05</span>
+              <span class="col__count">19</span>
+            </div>
+            <div class="col__title">Pesquisa</div>
+            <div class="col__sub">Coleta dados · <strong>2d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Lucas Martins</div>
+                  <div class="lead-card__phone">+55 41 9•••• 9087</div>
+                </div>
+                <span class="lead-card__health lead-card__health--watch"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>4d</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Sem resposta</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Ana Ribeiro</div>
+                  <div class="lead-card__phone">+55 19 9•••• 4471</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Instagram Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Diego Andrade</div>
+                  <div class="lead-card__phone">+55 62 9•••• 4423</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Google Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 16 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 06 ANÁLISE GRATUITA ──────────────────────────── -->
+        <section class="col" data-stage="6">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">06</span>
+              <span class="col__count">14</span>
+            </div>
+            <div class="col__title">Análise gratuita</div>
+            <div class="col__sub">Diagnóstico enviado · <strong>1d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Fernanda Souza</div>
+                  <div class="lead-card__phone">+55 11 9•••• 2231</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Google Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>8h</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Aguarda decisão</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Ricardo Teixeira</div>
+                  <div class="lead-card__phone">+55 51 9•••• 8810</div>
+                </div>
+                <span class="lead-card__health lead-card__health--cold" title="Frio"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>7d</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Sem resposta</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Patrícia Moura</div>
+                  <div class="lead-card__phone">+55 21 9•••• 7019</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>5h</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Análise enviada</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 11 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 07 CRIAÇÃO DE CONTA ──────────────────────────── -->
+        <section class="col" data-stage="7">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">07</span>
+              <span class="col__count">11</span>
+            </div>
+            <div class="col__title">Criação de conta</div>
+            <div class="col__sub">Cadastro na plataforma · <strong>4h</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Henrique Costa</div>
+                  <div class="lead-card__phone">+55 81 9•••• 0098</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Orgânico</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>2h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Tatiana Vieira</div>
+                  <div class="lead-card__phone">+55 11 9•••• 4467</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Felipe Ramos</div>
+                  <div class="lead-card__phone">+55 31 9•••• 2208</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Instagram Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>3h</strong> na etapa
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 8 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 08 OPEN FINANCE ──────────────────────────────── -->
+        <section class="col" data-stage="8">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">08</span>
+              <span class="col__count">9</span>
+            </div>
+            <div class="col__title">Open Finance</div>
+            <div class="col__sub">Conexão de bancos · <strong>2d</strong> médio</div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Maria Carvalho</div>
+                  <div class="lead-card__phone">+55 19 9•••• 5723</div>
+                </div>
+                <span class="lead-card__health lead-card__health--watch"></span>
+              </div>
+              <span class="lead-card__source">Instagram Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>2d</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">Itaú pendente</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Sérgio Mendes</div>
+                  <div class="lead-card__phone">+55 11 9•••• 6712</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Google Ads</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>1d</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">2 bancos OK</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Larissa Coutinho</div>
+                  <div class="lead-card__phone">+55 19 9•••• 1145</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Orgânico</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <strong>4h</strong> na etapa
+                </span>
+                <span class="lead-card__meta-item">3 bancos OK</span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 6 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ── 09 CONCLUÍDO ─────────────────────────────────── -->
+        <section class="col" data-stage="9">
+          <header class="col__head">
+            <div class="col__top">
+              <span class="col__num">09</span>
+              <span class="col__count">23</span>
+            </div>
+            <div class="col__title">Concluído</div>
+            <div class="col__sub">Contratação Assinada · <strong>30d</strong></div>
+          </header>
+          <div class="col__body">
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Cláudia Pereira</div>
+                  <div class="lead-card__phone">+55 11 9•••• 1182</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <strong>4 reqs</strong> assinados
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Bruno Carvalho</div>
+                  <div class="lead-card__phone">+55 21 9•••• 3344</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Orgânico</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <strong>2 reqs</strong> assinados
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">Rafael Nogueira</div>
+                  <div class="lead-card__phone">+55 41 9•••• 5567</div>
+                </div>
+                <span class="lead-card__health lead-card__health--ok"></span>
+              </div>
+              <span class="lead-card__source">Email Mkting</span>
+              <div class="lead-card__meta">
+                <span class="lead-card__meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <strong>3 reqs</strong> assinados
+                </span>
+              </div>
+              <div class="lead-card__actions">
+                <a href="19_basta-admin-conversas.html" class="lead-card__btn lead-card__btn--primary">Abrir conversa</a>
+              </div>
+            </article>
+
+            <article class="lead-card">
+              <div class="lead-card__top">
+                <div>
+                  <div class="lead-card__name">+ 20 leads</div>
+                  <div class="lead-card__phone">Ver todos</div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- spacer · garante respiro após a última coluna no fim do scroll horizontal -->
+        <div class="board__end-spacer" aria-hidden="true"></div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         LIST VIEW (complementar ao Kanban)
+         ════════════════════════════════════════════════════════ -->
+    <section class="list-view is-hidden" data-view-pane="lista">
+
+      <div class="list-head-bar">
+        <div class="list-head-bar__title">
+          <strong>14</strong> de <strong>142</strong> leads · ordenados por última atividade
+        </div>
+        <div class="list-head-bar__right">
+          <button class="group-toggle" id="groupToggle" onclick="toggleGroup()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Agrupar por etapa
+          </button>
+        </div>
+      </div>
+
+      <div class="list-scroll">
+        <table class="list-table" id="leadsTable" data-grouped="false">
+          <thead>
+            <tr>
+              <th class="is-sortable">Lead <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+              <th class="is-sortable">Etapa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+              <th class="is-sortable">Tempo na etapa <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></th>
+              <th>Origem</th>
+              <th>Última atividade</th>
+              <th class="col-actions" aria-label="Ações"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ETAPA 01 (group header — visible só quando agrupado) -->
+            <tr class="list-section-row" data-stage="1"><td colspan="7"><div><span class="list-section-row__num">01</span> Atendimento <span class="list-section-row__count">38 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Roberta Nunes (01 Atendimento) -->
+            <tr data-stage="1">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">RN<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Roberta Nunes</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 4421</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="1"><span class="stage-chip-list__num">01</span><span class="stage-chip-list__name">Atendimento</span></span></td>
+              <td><span class="time-cell"><strong>3h</strong></span></td>
+              <td><span class="source-pill">Instagram Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Agente respondeu sobre análise gratuita</div>
+                  <div class="activity-cell__when">há 12 min</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: João da Silva (01) -->
+            <tr data-stage="1">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">JS<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">João da Silva</div>
+                    <div class="lead-cell__phone">+55 21 9•••• 7782</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="1"><span class="stage-chip-list__num">01</span><span class="stage-chip-list__name">Atendimento</span></span></td>
+              <td><span class="time-cell"><strong>1d</strong></span></td>
+              <td><span class="source-pill">Email Mkting</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">"Posso enviar documentos hoje?"</div>
+                  <div class="activity-cell__when">há 38 min</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Beatriz Almeida (01, watch) -->
+            <tr data-stage="1">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">BA<span class="lead-cell__health-dot lead-cell__health-dot--watch"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Beatriz Almeida</div>
+                    <div class="lead-cell__phone">+55 31 9•••• 1102</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="1"><span class="stage-chip-list__num">01</span><span class="stage-chip-list__name">Atendimento</span></span></td>
+              <td><span class="time-cell time-cell--alert"><strong>3d</strong></span></td>
+              <td><span class="source-pill">Google Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Sem resposta desde último contato</div>
+                  <div class="activity-cell__when">há 2 dias</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 02 -->
+            <tr class="list-section-row" data-stage="2"><td colspan="7"><div><span class="list-section-row__num">02</span> Pessoais <span class="list-section-row__count">24 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Pedro Lima -->
+            <tr data-stage="2">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">PL<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Pedro Lima</div>
+                    <div class="lead-cell__phone">+55 47 9•••• 3382</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="2"><span class="stage-chip-list__num">02</span><span class="stage-chip-list__name">Pessoais</span></span></td>
+              <td><span class="time-cell"><strong>5h</strong></span></td>
+              <td><span class="source-pill">Instagram Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Enviou RG e comprovante de residência</div>
+                  <div class="activity-cell__when">há 2h</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Carla Bittencourt -->
+            <tr data-stage="2">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">CB<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Carla Bittencourt</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 5544</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="2"><span class="stage-chip-list__num">02</span><span class="stage-chip-list__name">Pessoais</span></span></td>
+              <td><span class="time-cell"><strong>1d</strong></span></td>
+              <td><span class="source-pill">Orgânico</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Conversa assumida pelo Aliado</div>
+                  <div class="activity-cell__when">ontem · 18:14</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 03 -->
+            <tr class="list-section-row" data-stage="3"><td colspan="7"><div><span class="list-section-row__num">03</span> Holerite <span class="list-section-row__count">16 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Rafael Costa -->
+            <tr data-stage="3">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">RC<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Rafael Costa</div>
+                    <div class="lead-cell__phone">+55 21 9•••• 4471</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="3"><span class="stage-chip-list__num">03</span><span class="stage-chip-list__name">Holerite</span></span></td>
+              <td><span class="time-cell"><strong>6h</strong></span></td>
+              <td><span class="source-pill">Indicação</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Enviou holerite dos últimos 3 meses</div>
+                  <div class="activity-cell__when">há 4h</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Juliana Mendes -->
+            <tr data-stage="3">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">JM<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Juliana Mendes</div>
+                    <div class="lead-cell__phone">+55 31 9•••• 8820</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="3"><span class="stage-chip-list__num">03</span><span class="stage-chip-list__name">Holerite</span></span></td>
+              <td><span class="time-cell"><strong>1d</strong></span></td>
+              <td><span class="source-pill">Google Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Aguardando holerite — lembrete enviado</div>
+                  <div class="activity-cell__when">ontem · 16:30</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 04 -->
+            <tr class="list-section-row" data-stage="4"><td colspan="7"><div><span class="list-section-row__num">04</span> SCR <span class="list-section-row__count">12 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Marcos Andrade -->
+            <tr data-stage="4">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">MA<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Marcos Andrade</div>
+                    <div class="lead-cell__phone">+55 51 9•••• 1129</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="4"><span class="stage-chip-list__num">04</span><span class="stage-chip-list__name">SCR</span></span></td>
+              <td><span class="time-cell"><strong>4h</strong></span></td>
+              <td><span class="source-pill">Orgânico</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Autorizou consulta SCR/Bacen</div>
+                  <div class="activity-cell__when">há 3h</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Patrícia Souza -->
+            <tr data-stage="4">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">PS<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Patrícia Souza</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 3367</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="4"><span class="stage-chip-list__num">04</span><span class="stage-chip-list__name">SCR</span></span></td>
+              <td><span class="time-cell"><strong>14h</strong></span></td>
+              <td><span class="source-pill">Indicação</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">SCR coletado — análise iniciada</div>
+                  <div class="activity-cell__when">hoje · 09:12</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 05 -->
+            <tr class="list-section-row" data-stage="5"><td colspan="7"><div><span class="list-section-row__num">05</span> Pesquisa <span class="list-section-row__count">19 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Lucas Martins -->
+            <tr data-stage="5">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">LM<span class="lead-cell__health-dot lead-cell__health-dot--watch"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Lucas Martins</div>
+                    <div class="lead-cell__phone">+55 41 9•••• 9087</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="5"><span class="stage-chip-list__num">05</span><span class="stage-chip-list__name">Pesquisa</span></span></td>
+              <td><span class="time-cell time-cell--alert"><strong>4d</strong></span></td>
+              <td><span class="source-pill">Email Mkting</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Sem resposta da pesquisa</div>
+                  <div class="activity-cell__when">há 4 dias</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Ana Ribeiro -->
+            <tr data-stage="5">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">AR<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Ana Ribeiro</div>
+                    <div class="lead-cell__phone">+55 19 9•••• 4471</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="5"><span class="stage-chip-list__num">05</span><span class="stage-chip-list__name">Pesquisa</span></span></td>
+              <td><span class="time-cell"><strong>1d</strong></span></td>
+              <td><span class="source-pill">Instagram Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Respondeu 6 de 10 perguntas</div>
+                  <div class="activity-cell__when">hoje · 09:21</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 06 -->
+            <tr class="list-section-row" data-stage="6"><td colspan="7"><div><span class="list-section-row__num">06</span> Análise gratuita <span class="list-section-row__count">14 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Fernanda Souza -->
+            <tr data-stage="6">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">FS<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Fernanda Souza</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 2231</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="6"><span class="stage-chip-list__num">06</span><span class="stage-chip-list__name">Análise gratuita</span></span></td>
+              <td><span class="time-cell"><strong>8h</strong></span></td>
+              <td><span class="source-pill">Google Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Análise enviada · aguardando decisão</div>
+                  <div class="activity-cell__when">há 8h</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Ricardo Teixeira (cold) -->
+            <tr data-stage="6">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">RT<span class="lead-cell__health-dot lead-cell__health-dot--cold"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Ricardo Teixeira</div>
+                    <div class="lead-cell__phone">+55 51 9•••• 8810</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="6"><span class="stage-chip-list__num">06</span><span class="stage-chip-list__name">Análise gratuita</span></span></td>
+              <td><span class="time-cell time-cell--cold"><strong>7d</strong></span></td>
+              <td><span class="source-pill">Email Mkting</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Sem resposta após análise enviada</div>
+                  <div class="activity-cell__when">há 7 dias</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 07 -->
+            <tr class="list-section-row" data-stage="7"><td colspan="7"><div><span class="list-section-row__num">07</span> Criação de conta <span class="list-section-row__count">11 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Henrique Costa -->
+            <tr data-stage="7">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">HC<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Henrique Costa</div>
+                    <div class="lead-cell__phone">+55 81 9•••• 0098</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="7"><span class="stage-chip-list__num">07</span><span class="stage-chip-list__name">Criação de conta</span></span></td>
+              <td><span class="time-cell"><strong>2h</strong></span></td>
+              <td><span class="source-pill">Orgânico</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Conta criada · começou onboarding</div>
+                  <div class="activity-cell__when">há 2h</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Tatiana Vieira -->
+            <tr data-stage="7">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">TV<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Tatiana Vieira</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 4467</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="7"><span class="stage-chip-list__num">07</span><span class="stage-chip-list__name">Criação de conta</span></span></td>
+              <td><span class="time-cell"><strong>1d</strong></span></td>
+              <td><span class="source-pill">Email Mkting</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Aceitou termos · aguarda Open Finance</div>
+                  <div class="activity-cell__when">ontem · 22:08</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 08 -->
+            <tr class="list-section-row" data-stage="8"><td colspan="7"><div><span class="list-section-row__num">08</span> Open Finance <span class="list-section-row__count">9 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Maria Carvalho (caso central) -->
+            <tr data-stage="8">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">MC<span class="lead-cell__health-dot lead-cell__health-dot--watch"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Maria Carvalho</div>
+                    <div class="lead-cell__phone">+55 19 9•••• 5723</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="8"><span class="stage-chip-list__num">08</span><span class="stage-chip-list__name">Open Finance</span></span></td>
+              <td><span class="time-cell time-cell--alert"><strong>2d</strong></span></td>
+              <td><span class="source-pill">Instagram Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">Itaú falhou na conexão · aguarda retry</div>
+                  <div class="activity-cell__when">hoje · 10:42</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Sérgio Mendes -->
+            <tr data-stage="8">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">SM<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Sérgio Mendes</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 6712</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="8"><span class="stage-chip-list__num">08</span><span class="stage-chip-list__name">Open Finance</span></span></td>
+              <td><span class="time-cell"><strong>1d</strong></span></td>
+              <td><span class="source-pill">Google Ads</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">2 bancos conectados · análise rodando</div>
+                  <div class="activity-cell__when">há 4h</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- ETAPA 09 -->
+            <tr class="list-section-row" data-stage="9"><td colspan="7"><div><span class="list-section-row__num">09</span> Concluído <span class="list-section-row__count">23 leads no total</span></div></td></tr>
+
+            <!-- LEAD: Cláudia Pereira -->
+            <tr data-stage="9">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">CP<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Cláudia Pereira</div>
+                    <div class="lead-cell__phone">+55 11 9•••• 1182</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="9"><span class="stage-chip-list__num">09</span><span class="stage-chip-list__name">Concluído</span></span></td>
+              <td><span class="time-cell">—</span></td>
+              <td><span class="source-pill">Email Mkting</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">4 requerimentos assinados · enviados</div>
+                  <div class="activity-cell__when">02 mai</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+            <!-- LEAD: Bruno Carvalho -->
+            <tr data-stage="9">
+              <td>
+                <div class="lead-cell">
+                  <div class="lead-cell__avatar">BC<span class="lead-cell__health-dot lead-cell__health-dot--ok"></span></div>
+                  <div class="lead-cell__body">
+                    <div class="lead-cell__name">Bruno Carvalho</div>
+                    <div class="lead-cell__phone">+55 21 9•••• 3344</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="stage-chip-list" data-stage="9"><span class="stage-chip-list__num">09</span><span class="stage-chip-list__name">Concluído</span></span></td>
+              <td><span class="time-cell">—</span></td>
+              <td><span class="source-pill">Orgânico</span></td>
+              <td>
+                <div class="activity-cell">
+                  <div class="activity-cell__what">2 requerimentos assinados</div>
+                  <div class="activity-cell__when">28 abr</div>
+                </div>
+              </td>
+              <td><a class="kebab-mini" href="19_basta-admin-conversas.html" aria-label="Abrir conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="list-foot">
+        <span>Mostrando <strong>1–14</strong> de <strong>142</strong> leads</span>
+        <div class="list-foot__nav">
+          <button class="list-foot__btn" disabled>‹</button>
+          <button class="list-foot__btn list-foot__btn--active">1</button>
+          <button class="list-foot__btn">2</button>
+          <button class="list-foot__btn">3</button>
+          <button class="list-foot__btn">…</button>
+          <button class="list-foot__btn">11</button>
+          <button class="list-foot__btn">›</button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='03_basta-login.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Filter pill toggle (período = mutex, saúde = multi-select) ─ */
+  document.querySelectorAll('.filter-pill').forEach(function(pill){
+    pill.addEventListener('click', function(){
+      var group = pill.dataset.group;
+      if (group === 'period') {
+        document.querySelectorAll('.filter-pill[data-group="period"]').forEach(function(p){
+          p.classList.remove('filter-pill--active');
+        });
+        pill.classList.add('filter-pill--active');
+      } else if (group === 'health') {
+        pill.classList.toggle('filter-pill--active');
+        applyHealthFilter();
+      }
+    });
+  });
+
+  function applyHealthFilter() {
+    var active = Array.from(document.querySelectorAll('.filter-pill[data-group="health"].filter-pill--active'))
+      .map(function(p){ return p.dataset.health; });
+    document.querySelectorAll('.lead-card').forEach(function(card){
+      // pula placeholders ("Ver todos")
+      var phone = card.querySelector('.lead-card__phone');
+      if (phone && phone.textContent.trim() === 'Ver todos') return;
+      var dot = card.querySelector('.lead-card__health');
+      if (!dot) return;
+      var h = dot.classList.contains('lead-card__health--ok') ? 'ok'
+            : dot.classList.contains('lead-card__health--watch') ? 'watch'
+            : dot.classList.contains('lead-card__health--cold') ? 'cold' : '';
+      // se nenhum filtro ativo, mostra todos
+      if (active.length === 0 || active.indexOf(h) !== -1) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  /* ── Drag-and-drop entre colunas do Kanban ──────────────── */
+  var draggedCard = null;
+
+  function isPlaceholder(card) {
+    var phone = card.querySelector('.lead-card__phone');
+    return phone && phone.textContent.trim() === 'Ver todos';
+  }
+
+  document.querySelectorAll('.lead-card').forEach(function(card){
+    if (isPlaceholder(card)) return;
+    card.draggable = true;
+    card.addEventListener('dragstart', function(e){
+      draggedCard = card;
+      card.classList.add('is-dragging');
+      if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = 'move';
+        try { e.dataTransfer.setData('text/plain', ''); } catch(_) {}
+      }
+    });
+    card.addEventListener('dragend', function(){
+      card.classList.remove('is-dragging');
+      draggedCard = null;
+      document.querySelectorAll('.col.is-drop-target').forEach(function(c){ c.classList.remove('is-drop-target'); });
+    });
+  });
+
+  document.querySelectorAll('.col').forEach(function(col){
+    var body = col.querySelector('.col__body');
+    if (!body) return;
+    col.addEventListener('dragover', function(e){
+      if (!draggedCard) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+      col.classList.add('is-drop-target');
+    });
+    col.addEventListener('dragleave', function(e){
+      // só limpa se o cursor saiu de fato da coluna (não filhos)
+      if (e.relatedTarget && col.contains(e.relatedTarget)) return;
+      col.classList.remove('is-drop-target');
+    });
+    col.addEventListener('drop', function(e){
+      e.preventDefault();
+      col.classList.remove('is-drop-target');
+      if (!draggedCard) return;
+      var fromCol = draggedCard.closest('.col');
+      // insere antes do placeholder "Ver todos" (se existir)
+      var placeholder = Array.from(body.querySelectorAll('.lead-card')).find(isPlaceholder);
+      if (placeholder) body.insertBefore(draggedCard, placeholder);
+      else body.appendChild(draggedCard);
+      // atualiza contadores das colunas afetadas
+      [fromCol, col].forEach(updateColCount);
+    });
+  });
+
+  function updateColCount(col) {
+    if (!col) return;
+    var cards = col.querySelectorAll('.lead-card');
+    var realCount = 0;
+    cards.forEach(function(c){ if (!isPlaceholder(c)) realCount++; });
+    var countEl = col.querySelector('.col__count');
+    if (countEl) countEl.textContent = realCount;
+  }
+
+  /* ── View toggle (Kanban / Lista) ────────────────────────── */
+  document.querySelectorAll('.view-toggle__btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var view = b.dataset.view;
+      document.querySelectorAll('.view-toggle__btn').forEach(function(x){ x.classList.remove('view-toggle__btn--active'); });
+      b.classList.add('view-toggle__btn--active');
+      document.querySelectorAll('[data-view-pane]').forEach(function(p){
+        if (p.dataset.viewPane === view) p.classList.remove('is-hidden');
+        else p.classList.add('is-hidden');
+      });
+    });
+  });
+
+  /* ── Agrupar por etapa ───────────────────────────────────── */
+  function toggleGroup() {
+    var btn = document.getElementById('groupToggle');
+    var table = document.getElementById('leadsTable');
+    var grouped = table.dataset.grouped === 'true';
+    table.dataset.grouped = grouped ? 'false' : 'true';
+    btn.classList.toggle('is-active');
+  }
+
+  /* ── Logout modal ────────────────────────────────────────── */
+  let lastFocusedElement = null;
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+  const logoutModal = document.getElementById('logoutModal');
+  logoutModal.addEventListener('click', function(e){ if (e.target === this) closeLogout(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && document.getElementById('logoutModal').classList.contains('is-open')) closeLogout();
+  });
+</script>
+
+</body>
+</html>

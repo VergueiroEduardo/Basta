@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Perfil</title>
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/form.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <style>
+    /* Hover-only: em devices touch (sem hover real), neutraliza estados hover
+       que ficam "stuck" depois do tap (transform, translate). Cosmética; não toca em color/background. */
+    @media (hover: none) and (pointer: coarse) {
+      *:hover {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+    }
+
+
+    /* ══════════════════════════════════════════════════════════
+       RESET
+       ══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: clip; }
+    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    :where(button, a) { border-radius: 0; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR ──────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { flex: 1; }
+
+    /* ── TOP BAR ──────────────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAGE HEADER
+       ══════════════════════════════════════════════════════════ */
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .accent { color: var(--black); }
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.5; margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       FORM CARDS
+       ══════════════════════════════════════════════════════════ */
+    .form-cards { max-width: 600px; }
+
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 18px 16px;
+    }
+    .form-card + .form-card { margin-top: -1px; }
+
+    /* Section heading */
+    .form-section-title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black);
+      margin-bottom: 14px;
+    }
+
+    /* Field groups */
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-of-type { margin-bottom: 0; }
+
+    /* 2-col row (CPF+nasc, WA+email) */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* Localidade grid: mobile = CEP full + Cidade + UF 2-col */
+    .loc-grid {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      gap: 12px;
+    }
+    .loc-cep  { grid-column: 1 / -1; }
+    .loc-city { }
+    .loc-uf   { }
+
+    /* Label */
+    .form-label {
+      display: block;
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+
+    /* Input */
+    .form-input {
+      width: 100%;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--black);
+      font-family: var(--f);
+      font-size: 16px;
+      font-weight: 400;
+      padding: 12px 16px;
+      transition: border-color var(--t);
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: 0;
+    }
+    .form-input:focus { outline: none; border-color: var(--black); }
+    .form-input::placeholder { color: #999; font-weight: 400; }
+
+    /* ── FORM VALIDATION ───────────────────────────────────── */
+    .form-input--error {
+      border-color: var(--error) !important;
+    }
+    .form-error {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: 6px;
+      color: var(--error);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .form-error__icon {
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+      margin-top: 1px;
+    }
+    .form-error[hidden] { display: none; }
+
+    .form-input--readonly {
+      background: var(--gray-100);
+      color: var(--gray-600);
+      cursor: not-allowed;
+    }
+    .form-input--masked {
+      background: var(--gray-100);
+      color: var(--gray-600);
+      cursor: not-allowed;
+      letter-spacing: 0.06em;
+    }
+
+    /* Input wrapper for inline action (e.g. Revelar) */
+    .input-wrap { position: relative; }
+    .input-wrap .form-input { padding-right: 72px; }
+    .input-action {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--green); cursor: pointer;
+      transition: color var(--t); background: none; border: none;
+      font-family: var(--f); padding: 0;
+    }
+    .input-action:hover { color: var(--green-hover); }
+
+    /* Hint text */
+    .form-hint {
+      font-size: 11px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.4; margin-top: 4px;
+    }
+
+    /* ── Save button + feedback ───────────────────────────── */
+    .form-actions {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap; margin-top: 16px; padding-top: 16px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .btn-save {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 100%;
+      padding: 12px 24px;
+      background: var(--green); color: var(--white);
+      font-family: var(--f); font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 2px solid var(--black);
+      transition: background var(--t);
+      cursor: pointer;
+    }
+    .btn-save:hover { background: var(--black); }
+    .btn-save:active { transform: scale(0.98); }
+
+    .save-feedback {
+      display: none; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      border-left: 3px solid var(--green);
+      background: #edf7ee;
+    }
+    .save-feedback.is-visible { display: flex; }
+    .save-feedback__text {
+      font-size: 12px; font-weight: 700; color: var(--green);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       WHATSAPP FAB
+       ══════════════════════════════════════════════════════════ */
+    .fab {
+      position: fixed; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      width: 68px; height: 68px;
+      background: var(--green); border: 2px solid var(--black);
+      border-radius: 0; color: var(--white); box-shadow: none;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .fab:hover { background: var(--black); border-color: var(--black); }
+    .fab__icon { width: 36px; height: 36px; flex-shrink: 0; }
+
+    /* ── LOADING STATE ──────────────────────────────────────── */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .btn--loading {
+      pointer-events: none;
+      opacity: 0.7;
+      position: relative;
+    }
+    .btn--loading .btn__text { visibility: hidden; }
+    .btn--loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      top: 50%;
+      left: 50%;
+      margin: -9px 0 0 -9px;
+      border: 2.5px solid rgba(0,0,0,0.3);
+      border-top-color: var(--black);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE-FIRST RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar { display: flex; }
+    .main { padding: 84px 24px 100px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+    .form-input { font-size: 16px; } /* previne zoom iOS */
+    .fab { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
+
+    @media (min-width: 480px) {
+      .form-row { grid-template-columns: 1fr 1fr; }
+      .loc-grid { grid-template-columns: 148px 1fr 72px; }
+      .loc-cep  { grid-column: auto; }
+      .btn-save { width: auto; }
+    }
+
+    @media (min-width: 640px) {
+      .main { padding: 84px 24px 100px; }
+      .page-title { font-size: 26px; }
+      .form-card { padding: 20px 24px; }
+    }
+
+    @media (min-width: 768px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 960px; }
+      .page-title { font-size: 28px; }
+      .fab { width: 80px; height: 80px; bottom: max(36px, env(safe-area-inset-bottom)); right: 36px; }
+      .fab__icon { width: 40px; height: 40px; }
+      .form-card { padding: 24px 28px; }
+    }
+
+    @media (min-width: 1200px) {
+      .main { padding: 40px 48px 80px; }
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))); }
+      .fab { bottom: max(16px, calc(8px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ── Close button ─────────────────────────────────────── */
+    .btn-close {
+      position: fixed; top: 0; right: 0; z-index: 80;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--gray-600);
+      transition: color var(--t), background var(--t);
+    }
+    .btn-close:hover { color: var(--black); background: rgba(0,0,0,0.05); }
+    /* hide avatar — close takes its place on mobile */
+    .topbar__avatar { display: none !important; }
+
+    @media (min-width: 768px) {
+      .btn-close {
+        width: 36px; height: 36px;
+        top: 20px; right: 28px;
+        background: var(--white);
+        border: 1.5px solid var(--gray-300);
+        color: var(--black);
+      }
+      .btn-close:hover { background: var(--off-white); border-color: var(--black); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .logout-modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 28px 28px 24px;
+      width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error);
+      margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .logout-modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }
+    .btn-logout-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
+
+    /* ── TOAST / SNACKBAR ──────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--f);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 500;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: calc(100% - 48px);
+    }
+    .toast--visible {
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast--success .toast__icon { color: var(--green); }
+    .toast--error .toast__icon { color: #DC2626; }
+    .toast__icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+    /* ─── Onda 9a: tablets portrait (768-959px) usam topbar mobile,
+       sidebar só aparece em ≥960px (mais espaço para conteúdo) ─── */
+    @media (max-width: 959px) {
+      .sidebar { display: none; }
+      .topbar  { display: flex; }
+      .main {
+        margin-left: 0;
+        padding: 84px 24px 100px;
+        max-width: 100%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <div class="topbar__avatar">MC</div>
+
+</div>
+
+<a href="12_basta-dashboard.html" class="btn-close" aria-label="Fechar">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</a>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item nav-item--active">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">MC</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Maria Carvalho</div>
+        <div class="sidebar__user-email">maria.carvalho@email.com</div>
+      </div>
+      <button type="button" class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ════════════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <h1 class="page-title">Suas Informações<span class="accent">.</span></h1>
+    <p class="page-desc">Mantenha as informações completas, elas serão usadas em outros documentos.</p>
+
+    <form class="form-cards" id="profile-form" novalidate onsubmit="event.preventDefault(); if(validatePerfil()) salvar();">
+
+      <!-- ── Card 1: Informações Pessoais ─────────────────── -->
+      <div class="form-card">
+        <div class="form-section-title">Informações Pessoais</div>
+
+        <!-- Nome completo -->
+        <div class="form-group">
+          <label class="form-label" for="nome">Nome Completo</label>
+          <input
+            id="nome"
+            type="text"
+            class="form-input form-input--readonly"
+            value="USUÁRIO DEMO"
+            readonly
+            aria-describedby="nome-hint"
+          />
+          <p class="form-hint" id="nome-hint">Importado do login. Somente leitura.</p>
+        </div>
+
+        <!-- CPF + Data de Nascimento -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cpf">CPF</label>
+            <div class="input-wrap">
+              <input
+                id="cpf"
+                type="text"
+                class="form-input form-input--masked"
+                value="•••.•••.456-09"
+                readonly
+                data-cpf-masked="•••.•••.456-09"
+                data-cpf-clear="123.456.456-09"
+              />
+              <button type="button" class="input-action" id="btnRevelar" onclick="toggleCpf()" aria-label="Revelar CPF">Revelar</button>
+            </div>
+            <p class="form-hint">Campo protegido.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="nascimento">Data de Nascimento</label>
+            <input
+              id="nascimento"
+              type="text"
+              class="form-input"
+              placeholder="DD/MM/AAAA"
+              maxlength="10"
+            />
+            <div class="form-error" id="nascimento-error" hidden>
+              <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Informe uma data válida.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp + Email -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="whatsapp">WhatsApp</label>
+            <input
+              id="whatsapp"
+              type="text"
+              class="form-input form-input--masked"
+              value="(19) ••••• -5723"
+              readonly
+            />
+            <p class="form-hint">Capturado no cadastro. Campo protegido.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              class="form-input"
+              value="demo@exemplo.com"
+            />
+            <div class="form-error" id="email-error" hidden>
+              <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Informe um email válido.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Card 2: Localidade ────────────────────────────── -->
+      <div class="form-card">
+        <div class="form-section-title">Localidade</div>
+
+        <!-- CEP + Cidade + UF -->
+        <div class="loc-grid">
+          <div class="form-group loc-cep">
+            <label class="form-label" for="cep">CEP</label>
+            <input
+              id="cep"
+              type="text"
+              class="form-input"
+              placeholder="00000-000"
+              maxlength="9"
+              oninput="maskCep(this)"
+            />
+            <div class="form-error" id="cep-error" hidden>
+              <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Informe um CEP válido.</span>
+            </div>
+          </div>
+          <div class="form-group loc-city">
+            <label class="form-label" for="cidade">Cidade</label>
+            <input
+              id="cidade"
+              type="text"
+              class="form-input form-input--readonly"
+              placeholder="—"
+              readonly
+            />
+          </div>
+          <div class="form-group loc-uf">
+            <label class="form-label" for="uf">UF</label>
+            <input
+              id="uf"
+              type="text"
+              class="form-input form-input--readonly"
+              placeholder="—"
+              readonly
+              maxlength="2"
+            />
+          </div>
+        </div>
+
+        <!-- Salvar -->
+        <div class="form-actions">
+          <button type="submit" class="btn-save" aria-disabled="false"><span class="btn__text">Salvar Alterações</span></button>
+          <div class="save-feedback" id="saveFeedback" role="status" aria-live="polite">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#42b449" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="save-feedback__text">Alterações salvas</span>
+          </div>
+        </div>
+      </div>
+
+    </form><!-- /#profile-form -->
+
+  </main>
+</div>
+
+<script>
+  /* ── FORM VALIDATION ────────────────────────────────────── */
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validateField(fieldId, isValid, errorMsg = '') {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById(fieldId + '-error');
+
+    if (!isValid) {
+      field.classList.add('form-input--error');
+      if (errorEl) {
+        errorEl.removeAttribute('hidden');
+        if (errorMsg) errorEl.querySelector('span').textContent = errorMsg;
+      }
+      return false;
+    } else {
+      field.classList.remove('form-input--error');
+      if (errorEl) errorEl.setAttribute('hidden', '');
+      return true;
+    }
+  }
+
+  function validatePerfil() {
+    const email = document.getElementById('email').value.trim();
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+
+    let isValid = true;
+
+    isValid = validateField('email', email && validateEmail(email), 'Informe um email válido.') && isValid;
+    if (cep) {
+      isValid = validateField('cep', cep.length === 8, 'Informe um CEP válido.') && isValid;
+    }
+
+    return isValid;
+  }
+
+  // Validação no blur de cada campo
+  document.getElementById('email')?.addEventListener('blur', function() {
+    if (this.value.trim()) {
+      validateField('email', validateEmail(this.value.trim()), 'Informe um email válido.');
+    }
+  });
+
+  document.getElementById('cep')?.addEventListener('blur', function() {
+    if (this.value.trim()) {
+      const cep = this.value.replace(/\D/g, '');
+      validateField('cep', cep.length === 8, 'Informe um CEP válido.');
+    }
+  });
+
+  /* ── CPF reveal ───────────────────────────────────────── */
+  let cpfRevealed = false;
+  function toggleCpf() {
+    const input = document.getElementById('cpf');
+    const btn   = document.getElementById('btnRevelar');
+    cpfRevealed = !cpfRevealed;
+    if (cpfRevealed) {
+      input.value = input.dataset.cpfClear;
+      input.classList.remove('form-input--masked');
+      btn.textContent = 'Ocultar';
+    } else {
+      input.value = input.dataset.cpfMasked;
+      input.classList.add('form-input--masked');
+      btn.textContent = 'Revelar';
+    }
+  }
+
+  /* ── CEP mask ─────────────────────────────────────────── */
+  function maskCep(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 5) v = v.slice(0,5) + '-' + v.slice(5);
+    input.value = v;
+  }
+
+  /* ── CEP lookup (ViaCEP) ──────────────────────────────── */
+  async function lookupCep(cep) {
+    const raw = cep.replace(/\D/g, '');
+    if (raw.length !== 8) return;
+    try {
+      const res  = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+      const data = await res.json();
+      if (!data.erro) {
+        document.getElementById('cidade').value = data.localidade || '';
+        document.getElementById('uf').value      = data.uf || '';
+        // Visual feedback: green border on success
+        const cepField = document.getElementById('cep');
+        cepField.style.borderColor = 'var(--green)';
+        setTimeout(() => {
+          cepField.style.borderColor = '';
+        }, 1500);
+      }
+    } catch (_) { /* silently fail in prototype */ }
+  }
+
+  /* ── CEP lookup com debounce ───────────────────────── */
+  let cepDebounceTimer = null;
+  function setupCepLookupDebounce() {
+    const cepField = document.getElementById('cep');
+    if (!cepField) return;
+
+    cepField.addEventListener('input', function() {
+      clearTimeout(cepDebounceTimer);
+      const cep = this.value;
+      cepDebounceTimer = setTimeout(() => {
+        lookupCep(cep);
+      }, 500);
+    });
+  }
+
+  // Initialize on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCepLookupDebounce);
+  } else {
+    setupCepLookupDebounce();
+  }
+
+  /* ── Toast notification ───────────────────────────────── */
+  function showToast(message, type) {
+    var toast = document.getElementById('toast');
+    var text = toast.querySelector('.toast__text');
+    var icon = toast.querySelector('.toast__icon');
+
+    text.textContent = message || 'Dados salvos com sucesso.';
+    toast.className = 'toast toast--' + (type || 'success');
+
+    // Change icon based on type
+    if (type === 'error') {
+      icon.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+    } else {
+      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+    }
+
+    toast.classList.add('toast--visible');
+
+    setTimeout(function() {
+      toast.classList.remove('toast--visible');
+    }, 3000);
+  }
+
+  /* ── Save feedback ────────────────────────────────────── */
+  function salvar() {
+    showToast('Dados salvos com sucesso.', 'success');
+  }
+
+  /* ── Data de nascimento mask ──────────────────────────── */
+  document.getElementById('nascimento').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 4) v = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4);
+    else if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+    this.value = v;
+  });
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button type="button" class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button type="button" class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let lastFocusedElement = null;
+
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Mover foco para o primeiro botão
+    document.getElementById('logoutCancel').focus();
+  }
+
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Restaurar foco ao elemento que abriu o modal
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  // Focus trap e Escape para fechar
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutBox = document.querySelector('.logout-modal');
+  const cancelBtn = document.getElementById('logoutCancel');
+  const confirmBtn = document.getElementById('logoutConfirm');
+
+  logoutModal.addEventListener('click', function(e) {
+    if (e.target === this) closeLogout();
+  });
+
+  logoutBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLogout();
+    }
+
+    if (e.key === 'Tab') {
+      const focusableElements = [cancelBtn, confirmBtn];
+      const currentIndex = focusableElements.indexOf(document.activeElement);
+
+      if (e.shiftKey) {
+        // Shift + Tab (backward)
+        e.preventDefault();
+        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        focusableElements[nextIndex].focus();
+      } else {
+        // Tab (forward)
+        e.preventDefault();
+        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        focusableElements[nextIndex].focus();
+      }
+    }
+  });
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     TOAST
+     ════════════════════════════════════════════════════════ -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  <span class="toast__text">Dados salvos com sucesso.</span>
+</div>
+
+</body>
+</html>

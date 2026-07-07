@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basta. — Carrossel #7: Demonstrativo de Evolução da Dívida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:       #1A1A1A;
+    --white:       #FFFFFF;
+    --off-white:   #F5F3EF;
+    --green:       #42b449;
+    --green-dark:  #389d3e;
+    --amber:       #F59E0B;
+    --gray-600:    #4A4A4A;
+    --gray-300:    #D4D4D4;
+    --gray-200:    #EEEEEE;
+    --font:        'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --scale:       0.444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body {
+    font-family: var(--font);
+    background: #2a2a2a;
+    color: var(--white);
+    padding: 48px 32px 80px;
+    min-height: 100vh;
+  }
+
+  .review-header {
+    max-width: 1568px;
+    margin: 0 auto 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding-bottom: 24px;
+  }
+  .review-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .review-title { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 8px; }
+  .review-meta { font-size: 12px; font-weight: 500; letter-spacing: 0.04em; color: rgba(255,255,255,0.5); }
+  .review-meta span { color: rgba(255,255,255,0.85); font-weight: 700; }
+
+  .carousel {
+    max-width: 1568px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 480px);
+    gap: 32px;
+    justify-content: center;
+  }
+  .slide-frame { position: relative; }
+  .slide-tag {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+  .slide-tag-num { color: var(--green); }
+  .slide-shell { width: 480px; height: 600px; overflow: hidden; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.45); }
+  .slide { width: 1080px; height: 1350px; transform: scale(var(--scale)); transform-origin: top left; position: relative; overflow: hidden; font-family: var(--font); }
+
+  .logo {
+    position: absolute; top: 64px; left: 64px;
+    width: 200px; height: auto; aspect-ratio: 602.25 / 254.23;
+    display: block; z-index: 5;
+  }
+  .logo--dark  { color: var(--white); }
+  .logo--light { color: var(--black); }
+  .logo--dark  path { fill: var(--white) !important; }
+  .logo--light path { fill: var(--black) !important; }
+
+  .accent-bar { width: 120px; height: 6px; background: var(--green); margin-bottom: 56px; }
+
+  .headline { font-family: var(--font); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; }
+  .subhead  { font-family: var(--font); font-weight: 400; line-height: 1.4; }
+  .label-up { font-size: 22px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 32px; }
+  .hl-green { color: var(--green); }
+
+  /* SLIDE 1 — HOOK · preto */
+  .s1 {
+    background: var(--black); color: var(--white);
+    padding: 64px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .s1 .logo     { position: static; width: 600px; margin-bottom: 40px; }
+  .s1 .headline { font-size: 88px; margin-bottom: 48px; }
+  .s1 .subhead  { font-size: 40px; line-height: 1.32; color: rgba(255,255,255,0.78); max-width: 95%; }
+
+  /* SLIDE 2 — O QUE É · off-white */
+  .s2 {
+    background: var(--off-white); color: var(--black);
+    padding: 64px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .s2 .label-up { color: var(--green); }
+  .s2 .headline { font-size: 84px; margin-bottom: 32px; }
+  .s2 .subhead  { font-size: 32px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+  .s2 .subhead strong { color: var(--black); font-weight: 700; }
+
+  /* SLIDE 3 — POR QUE IMPORTA · amber */
+  .s3 {
+    background: var(--amber); color: var(--black);
+    padding: 64px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .s3 .accent-bar { background: var(--black); }
+  .s3 .headline { font-size: 108px; margin-bottom: 40px; }
+  .s3 .subhead  { font-size: 38px; line-height: 1.32; color: var(--black); max-width: 95%; }
+
+  /* SLIDE 4 — O QUE FAZ · branco */
+  .s4 {
+    background: var(--white); color: var(--black);
+    padding: 64px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .s4 .headline { font-size: 96px; margin-bottom: 40px; }
+  .s4 .subhead  { font-size: 34px; line-height: 1.42; color: var(--gray-600); max-width: 95%; }
+  .s4 .subhead strong { color: var(--black); font-weight: 700; }
+
+  /* SLIDE 5 — METÁFORA · verde brand */
+  .s5 {
+    background: var(--green); color: var(--white);
+    padding: 64px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .s5 .accent-bar { background: var(--white); }
+  .s5 .headline { font-size: 116px; margin-bottom: 40px; color: var(--white); }
+  .s5 .subhead  { font-size: 40px; line-height: 1.32; color: rgba(255,255,255,0.92); max-width: 95%; }
+
+  /* SLIDE 6 — DIFERENCIAÇÃO · branco (ritual) */
+  .s6 {
+    background: var(--white); color: var(--black);
+    padding: 64px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .s6 .headline { font-size: 108px; margin-bottom: 48px; }
+  .s6 .subhead  { font-size: 36px; line-height: 1.45; color: var(--gray-600); max-width: 95%; }
+
+  /* SLIDE 7 — CTA · branco com botão verde */
+  .s7 {
+    background: var(--white); color: var(--black);
+    padding: 64px;
+    display: flex; flex-direction: column;
+  }
+  .s7 .headline { font-size: 116px; margin-top: 220px; margin-bottom: 40px; }
+  .s7 .subhead  { font-size: 38px; line-height: 1.32; color: var(--gray-600); max-width: 95%; margin-bottom: 64px; }
+  .s7 .cta-button {
+    background: var(--green); color: var(--white);
+    padding: 44px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 32px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 24px; gap: 24px;
+  }
+  .s7 .wa-icon { width: 48px; height: 48px; flex-shrink: 0; }
+
+  .panel { max-width: 1568px; margin: 64px auto 0; background: var(--off-white); color: var(--black); padding: 48px; }
+  .panel-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 12px; }
+  .panel-title { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 32px; }
+  table.copy-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.copy-table th { text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--black); font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-600); }
+  table.copy-table td { padding: 18px 16px; border-bottom: 1px solid var(--gray-300); vertical-align: top; line-height: 1.5; }
+  table.copy-table td:nth-child(1) { width: 60px; font-weight: 800; color: var(--green); }
+  table.copy-table td:nth-child(2) { width: 180px; font-weight: 700; }
+  table.copy-table td:nth-child(3) { width: 200px; color: var(--gray-600); font-size: 12px; }
+  table.copy-table td.copy-cell { font-weight: 500; color: var(--black); }
+  table.copy-table td.copy-cell em { display:block; color: var(--gray-600); font-style: normal; font-size: 12px; margin-top: 6px; }
+  .caption-block { margin-top: 40px; background: var(--white); border-left: 6px solid var(--green); padding: 32px; }
+  .caption-block h3 { font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-600); margin-bottom: 16px; }
+  .caption-block p { font-size: 15px; line-height: 1.6; color: var(--black); margin-bottom: 12px; }
+  .caption-block .hashtags { color: var(--gray-600); font-size: 13px; }
+  .notes { margin-top: 32px; font-size: 13px; line-height: 1.6; color: var(--gray-600); }
+  .notes strong { color: var(--black); font-weight: 800; }
+  .notes code { background: var(--white); padding: 2px 6px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<header class="review-header">
+  <div class="review-eyebrow">Carrossel · Educativo · Post 07 · Demonstrativo de Evolução da Dívida</div>
+  <h1 class="review-title">Demonstrativo de Evolução da Dívida</h1>
+  <div class="review-meta">
+    Pilar: <span>Educacional / Direitos do Devedor</span> &nbsp;·&nbsp;
+    Objetivo: <span>Awareness + Educação</span> &nbsp;·&nbsp;
+    CTA: <span>WhatsApp</span> &nbsp;·&nbsp;
+    Formato: <span>1080×1350 (4:5)</span> &nbsp;·&nbsp;
+    Slides: <span>7</span>
+  </div>
+</header>
+
+<div class="carousel">
+
+  <!-- 01 HOOK -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">01</span> · Hook</span><span>T-01 · Preto</span></div>
+    <div class="slide-shell">
+      <div class="slide s1">
+        <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline">Você sabe<br>como chegou<br>na sua situação<br>de endividamento atual?</div>
+        <div class="subhead">Você pode exigir uma explicação.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 O QUE É -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">02</span> · O que é</span><span>T-01 · Off-white</span></div>
+    <div class="slide-shell">
+      <div class="slide s2">
+        <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+        <div class="label-up" style="text-transform: none; letter-spacing: -0.01em; font-size: 40px;">Se apoie no:</div>
+        <div class="headline">Demonstrativo de<br>Evolução da Dívida</div>
+        <div class="subhead"><strong>Exija a memória<br>de cálculo completa.</strong><br>Aberta. Auditável.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 POR QUE IMPORTA -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">03</span> · Por que importa</span><span>Amber #F59E0B</span></div>
+    <div class="slide-shell">
+      <div class="slide s3">
+        <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline">A dívida<br>cresce<br>no escuro.</div>
+        <div class="subhead">Raramente, as pessoas sabem<br>o caminho que as levou ao<br>endividamento que aprisiona.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 O QUE FAZ -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">04</span> · O que faz</span><span>T-01 · Branco</span></div>
+    <div class="slide-shell">
+      <div class="slide s4">
+        <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline">O demonstrativo<br>abre a caixa-preta.</div>
+        <div class="subhead">O banco é obrigado a mostrar <strong>número por número</strong>: quanto você pegou emprestado, quanto já pagou, quanto de juros incidiu, e como chegaram no saldo atual.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 METÁFORA (verde) -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">05</span> · Metáfora</span><span>Verde brand</span></div>
+    <div class="slide-shell">
+      <div class="slide s5">
+        <svg class="logo logo--dark"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline">É o raio-X<br>da sua dívida.</div>
+        <div class="subhead">Entender a evolução da dívida<br>é fundamental para criar<br>um caminho concreto<br>para sair do endividamento.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 DIFERENCIAÇÃO -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">06</span> · Diferenciação</span><span>T-01 · Branco</span></div>
+    <div class="slide-shell">
+      <div class="slide s6">
+        <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+        <div class="accent-bar"></div>
+        <div class="headline"><span class="hl-green">Resolva sem pagar<br>nada antes.</span><br>Você só paga uma<br>parte do que ganhar.</div>
+        <div class="subhead">Com clareza,<br>Do seu lado,<br>Sem letras miúdas.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 CTA -->
+  <div class="slide-frame">
+    <div class="slide-tag"><span><span class="slide-tag-num">07</span> · CTA WhatsApp</span><span>T-06 · Branco</span></div>
+    <div class="slide-shell">
+      <div class="slide s7">
+        <svg class="logo logo--light"><use href="#logo-basta"/></svg>
+        <div class="headline">Chame agora<br>e mude<br>sua história.</div>
+        <div class="subhead">Gratuito, simples e honesto.<br>Direto no WhatsApp.</div>
+        <div class="cta-button">
+          <span>Falar no WhatsApp</span>
+          <svg class="wa-icon" viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 0C7.163 0 0 7.163 0 16c0 2.823.733 5.481 2.018 7.789L0 32l8.434-2.205A15.928 15.928 0 0 0 16 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333c-2.475 0-4.785-.677-6.77-1.853l-.485-.288-5.013 1.31 1.342-4.886-.317-.504A13.276 13.276 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zm7.317-9.972c-.4-.2-2.367-1.167-2.733-1.3-.367-.133-.633-.2-.9.2s-1.033 1.3-1.267 1.567c-.233.267-.467.3-.867.1-.4-.2-1.69-.622-3.218-1.985-1.19-1.061-1.993-2.372-2.226-2.772-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.167-1.233-2.967-.323-.778-.652-.673-.9-.685l-.767-.013c-.267 0-.7.1-1.067.5-.367.4-1.4 1.367-1.4 3.333s1.433 3.867 1.633 4.133c.2.267 2.817 4.301 6.825 6.029.953.412 1.696.658 2.275.842.956.304 1.826.261 2.514.158.767-.115 2.367-.967 2.7-1.9.333-.933.333-1.733.233-1.9-.1-.167-.367-.267-.767-.467z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<section class="panel">
+  <div class="panel-eyebrow">Briefing de produção</div>
+  <h2 class="panel-title">Copy slide a slide</h2>
+  <table class="copy-table">
+    <thead>
+      <tr><th>#</th><th>Função / Template</th><th>Asset</th><th>Copy</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>01</td>
+        <td>Hook<br><small style="color:var(--gray-600); font-weight:500;">T-01 · Preto</small></td>
+        <td>Pergunta retórica em duas partes — sabe quanto, mas sabe como?</td>
+        <td class="copy-cell">
+          <strong>Você sabe como chegou na sua situação de endividamento atual?</strong>
+          <em>Você pode exigir uma explicação.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td>O que é<br><small style="color:var(--gray-600); font-weight:500;">T-01 · Off-white</small></td>
+        <td>Apresenta o nome do mecanismo. Eyebrow verde "SEU DIREITO" mantém convenção do feed educativo.</td>
+        <td class="copy-cell">
+          Eyebrow: <strong>Se apoie no:</strong> (case normal, peso 800)<br>
+          <strong>Demonstrativo de Evolução da Dívida</strong>
+          <em>Exija a memória de cálculo completa. Aberta. Auditável.</em>
+          <em>"Exija a memória de cálculo completa." em bold no subhead — palavra-chave do mecanismo destacada.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td>Por que importa<br><small style="color:var(--gray-600); font-weight:500;">Amber #F59E0B</small></td>
+        <td>Amber sinaliza atenção. Estado de coisas factual, sem demonização do banco.</td>
+        <td class="copy-cell">
+          <strong>A dívida cresce no escuro.</strong>
+          <em>Raramente, as pessoas sabem o caminho que as levou ao endividamento que aprisiona.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td>O que faz<br><small style="color:var(--gray-600); font-weight:500;">T-01 · Branco</small></td>
+        <td>Solução. "Número por número" em destaque — frase-âncora SEO.</td>
+        <td class="copy-cell">
+          <strong>O demonstrativo abre a caixa-preta.</strong>
+          <em>O banco é obrigado a mostrar número por número: quanto você pegou emprestado, quanto já pagou, quanto de juros incidiu, e como chegaram no saldo atual.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td>Metáfora<br><small style="color:var(--gray-600); font-weight:500;">Verde brand #42b449</small></td>
+        <td>Verde marca o "alívio". Metáfora visual forte: raio-X (medical imaging — aceitável universal).</td>
+        <td class="copy-cell">
+          <strong>É o raio-X da sua dívida.</strong>
+          <em>Entender a evolução da dívida é fundamental para criar um caminho concreto para sair do endividamento.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>06</td>
+        <td>Diferenciação<br><small style="color:var(--gray-600); font-weight:500;">T-01 · Branco</small></td>
+        <td>Ritual de diferenciação — idêntico aos outros carrosseis.</td>
+        <td class="copy-cell">
+          <strong><span style="color:var(--green);">Resolva sem pagar nada antes.</span> Você só paga uma parte do que ganhar.</strong>
+          <em>Com clareza, Do seu lado, Sem letras miúdas.</em>
+        </td>
+      </tr>
+      <tr>
+        <td>07</td>
+        <td>CTA<br><small style="color:var(--gray-600); font-weight:500;">T-06 · Branco</small></td>
+        <td>Ritual de fechamento.</td>
+        <td class="copy-cell">
+          <strong>Chame agora e mude sua história.</strong>
+          <em>Gratuito, simples e honesto. Direto no WhatsApp.</em>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="caption-block">
+    <h3>Caption do post (para a publicação no feed)</h3>
+    <p><strong>Você sabe quanto deve. Sabe como chegou lá?</strong></p>
+    <p>A maioria das pessoas sabe o saldo da dívida, mas raramente conhece o caminho até ele. A dívida cresce no escuro — juros, taxas, encargos somando todo mês sem que ninguém te mostre a conta.</p>
+    <p>Existe um mecanismo simples que muda isso: o <strong>Demonstrativo de Evolução da Dívida</strong>. Ele obriga o banco a mostrar a memória de cálculo completa — quanto você pegou emprestado, quanto já pagou, quanto de juros incidiu, e como chegaram no saldo atual. É o raio-X da sua dívida.</p>
+    <p>Quer descobrir como pedir o seu? Chame a gente no WhatsApp. Gratuito, simples e honesto.</p>
+    <p class="hashtags">#Basta #DireitosDoDevedor #DemonstrativoDeDívida #EducaçãoFinanceira #MemóriaDeCálculo</p>
+  </div>
+
+  <div class="notes">
+    <p><strong>Notas de produção</strong></p>
+    <p>· <strong>Segundo carrossel da série educativa "Direitos do Devedor".</strong> Mantém a estrutura jornada cromática consolidada no C6: preto (hook) → off-white (conceito) → amber (alerta) → branco (solução) → verde (alívio) → branco (CTA). Sem slide de base legal — você não me passou a referência específica. Se quiser adicionar (ex: CDC art. 6º III ou art. 52, ou alguma decisão STJ), me diga e eu insiro entre os slides 05 e 06.</p>
+    <p>· <strong>Métafora "raio-X":</strong> escolha proposital. Universal, não-financeira, ativa imagem mental do "ver dentro" sem precisar de explicação. Wolff Olins-grade.</p>
+    <p>· <strong>"Caixa-preta":</strong> palavra-âncora do slide 04. Conceito que conecta com a metáfora do slide 05 (raio-X abre o que estava preto).</p>
+    <p>· <strong>Nome do mecanismo preservado:</strong> "Demonstrativo de Evolução da Dívida" mantido fielmente no slide 02 — termo legal específico, importante pra SEO e pra o leitor reconhecer o documento no banco.</p>
+    <p>· <strong>Convenção do educativo travada:</strong> dois carrosseis, mesma estrutura. Vira fórmula. Próximo educativo segue a mesma anatomia: hook → conceito (eyebrow SEU DIREITO) → tensão amber → solução branca → metáfora verde → [opcional: base legal preto] → CTA.</p>
+  </div>
+</section>
+
+</body>
+</html>

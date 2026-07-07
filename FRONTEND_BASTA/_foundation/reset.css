@@ -1,0 +1,96 @@
+/* ============================================================================
+   RESET + BASE TYPOGRAPHY — Basta
+   Reset minimalista, alinhado ao DS.
+   ============================================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Defesa universal contra horizontal scroll. clip vence em browsers modernos;
+     hidden é fallback para Safari < 16 e Edge < 90. */
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* Respeita preferência do sistema por reduzir movimento (a11y) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--black);
+  background: var(--white);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+img, svg, video {
+  display: block;
+  max-width: 100%;
+}
+
+/* Foco visível e consistente — a11y */
+:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: 2px;
+}
+
+/* Skip link (escondido até receber foco) */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-lg);
+  background: var(--black);
+  color: var(--white);
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--fs-xs);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  z-index: 10000;
+  transition: top var(--transition);
+}
+.skip-link:focus-visible {
+  top: var(--space-lg);
+}
+
+/* Util — visualmente escondido mas lido por screen reader */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

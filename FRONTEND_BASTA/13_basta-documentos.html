@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Meus Documentos</title>
+  <meta name="theme-color" content="#1A1A1A" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/accordion.css" />
+  <style>
+    /* Hover-only: em devices touch (sem hover real), neutraliza estados hover
+       que ficam "stuck" depois do tap (transform, translate). Cosmética; não toca em color/background. */
+    @media (hover: none) and (pointer: coarse) {
+      *:hover {
+        transform: none !important;
+        box-shadow: none !important;
+      }
+    }
+
+
+    /* ══════════════════════════════════════════════════════════
+       RESET
+       ══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: clip; }
+    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    :where(button, a) { border-radius: 0; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT — sidebar + main
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR ──────────────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { flex: 1; }
+
+    /* ── TOP BAR ──────────────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       PAGE CONTENT
+       ══════════════════════════════════════════════════════════ */
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .accent { color: var(--black); }
+
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.5; margin-bottom: 28px;
+    }
+
+    /* ── Section label ────────────────────────────────────── */
+    .section-label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black); margin-bottom: 16px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       ACCORDION — Level 1 (main sections)
+       ══════════════════════════════════════════════════════════ */
+    .acc {
+      background: var(--white);
+      border: 2px solid var(--black);
+      margin-bottom: -2px;
+    }
+    .acc:last-of-type { margin-bottom: 0; }
+
+    .acc__header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 20px; cursor: pointer;
+      transition: background var(--t);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .acc__header:hover { background: var(--off-white); }
+
+    .acc__title { font-weight: 700; font-size: 14px; color: var(--black); line-height: 1.3; }
+    .acc__subtitle { font-size: 12px; color: var(--gray-600); font-weight: 400; margin-top: 2px; }
+
+    .acc__meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    .acc__count {
+      font-weight: 800; font-size: 18px; color: var(--green); line-height: 1;
+    }
+    .acc__count--zero { color: var(--gray-300); }
+
+    .acc__chevron {
+      width: 16px; height: 16px; color: var(--gray-600);
+      transition: transform var(--t); flex-shrink: 0;
+    }
+    .acc--closed .acc__chevron { transform: rotate(180deg); }
+
+    .acc__body { border-top: 1px solid var(--gray-300); }
+    .acc--closed .acc__body { display: none; }
+
+    /* ══════════════════════════════════════════════════════════
+       DOCUMENT ROW
+       ══════════════════════════════════════════════════════════ */
+    .doc-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; font-size: 13px;
+      border-bottom: 1px solid var(--gray-200);
+      transition: background var(--t);
+    }
+    .doc-row:last-child { border-bottom: none; }
+
+    .doc-row__left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+    /* Check icon (received) */
+    .doc-row__check {
+      width: 20px; height: 20px; flex-shrink: 0; color: var(--green);
+    }
+
+    /* Empty circle (pending) */
+    .doc-row__circle {
+      width: 20px; height: 20px; border: 2px solid var(--gray-300); border-radius: 50%; flex-shrink: 0;
+    }
+
+    .doc-row__name { font-weight: 500; color: var(--black); }
+
+    /* Status labels */
+    .doc-row__status {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; flex-shrink: 0;
+    }
+    .doc-row__status--done { color: var(--green); }
+
+    /* CTA link for pending items */
+    a.doc-row { text-decoration: none; color: inherit; }
+    a.doc-row:hover { background: var(--off-white); }
+
+    .doc-row__cta {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--green); flex-shrink: 0;
+    }
+    .doc-row__cta-arrow {
+      display: inline-block; transition: transform 0.2s var(--ease);
+    }
+    a.doc-row:hover .doc-row__cta-arrow { transform: translateX(4px); }
+
+    /* ══════════════════════════════════════════════════════════
+       ACCORDION — Level 2 (bank sub-sections inside Docs Bancários)
+       ══════════════════════════════════════════════════════════ */
+    .sub-acc {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      margin: 12px 16px;
+    }
+    .sub-acc:last-child { margin-bottom: 16px; }
+
+    .sub-acc__header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 16px; cursor: pointer;
+      transition: background var(--t);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sub-acc__header:hover { background: var(--off-white); }
+
+    .sub-acc__title { font-weight: 700; font-size: 13px; color: var(--black); line-height: 1.3; }
+    .sub-acc__subtitle { font-size: 11px; color: var(--gray-600); font-weight: 400; margin-top: 2px; }
+
+    .sub-acc__meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .sub-acc__count {
+      font-weight: 800; font-size: 15px; color: var(--green); line-height: 1;
+    }
+    .sub-acc__count--zero { color: var(--gray-300); }
+
+    .sub-acc__chevron {
+      width: 14px; height: 14px; color: var(--gray-600);
+      transition: transform var(--t); flex-shrink: 0;
+    }
+    .sub-acc--closed .sub-acc__chevron { transform: rotate(180deg); }
+
+    .sub-acc__body { border-top: 1px solid var(--gray-200); }
+    .sub-acc--closed .sub-acc__body { display: none; }
+
+    /* ── Level 3 rows inside bank sub-accordion ───────────── */
+    .sub-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; font-size: 13px;
+      border-bottom: 1px solid var(--gray-100);
+      transition: background var(--t);
+      cursor: pointer;
+    }
+    .sub-row:last-child { border-bottom: none; }
+    .sub-row:hover { background: var(--off-white); }
+
+    .sub-row__name { font-weight: 500; color: var(--black); }
+
+    .sub-row__meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .sub-row__count { font-weight: 700; font-size: 13px; color: var(--green); }
+    .sub-row__count--zero { color: var(--gray-300); }
+    .sub-row__chevron {
+      width: 12px; height: 12px; color: var(--gray-600);
+      transition: transform var(--t);
+    }
+    .sub-row--closed .sub-row__chevron { transform: rotate(180deg); }
+
+    /* ══════════════════════════════════════════════════════════
+       ICON ACTION BUTTONS + TOOLTIP
+       ══════════════════════════════════════════════════════════ */
+    .doc-actions {
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+    }
+    .icon-btn {
+      position: relative;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--white); color: var(--gray-600);
+      border: 1px solid var(--gray-300);
+      cursor: pointer; flex-shrink: 0;
+      transition: color var(--t), border-color var(--t), background var(--t);
+    }
+    .icon-btn:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
+    .icon-btn::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%; transform: translateX(-50%);
+      background: var(--black); color: var(--white);
+      font-size: 11px; font-weight: 700; font-family: var(--f);
+      text-transform: uppercase; letter-spacing: 0.04em;
+      white-space: nowrap;
+      padding: 4px 8px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+    .icon-btn:hover::after { opacity: 1; }
+
+    /* ══════════════════════════════════════════════════════════
+       WHATSAPP FAB
+       ══════════════════════════════════════════════════════════ */
+    .fab {
+      position: fixed; z-index: 100;
+      display: flex; align-items: center; justify-content: center;
+      width: 68px; height: 68px;
+      background: var(--green); border: 2px solid var(--black);
+      border-radius: 0; color: var(--white); box-shadow: none;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .fab:hover { background: var(--black); border-color: var(--black); }
+    .fab__icon { width: 36px; height: 36px; flex-shrink: 0; }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE-FIRST RESPONSIVE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar { display: flex; }
+    .main { padding: 84px 24px 100px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+    .fab { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 84px 24px 100px; }
+      .page-title { font-size: 26px; }
+      .acc__header { padding: 18px 24px; }
+      .doc-row { padding: 14px 24px; }
+      .sub-acc { margin: 14px 20px; }
+      .sub-acc__header { padding: 14px 20px; }
+      .sub-row { padding: 12px 20px; }
+    }
+
+    @media (min-width: 768px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 960px; }
+      .page-title { font-size: 28px; margin-bottom: 8px; }
+      .acc__title { font-size: 15px; }
+      .acc__header { padding: 18px 24px; }
+      .doc-row { padding: 16px 24px; font-size: 14px; }
+      .doc-row__cta { font-size: 12px; }
+      .sub-acc { margin: 16px 24px; }
+      .fab { width: 80px; height: 80px; bottom: max(36px, env(safe-area-inset-bottom)); right: 36px; }
+      .fab__icon { width: 40px; height: 40px; }
+    }
+
+    @media (min-width: 1200px) {
+      .main { padding: 40px 48px 80px; }
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))); }
+      .fab { bottom: max(16px, calc(8px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ── Close button ─────────────────────────────────────── */
+    .btn-close {
+      position: fixed; top: 0; right: 0; z-index: 80;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--gray-600);
+      transition: color var(--t), background var(--t);
+    }
+    .btn-close:hover { color: var(--black); background: rgba(0,0,0,0.05); }
+    /* hide avatar — close takes its place on mobile */
+    .topbar__avatar { display: none !important; }
+
+    @media (min-width: 768px) {
+      .btn-close {
+        width: 36px; height: 36px;
+        top: 20px; right: 28px;
+        background: var(--white);
+        border: 1.5px solid var(--gray-300);
+        color: var(--black);
+      }
+      .btn-close:hover { background: var(--off-white); border-color: var(--black); }
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LOGOUT MODAL
+       ══════════════════════════════════════════════════════════ */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(26,26,26,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .logout-modal {
+      background: var(--white);
+      border: 2px solid var(--black);
+      padding: 28px 28px 24px;
+      width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error);
+      margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .logout-modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+      transition: border-color var(--t), background var(--t);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+      transition: background var(--t), border-color var(--t);
+    }
+    .btn-logout-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
+    .btn-close:active, .btn-logout-cancel:active, .btn-logout-confirm:active { transform: scale(0.98); }
+
+    /* ── EMPTY STATE ───────────────────────────────────────── */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 64px 24px;
+    }
+    .empty-state__icon {
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: var(--gray-300);
+    }
+    .empty-state__title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .empty-state__desc {
+      font-size: 14px;
+      color: var(--gray-600);
+      line-height: 1.5;
+      max-width: 320px;
+      margin-bottom: 24px;
+    }
+    .empty-state__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 24px;
+      background: var(--green);
+      color: var(--white);
+      font-family: var(--f);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 2px solid var(--black);
+      text-decoration: none;
+      transition: background 0.24s, color 0.24s;
+    }
+    .empty-state__cta:hover {
+      background: var(--black);
+      color: var(--white);
+    }
+    .empty-state__cta:active {
+      transform: scale(0.98);
+    }
+    /* ─── Onda 9a: tablets portrait (768-959px) usam topbar mobile,
+       sidebar só aparece em ≥960px (mais espaço para conteúdo) ─── */
+    @media (max-width: 959px) {
+      .sidebar { display: none; }
+      .topbar  { display: flex; }
+      .main {
+        margin-left: 0;
+        padding: 84px 24px 100px;
+        max-width: 100%;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <div class="topbar__avatar">MC</div>
+
+</div>
+
+<a href="12_basta-dashboard.html" class="btn-close" aria-label="Fechar">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+</a>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item nav-item--active">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">MC</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Maria Carvalho</div>
+        <div class="sidebar__user-email">maria.carvalho@email.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ════════════════════════════════════════════════════════ -->
+  <main class="main">
+
+    <h1 class="page-title">Meus Documentos<span class="accent">.</span></h1>
+    <p class="page-desc">Mantenha seus documentos pessoais, seus relatórios e seus documentos bancários em um só lugar, <strong>prontos para serem usados a seu favor.</strong></p>
+
+    <!-- ── Section label ────────────────────────────────── -->
+    <div class="section-label">Documentos arquivados</div>
+
+    <!-- ── No results message ───────────────────────────── -->
+    <div id="noResults" style="display:none;text-align:center;padding:40px 20px;color:var(--gray-600);font-size:14px;">
+      Nenhum documento encontrado.
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         ACCORDION 1 — Documentos Pessoais
+         ══════════════════════════════════════════════════════ -->
+    <div class="acc" id="acc-pessoais">
+      <div class="acc__header" onclick="toggle('acc-pessoais')" role="button" tabindex="0" aria-expanded="true" aria-controls="acc-pessoais-body">
+        <div>
+          <div class="acc__title">Documentos Pessoais</div>
+          <div class="acc__subtitle">RG, CPF e Comprovante de Residência</div>
+        </div>
+        <div class="acc__meta">
+          <span class="acc__count acc__count--zero">0</span>
+          <svg class="acc__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="acc__body" id="acc-pessoais-body">
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <div class="doc-row__circle"></div>
+            <span class="doc-row__name">RG / CNH</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar RG / CNH">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar RG / CNH">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <div class="doc-row__circle"></div>
+            <span class="doc-row__name">CPF</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar CPF">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar CPF">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <div class="doc-row__circle"></div>
+            <span class="doc-row__name">Comprovante de Residência</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar Comprovante de Residência">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar Comprovante de Residência">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         ACCORDION 2 — Relatórios
+         ══════════════════════════════════════════════════════ -->
+    <div class="acc acc--closed" id="acc-relatorios">
+      <div class="acc__header" onclick="toggle('acc-relatorios')" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-relatorios-body">
+        <div>
+          <div class="acc__title">Relatórios</div>
+          <div class="acc__subtitle">SCR, Holerites, SUSEP e INSS</div>
+        </div>
+        <div class="acc__meta">
+          <span class="acc__count">2</span>
+          <svg class="acc__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="acc__body" id="acc-relatorios-body">
+        <!-- SCR — RECEBIDO -->
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <svg class="doc-row__check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><polyline points="9 12 11 14 15 10" fill="none" stroke="#FFFFFF" stroke-width="2.5"/></svg>
+            <span class="doc-row__name">SCR</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar SCR">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar SCR">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- Holerites — RECEBIDO -->
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <svg class="doc-row__check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><polyline points="9 12 11 14 15 10" fill="none" stroke="#FFFFFF" stroke-width="2.5"/></svg>
+            <span class="doc-row__name">Holerites</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar Holerites">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar Holerites">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- SUSEP — PENDENTE -->
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <div class="doc-row__circle"></div>
+            <span class="doc-row__name">SUSEP</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar SUSEP">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar SUSEP">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- INSS — PENDENTE -->
+        <div class="doc-row">
+          <div class="doc-row__left">
+            <div class="doc-row__circle"></div>
+            <span class="doc-row__name">INSS</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar INSS">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar INSS">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════
+         ACCORDION 3 — Documentos Bancários (expandido)
+         Com sub-acordeões por banco
+         ══════════════════════════════════════════════════════ -->
+    <div class="acc acc--closed" id="acc-bancarios">
+      <div class="acc__header" onclick="toggle('acc-bancarios')" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-bancarios-body">
+        <div>
+          <div class="acc__title">Documentos Bancários</div>
+          <div class="acc__subtitle">Extratos, contratos e faturas de suas contas</div>
+        </div>
+        <div class="acc__meta">
+          <span class="acc__count acc__count--zero">0</span>
+          <svg class="acc__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div class="acc__body" id="acc-bancarios-body">
+
+        <!-- ── Banco Central do Brasil ──────────────────── -->
+        <div class="sub-acc" id="sub-bcb">
+          <div class="sub-acc__header" onclick="toggle('sub-bcb')" role="button" tabindex="0" aria-expanded="true" aria-controls="sub-bcb-body">
+            <div>
+              <div class="sub-acc__title">Banco Central do Brasil</div>
+              <div class="sub-acc__subtitle">Ag. 4449 / CC 282883</div>
+            </div>
+            <div class="sub-acc__meta">
+              <span class="sub-acc__count sub-acc__count--zero">0</span>
+              <svg class="sub-acc__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="sub-acc__body" id="sub-bcb-body">
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Extratos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Contratos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Faturas Cartão</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Produtos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Outros Documentos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Acesso Soluções De Pagamento S.A. ────────── -->
+        <div class="sub-acc sub-acc--closed" id="sub-acesso">
+          <div class="sub-acc__header" onclick="toggle('sub-acesso')" role="button" tabindex="0" aria-expanded="false" aria-controls="sub-acesso-body">
+            <div>
+              <div class="sub-acc__title">Acesso Soluções De Pagamento S.A.</div>
+              <div class="sub-acc__subtitle">Ag. 0001 / CC 111111</div>
+            </div>
+            <div class="sub-acc__meta">
+              <span class="sub-acc__count sub-acc__count--zero">0</span>
+              <svg class="sub-acc__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div class="sub-acc__body" id="sub-acesso-body">
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Extratos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Contratos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Faturas Cartão</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Produtos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="sub-row" onclick="this.classList.toggle('sub-row--closed')" role="button" tabindex="0" aria-expanded="false">
+              <span class="sub-row__name">Outros Documentos</span>
+              <div class="sub-row__meta">
+                <span class="sub-row__count sub-row__count--zero">0</span>
+                <svg class="sub-row__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── EMPTY STATE (hidden by default) ──────────────── -->
+    <div id="docs-content">
+    </div>
+
+    <div class="empty-state" id="empty-docs" hidden>
+      <div class="empty-state__icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </div>
+      <h3 class="empty-state__title">Nenhum documento ainda.</h3>
+      <p class="empty-state__desc">Seus documentos aparecerão aqui assim que forem coletados via Open Finance.</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  function toggle(id) {
+    var el = document.getElementById(id);
+    var closedClass = el.classList.contains('sub-acc') ? 'sub-acc--closed' : 'acc--closed';
+    var isNowClosed = el.classList.toggle(closedClass);
+    var header = el.querySelector('[role="button"]');
+    if (header) header.setAttribute('aria-expanded', String(!isNowClosed));
+  }
+
+  function toggleEmpty() {
+    var content = document.getElementById('docs-content');
+    var empty = document.getElementById('empty-docs');
+    var isHidden = empty.hidden;
+    empty.hidden = !isHidden;
+    content.hidden = isHidden;
+  }
+
+  /* ── Keyboard support for accordion headers and sub-rows ─── */
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var target = e.target;
+      if (target.getAttribute('role') === 'button' && target.hasAttribute('onclick')) {
+        e.preventDefault();
+        target.click();
+      }
+    }
+  });
+
+  /* ── Keyboard support for sub-rows (toggle aria-expanded) ─── */
+  document.addEventListener('click', function(e) {
+    var target = e.target.closest('[role="button"]');
+    if (target && target.classList.contains('sub-row')) {
+      var isNowClosed = target.classList.contains('sub-row--closed');
+      target.setAttribute('aria-expanded', String(!isNowClosed));
+    }
+  });
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ═══════════════════════════════════════════════════════════
+  // FILTRO DE DOCUMENTOS
+  // ═══════════════════════════════════════════════════════════
+  const searchInput = document.getElementById('documentFilter');
+  const noResultsDiv = document.getElementById('noResults');
+  const accordions = document.querySelectorAll('.acc');
+  const subAccordions = document.querySelectorAll('.sub-acc');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      let totalVisibleItems = 0;
+
+      // Iterar sobre cada accordion principal
+      accordions.forEach(function(accordion) {
+        let visibleInAccordion = 0;
+        const items = accordion.querySelectorAll('.doc-row');
+
+        items.forEach(function(item) {
+          const text = item.textContent.toLowerCase();
+          if (!query || text.includes(query)) {
+            item.style.display = '';
+            visibleInAccordion++;
+            totalVisibleItems++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // Se for accordion bancário, filtrar sub-accordions também
+        if (accordion.id === 'acc-bancarios') {
+          const subAccs = accordion.querySelectorAll('.sub-acc');
+          let visibleInSubAccordions = 0;
+
+          subAccs.forEach(function(subAcc) {
+            let visibleInSub = 0;
+            const subRows = subAcc.querySelectorAll('.sub-row');
+
+            subRows.forEach(function(subRow) {
+              const text = subRow.textContent.toLowerCase();
+              if (!query || text.includes(query)) {
+                subRow.style.display = '';
+                visibleInSub++;
+                visibleInSubAccordions++;
+                totalVisibleItems++;
+              } else {
+                subRow.style.display = 'none';
+              }
+            });
+
+            // Esconder sub-accordion se não tiver items visíveis
+            subAcc.style.display = visibleInSub > 0 ? '' : 'none';
+          });
+
+          visibleInAccordion += visibleInSubAccordions;
+        }
+
+        // Esconder accordion principal se não tiver items visíveis
+        accordion.style.display = visibleInAccordion > 0 ? '' : 'none';
+      });
+
+      // Mostrar/esconder mensagem de sem resultados
+      noResultsDiv.style.display = totalVisibleItems === 0 && query ? 'block' : 'none';
+    });
+  }
+
+  let lastFocusedElement = null;
+
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    const modal = document.getElementById('logoutModal');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Mover foco para o primeiro botão
+    document.getElementById('logoutCancel').focus();
+  }
+
+  function closeLogout() {
+    const modal = document.getElementById('logoutModal');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+    // Restaurar foco ao elemento que abriu o modal
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  }
+
+  // Focus trap e Escape para fechar
+  const logoutModal = document.getElementById('logoutModal');
+  const logoutBox = document.querySelector('.logout-modal');
+  const cancelBtn = document.getElementById('logoutCancel');
+  const confirmBtn = document.getElementById('logoutConfirm');
+
+  logoutModal.addEventListener('click', function(e) {
+    if (e.target === this) closeLogout();
+  });
+
+  logoutBox.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLogout();
+    }
+
+    if (e.key === 'Tab') {
+      const focusableElements = [cancelBtn, confirmBtn];
+      const currentIndex = focusableElements.indexOf(document.activeElement);
+
+      if (e.shiftKey) {
+        // Shift + Tab (backward)
+        e.preventDefault();
+        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+        focusableElements[nextIndex].focus();
+      } else {
+        // Tab (forward)
+        e.preventDefault();
+        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
+        focusableElements[nextIndex].focus();
+      }
+    }
+  });
+</script>
+
+<button onclick="toggleEmpty()" style="position:fixed;bottom:16px;left:16px;z-index:999;padding:6px 12px;font-size:11px;font-family:var(--f);font-weight:700;background:var(--off-white);border:1px solid var(--gray-300);cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;">Demo: toggle vazio</button>
+
+</body>
+</html>

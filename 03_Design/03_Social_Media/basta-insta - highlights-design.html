@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basta. — Highlights Instagram</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* ── NEUTROS ── */
+      --black:      #1A1A1A;
+      --white:      #FFFFFF;
+      --off-white:  #F5F3EF;
+      --gray-600:   #4A4A4A;
+      --gray-300:   #D4D4D4;
+
+      /* ── PALETA DE MARCA ── */
+      --green:      #42b449;  /* já existia — brand primary */
+      --red:        #E84038;  /* novo — verificar hex exato */
+      --blue:       #4AAAD4;  /* novo — verificar hex exato */
+      --sage:       #BDC0AC;  /* já existia — neutro terroso */
+
+      /* ── TIPOGRAFIA ── */
+      --f: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--f);
+      background: #E8E5E0;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── PAGE LAYOUT ──────────────────────────────────── */
+    .page-header {
+      padding: 64px 40px 48px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .page-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+    .page-headline {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--black);
+    }
+
+    /* ── HIGHLIGHT SECTION ────────────────────────────── */
+    .highlight-section {
+      padding: 0 40px 80px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .highlight-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .highlight-num {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      white-space: nowrap;
+    }
+    .highlight-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gray-300);
+    }
+    .highlight-name {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.02;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    /* ── STORIES ROW ──────────────────────────────────── */
+    .stories-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      scrollbar-width: thin;
+    }
+    .stories-row::-webkit-scrollbar { height: 4px; }
+    .stories-row::-webkit-scrollbar-track { background: transparent; }
+    .stories-row::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 2px; }
+
+    /* ── STORY FRAME ──────────────────────────────────── */
+    .story {
+      width: 270px;
+      min-width: 270px;
+      height: 480px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--gray-300);
+    }
+    .story-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px 28px 40px;
+      position: relative;
+    }
+    .story-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ── STORY THEMES ─────────────────────────────────── */
+    .story--dark {
+      background: var(--black);
+      color: var(--white);
+    }
+    .story--light {
+      background: var(--white);
+      color: var(--black);
+    }
+    .story--warm {
+      background: var(--off-white);
+      color: var(--black);
+    }
+    .story--red {
+      background: var(--red);
+      color: var(--black);
+    }
+    .story--green {
+      background: var(--green);
+      color: var(--black);
+    }
+    .story--blue {
+      background: var(--blue);
+      color: var(--black);
+    }
+    .story--sage {
+      background: var(--sage);
+      color: var(--black);
+    }
+
+    /* ── LOGO SVG ─────────────────────────────────────── */
+    .logo-watermark {
+      position: absolute;
+      bottom: 24px;
+      left: 28px;
+      height: 21px;
+      width: auto;
+      opacity: 1;
+    }
+
+    /* ── COVER ICON ────────────────────────────────────── */
+    .cover-icon {
+      position: absolute;
+      top: 40px;
+      left: 28px;
+      width: 60px;
+      height: auto;
+    }
+
+    /* ── COVER RULE ────────────────────────────────────── */
+    .cover-rule {
+      width: 32px;
+      height: 2px;
+      background: var(--green);
+      margin-bottom: 16px;
+    }
+    .story--green .cover-rule,
+    .story--red .cover-rule,
+    .story--blue .cover-rule { background: var(--white); }
+
+    /* ── COVER TEMPLATE ────────────────────────────────── */
+    .story-cover .story-inner {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    .cover-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    /* Variante: capa com frase (alinhada à esquerda) */
+    .story-cover--statement .story-inner {
+      align-items: flex-start;
+      text-align: left;
+    }
+    .cover-logo {
+      position: absolute;
+      bottom: 24px;
+      right: 28px;
+      height: 36px;
+      width: auto;
+      opacity: 1;
+    }
+
+    /* ── TYPOGRAPHY ────────────────────────────────────── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .story--dark .eyebrow  { color: var(--green); }
+    .story--light .eyebrow { color: var(--gray-600); }
+    .story--warm .eyebrow  { color: var(--gray-600); }
+    .story--red .eyebrow   { color: var(--black); }
+    .story--green .eyebrow { color: var(--black); }
+    .story--blue .eyebrow  { color: var(--black); }
+    .story--sage .eyebrow  { color: var(--black); }
+
+    .story-headline {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+
+    .story-body {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.45;
+    }
+    .story--dark .story-body  { color: rgba(255,255,255,0.7); }
+    .story--light .story-body { color: var(--gray-600); }
+    .story--warm .story-body  { color: var(--gray-600); }
+    .story--red .story-body   { color: rgba(0,0,0,0.75); }
+    .story--green .story-body { color: rgba(0,0,0,0.75); }
+    .story--blue .story-body  { color: rgba(0,0,0,0.75); }
+    .story--sage .story-body  { color: rgba(0,0,0,0.75); }
+
+    .story-body p + p {
+      margin-top: 16px;
+    }
+
+    .story-body strong {
+      font-weight: 700;
+    }
+    .story--dark .story-body strong  { color: var(--white); }
+    .story--light .story-body strong { color: var(--black); }
+    .story--warm .story-body strong  { color: var(--black); }
+    .story--red .story-body strong   { color: var(--black); }
+    .story--green .story-body strong { color: var(--black); }
+    .story--blue .story-body strong  { color: var(--black); }
+    .story--sage .story-body strong  { color: var(--black); }
+
+    /* ── STORY INNER OFFSET (eyebrow mais baixo) ──────── */
+    /* Aumenta o padding-top para redistribuir o espaço
+       branco entre topo e base nos slides com conteúdo
+       ancorado no topo (story-content--anchored). */
+    .story-inner--offset {
+      padding-top: 72px;
+    }
+
+    /* ── CONTENT ANCHORED (grid top-aligned) ──────────── */
+    /* Âncora o conteúdo no topo da zona de conteúdo.
+       Eyebrow → posição Y fixa → headline → divider → body.
+       Independente do volume de texto, o headline está sempre
+       no mesmo Y em todos os slides do mesmo destaque. */
+    .story-content--anchored {
+      justify-content: flex-start;
+    }
+
+    /* ── STEP NUMBER ───────────────────────────────────── */
+    .step-number {
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 0.85;
+      margin-bottom: 16px;
+    }
+    .story--light .step-number { color: var(--green); }
+    .story--dark .step-number { color: rgba(255,255,255,0.15); }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+    .step-desc p + p { margin-top: 12px; }
+    .story--light .step-desc { color: var(--gray-600); }
+
+    /* ── CONTACT ───────────────────────────────────────── */
+    .contact-group {
+      margin-bottom: 24px;
+    }
+    .contact-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: rgba(255,255,255,0.4);
+    }
+    .contact-value {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    /* ── DIVIDER ───────────────────────────────────────── */
+    .story-divider {
+      width: 32px;
+      height: 1px;
+      background: var(--gray-300);
+      margin: 20px 0;
+    }
+    .story--dark .story-divider { background: rgba(255,255,255,0.15); }
+
+    /* ── FOOTER NOTE ───────────────────────────────────── */
+    .story-footer-note {
+      font-size: 11px;
+      font-weight: 400;
+      font-style: italic;
+      opacity: 0.5;
+      margin-top: auto;
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       SVG DEFS — Logo monocromático (ponto mesma cor do texto)
+  ══════════════════════════════════════════════════════ -->
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="basta-logo" viewBox="0 0 602.25 254.23">
+      <!-- Texto: herda currentColor -->
+      <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+      <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+      <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+      <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <!-- Ponto: mesma cor do texto -->
+      <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+    </symbol>
+    <!-- Versão branca (todos os paths brancos) -->
+    <symbol id="basta-logo-white" viewBox="0 0 602.25 254.23">
+      <path fill="#FFFFFF" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+      <path fill="#FFFFFF" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="#FFFFFF" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+      <path fill="#FFFFFF" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+      <path fill="#FFFFFF" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+      <path fill="#FFFFFF" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+    </symbol>
+  </svg>
+
+  <!-- ══════════════════════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════════════════════ -->
+  <div class="page-header">
+    <div class="page-title">Instagram — Destaques</div>
+    <div class="page-headline">Basta<span style="color:inherit">.</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       DESTAQUE 01 — BASTA.
+  ══════════════════════════════════════════════════════ -->
+  <div class="highlight-section">
+    <div class="highlight-label">
+      <span class="highlight-num">Destaque 01</span>
+      <span class="highlight-line"></span>
+    </div>
+    <div class="highlight-name">Basta<span style="color:inherit">.</span></div>
+    <div class="stories-row">
+
+      <!-- Story 1/3: Capa — Declaração -->
+      <div id="d01-01" class="story story--dark story-cover story-cover--statement">
+        <div class="story-inner">
+          <div class="cover-rule"></div>
+          <div class="cover-title">Somos uma<br>plataforma de<br>reestruturação<br>financeira para<br>pessoas<br>endividadas.</div>
+          <svg class="cover-logo" viewBox="0 0 602.25 254.23" aria-hidden="true"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+      <!-- Story 2/3: Caminho -->
+      <div id="d01-02" class="story story--dark">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Quem somos</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Seu melhor aliado<br>para sair das dívidas.</p>
+            <div class="story-divider"></div>
+            <p class="story-body">Somos a plataforma que lê os seus dados financeiros, entende o que está errado e <strong>te mostra o que pode ser feito — com clareza,<br>sem letras miúdas.</strong></p>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+      <!-- Story 3/3: Modelo de receita -->
+      <div id="d01-03" class="story story--dark">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Quem somos</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Você não paga nada<br>antecipadamente.</p>
+            <div class="story-divider"></div>
+            <div class="story-body">
+              <p>Encontramos crédito mais barato.<br>Identificamos indícios de abusos<br>que podem ser devolvidos.<br>Construímos seu caminho de<br>liberdade financeira.</p>
+              <p><strong>Sem pagar nada<br>antecipadamente.</strong></p>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       DESTAQUE 02 — COMO FUNCIONA
+  ══════════════════════════════════════════════════════ -->
+  <div class="highlight-section">
+    <div class="highlight-label">
+      <span class="highlight-num">Destaque 02</span>
+      <span class="highlight-line"></span>
+    </div>
+    <div class="highlight-name">Como Funciona</div>
+    <div class="stories-row">
+
+      <!-- Capa — Cover Template -->
+      <div id="d02-01" class="story story--light story-cover story-cover--statement">
+        <div class="story-inner">
+          <div class="cover-rule"></div>
+          <div class="cover-title">Você compartilha<br>seus dados, nós<br>te ajudamos a<br>recuperar sua<br>autonomia financeira.</div>
+          <svg class="cover-logo" viewBox="0 0 602.25 254.23" aria-hidden="true" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Step 1 -->
+      <div id="d02-02" class="story story--light">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Como funciona</div>
+          <div class="story-content story-content--anchored">
+            <div class="step-number">1</div>
+            <div class="step-title">Conecte seus bancos<br>via Open Finance.</div>
+            <div class="step-desc"><p>Você autoriza a leitura dos<br>seus dados bancários via<br>Open Finance.</p><p><strong>Só leitura,<br>sem movimentação.</strong></p></div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="d02-03" class="story story--light">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Como funciona</div>
+          <div class="story-content story-content--anchored">
+            <div class="step-number">2</div>
+            <div class="step-title">Aja com<br>instrumentos.</div>
+            <div class="step-desc">Receba documentos prontos<br>com instruções claras de<br>como usá-los para exigir<br>explicações e para<br>registrar reclamações.</div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="d02-04" class="story story--light">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Como funciona</div>
+          <div class="story-content story-content--anchored">
+            <div class="step-number">3</div>
+            <div class="step-title">Entenda sua<br>real situação.</div>
+            <div class="step-desc">Veja o que nunca te mostraram:<br>quanto você deve, para quem,<br>quanto da sua renda está<br>comprometida — e por<br>quantos meses.</div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div id="d02-05" class="story story--light">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Como funciona</div>
+          <div class="story-content story-content--anchored">
+            <div class="step-number">4</div>
+            <div class="step-title">Contrate seu<br>crédito justo.</div>
+            <div class="step-desc"><p>Tenha acesso às melhores<br>condições de crédito<br>disponíveis para você.</p><p><strong>Troque taxas altas pelas<br>melhores condições<br>oferecidas no mercado.</strong></p></div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div id="d02-06" class="story story--light">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Como funciona</div>
+          <div class="story-content story-content--anchored">
+            <div class="step-number">5</div>
+            <div class="step-title">Busque reparação<br>contra abusos.</div>
+            <div class="step-desc">Se o credor contribuiu para sua situação de endividamento, se agiu de forma abusiva, receba apoio especializado para exigir reparação — do jeito certo.</div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div id="d02-07" class="story story--light">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Como funciona</div>
+          <div class="story-content story-content--anchored">
+            <div class="step-number">6</div>
+            <div class="step-title">Tenha autonomia<br>financeira.</div>
+            <div class="step-desc"><p>Coloque suas dívidas em uma<br>trajetória de pagamento real,<br>com data para acabar.</p><p><strong>Retome o controle da<br>sua vida financeira.</strong></p></div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       DESTAQUE 03 — OPEN FINANCE
+  ══════════════════════════════════════════════════════ -->
+  <div class="highlight-section">
+    <div class="highlight-label">
+      <span class="highlight-num">Destaque 03</span>
+      <span class="highlight-line"></span>
+    </div>
+    <div class="highlight-name">Open Finance</div>
+    <div class="stories-row">
+
+      <!-- Slide 1/4: Capa — Declaração -->
+      <div id="d03-01" class="story story--dark story-cover story-cover--statement">
+        <div class="story-inner">
+          <div class="cover-rule"></div>
+          <div class="cover-title">Use seus dados<br>bancários a seu<br>favor com<br>Open Finance.</div>
+          <svg class="cover-logo" viewBox="0 0 602.25 254.23" aria-hidden="true"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 2/4: Liberdade de Informações -->
+      <div id="d03-02" class="story story--dark">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Open Finance</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Liberdade<br>de Informações.</p>
+            <div class="story-divider"></div>
+            <div class="story-body">
+              <p><strong>O Open Finance te permite usar seus dados financeiros a seu favor, contra o endividamento.</strong></p>
+              <p>Receba o resultado de análises que mostram taxas, tarifas, débitos de produtos contratados e muito mais, para comprovar abusos com informações oficiais.</p>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 3/4: Segurança -->
+      <div id="d03-03" class="story story--dark">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Open Finance</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Use sem medo.<br>É seguro.</p>
+            <div class="story-divider"></div>
+            <p class="story-body"><strong>O Open Finance é seguro.</strong><br>As organizações precisam ser<br>autorizadas pelo <strong>Banco Central</strong>,<br>que estabelece regras rígidas<br>para proteger as informações<br>sobre o usuário, como o <strong>uso<br>de criptografia</strong>.</p>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       DESTAQUE 04 — MANIFESTO
+  ══════════════════════════════════════════════════════ -->
+  <div class="highlight-section">
+    <div class="highlight-label">
+      <span class="highlight-num">Destaque 04</span>
+      <span class="highlight-line"></span>
+    </div>
+    <div class="highlight-name">Manifesto</div>
+    <div class="stories-row">
+
+      <!-- Capa — Declaração -->
+      <div id="d04-01" class="story story--green story-cover story-cover--statement">
+        <div class="story-inner">
+          <div class="cover-rule"></div>
+          <div class="cover-title">Crédito deve libertar,<br>não aprisionar.</div>
+          <svg class="cover-logo" viewBox="0 0 602.25 254.23" aria-hidden="true" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 2/4: Quem deve -->
+      <div id="d04-02" class="story story--warm">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Manifesto</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Quem deve, merece um<br>caminho justo para sair.</p>
+            <div class="story-divider"></div>
+            <div class="story-body">
+              <p><strong>O sistema de crédito brasileiro captura pessoas comuns, consome sua renda e as mantém presas no modo de sobrevivência.</strong></p>
+              <p>Diante de urgências financeiras, essas pessoas aceitam qualquer oferta de renegociação.</p>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 3/5: A face do endividamento -->
+      <div id="d04-03" class="story story--warm">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Manifesto</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">A face do<br>endividamento.</p>
+            <div class="story-divider"></div>
+            <div class="story-body">
+              <p>São chefes de família<br>pressionados, envergonhados,<br>com baixa autoestima — sem o<br>conhecimento necessário para<br>se reorganizarem financeiramente<br>e, muitas vezes, sem renda<br>suficiente para sobreviver.</p>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 4/5: Equilíbrio -->
+      <div id="d04-04" class="story story--warm">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Manifesto</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Reestabelecer<br>o equilíbrio.</p>
+            <div class="story-divider"></div>
+            <div class="story-body">
+              <p>Essas pessoas precisam se preparar antes de renegociar. <strong>Precisam saber que existem instrumentos simples para não recomeçar dentro da mesma armadilha.</strong></p>
+              <p><strong>Precisam renegociar em igualdade de condições.</strong></p>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 5/5: Closure -->
+      <div id="d04-05" class="story story--warm">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Manifesto</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Basta<span style="color:inherit">.</span><br>E ponto.</p>
+            <div class="story-divider"></div>
+            <div class="story-body">
+              <p>Basta de permitir que as pessoas se tornem prisioneiras do sistema de crédito.</p>
+              <p><strong>Basta. é a primeira plataforma construída para lutar ao lado de quem deve — para reestabelecer o equilíbrio nas relações financeiras.</strong></p>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23" style="color:var(--black)"><use href="#basta-logo"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       DESTAQUE 05 — CONTATO
+  ══════════════════════════════════════════════════════ -->
+  <div class="highlight-section">
+    <div class="highlight-label">
+      <span class="highlight-num">Destaque 05</span>
+      <span class="highlight-line"></span>
+    </div>
+    <div class="highlight-name">Contato</div>
+    <div class="stories-row">
+
+      <!-- Slide 1/2: Capa — Declaração -->
+      <div id="d05-01" class="story story--dark story-cover story-cover--statement">
+        <div class="story-inner">
+          <div class="cover-rule"></div>
+          <div class="cover-title">Precisa de ajuda<br>para sair do<br>endividamento?</div>
+          <svg class="cover-logo" viewBox="0 0 602.25 254.23" aria-hidden="true"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+      <!-- Slide 2/2: Contato -->
+      <div id="d05-02" class="story story--dark">
+        <div class="story-inner story-inner--offset">
+          <div class="eyebrow">Contato</div>
+          <div class="story-content story-content--anchored">
+            <p class="story-headline">Entre em<br>contato.</p>
+            <div class="story-divider"></div>
+            <div class="contact-group">
+              <div class="contact-label">WhatsApp</div>
+              <div class="contact-value">(19) 97179-5723</div>
+            </div>
+            <div class="contact-group">
+              <div class="contact-label">Email</div>
+              <div class="contact-value">ola@bastaeponto.com.br</div>
+            </div>
+          </div>
+          <svg class="logo-watermark" viewBox="0 0 602.25 254.23"><use href="#basta-logo-white"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

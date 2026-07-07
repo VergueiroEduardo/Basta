@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Índice do sistema</title>
+  <meta name="description" content="Índice interno do sistema Basta — navegação entre telas para desenvolvimento e revisão." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <style>    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }    /* ── Layout ──────────────────────────────────────────── */
+    .page {
+      max-width: 1100px; margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+    @media (min-width: 720px) { .page { padding: 56px 32px 120px; } }
+    @media (min-width: 1024px) { .page { padding: 72px 40px 140px; } }
+
+    /* ── Header ──────────────────────────────────────────── */
+    .doc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-bottom: 28px;
+      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: 48px;
+    }
+    .doc-header__logo { height: 48px; width: auto; display: block; }
+    @media (min-width: 720px) { .doc-header__logo { height: 64px; } }
+    .doc-header__meta {
+      text-align: right;
+      font-size: 10px; font-weight: 700;
+      color: var(--gray-600); line-height: 1.5;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .doc-header__meta strong { color: var(--black); font-weight: 800; }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .kicker {
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600); margin-bottom: 16px;
+    }
+    .kicker__dot { color: var(--green); }
+    .hero-title {
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 800; letter-spacing: -0.04em;
+      line-height: 0.98; color: var(--black);
+      margin-bottom: 20px;
+    }
+    .hero-title strong { color: var(--green); font-weight: 800; }
+    .hero-lead {
+      font-size: clamp(15px, 1.6vw, 17px);
+      line-height: 1.7; color: var(--gray-600);
+      max-width: 60ch; margin-bottom: 56px;
+    }
+    .hero-lead strong { color: var(--black); font-weight: 700; }
+
+    /* ── Section ─────────────────────────────────────────── */
+    .section { margin-bottom: 56px; }
+    .section__head {
+      display: flex; align-items: baseline;
+      gap: 12px; margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--gray-300);
+    }
+    .section__num {
+      font-size: 11px; font-weight: 800;
+      letter-spacing: 0.06em;
+      color: var(--gray-600);
+      font-variant-numeric: tabular-nums;
+    }
+    .section__title {
+      font-size: clamp(20px, 2.4vw, 24px);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--black); line-height: 1.2;
+    }
+    .section__status {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid currentColor;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .section__status--build {
+      color: var(--warning);
+    }
+    .section__status--migrate {
+      color: var(--info);
+    }
+    .section__status--functional {
+      color: var(--green);
+    }
+    .section__status--defined {
+      color: var(--blue);
+    }
+    .section__status--study {
+      color: var(--gray-600);
+    }
+    .section__count {
+      margin-left: auto;
+      font-size: 11px; font-weight: 700;
+      color: var(--gray-600);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Card grid ───────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+    /* ── Card ────────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 18px 18px 16px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 14px;
+      row-gap: 4px;
+      transition: border-color var(--t), transform var(--t);
+      cursor: pointer;
+    }
+    .card:hover {
+      border-color: var(--black);
+    }
+    .card:focus-visible {
+      border-color: var(--green);
+      outline: 2px solid var(--green);
+      outline-offset: 2px;
+    }
+    .card__num {
+      grid-row: 1 / span 3;
+      font-size: 24px; font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--green);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      align-self: start;
+      padding-top: 2px;
+    }
+    .card__title {
+      font-size: 14px; font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      line-height: 1.25;
+    }
+    .card__desc {
+      font-size: 12px; line-height: 1.5;
+      color: var(--gray-600);
+    }
+    .card__meta {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .card__tag {
+      display: inline-flex; align-items: center;
+      padding: 2px 7px;
+      font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-600);
+    }
+    .card__tag--public { color: var(--blue); border-color: var(--blue); }
+    .card__tag--logged { color: var(--green); border-color: var(--green); }
+    .card__tag--admin  { color: var(--warning); border-color: var(--warning); }
+    .card__tag--external { color: var(--gray-600); border-color: var(--gray-300); }
+    .card__tag--partner { color: var(--blue-dark); border-color: var(--blue-dark); }
+    .card__tag--draft { color: var(--error); border-color: var(--error); }
+    .card__arrow {
+      grid-column: 2;
+      margin-top: 4px;
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .card__arrow svg {
+      width: 12px; height: 12px;
+      transition: transform var(--t);
+    }
+    .card:hover .card__arrow svg { transform: translateX(2px); }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .doc-footer {
+      padding-top: 32px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 12px; line-height: 1.7;
+      color: var(--gray-600);
+    }
+    .doc-footer strong { color: var(--black); font-weight: 800; }
+    .doc-footer a {
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<main class="page">
+
+  <header class="doc-header">
+    <svg class="doc-header__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    <div class="doc-header__meta">
+      Sandbox de design<br>
+      <strong>v.08 jun 2026</strong>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="kicker">Sistema Basta <span class="kicker__dot">·</span> Hub integrado</div>
+    <h1 class="hero-title">Índice <strong>navegável</strong> de todas as telas.</h1>
+    <p class="hero-lead">
+      Mapa do sistema com link direto para cada página. Use este hub como ponto de entrada para
+      QA, demos e revisão de fluxo. Cada card abre a tela em uma nova aba — clique no logo de
+      qualquer página interna para voltar à home daquele fluxo (cliente ou admin).
+    </p>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 1 · ENTRADA (público / pré-login)
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 01</span>
+      <h2 class="section__title">Entrada e autenticação</h2>
+      <span class="section__status section__status--functional">Funcional</span>
+      <span class="section__count">6 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="01_basta-landing.html" target="_blank" rel="noopener">
+        <span class="card__num">01</span>
+        <span class="card__title">Landing</span>
+        <span class="card__desc">Página pública com proposta de valor e CTAs.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Público</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="02_basta-cadastro.html" target="_blank" rel="noopener">
+        <span class="card__num">02</span>
+        <span class="card__title">Cadastro</span>
+        <span class="card__desc">Criação de conta com nome, CPF, email, senha.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Público</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="03_basta-login.html" target="_blank" rel="noopener">
+        <span class="card__num">03</span>
+        <span class="card__title">Login</span>
+        <span class="card__desc">Autenticação com email e senha.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Público</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="04_basta-recuperar-senha.html" target="_blank" rel="noopener">
+        <span class="card__num">04</span>
+        <span class="card__title">Recuperar senha</span>
+        <span class="card__desc">Solicitação de email com link de recuperação.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Público</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="05_basta-redefinir-senha.html" target="_blank" rel="noopener">
+        <span class="card__num">05</span>
+        <span class="card__title">Redefinir senha</span>
+        <span class="card__desc">Página de troca de senha (acesso via link de email).</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Público</span>
+          <span class="card__tag card__tag--external">Via email</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="06_basta-conta-criada.html" target="_blank" rel="noopener">
+        <span class="card__num">06</span>
+        <span class="card__title">Conta criada</span>
+        <span class="card__desc">Confirmação pós-cadastro com próximo passo.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Público</span>
+          <span class="card__tag card__tag--external">Pós-cadastro</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 2 · OPEN FINANCE
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 02</span>
+      <h2 class="section__title">Conexão Open Finance</h2>
+      <span class="section__status section__status--functional">Funcional</span>
+      <span class="section__count">5 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="07_basta-of-selecao-banco.html" target="_blank" rel="noopener">
+        <span class="card__num">07</span>
+        <span class="card__title">Seleção de banco</span>
+        <span class="card__desc">Escolha do banco para conectar via Open Finance.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="08_basta-of-credenciais.html" target="_blank" rel="noopener">
+        <span class="card__num">08</span>
+        <span class="card__title">Credenciais</span>
+        <span class="card__desc">Coleta de dados para iniciar a conexão.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="09_basta-of-instrucao-banco.html" target="_blank" rel="noopener">
+        <span class="card__num">09</span>
+        <span class="card__title">Instrução no banco</span>
+        <span class="card__desc">Tela de orientação durante o fluxo de redirecionamento.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="10_basta-of-progresso.html" target="_blank" rel="noopener">
+        <span class="card__num">10</span>
+        <span class="card__title">Progresso da análise</span>
+        <span class="card__desc">Acompanhamento da coleta SCR/Bacen e holerite.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="11_basta-of-erro.html" target="_blank" rel="noopener">
+        <span class="card__num">11</span>
+        <span class="card__title">Erro de conexão</span>
+        <span class="card__desc">Estado de falha com instruções de retry.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+          <span class="card__tag card__tag--external">Fallback</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 3 · CLIENTE LOGADO
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 03</span>
+      <h2 class="section__title">Área do cliente</h2>
+      <span class="section__status section__status--functional">Funcional</span>
+      <span class="section__count">6 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="12_basta-dashboard.html" target="_blank" rel="noopener">
+        <span class="card__num">12</span>
+        <span class="card__title">Dashboard / Resumo</span>
+        <span class="card__desc">Home logada com situação financeira e próximos passos.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="13_basta-documentos.html" target="_blank" rel="noopener">
+        <span class="card__num">13</span>
+        <span class="card__title">Meus Documentos</span>
+        <span class="card__desc">Holerite, RG, comprovantes e contratos.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="14_basta-contas-bancarias.html" target="_blank" rel="noopener">
+        <span class="card__num">14</span>
+        <span class="card__title">Contas Bancárias</span>
+        <span class="card__desc">Bancos conectados via Open Finance.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="15_basta-requerimentos.html" target="_blank" rel="noopener">
+        <span class="card__num">15</span>
+        <span class="card__title">Requerimentos</span>
+        <span class="card__desc">12 requerimentos por banco — visualizar, baixar PDF, assinar.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="16_basta-perfil.html" target="_blank" rel="noopener">
+        <span class="card__num">16</span>
+        <span class="card__title">Perfil</span>
+        <span class="card__desc">Dados pessoais, segurança da conta, autorizações.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="17_basta-ajuda.html" target="_blank" rel="noopener">
+        <span class="card__num">17</span>
+        <span class="card__title">Ajuda</span>
+        <span class="card__desc">FAQ + canais de suporte (WhatsApp, Consumidor.gov).</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--logged">Logado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 4 · ADMIN
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 04</span>
+      <h2 class="section__title">Operação interna · Admin (web+ZM)</h2>
+      <span class="section__status section__status--build">Construção</span>
+      <span class="section__count">5 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="18_basta-hoje.html" target="_blank" rel="noopener">
+        <span class="card__num">18</span>
+        <span class="card__title">Hoje</span>
+        <span class="card__desc">Resumo operacional do dia: leads novos, pendências, métricas.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--admin">Admin</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="19_basta-admin-conversas.html" target="_blank" rel="noopener">
+        <span class="card__num">19</span>
+        <span class="card__title">Conversas</span>
+        <span class="card__desc">Inbox de WhatsApp dos leads — atendimento e triagem.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--admin">Admin</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="20_basta-admin-pipeline.html" target="_blank" rel="noopener">
+        <span class="card__num">20</span>
+        <span class="card__title">CRM / Pipeline</span>
+        <span class="card__desc">9 etapas do funil em kanban + lista. Drag-drop entre estágios.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--admin">Admin</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="21_basta-admin-templates.html" target="_blank" rel="noopener">
+        <span class="card__num">21</span>
+        <span class="card__title">Templates</span>
+        <span class="card__desc">6 modelos de requerimentos com chaves substituíveis.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--admin">Admin</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="22_basta-admin-usuarios.html" target="_blank" rel="noopener">
+        <span class="card__num">22</span>
+        <span class="card__title">Usuários</span>
+        <span class="card__desc">Gestão de admins e operadores da plataforma.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--admin">Admin</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 5 · DIAGNÓSTICO
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 05</span>
+      <h2 class="section__title">Diagnóstico de dívida · peça única</h2>
+      <span class="section__status section__status--study">Em estudo</span>
+      <span class="section__count">2 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="23_basta-diagnostico-admin.html" target="_blank" rel="noopener">
+        <span class="card__num">23</span>
+        <span class="card__title">Diagnóstico — visão admin</span>
+        <span class="card__desc">Pré-visualização e envio do diagnóstico ao cliente via WhatsApp.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--admin">Admin</span>
+          <span class="card__tag card__tag--external">Workflow</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="24_basta-diagnostico-cliente-v2.html" target="_blank" rel="noopener">
+        <span class="card__num">24</span>
+        <span class="card__title">Diagnóstico — visão cliente</span>
+        <span class="card__desc">Peça que o cliente recebe via link único · termo + assinatura.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--public">Link único</span>
+          <span class="card__tag card__tag--external">v2</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 6 · PARCEIRO DE CRÉDITO
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 06</span>
+      <h2 class="section__title">Parceiro de Crédito</h2>
+      <span class="section__status section__status--build">Construção</span>
+      <span class="section__count">4 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="26_basta-login-parceiros.html" target="_blank" rel="noopener">
+        <span class="card__num">26</span>
+        <span class="card__title">Login</span>
+        <span class="card__desc">Login único de parceiro — roteia por papel (crédito, renegociação, cancelamento, advogado).</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--external">Compartilhado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="27_basta-dashboard-parceiros.html" target="_blank" rel="noopener">
+        <span class="card__num">27</span>
+        <span class="card__title">Painel</span>
+        <span class="card__desc">Carteira de clientes com oportunidades de reestruturação de crédito (Crédito Sul).</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="27_basta-parceiro-consulta-cpf.html" target="_blank" rel="noopener">
+        <span class="card__num">27</span>
+        <span class="card__title">Detalhe do cliente</span>
+        <span class="card__desc">Console do parceiro — ficha do cliente e operações de crédito por CPF.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="27_basta-parceiro-perfil.html" target="_blank" rel="noopener">
+        <span class="card__num">27</span>
+        <span class="card__title">Perfil</span>
+        <span class="card__desc">Dados cadastrais do parceiro — campos protegidos vindos do cadastro.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 7 · PARCEIRO RENEGOCIAÇÃO
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 07</span>
+      <h2 class="section__title">Parceiro Renegociação</h2>
+      <span class="section__status section__status--build">Construção</span>
+      <span class="section__count">4 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="26_basta-login-parceiros.html" target="_blank" rel="noopener">
+        <span class="card__num">26</span>
+        <span class="card__title">Login</span>
+        <span class="card__desc">Login único de parceiro — roteia para o painel de renegociação.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--external">Compartilhado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="28_basta-dashboard-parceiros.html" target="_blank" rel="noopener">
+        <span class="card__num">28</span>
+        <span class="card__title">Painel</span>
+        <span class="card__desc">Carteira de renegociação (Renegocia Mais). Rascunho — fluxo ainda em definição.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Rascunho</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="28_basta-parceiro-renegociacao.html" target="_blank" rel="noopener">
+        <span class="card__num">28</span>
+        <span class="card__title">Detalhe do cliente</span>
+        <span class="card__desc">Console do parceiro — ficha do cliente e proposta de renegociação. Rascunho.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Rascunho</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="28_basta-parceiro-perfil.html" target="_blank" rel="noopener">
+        <span class="card__num">28</span>
+        <span class="card__title">Perfil</span>
+        <span class="card__desc">Dados cadastrais do parceiro de renegociação. Espelha o perfil do fl. 06.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Planejado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 8 · PARCEIRO CANCELAMENTO DE SERVIÇOS
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 08</span>
+      <h2 class="section__title">Parceiro Cancelamento de Serviços</h2>
+      <span class="section__status section__status--build">Construção</span>
+      <span class="section__count">4 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="26_basta-login-parceiros.html" target="_blank" rel="noopener">
+        <span class="card__num">26</span>
+        <span class="card__title">Login</span>
+        <span class="card__desc">Login único de parceiro — roteia para o painel de cancelamentos.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--external">Compartilhado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="29_basta-dashboard-cancelamentos.html" target="_blank" rel="noopener">
+        <span class="card__num">29</span>
+        <span class="card__title">Painel</span>
+        <span class="card__desc">Clientes encaminhados para cancelamento de seguros e serviços bancários ativos.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="29_basta-cancela-tudo-detalhe.html" target="_blank" rel="noopener">
+        <span class="card__num">29</span>
+        <span class="card__title">Detalhe do cliente</span>
+        <span class="card__desc">Ficha do cliente com serviços e seguros ativos a revisar e cancelar.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="29_basta-parceiro-perfil.html" target="_blank" rel="noopener">
+        <span class="card__num">29</span>
+        <span class="card__title">Perfil</span>
+        <span class="card__desc">Dados cadastrais do parceiro de cancelamento. Espelha o perfil do fl. 06.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Planejado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FLUXO 9 · ADVOGADO
+       ────────────────────────────────────────────────────── -->
+  <section class="section">
+    <div class="section__head">
+      <span class="section__num">FLUXO 09</span>
+      <h2 class="section__title">Advogado</h2>
+      <span class="section__status section__status--build">Construção</span>
+      <span class="section__count">4 telas</span>
+    </div>
+    <div class="grid">
+
+      <a class="card" href="26_basta-login-parceiros.html" target="_blank" rel="noopener">
+        <span class="card__num">26</span>
+        <span class="card__title">Login</span>
+        <span class="card__desc">Login único de parceiro — roteia para o painel do advogado.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--external">Compartilhado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="30_basta-dashboard-advogado.html" target="_blank" rel="noopener">
+        <span class="card__num">30</span>
+        <span class="card__title">Painel</span>
+        <span class="card__desc">Carteira de processos e casos do advogado parceiro. Espelha o painel do fl. 06.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Planejado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="30_basta-advogado-detalhe.html" target="_blank" rel="noopener">
+        <span class="card__num">30</span>
+        <span class="card__title">Detalhe do cliente</span>
+        <span class="card__desc">Console do advogado — ficha do cliente e andamento do caso. Espelha o detalhe do fl. 06.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Planejado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="30_basta-advogado-perfil.html" target="_blank" rel="noopener">
+        <span class="card__num">30</span>
+        <span class="card__title">Perfil</span>
+        <span class="card__desc">Dados cadastrais do advogado parceiro (OAB, escritório). Espelha o perfil do fl. 06.</span>
+        <span class="card__meta">
+          <span class="card__tag card__tag--partner">Parceiro</span>
+          <span class="card__tag card__tag--draft">Planejado</span>
+        </span>
+        <span class="card__arrow">Abrir
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────────────────────
+       FOOTER
+       ────────────────────────────────────────────────────── -->
+  <footer class="doc-footer">
+    <p>
+      <strong>37 telas catalogadas</strong> · 9 fluxos · sandbox de design pré-produção. Os fluxos de
+      parceiro (06–09) seguem a mesma estrutura: <strong>login · painel · detalhe do cliente · perfil</strong>.
+      O login é único e compartilhado (<code>26_basta-login-parceiros</code>), roteado por papel. Telas marcadas
+      <span class="card__tag card__tag--draft">Planejado</span> ainda não têm arquivo HTML — ver
+      <a href="PLANO_IMPLEMENTACAO_PARCEIROS.md">PLANO_IMPLEMENTACAO_PARCEIROS</a>.
+      As páginas usam o mesmo foundation CSS (<code>_foundation/</code>) e components compartilhados
+      (<code>_components/</code>). Auditoria QA + integração em
+      <a href="_audit/QA_REPORT_2026-05-07.md">QA_REPORT</a> ·
+      <a href="_audit/INTEGRATION_REPORT_2026-05-07.md">INTEGRATION_REPORT</a>.
+    </p>
+  </footer>
+
+</main>
+
+</body>
+</html>
