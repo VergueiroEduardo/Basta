@@ -144,45 +144,19 @@
       letter-spacing: -0.03em; line-height: 1.0; color: var(--black);
       font-variant-numeric: tabular-nums;
     }
-    /* Selo de etapa do funil junto à identidade */
-    .id__stage {
-      display: inline-flex; align-items: center; align-self: center;
-      font-size: 11px; font-weight: 700; letter-spacing: -0.01em;
-      padding: 4px 10px; border: 1px solid var(--green); color: var(--green);
-      white-space: nowrap;
-    }
-
     /* ── AÇÕES + FECHAR ─────────────────────────────────────── */
-    .actions__row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .btn-download, .review-btn, .btn-whatsapp {
+    .actions__row { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    .btn-whatsapp {
       display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px;
       font-family: var(--f); font-size: 12px; font-weight: 800;
       text-transform: uppercase; letter-spacing: 0.06em;
       cursor: pointer; white-space: nowrap;
-    }
-    .btn-download svg, .review-btn svg, .btn-whatsapp svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .btn-whatsapp {
       background: var(--green); color: var(--white); border: 1.5px solid var(--green);
       transition: background var(--t), border-color var(--t), transform var(--t);
     }
     .btn-whatsapp:hover { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-1px); }
     .btn-whatsapp:active { transform: translateY(0); }
-    .btn-whatsapp svg { width: 18px; height: 18px; }
-    .btn-download {
-      background: var(--white); color: var(--black); border: 1.5px solid var(--gray-300);
-      transition: background var(--t), color var(--t), border-color var(--t);
-    }
-    .btn-download:hover { border-color: var(--black); background: var(--off-white); }
-    .review-btn {
-      background: var(--white); color: var(--black); border: 1.5px solid var(--black);
-      transition: background var(--t), color var(--t), border-color var(--t);
-    }
-    .review-btn:hover { background: var(--off-white); }
-    .review-btn.is-done { background: var(--black); color: var(--white); border-color: var(--black); }
-    .review-btn.is-done:hover { background: #1a1a1a; }
-    .review-btn__label { display: grid; justify-items: start; }
-    .review-btn__label > span { grid-column: 1; grid-row: 1; white-space: nowrap; }
-    .review-btn__sizer { visibility: hidden; pointer-events: none; }
+    .btn-whatsapp svg { width: 18px; height: 18px; flex-shrink: 0; }
     .btn-close {
       flex-shrink: 0; margin-left: auto; width: 44px; height: 44px;
       display: inline-flex; align-items: center; justify-content: center;
@@ -195,10 +169,6 @@
 
     /* ── AÇÕES ──────────────────────────────────────────────── */
     .actions { margin-bottom: 28px; }
-    .docs__label {
-      font-size: 10px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 0.12em; color: var(--gray-600); margin-bottom: 12px;
-    }
 
     /* ── ACORDEÃO ───────────────────────────────────────────── */
     .results__bar { cursor: pointer; user-select: none; }
@@ -250,20 +220,6 @@
     .ops .col-prod { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 104px; }
     .ops .money { font-weight: 700; color: var(--black); white-space: nowrap; }
     .ops .qty { font-weight: 800; color: var(--black); }
-    /* Coluna "Enviado" — confirmação manual de que o cliente encaminhou o requerimento ao banco */
-    .sent-toggle {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: var(--f); font-size: 9px; font-weight: 800;
-      text-transform: uppercase; letter-spacing: 0.05em;
-      padding: 6px 10px; background: var(--white); color: var(--gray-600);
-      border: 1.5px solid var(--gray-300); cursor: pointer; white-space: nowrap;
-      transition: background var(--t), color var(--t), border-color var(--t);
-    }
-    .sent-toggle svg { width: 12px; height: 12px; flex-shrink: 0; opacity: 0.35; }
-    .sent-toggle:hover { border-color: var(--black); color: var(--black); }
-    .sent-toggle.is-sent { background: var(--green); color: var(--white); border-color: var(--green); }
-    .sent-toggle.is-sent svg { opacity: 1; }
-    .sent-toggle.is-sent:hover { background: var(--green-hover); border-color: var(--green-hover); }
     .ops .contract-id {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 11px; font-weight: 700; color: var(--gray-600); white-space: nowrap;
@@ -272,21 +228,6 @@
       display: inline-block; font-size: 9px; font-weight: 800;
       text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.35;
       color: var(--gray-600);
-    }
-    /* Botão "Gerar cancelamento" (ação por linha) */
-    .gen-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 12px; font-family: var(--f);
-      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
-      color: var(--black); background: var(--white); border: 1.5px solid var(--black);
-      cursor: pointer; white-space: nowrap; line-height: 1;
-      transition: background var(--t), color var(--t), border-color var(--t);
-    }
-    .gen-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-    .gen-btn:hover { background: var(--green); color: var(--white); border-color: var(--green); }
-    .gen-btn.is-done {
-      background: var(--off-white); color: var(--green); border-color: var(--green);
-      pointer-events: none;
     }
     /* Linha de total */
     .ops tfoot td {
@@ -303,6 +244,110 @@
       border-top: 1px solid var(--gray-200);
     }
     @media (min-width: 980px) { .scroll-hint { display: none; } }
+
+    /* ── CHECKBOX BRUTALISTA ────────────────────────────────── */
+    .seg-check {
+      appearance: none; -webkit-appearance: none;
+      width: 18px; height: 18px; margin: 0;
+      border: 1.5px solid var(--gray-300); background: var(--white);
+      cursor: pointer; flex-shrink: 0; position: relative; vertical-align: middle;
+      transition: background var(--t), border-color var(--t);
+    }
+    .seg-check:hover:not(:disabled) { border-color: var(--black); }
+    .seg-check:checked { background: var(--green); border-color: var(--green); }
+    .seg-check:checked::after {
+      content: ''; position: absolute; left: 5px; top: 1px;
+      width: 5px; height: 10px; border: solid var(--white);
+      border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+    }
+    .seg-check:indeterminate { background: var(--green); border-color: var(--green); }
+    .seg-check:indeterminate::after {
+      content: ''; position: absolute; left: 3px; top: 7px;
+      width: 10px; height: 0; border-top: 2.5px solid var(--white); transform: none;
+    }
+    .seg-check:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+    /* estado assinado (requerimento não editável) */
+    .seg-check:disabled { cursor: not-allowed; }
+    .seg-check:disabled:not(:checked) { background: var(--gray-200); border-color: var(--gray-300); }
+    .seg-check:disabled:checked { background: var(--gray-600); border-color: var(--gray-600); }
+
+    /* ── MATRIZ APÓLICES × BANCOS ───────────────────────────── */
+    .mtx-note {
+      font-size: 12px; line-height: 1.55; color: var(--gray-600);
+      padding: 14px 16px; border-bottom: 1px solid var(--gray-300); background: var(--off-white);
+    }
+    .mtx-note strong { color: var(--black); font-weight: 700; }
+    table.mtx {
+      width: 100%; border-collapse: collapse; min-width: 920px;
+      table-layout: fixed; font-variant-numeric: tabular-nums;
+    }
+    .mtx thead th {
+      padding: 10px 8px; border-bottom: 2px solid var(--black);
+      background: var(--off-white); vertical-align: top; text-align: left;
+    }
+    .mtx-corner {
+      font-size: 12px; font-weight: 800; letter-spacing: -0.01em;
+      color: var(--black); line-height: 1.2; vertical-align: top;
+    }
+    .mtx-idx { text-align: center; }
+    .mtx thead th.mtx-idx { text-align: center; }
+    .mtx tbody td.mtx-idx { font-size: 12px; font-weight: 800; color: var(--gray-600); }
+    .mtx-bank { text-align: center; border-left: 1px solid var(--gray-200); }
+    .mtx-bank.is-frozen { background: #f0efe9; }
+    .mtx-bank__name { font-size: 12px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; line-height: 1.15; }
+    .mtx-bank__acct {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 9px; font-weight: 700; color: var(--gray-600); margin-top: 4px; white-space: nowrap;
+    }
+    .mtx-resend {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      width: 100%; height: 34px; padding: 0 8px; font-family: var(--f);
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--white); background: var(--green); border: 1.5px solid var(--green);
+      cursor: pointer; white-space: nowrap;
+      transition: background var(--t), border-color var(--t);
+    }
+    .mtx-resend svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .mtx-resend:hover { background: var(--green-hover); border-color: var(--green-hover); }
+    .mtx-locked {
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      width: 100%; height: 34px; padding: 0 8px;
+      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+      color: var(--gray-600); background: var(--gray-200); border: 1.5px solid var(--gray-300);
+      white-space: nowrap;
+    }
+    .mtx-locked svg { width: 11px; height: 11px; flex-shrink: 0; }
+    /* rodapé de comando (alinhado a cada coluna de banco) */
+    .mtx tfoot td {
+      padding: 12px 8px; border-top: 2px solid var(--black); background: var(--off-white);
+      vertical-align: middle;
+    }
+    .mtx tfoot td.mtx-foot { border-left: 1px solid var(--gray-200); text-align: center; }
+    .mtx tfoot td.mtx-foot.is-frozen { background: #f0efe9; }
+    .mtx-foot-label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-600); text-align: right;
+    }
+    .mtx tbody td, .mtx tbody th { padding: 12px 8px; border-bottom: 1px solid var(--gray-200); vertical-align: middle; }
+    .mtx tbody th.mtx__apolice { text-align: left; font-weight: 400; }
+    .mtx tbody tr:last-child td, .mtx tbody tr:last-child th { border-bottom: none; }
+    .mtx tbody tr:hover td, .mtx tbody tr:hover th { background: var(--off-white); }
+    .mtx tbody tr:hover td.is-frozen { background: #f0efe9; }
+    .mtx-ap { display: flex; align-items: flex-start; gap: 10px; }
+    .mtx-ap__info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .mtx-ap__name { font-size: 12px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; line-height: 1.25; overflow-wrap: anywhere; }
+    .mtx-ap__ins { font-size: 11px; font-weight: 600; color: var(--gray-600); overflow-wrap: anywhere; }
+    .mtx-ap__num { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; font-weight: 700; color: var(--gray-600); overflow-wrap: anywhere; }
+    .mtx__cell { text-align: center; border-left: 1px solid var(--gray-200); }
+    .mtx__cell.is-frozen { background: #f0efe9; }
+    .mtx-legend {
+      display: flex; flex-wrap: wrap; gap: 10px 18px; padding: 12px 16px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .mtx-legend__item { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 700; color: var(--gray-600); }
+    .mtx-legend__sw { width: 14px; height: 14px; border: 1.5px solid var(--gray-300); flex-shrink: 0; }
+    .mtx-legend__sw--on { background: var(--green); border-color: var(--green); }
+    .mtx-legend__sw--frozen { background: var(--gray-600); border-color: var(--gray-600); }
 
     /* ── ARQUIVOS ENVIADOS PELO CLIENTE (fotos da apólice) ──── */
     .files { margin-bottom: 40px; }
@@ -510,9 +555,8 @@
           <span class="id__label">CPF</span>
           <span class="id__cpf">001.814.691-03</span>
         </div>
-        <span class="id__stage">Funil concluído · Recebeu Ofertas</span>
       </div>
-      <p class="page-lead">Abaixo estão os <strong>seguros e serviços ativos</strong> identificados em nome do cliente via Open Finance.</p>
+      <p class="page-lead">Abaixo estão os <strong>seguros e serviços ativos</strong> identificados em nome do cliente via consulta no site da SUSEP.</p>
     </div>
     <a href="29_basta-dashboard-cancelamentos.html" class="btn-close" aria-label="Fechar e voltar ao Resumo">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -521,19 +565,7 @@
 
   <!-- AÇÕES -->
   <div class="actions">
-    <div class="docs__label">Ações</div>
     <div class="actions__row">
-        <button type="button" id="clientReviewBtn" class="review-btn" aria-pressed="false" onclick="toggleClientReview()">
-          <svg class="review-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
-          <span class="review-btn__label">
-            <span class="review-btn__sizer" aria-hidden="true">Contatado em 00/00/0000</span>
-            <span class="review-btn__text">Marcar como contatado</span>
-          </span>
-        </button>
-        <button type="button" class="btn-download" onclick="downloadDossie()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Baixar
-        </button>
         <button type="button" class="btn-whatsapp" onclick="callClient()" aria-label="Chamar cliente no WhatsApp">
           Chamar Cliente
           <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 4C9.93 4 4.97 8.96 4.97 15.07c0 2.13.6 4.12 1.64 5.81L4.5 27l6.3-2.05a11 11 0 0 0 5.24 1.34h.01c6.11 0 11.07-4.96 11.07-11.07S22.15 4 16.04 4zm0 20.2h-.01a9.2 9.2 0 0 1-4.69-1.28l-.34-.2-3.74 1.22 1.25-3.64-.22-.37a9.13 9.13 0 0 1-1.4-4.87c0-5.05 4.11-9.16 9.18-9.16 2.45 0 4.75.96 6.48 2.69a9.1 9.1 0 0 1 2.68 6.48c0 5.05-4.11 9.16-9.18 9.16zm5.03-6.86c-.28-.14-1.63-.8-1.88-.9-.25-.09-.43-.14-.62.14-.18.28-.71.9-.87 1.08-.16.18-.32.21-.6.07-.28-.14-1.16-.43-2.21-1.36-.82-.73-1.37-1.63-1.53-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.53-.08 1.63-.67 1.86-1.31.23-.64.23-1.19.16-1.31-.07-.12-.25-.18-.53-.32z"/></svg>
@@ -541,86 +573,203 @@
       </div>
     </div>
 
-  <!-- SEGUROS MAPEADOS · SUSEP (requerimento consolidado por banco) -->
-  <section class="results" aria-label="Seguros mapeados via SUSEP" style="margin-bottom: 24px;">
-    <div class="results__bar" role="button" tabindex="0" aria-expanded="true" aria-controls="susepBody"
+  <!-- GESTÃO DE APÓLICES POR BANCO · matriz apólices × bancos -->
+  <section class="results" aria-label="Gestão de apólices por banco" style="margin-bottom: 24px;">
+    <div class="results__bar" role="button" tabindex="0" aria-expanded="true" aria-controls="matrixBody"
          onclick="toggleOps(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleOps(this);}">
       <div class="results__left">
         <svg class="results__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        <span class="results__heading">Seguros mapeados · SUSEP</span>
-        <span class="results__count"><b>3</b> seguros · <b>5</b> bancos conectados</span>
+        <span class="results__heading">Requerimentos · apólices por banco</span>
+        <span class="results__count">endividamento total <b>R$ 121.480,00</b> · <b>5</b> apólices · <b>5</b> bancos conectados via Open Finance</span>
       </div>
     </div>
-    <div id="susepBody">
+    <div id="matrixBody">
+
+    <p class="mtx-note">
+      Cada <strong>banco</strong> recebe um requerimento com as apólices marcadas na sua coluna. A mesma apólice é enviada a vários bancos — cada um confirma se é da sua base. Marque/desmarque as apólices em cada <strong>coluna</strong> para montar o requerimento daquele banco. Requerimentos <strong>assinados</strong> ficam bloqueados e não podem ser editados.
+    </p>
 
     <div class="table-scroll">
-      <table class="ops">
+      <table class="mtx">
         <colgroup>
-          <col style="width: 5%" />    <!-- # -->
-          <col style="width: 22%" />   <!-- Banco -->
-          <col style="width: 13%" />   <!-- Agência -->
-          <col style="width: 18%" />   <!-- Conta -->
-          <col style="width: 16%" />   <!-- Enviado -->
-          <col style="width: 26%" />   <!-- Gerar cancelamento -->
+          <col style="width: 44px" />    <!-- Nº -->
+          <col style="width: 260px" />   <!-- Apólice -->
+          <col style="width: 132px" />   <!-- Banco do Brasil -->
+          <col style="width: 132px" />   <!-- Caixa -->
+          <col style="width: 132px" />   <!-- Bradesco -->
+          <col style="width: 132px" />   <!-- BMG -->
+          <col style="width: 132px" />   <!-- Santander -->
         </colgroup>
         <thead>
           <tr>
-            <th class="col-idx">#</th>
-            <th>Banco</th>
-            <th>Agência</th>
-            <th>Conta</th>
-            <th>Enviado</th>
-            <th>Gerar cancelamento</th>
+            <th class="mtx-corner mtx-idx" scope="col">Nº</th>
+            <th class="mtx-corner" scope="col">Descrição</th>
+            <!-- Banco do Brasil (editável) -->
+            <th class="mtx-bank" scope="col">
+              <div class="mtx-bank__name">Banco do Brasil</div>
+              <div class="mtx-bank__acct">Ag 3021-4 · 45782-1</div>
+            </th>
+            <!-- Caixa Econômica (editável) -->
+            <th class="mtx-bank" scope="col">
+              <div class="mtx-bank__name">Caixa Econômica</div>
+              <div class="mtx-bank__acct">Ag 0512 · 0002198-7</div>
+            </th>
+            <!-- Bradesco (assinado) -->
+            <th class="mtx-bank is-frozen" scope="col">
+              <div class="mtx-bank__name">Bradesco</div>
+              <div class="mtx-bank__acct">Ag 0847-2 · 0112233-9</div>
+            </th>
+            <!-- Banco BMG (assinado) -->
+            <th class="mtx-bank is-frozen" scope="col">
+              <div class="mtx-bank__name">Banco BMG</div>
+              <div class="mtx-bank__acct">Ag 0031 · 998877-2</div>
+            </th>
+            <!-- Santander (editável) -->
+            <th class="mtx-bank" scope="col">
+              <div class="mtx-bank__name">Santander</div>
+              <div class="mtx-bank__acct">Ag 4455 · 033221-0</div>
+            </th>
           </tr>
         </thead>
         <tbody>
+          <!-- Apólice 1 -->
           <tr>
-            <td class="col-idx">1</td>
-            <td class="col-bank">Banco do Brasil</td>
-            <td><span class="contract-id">3021-4</span></td>
-            <td><span class="contract-id">45782-1</span></td>
-            <td><button type="button" class="sent-toggle" aria-pressed="false" onclick="toggleSent(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span class="sent-toggle__lbl">Não enviado</span></button></td>
-            <td><button type="button" class="gen-btn" onclick="generateInsuranceRequest(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+            <td class="mtx-idx">1</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Pessoas Coletivo – Prestamista</span>
+                  <span class="mtx-ap__ins">Aliança do Brasil Seguros S.A</span>
+                  <span class="mtx-ap__num">31161_0977_5148785</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Caixa" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 1 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 1 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Santander" /></td>
           </tr>
+          <!-- Apólice 2 -->
           <tr>
-            <td class="col-idx">2</td>
-            <td class="col-bank">Caixa Econômica</td>
-            <td><span class="contract-id">0512</span></td>
-            <td><span class="contract-id">0002198-7</span></td>
-            <td><button type="button" class="sent-toggle" aria-pressed="false" onclick="toggleSent(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span class="sent-toggle__lbl">Não enviado</span></button></td>
-            <td><button type="button" class="gen-btn" onclick="generateInsuranceRequest(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+            <td class="mtx-idx">2</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Pessoas Coletivo – Prestamista</span>
+                  <span class="mtx-ap__ins">Brasilseg Companhia de Seguros</span>
+                  <span class="mtx-ap__num">31161_0977_5148785</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Caixa" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 2 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 2 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Santander" /></td>
           </tr>
+          <!-- Apólice 3 -->
           <tr>
-            <td class="col-idx">3</td>
-            <td class="col-bank">Bradesco</td>
-            <td><span class="contract-id">0847-2</span></td>
-            <td><span class="contract-id">0112233-9</span></td>
-            <td><button type="button" class="sent-toggle" aria-pressed="false" onclick="toggleSent(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span class="sent-toggle__lbl">Não enviado</span></button></td>
-            <td><button type="button" class="gen-btn" onclick="generateInsuranceRequest(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+            <td class="mtx-idx">3</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Pessoas Coletivo – Prestamista</span>
+                  <span class="mtx-ap__ins">Icatu Seguros S.A</span>
+                  <span class="mtx-ap__num">77000911</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Caixa" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 3 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 3 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Santander" /></td>
           </tr>
+          <!-- Apólice 4 -->
           <tr>
-            <td class="col-idx">4</td>
-            <td class="col-bank">Banco BMG</td>
-            <td><span class="contract-id">0031</span></td>
-            <td><span class="contract-id">998877-2</span></td>
-            <td><button type="button" class="sent-toggle" aria-pressed="false" onclick="toggleSent(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span class="sent-toggle__lbl">Não enviado</span></button></td>
-            <td><button type="button" class="gen-btn" onclick="generateInsuranceRequest(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+            <td class="mtx-idx">4</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Pessoas Coletivo – Prestamista</span>
+                  <span class="mtx-ap__ins">Icatu Seguros S.A</span>
+                  <span class="mtx-ap__num">77001067</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Caixa" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 4 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 4 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Santander" /></td>
           </tr>
+          <!-- Apólice 5 · cliente decidiu MANTER → fora dos bancos editáveis; presa nos já comprometidos -->
           <tr>
-            <td class="col-idx">5</td>
-            <td class="col-bank">Santander</td>
-            <td><span class="contract-id">4455</span></td>
-            <td><span class="contract-id">033221-0</span></td>
-            <td><button type="button" class="sent-toggle" aria-pressed="false" onclick="toggleSent(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span class="sent-toggle__lbl">Não enviado</span></button></td>
-            <td><button type="button" class="gen-btn" onclick="generateInsuranceRequest(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+            <td class="mtx-idx">5</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Patrimonial – Riscos Diversos</span>
+                  <span class="mtx-ap__ins">Kovr Seguradora S.A</span>
+                  <span class="mtx-ap__num">1007117985596</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Caixa" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 5 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 5 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Santander" /></td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td class="mtx-foot-label" colspan="2">Comando por banco →</td>
+            <td class="mtx-foot">
+              <button type="button" class="mtx-resend" onclick="mtxResend(0,'Banco do Brasil')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Reenviar
+              </button>
+            </td>
+            <td class="mtx-foot">
+              <button type="button" class="mtx-resend" onclick="mtxResend(1,'Caixa Econômica')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Reenviar
+              </button>
+            </td>
+            <td class="mtx-foot is-frozen">
+              <span class="mtx-locked">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Assinado
+              </span>
+            </td>
+            <td class="mtx-foot is-frozen">
+              <span class="mtx-locked">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Assinado
+              </span>
+            </td>
+            <td class="mtx-foot">
+              <button type="button" class="mtx-resend" onclick="mtxResend(4,'Santander')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Reenviar
+              </button>
+            </td>
+          </tr>
+        </tfoot>
       </table>
+    </div>
+
+    <div class="mtx-legend">
+      <span class="mtx-legend__item"><span class="mtx-legend__sw mtx-legend__sw--on"></span> Incluída no requerimento</span>
+      <span class="mtx-legend__item"><span class="mtx-legend__sw"></span> Fora do requerimento</span>
+      <span class="mtx-legend__item"><span class="mtx-legend__sw mtx-legend__sw--frozen"></span> Assinado · requerimento não editável</span>
     </div>
 
     <div class="scroll-hint">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      Arraste para o lado para ver todas as colunas
+      Arraste para o lado para ver todos os bancos
     </div>
     </div>
   </section>
@@ -698,31 +847,6 @@
     bar.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
   }
 
-  /* ── CONTATO A NÍVEL DE CLIENTE ──────────────────────────── */
-  function toggleClientReview() {
-    var btn = document.getElementById('clientReviewBtn');
-    var done = btn.classList.toggle('is-done');
-    btn.setAttribute('aria-pressed', done ? 'true' : 'false');
-    var txt = btn.querySelector('.review-btn__text');
-    var icon = btn.querySelector('.review-btn__icon');
-    if (done) {
-      var d = new Date();
-      var dd = String(d.getDate()).padStart(2, '0');
-      var mm = String(d.getMonth() + 1).padStart(2, '0');
-      txt.textContent = 'Contatado em ' + dd + '/' + mm + '/' + d.getFullYear();
-      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
-    } else {
-      txt.textContent = 'Marcar como contatado';
-      icon.innerHTML = '<circle cx="12" cy="12" r="9"/>';
-    }
-  }
-
-  /* ── DOWNLOAD ────────────────────────────────────────────── */
-  function downloadDossie() {
-    /* INTEGRAÇÃO: gerar/baixar o dossiê de produtos do cliente (PDF/CSV). */
-    alert('Download do dossiê do cliente — em breve.');
-  }
-
   /* ── CHAMAR CLIENTE NO WHATSAPP ──────────────────────────── */
   function callClient() {
     /* INTEGRAÇÃO: substituir pelo telefone real do cliente (apenas dígitos, com DDI 55). */
@@ -736,33 +860,29 @@
     window.open(url, '_blank', 'noopener');
   }
 
-  /* ── GERAR CANCELAMENTO (por produto/serviço, vínculo já resolvido) ─ */
-  function generateCancellation(btn) {
-    /* INTEGRAÇÃO: gerar a solicitação/carta de cancelamento do item e registrar no fluxo. */
-    btn.classList.add('is-done');
-    var lbl = btn.querySelector('.gen-btn__lbl');
-    if (lbl) lbl.textContent = 'Cancelamento gerado';
+  /* ══════════════════════════════════════════════════════════
+     MATRIZ APÓLICES × BANCOS
+     - Célula marcada = apólice incluída no requerimento daquele banco.
+     - Células :disabled = bancos assinados (requerimento não editável).
+     - Reenviar (por coluna) gera nova versão do requerimento do banco
+       com as apólices marcadas e envia ao cliente para assinatura.
+     ══════════════════════════════════════════════════════════ */
+
+  /* Marca/desmarca uma célula (hook para futura integração de estado) */
+  function mtxCellChange(cb) { /* no-op */ }
+
+  /* Reenviar o requerimento de um banco (nova versão para assinatura do cliente) */
+  function mtxResend(bankIdx, bankName) {
+    var n = document.querySelectorAll('.mtx-cell-check[data-col="' + bankIdx + '"]:checked').length;
+    if (!n) {
+      alert('Nenhuma apólice marcada para ' + bankName + '. Marque ao menos uma antes de enviar.');
+      return;
+    }
+    /* INTEGRAÇÃO: gerar nova versão do requerimento de `bankName` com as `n` apólices
+       marcadas e disparar ao cliente (WhatsApp) para assinatura eletrônica. */
+    alert('Requerimento de ' + bankName + ' gerado com ' + n + ' apólice(s) e enviado ao cliente para assinatura.');
   }
 
-  /* ── GERAR REQUERIMENTO DE SEGUROS (consolidado por banco, via SUSEP) ─
-     Gera o requerimento com a lista completa de seguros mapeados e envia
-     ao fornecedor de gestão de documentos; o cliente recebe o link de
-     assinatura pelo WhatsApp. O envio ao banco é feito pelo próprio
-     cliente — por isso a confirmação fica na coluna "Enviado". */
-  function generateInsuranceRequest(btn) {
-    /* INTEGRAÇÃO: gerar o requerimento consolidado e disparar para o fornecedor de assinatura eletrônica. */
-    btn.classList.add('is-done');
-    var lbl = btn.querySelector('.gen-btn__lbl');
-    if (lbl) lbl.textContent = 'Enviado para assinatura';
-  }
-
-  /* ── CONFIRMAÇÃO MANUAL DE ENVIO AO BANCO (coluna Enviado) ───────── */
-  function toggleSent(btn) {
-    var sent = btn.classList.toggle('is-sent');
-    btn.setAttribute('aria-pressed', sent ? 'true' : 'false');
-    var lbl = btn.querySelector('.sent-toggle__lbl');
-    if (lbl) lbl.textContent = sent ? 'Enviado' : 'Não enviado';
-  }
 
   /* ── VALIDAÇÃO DE FOTOS DA APÓLICE ───────────────────────── */
   function approveShot(btn) {
