@@ -126,9 +126,10 @@
     /* ── CABEÇALHO / IDENTIDADE ─────────────────────────────── */
     .detail-header {
       display: flex; align-items: flex-start;
-      gap: 16px 24px; flex-wrap: wrap; margin-bottom: 28px;
+      gap: 16px 24px; flex-wrap: wrap; margin-bottom: 24px;
     }
     .detail-header__main { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 280px; }
+    .detail-header__aside { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; flex-shrink: 0; }
     .id { display: flex; flex-wrap: wrap; gap: 22px 48px; align-items: flex-start; }
     .id__item { display: flex; flex-direction: column; gap: 5px; }
     .id__label {
@@ -145,7 +146,6 @@
       font-variant-numeric: tabular-nums;
     }
     /* ── AÇÕES + FECHAR ─────────────────────────────────────── */
-    .actions__row { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     .btn-whatsapp {
       display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px;
       font-family: var(--f); font-size: 12px; font-weight: 800;
@@ -158,7 +158,7 @@
     .btn-whatsapp:active { transform: translateY(0); }
     .btn-whatsapp svg { width: 18px; height: 18px; flex-shrink: 0; }
     .btn-close {
-      flex-shrink: 0; margin-left: auto; width: 44px; height: 44px;
+      flex-shrink: 0; width: 44px; height: 44px;
       display: inline-flex; align-items: center; justify-content: center;
       background: transparent; border: 1.5px solid var(--gray-300); color: var(--gray-600);
       transition: color var(--t), border-color var(--t), background var(--t);
@@ -166,9 +166,6 @@
     }
     .btn-close:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
     .btn-close:active { transform: scale(0.97); }
-
-    /* ── AÇÕES ──────────────────────────────────────────────── */
-    .actions { margin-bottom: 28px; }
 
     /* ── ACORDEÃO ───────────────────────────────────────────── */
     .results__bar { cursor: pointer; user-select: none; }
@@ -196,7 +193,7 @@
     }
     .results__count b { color: var(--green); }
 
-    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-scroll { overflow: auto; -webkit-overflow-scrolling: touch; max-height: 62vh; }
     table.ops {
       width: 100%; border-collapse: collapse; min-width: 900px;
       table-layout: fixed; font-variant-numeric: tabular-nums;
@@ -273,15 +270,27 @@
 
     /* ── MATRIZ APÓLICES × BANCOS ───────────────────────────── */
     .mtx-note {
-      font-size: 12px; line-height: 1.55; color: var(--gray-600);
+      display: flex; align-items: center; gap: 16px 24px; flex-wrap: wrap;
       padding: 14px 16px; border-bottom: 1px solid var(--gray-300); background: var(--off-white);
     }
+    .mtx-note__text { font-size: 12px; line-height: 1.55; color: var(--gray-600); flex: 1; min-width: 280px; margin: 0; }
     .mtx-note strong { color: var(--black); font-weight: 700; }
+    /* botão selecionar/limpar tudo */
+    .mtx-selall {
+      display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px;
+      font-family: var(--f); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--black); background: var(--white); border: 1.5px solid var(--black); cursor: pointer;
+      white-space: nowrap; flex-shrink: 0; transition: background var(--t), color var(--t);
+    }
+    .mtx-selall svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .mtx-selall:hover { background: var(--black); color: var(--white); }
     table.mtx {
-      width: 100%; border-collapse: collapse; min-width: 920px;
+      width: 100%; border-collapse: separate; border-spacing: 0; min-width: 920px;
       table-layout: fixed; font-variant-numeric: tabular-nums;
     }
+    /* cabeçalho de bancos (topo) — congelado ao rolar na vertical */
     .mtx thead th {
+      position: sticky; top: 0; z-index: 3;
       padding: 10px 8px; border-bottom: 2px solid var(--black);
       background: var(--off-white); vertical-align: top; text-align: left;
     }
@@ -290,49 +299,80 @@
       color: var(--black); line-height: 1.2; vertical-align: top;
     }
     .mtx-idx { text-align: center; }
-    .mtx thead th.mtx-idx { text-align: center; }
-    .mtx tbody td.mtx-idx { font-size: 12px; font-weight: 800; color: var(--gray-600); }
-    .mtx-bank { text-align: center; border-left: 1px solid var(--gray-200); }
+    /* cantos superiores — congelados nos dois eixos */
+    .mtx thead th.mtx-idx { left: 0; z-index: 4; text-align: center; }
+    .mtx thead th.mtx-corner:not(.mtx-idx) { left: 44px; z-index: 4; }
+    /* coluna Nº (corpo) — congelada à esquerda */
+    .mtx tbody td.mtx-idx {
+      position: sticky; left: 0; z-index: 2; background: var(--white);
+      font-size: 12px; font-weight: 800; color: var(--gray-600);
+    }
+    .mtx-bank { text-align: center; border-left: 1px solid var(--gray-200); cursor: pointer; user-select: none; }
+    .mtx thead th.mtx-bank:hover { background: var(--gray-200); }
+    .mtx thead th.mtx-bank:hover .mtx-bank__name { text-decoration: underline; text-underline-offset: 2px; }
     .mtx-bank.is-frozen { background: #f0efe9; }
     .mtx-bank__name { font-size: 12px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; line-height: 1.15; }
     .mtx-bank__acct {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 9px; font-weight: 700; color: var(--gray-600); margin-top: 4px; white-space: nowrap;
     }
-    .mtx-resend {
+    .mtx-foot__in { display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+    .mtx-send {
       display: inline-flex; align-items: center; justify-content: center; gap: 5px;
       width: 100%; height: 34px; padding: 0 8px; font-family: var(--f);
       font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
       color: var(--white); background: var(--green); border: 1.5px solid var(--green);
       cursor: pointer; white-space: nowrap;
-      transition: background var(--t), border-color var(--t);
+      transition: background var(--t), border-color var(--t), color var(--t);
     }
-    .mtx-resend svg { width: 13px; height: 13px; flex-shrink: 0; }
-    .mtx-resend:hover { background: var(--green-hover); border-color: var(--green-hover); }
-    .mtx-locked {
-      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-      width: 100%; height: 34px; padding: 0 8px;
-      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
-      color: var(--gray-600); background: var(--gray-200); border: 1.5px solid var(--gray-300);
-      white-space: nowrap;
+    .mtx-send svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .mtx-send:hover { background: var(--green-hover); border-color: var(--green-hover); }
+    /* já enviado (aguardando assinatura) — CTA reabre ao editar checkbox */
+    .mtx-send.is-sent { background: var(--white); color: var(--green); border-color: var(--green); }
+    .mtx-send.is-sent:hover { background: var(--off-white); }
+    /* CTA desabilitado (banco assinado — não some, só inerte) */
+    .mtx-send:disabled { background: var(--gray-200); color: var(--gray-600); border-color: var(--gray-300); cursor: not-allowed; }
+    .mtx-send:disabled:hover { background: var(--gray-200); border-color: var(--gray-300); }
+    /* card de estado, sob o botão */
+    .mtx-report {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      width: 100%; height: 24px; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      border: 1.5px solid var(--gray-300); background: var(--white);
     }
-    .mtx-locked svg { width: 11px; height: 11px; flex-shrink: 0; }
-    /* rodapé de comando (alinhado a cada coluna de banco) */
+    .mtx-report svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .mtx-report--pending { color: var(--gray-600); }
+    .mtx-report--pending::before {
+      content: ''; width: 7px; height: 7px; border: 1.5px solid var(--gray-600); border-radius: 50%; flex-shrink: 0;
+    }
+    .mtx-report--signed { color: var(--white); background: var(--black); border-color: var(--black); }
+    /* rodapé de comando — congelado na base ao rolar na vertical */
     .mtx tfoot td {
+      position: sticky; bottom: 0; z-index: 3;
       padding: 12px 8px; border-top: 2px solid var(--black); background: var(--off-white);
       vertical-align: middle;
     }
     .mtx tfoot td.mtx-foot { border-left: 1px solid var(--gray-200); text-align: center; }
     .mtx tfoot td.mtx-foot.is-frozen { background: #f0efe9; }
+    .mtx tfoot td.mtx-foot-label { left: 0; z-index: 4; }
     .mtx-foot-label {
       font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
       color: var(--gray-600); text-align: right;
     }
     .mtx tbody td, .mtx tbody th { padding: 12px 8px; border-bottom: 1px solid var(--gray-200); vertical-align: middle; }
-    .mtx tbody th.mtx__apolice { text-align: left; font-weight: 400; }
+    /* cabeçalho de seguros (esquerda) — congelado ao rolar na horizontal */
+    .mtx tbody th.mtx__apolice {
+      position: sticky; left: 44px; z-index: 2; background: var(--white);
+      text-align: left; font-weight: 400;
+    }
+    /* divisor sutil da faixa esquerda congelada */
+    .mtx thead th.mtx-corner:not(.mtx-idx),
+    .mtx tbody th.mtx__apolice,
+    .mtx tfoot td.mtx-foot-label { box-shadow: 3px 0 5px -3px rgba(0,0,0,0.15); }
     .mtx tbody tr:last-child td, .mtx tbody tr:last-child th { border-bottom: none; }
     .mtx tbody tr:hover td, .mtx tbody tr:hover th { background: var(--off-white); }
     .mtx tbody tr:hover td.is-frozen { background: #f0efe9; }
+    .mtx tbody tr:hover td.mtx-idx, .mtx tbody tr:hover th.mtx__apolice { background: var(--off-white); }
     .mtx-ap { display: flex; align-items: flex-start; gap: 10px; }
     .mtx-ap__info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
     .mtx-ap__name { font-size: 12px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; line-height: 1.25; overflow-wrap: anywhere; }
@@ -558,20 +598,16 @@
       </div>
       <p class="page-lead">Abaixo estão os <strong>seguros e serviços ativos</strong> identificados em nome do cliente via consulta no site da SUSEP.</p>
     </div>
-    <a href="29_basta-dashboard-cancelamentos.html" class="btn-close" aria-label="Fechar e voltar ao Resumo">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </a>
-  </div>
-
-  <!-- AÇÕES -->
-  <div class="actions">
-    <div class="actions__row">
-        <button type="button" class="btn-whatsapp" onclick="callClient()" aria-label="Chamar cliente no WhatsApp">
-          Chamar Cliente
-          <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 4C9.93 4 4.97 8.96 4.97 15.07c0 2.13.6 4.12 1.64 5.81L4.5 27l6.3-2.05a11 11 0 0 0 5.24 1.34h.01c6.11 0 11.07-4.96 11.07-11.07S22.15 4 16.04 4zm0 20.2h-.01a9.2 9.2 0 0 1-4.69-1.28l-.34-.2-3.74 1.22 1.25-3.64-.22-.37a9.13 9.13 0 0 1-1.4-4.87c0-5.05 4.11-9.16 9.18-9.16 2.45 0 4.75.96 6.48 2.69a9.1 9.1 0 0 1 2.68 6.48c0 5.05-4.11 9.16-9.18 9.16zm5.03-6.86c-.28-.14-1.63-.8-1.88-.9-.25-.09-.43-.14-.62.14-.18.28-.71.9-.87 1.08-.16.18-.32.21-.6.07-.28-.14-1.16-.43-2.21-1.36-.82-.73-1.37-1.63-1.53-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.53-.08 1.63-.67 1.86-1.31.23-.64.23-1.19.16-1.31-.07-.12-.25-.18-.53-.32z"/></svg>
-        </button>
-      </div>
+    <div class="detail-header__aside">
+      <a href="29_basta-dashboard-cancelamentos.html" class="btn-close" aria-label="Fechar e voltar ao Resumo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </a>
+      <button type="button" class="btn-whatsapp" onclick="callClient()" aria-label="Chamar cliente no WhatsApp">
+        Chamar Cliente
+        <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 4C9.93 4 4.97 8.96 4.97 15.07c0 2.13.6 4.12 1.64 5.81L4.5 27l6.3-2.05a11 11 0 0 0 5.24 1.34h.01c6.11 0 11.07-4.96 11.07-11.07S22.15 4 16.04 4zm0 20.2h-.01a9.2 9.2 0 0 1-4.69-1.28l-.34-.2-3.74 1.22 1.25-3.64-.22-.37a9.13 9.13 0 0 1-1.4-4.87c0-5.05 4.11-9.16 9.18-9.16 2.45 0 4.75.96 6.48 2.69a9.1 9.1 0 0 1 2.68 6.48c0 5.05-4.11 9.16-9.18 9.16zm5.03-6.86c-.28-.14-1.63-.8-1.88-.9-.25-.09-.43-.14-.62.14-.18.28-.71.9-.87 1.08-.16.18-.32.21-.6.07-.28-.14-1.16-.43-2.21-1.36-.82-.73-1.37-1.63-1.53-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.53-.08 1.63-.67 1.86-1.31.23-.64.23-1.19.16-1.31-.07-.12-.25-.18-.53-.32z"/></svg>
+      </button>
     </div>
+  </div>
 
   <!-- GESTÃO DE APÓLICES POR BANCO · matriz apólices × bancos -->
   <section class="results" aria-label="Gestão de apólices por banco" style="margin-bottom: 24px;">
@@ -580,54 +616,84 @@
       <div class="results__left">
         <svg class="results__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
         <span class="results__heading">Requerimentos · apólices por banco</span>
-        <span class="results__count">endividamento total <b>R$ 121.480,00</b> · <b>5</b> apólices · <b>5</b> bancos conectados via Open Finance</span>
+        <span class="results__count">endividamento total <b>R$ 121.480,00</b> · <b>9</b> apólices · <b>9</b> bancos conectados via Open Finance</span>
       </div>
     </div>
     <div id="matrixBody">
 
-    <p class="mtx-note">
-      Cada <strong>banco</strong> recebe um requerimento com as apólices marcadas na sua coluna. A mesma apólice é enviada a vários bancos — cada um confirma se é da sua base. Marque/desmarque as apólices em cada <strong>coluna</strong> para montar o requerimento daquele banco. Requerimentos <strong>assinados</strong> ficam bloqueados e não podem ser editados.
-    </p>
+    <div class="mtx-note">
+      <p class="mtx-note__text">
+        Cada <strong>banco</strong> recebe um requerimento com as apólices marcadas na sua coluna. A mesma apólice é enviada a vários bancos — cada um confirma se é da sua base. Marque/desmarque as apólices em cada <strong>coluna</strong> (ou clique no nome do banco para a coluna toda) para montar o requerimento. Um requerimento <strong>assinado</strong> ainda pode ser alterado: mudar as apólices invalida a assinatura vigente, o status volta a <strong>Pendente</strong> e o documento pode ser reenviado para nova assinatura.
+      </p>
+      <button type="button" class="mtx-selall" id="mtxSelAll" onclick="mtxSelectAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span class="mtx-selall__lbl">Selecionar tudo</span>
+      </button>
+    </div>
 
     <div class="table-scroll">
       <table class="mtx">
         <colgroup>
           <col style="width: 44px" />    <!-- Nº -->
           <col style="width: 260px" />   <!-- Apólice -->
-          <col style="width: 132px" />   <!-- Banco do Brasil -->
-          <col style="width: 132px" />   <!-- Caixa -->
-          <col style="width: 132px" />   <!-- Bradesco -->
-          <col style="width: 132px" />   <!-- BMG -->
-          <col style="width: 132px" />   <!-- Santander -->
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
+          <col style="width: 132px" />
         </colgroup>
         <thead>
           <tr>
             <th class="mtx-corner mtx-idx" scope="col">Nº</th>
             <th class="mtx-corner" scope="col">Descrição</th>
             <!-- Banco do Brasil (editável) -->
-            <th class="mtx-bank" scope="col">
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(0)" title="Selecionar / limpar esta coluna">
               <div class="mtx-bank__name">Banco do Brasil</div>
               <div class="mtx-bank__acct">Ag 3021-4 · 45782-1</div>
             </th>
             <!-- Caixa Econômica (editável) -->
-            <th class="mtx-bank" scope="col">
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(1)" title="Selecionar / limpar esta coluna">
               <div class="mtx-bank__name">Caixa Econômica</div>
               <div class="mtx-bank__acct">Ag 0512 · 0002198-7</div>
             </th>
             <!-- Bradesco (assinado) -->
-            <th class="mtx-bank is-frozen" scope="col">
+            <th class="mtx-bank is-frozen" scope="col" onclick="mtxSelectColumn(2)" title="Selecionar / limpar esta coluna">
               <div class="mtx-bank__name">Bradesco</div>
               <div class="mtx-bank__acct">Ag 0847-2 · 0112233-9</div>
             </th>
             <!-- Banco BMG (assinado) -->
-            <th class="mtx-bank is-frozen" scope="col">
+            <th class="mtx-bank is-frozen" scope="col" onclick="mtxSelectColumn(3)" title="Selecionar / limpar esta coluna">
               <div class="mtx-bank__name">Banco BMG</div>
               <div class="mtx-bank__acct">Ag 0031 · 998877-2</div>
             </th>
             <!-- Santander (editável) -->
-            <th class="mtx-bank" scope="col">
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(4)" title="Selecionar / limpar esta coluna">
               <div class="mtx-bank__name">Santander</div>
               <div class="mtx-bank__acct">Ag 4455 · 033221-0</div>
+            </th>
+            <!-- Itaú Unibanco (editável) -->
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(5)" title="Selecionar / limpar esta coluna">
+              <div class="mtx-bank__name">Itaú Unibanco</div>
+              <div class="mtx-bank__acct">Ag 1234 · 56789-0</div>
+            </th>
+            <!-- Nubank (editável) -->
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(6)" title="Selecionar / limpar esta coluna">
+              <div class="mtx-bank__name">Nubank</div>
+              <div class="mtx-bank__acct">Ag 0001 · 112233-4</div>
+            </th>
+            <!-- Banco Inter (editável) -->
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(7)" title="Selecionar / limpar esta coluna">
+              <div class="mtx-bank__name">Banco Inter</div>
+              <div class="mtx-bank__acct">Ag 0077 · 445566-7</div>
+            </th>
+            <!-- Sicoob (editável) -->
+            <th class="mtx-bank" scope="col" onclick="mtxSelectColumn(8)" title="Selecionar / limpar esta coluna">
+              <div class="mtx-bank__name">Sicoob</div>
+              <div class="mtx-bank__acct">Ag 3010 · 778899-0</div>
             </th>
           </tr>
         </thead>
@@ -645,10 +711,14 @@
               </div>
             </th>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Banco do Brasil" /></td>
-            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Caixa" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 1 em Bradesco (assinado)" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 1 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Banco BMG (assinado)" /></td>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 1 em Sicoob" /></td>
           </tr>
           <!-- Apólice 2 -->
           <tr>
@@ -663,10 +733,14 @@
               </div>
             </th>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Banco do Brasil" /></td>
-            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Caixa" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 2 em Bradesco (assinado)" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 2 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Banco BMG (assinado)" /></td>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 2 em Sicoob" /></td>
           </tr>
           <!-- Apólice 3 -->
           <tr>
@@ -681,10 +755,14 @@
               </div>
             </th>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Banco do Brasil" /></td>
-            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Caixa" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 3 em Bradesco (assinado)" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 3 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Banco BMG (assinado)" /></td>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 3 em Sicoob" /></td>
           </tr>
           <!-- Apólice 4 -->
           <tr>
@@ -699,12 +777,16 @@
               </div>
             </th>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Banco do Brasil" /></td>
-            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Caixa" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 4 em Bradesco (assinado)" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 4 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Banco BMG (assinado)" /></td>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 4 em Sicoob" /></td>
           </tr>
-          <!-- Apólice 5 · cliente decidiu MANTER → fora dos bancos editáveis; presa nos já comprometidos -->
+          <!-- Apólice 5 · cliente decidiu MANTER -->
           <tr>
             <td class="mtx-idx">5</td>
             <th class="mtx__apolice" scope="row">
@@ -717,44 +799,202 @@
               </div>
             </th>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Banco do Brasil" /></td>
-            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Caixa" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked disabled aria-label="Apólice 5 em Bradesco (assinado)" /></td>
-            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked disabled aria-label="Apólice 5 em BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 5 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 5 em Banco BMG (assinado)" /></td>
             <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" onchange="mtxCellChange(this)" aria-label="Apólice 5 em Sicoob" /></td>
+          </tr>
+          <!-- Apólice 6 -->
+          <tr>
+            <td class="mtx-idx">6</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Prestamista – Consignado</span>
+                  <span class="mtx-ap__ins">Sabemi Seguradora S.A</span>
+                  <span class="mtx-ap__num">88112233</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Banco BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 6 em Sicoob" /></td>
+          </tr>
+          <!-- Apólice 7 -->
+          <tr>
+            <td class="mtx-idx">7</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Vida em Grupo</span>
+                  <span class="mtx-ap__ins">Zurich Santander Brasil Seguros</span>
+                  <span class="mtx-ap__num">99001122</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Banco BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 7 em Sicoob" /></td>
+          </tr>
+          <!-- Apólice 8 -->
+          <tr>
+            <td class="mtx-idx">8</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Acidentes Pessoais</span>
+                  <span class="mtx-ap__ins">MetLife Seguros</span>
+                  <span class="mtx-ap__num">77665544</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Banco BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 8 em Sicoob" /></td>
+          </tr>
+          <!-- Apólice 9 -->
+          <tr>
+            <td class="mtx-idx">9</td>
+            <th class="mtx__apolice" scope="row">
+              <div class="mtx-ap">
+                <div class="mtx-ap__info">
+                  <span class="mtx-ap__name">Assistência Residencial</span>
+                  <span class="mtx-ap__ins">Mapfre Seguros Gerais</span>
+                  <span class="mtx-ap__num">66554433</span>
+                </div>
+              </div>
+            </th>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="0" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Banco do Brasil" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="1" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Caixa Econômica" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="2" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Bradesco (assinado)" /></td>
+            <td class="mtx__cell is-frozen"><input type="checkbox" class="seg-check mtx-cell-check" data-col="3" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Banco BMG (assinado)" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="4" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Santander" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="5" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Itaú Unibanco" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="6" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Nubank" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="7" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Banco Inter" /></td>
+            <td class="mtx__cell"><input type="checkbox" class="seg-check mtx-cell-check" data-col="8" checked onchange="mtxCellChange(this)" aria-label="Apólice 9 em Sicoob" /></td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
-            <td class="mtx-foot-label" colspan="2">Comando por banco →</td>
+            <td class="mtx-foot-label" colspan="2">Requerimento →</td>
+            <!-- Banco do Brasil · editável -->
             <td class="mtx-foot">
-              <button type="button" class="mtx-resend" onclick="mtxResend(0,'Banco do Brasil')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                Reenviar
-              </button>
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="0" onclick="mtxSend(this,0,&#39;Banco do Brasil&#39;)" aria-label="Enviar requerimento do Banco do Brasil">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
             </td>
+            <!-- Caixa Econômica · editável -->
             <td class="mtx-foot">
-              <button type="button" class="mtx-resend" onclick="mtxResend(1,'Caixa Econômica')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                Reenviar
-              </button>
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="1" onclick="mtxSend(this,1,&#39;Caixa Econômica&#39;)" aria-label="Enviar requerimento do Caixa Econômica">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
             </td>
+            <!-- Bradesco · assinado -->
             <td class="mtx-foot is-frozen">
-              <span class="mtx-locked">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Assinado
-              </span>
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="2" disabled aria-label="Requerimento do Bradesco já enviado">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviado</span>
+                </button>
+                <span class="mtx-report mtx-report--signed" aria-label="Requerimento do Bradesco assinado">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Assinado
+                </span>
+              </div>
             </td>
+            <!-- Banco BMG · assinado -->
             <td class="mtx-foot is-frozen">
-              <span class="mtx-locked">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Assinado
-              </span>
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="3" disabled aria-label="Requerimento do Banco BMG já enviado">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviado</span>
+                </button>
+                <span class="mtx-report mtx-report--signed" aria-label="Requerimento do Banco BMG assinado">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  Assinado
+                </span>
+              </div>
             </td>
+            <!-- Santander · editável -->
             <td class="mtx-foot">
-              <button type="button" class="mtx-resend" onclick="mtxResend(4,'Santander')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                Reenviar
-              </button>
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="4" onclick="mtxSend(this,4,&#39;Santander&#39;)" aria-label="Enviar requerimento do Santander">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
+            </td>
+            <!-- Itaú Unibanco · editável -->
+            <td class="mtx-foot">
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="5" onclick="mtxSend(this,5,&#39;Itaú Unibanco&#39;)" aria-label="Enviar requerimento do Itaú Unibanco">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
+            </td>
+            <!-- Nubank · editável -->
+            <td class="mtx-foot">
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="6" onclick="mtxSend(this,6,&#39;Nubank&#39;)" aria-label="Enviar requerimento do Nubank">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
+            </td>
+            <!-- Banco Inter · editável -->
+            <td class="mtx-foot">
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="7" onclick="mtxSend(this,7,&#39;Banco Inter&#39;)" aria-label="Enviar requerimento do Banco Inter">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
+            </td>
+            <!-- Sicoob · editável -->
+            <td class="mtx-foot">
+              <div class="mtx-foot__in">
+                <button type="button" class="mtx-send" data-col="8" onclick="mtxSend(this,8,&#39;Sicoob&#39;)" aria-label="Enviar requerimento do Sicoob">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22 11 13 2 9z"/></svg>
+                  <span class="mtx-send__lbl">Enviar</span>
+                </button>
+                <span class="mtx-report mtx-report--pending">Pendente</span>
+              </div>
             </td>
           </tr>
         </tfoot>
@@ -764,7 +1004,7 @@
     <div class="mtx-legend">
       <span class="mtx-legend__item"><span class="mtx-legend__sw mtx-legend__sw--on"></span> Incluída no requerimento</span>
       <span class="mtx-legend__item"><span class="mtx-legend__sw"></span> Fora do requerimento</span>
-      <span class="mtx-legend__item"><span class="mtx-legend__sw mtx-legend__sw--frozen"></span> Assinado · requerimento não editável</span>
+      <span class="mtx-legend__item"><span class="mtx-legend__sw mtx-legend__sw--frozen"></span> Assinado · versão vigente (editável)</span>
     </div>
 
     <div class="scroll-hint">
@@ -861,27 +1101,155 @@
   }
 
   /* ══════════════════════════════════════════════════════════
-     MATRIZ APÓLICES × BANCOS
-     - Célula marcada = apólice incluída no requerimento daquele banco.
-     - Células :disabled = bancos assinados (requerimento não editável).
-     - Reenviar (por coluna) gera nova versão do requerimento do banco
-       com as apólices marcadas e envia ao cliente para assinatura.
+     MATRIZ APÓLICES × BANCOS — máquina de estados por coluna
+
+     Cada coluna (banco) guarda o CONJUNTO COMPROMETIDO (a assinatura das
+     apólices da última versão enviada/assinada) e o STATUS COMPROMETIDO:
+       'open'   → nunca enviado nesta sessão (CTA "Enviar", card "Pendente")
+       'sent'   → enviado, aguardando assinatura (CTA "Enviado", card "Pendente")
+       'signed' → assinado (CTA "Enviado" inerte, card "Assinado", coluna congelada)
+
+     Ao mexer num checkbox:
+       - se o conjunto atual = conjunto comprometido → RESTAURA o status
+         comprometido (ex.: reabateu a apólice que tirou → volta a "Assinado");
+       - se difere → estado RASCUNHO (CTA "Enviar", card "Pendente", coluna acorda).
+     Enviar comita o conjunto atual como 'sent'.
      ══════════════════════════════════════════════════════════ */
 
-  /* Marca/desmarca uma célula (hook para futura integração de estado) */
-  function mtxCellChange(cb) { /* no-op */ }
+  var mtxCommitSig = {};    /* col → assinatura do conjunto comprometido */
+  var mtxCommitStatus = {}; /* col → 'open' | 'sent' | 'signed' */
 
-  /* Reenviar o requerimento de um banco (nova versão para assinatura do cliente) */
-  function mtxResend(bankIdx, bankName) {
+  /* Assinatura do conjunto atual da coluna (ex.: "11110") */
+  function mtxSig(col) {
+    var boxes = document.querySelectorAll('.mtx-cell-check[data-col="' + col + '"]');
+    var s = '';
+    for (var i = 0; i < boxes.length; i++) s += boxes[i].checked ? '1' : '0';
+    return s;
+  }
+
+  /* Card de estado sob o botão */
+  function mtxSetReport(col, kind) {
+    var btn = document.querySelector('.mtx-send[data-col="' + col + '"]');
+    if (!btn) return;
+    var report = btn.parentNode.querySelector('.mtx-report');
+    if (!report) return;
+    if (kind === 'signed') {
+      report.className = 'mtx-report mtx-report--signed';
+      report.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Assinado';
+    } else {
+      report.className = 'mtx-report mtx-report--pending';
+      report.textContent = 'Pendente';
+    }
+  }
+
+  /* Adiciona/remove o tom "assinado" (is-frozen) de toda a coluna do banco.
+     Índices: header/corpo = col+2 (após Nº e Descrição); rodapé = col+1
+     (a etiqueta "Requerimento" ocupa 1 <td> com colspan 2). */
+  function mtxTintColumn(col, on) {
+    var c = parseInt(col, 10);
+    var table = document.querySelector('table.mtx');
+    if (!table) return;
+    var op = on ? 'add' : 'remove';
+    if (table.tHead && table.tHead.rows[0]) {
+      var h = table.tHead.rows[0].cells[c + 2];
+      if (h) h.classList[op]('is-frozen');
+    }
+    var brows = table.tBodies[0].rows;
+    for (var i = 0; i < brows.length; i++) {
+      var cell = brows[i].cells[c + 2];
+      if (cell) cell.classList[op]('is-frozen');
+    }
+    if (table.tFoot && table.tFoot.rows[0]) {
+      var f = table.tFoot.rows[0].cells[c + 1];
+      if (f) f.classList[op]('is-frozen');
+    }
+  }
+
+  /* Renderiza a coluna no status dado ('signed' | 'sent' | 'open'/'dirty') */
+  function mtxRenderColumn(col, status) {
+    var btn = document.querySelector('.mtx-send[data-col="' + col + '"]');
+    if (!btn) return;
+    var lbl = btn.querySelector('.mtx-send__lbl');
+    if (status === 'signed') {
+      btn.disabled = true; btn.classList.remove('is-sent');
+      if (lbl) lbl.textContent = 'Enviado';
+      mtxSetReport(col, 'signed'); mtxTintColumn(col, true);
+    } else if (status === 'sent') {
+      btn.disabled = false; btn.classList.add('is-sent');
+      if (lbl) lbl.textContent = 'Enviado';
+      mtxSetReport(col, 'pending'); mtxTintColumn(col, false);
+    } else { /* 'open' ou 'dirty' */
+      btn.disabled = false; btn.classList.remove('is-sent');
+      if (lbl) lbl.textContent = 'Enviar';
+      mtxSetReport(col, 'pending'); mtxTintColumn(col, false);
+    }
+  }
+
+  /* Enviar → comita o conjunto atual como versão 'sent' (aguardando assinatura) */
+  function mtxSend(btn, bankIdx, bankName) {
     var n = document.querySelectorAll('.mtx-cell-check[data-col="' + bankIdx + '"]:checked').length;
     if (!n) {
       alert('Nenhuma apólice marcada para ' + bankName + '. Marque ao menos uma antes de enviar.');
       return;
     }
-    /* INTEGRAÇÃO: gerar nova versão do requerimento de `bankName` com as `n` apólices
+    /* INTEGRAÇÃO: gerar a versão do requerimento de `bankName` com as apólices
        marcadas e disparar ao cliente (WhatsApp) para assinatura eletrônica. */
-    alert('Requerimento de ' + bankName + ' gerado com ' + n + ' apólice(s) e enviado ao cliente para assinatura.');
+    mtxCommitSig[bankIdx] = mtxSig(bankIdx);
+    mtxCommitStatus[bankIdx] = 'sent';
+    mtxRenderColumn(bankIdx, 'sent');
   }
+
+  /* Reavalia uma coluna: se o conjunto voltou ao comprometido, restaura o status
+     que de fato aconteceu (ex.: "Assinado"); senão, vira rascunho. */
+  function mtxEvalColumn(col) {
+    if (mtxSig(col) === mtxCommitSig[col]) mtxRenderColumn(col, mtxCommitStatus[col]);
+    else mtxRenderColumn(col, 'dirty');
+  }
+
+  /* Editar um checkbox reavalia a coluna e atualiza o rótulo de "Selecionar tudo" */
+  function mtxCellChange(cb) {
+    mtxEvalColumn(cb.getAttribute('data-col'));
+    mtxUpdateSelAllLabel();
+  }
+
+  /* Clique no nome do banco → alterna a coluna toda (marca todas / limpa) */
+  function mtxSelectColumn(col) {
+    var boxes = document.querySelectorAll('.mtx-cell-check[data-col="' + col + '"]');
+    var allOn = Array.prototype.every.call(boxes, function (b) { return b.checked; });
+    var target = !allOn;
+    Array.prototype.forEach.call(boxes, function (b) { b.checked = target; });
+    mtxEvalColumn(String(col));
+    mtxUpdateSelAllLabel();
+  }
+
+  /* Botão "Selecionar tudo" / "Limpar tudo" — alterna a matriz inteira */
+  function mtxAllBoxes() { return document.querySelectorAll('.mtx-cell-check'); }
+  function mtxSelectAll() {
+    var boxes = mtxAllBoxes();
+    var allOn = Array.prototype.every.call(boxes, function (b) { return b.checked; });
+    var target = !allOn;
+    Array.prototype.forEach.call(boxes, function (b) { b.checked = target; });
+    for (var col = 0; col < 9; col++) mtxEvalColumn(String(col));
+    mtxUpdateSelAllLabel();
+  }
+  function mtxUpdateSelAllLabel() {
+    var boxes = mtxAllBoxes();
+    var allOn = boxes.length > 0 && Array.prototype.every.call(boxes, function (b) { return b.checked; });
+    var el = document.querySelector('#mtxSelAll .mtx-selall__lbl');
+    if (el) el.textContent = allOn ? 'Limpar tudo' : 'Selecionar tudo';
+  }
+
+  /* Init: captura o conjunto e o status comprometidos de cada coluna no load */
+  (function () {
+    for (var col = 0; col < 9; col++) {
+      var k = String(col);
+      mtxCommitSig[k] = mtxSig(k);
+      var btn = document.querySelector('.mtx-send[data-col="' + k + '"]');
+      var report = btn ? btn.parentNode.querySelector('.mtx-report') : null;
+      mtxCommitStatus[k] = (report && report.classList.contains('mtx-report--signed')) ? 'signed' : 'open';
+    }
+    mtxUpdateSelAllLabel();
+  })();
 
 
   /* ── VALIDAÇÃO DE FOTOS DA APÓLICE ───────────────────────── */
