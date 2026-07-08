@@ -199,6 +199,39 @@
     .tpl-card__badge--bank { background: var(--blue); }
     .tpl-card__badge--draft { background: var(--warning); }
 
+    /* Cabeçalho: badge + status empilhados à direita */
+    .tpl-card__head-right {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 8px; flex-shrink: 0;
+    }
+    .tpl-status { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; }
+    .tpl-status__label {
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--black);
+    }
+    /* Toggle Ativo/Inativo — slider quadrado (brutalista, sem cantos arredondados) */
+    .tpl-toggle {
+      --tgl-w: 46px; --tgl-h: 24px; --tgl-k: 16px;
+      position: relative; width: var(--tgl-w); height: var(--tgl-h);
+      padding: 0; flex-shrink: 0; cursor: pointer;
+      background: var(--white); border: 1.5px solid var(--gray-300);
+      transition: background var(--t), border-color var(--t);
+    }
+    .tpl-toggle__knob {
+      position: absolute; top: 50%; left: 2px; transform: translateY(-50%);
+      width: var(--tgl-k); height: var(--tgl-k); background: var(--gray-600);
+      transition: left var(--t), background var(--t);
+    }
+    .tpl-toggle.is-on { background: var(--green); border-color: var(--green); }
+    .tpl-toggle.is-on .tpl-toggle__knob {
+      left: calc(var(--tgl-w) - var(--tgl-k) - 4px); background: var(--white);
+    }
+    .tpl-toggle:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+    /* Card inativo — esmaecido; volta ao normal no hover para reativar */
+    .tpl-card.is-inactive { opacity: 0.55; }
+    .tpl-card.is-inactive:hover { opacity: 1; }
+    .tpl-card.is-inactive .tpl-status__label { color: var(--gray-600); }
+
     .tpl-card__divider {
       height: 1px; background: var(--gray-200);
       margin: 0 0 18px;
@@ -805,7 +838,13 @@
         <article class="tpl-card">
           <div class="tpl-card__head">
             <h2 class="tpl-card__title">Demonstrativo de Evolução da Dívida e Memória de Cálculo</h2>
-            <span class="tpl-card__badge">Geral</span>
+            <div class="tpl-card__head-right">
+              <span class="tpl-card__badge">Geral</span>
+              <div class="tpl-status">
+                <button type="button" class="tpl-toggle is-on" role="switch" aria-checked="true" aria-label="Ativar ou desativar template" onclick="toggleTemplate(this)"><span class="tpl-toggle__knob"></span></button>
+                <span class="tpl-status__label">Ativo</span>
+              </div>
+            </div>
           </div>
           <div class="tpl-card__divider"></div>
           <p class="tpl-card__body">Pedido para que a instituição financeira explique como você chegou na sua situação financeira atual, sob sua perspectiva.</p>
@@ -836,7 +875,13 @@
         <article class="tpl-card">
           <div class="tpl-card__head">
             <h2 class="tpl-card__title">Res. CMN 4.790 — Cancelamento de débitos</h2>
-            <span class="tpl-card__badge">Geral</span>
+            <div class="tpl-card__head-right">
+              <span class="tpl-card__badge">Geral</span>
+              <div class="tpl-status">
+                <button type="button" class="tpl-toggle is-on" role="switch" aria-checked="true" aria-label="Ativar ou desativar template" onclick="toggleTemplate(this)"><span class="tpl-toggle__knob"></span></button>
+                <span class="tpl-status__label">Ativo</span>
+              </div>
+            </div>
           </div>
           <div class="tpl-card__divider"></div>
           <p class="tpl-card__body">Revogue todas as cobranças automáticas que o banco faz em suas contas.</p>
@@ -867,7 +912,13 @@
         <article class="tpl-card">
           <div class="tpl-card__head">
             <h2 class="tpl-card__title">Histórico de Renovações e Alterações</h2>
-            <span class="tpl-card__badge">Geral</span>
+            <div class="tpl-card__head-right">
+              <span class="tpl-card__badge">Geral</span>
+              <div class="tpl-status">
+                <button type="button" class="tpl-toggle is-on" role="switch" aria-checked="true" aria-label="Ativar ou desativar template" onclick="toggleTemplate(this)"><span class="tpl-toggle__knob"></span></button>
+                <span class="tpl-status__label">Ativo</span>
+              </div>
+            </div>
           </div>
           <div class="tpl-card__divider"></div>
           <p class="tpl-card__body">Solicitação ao banco do histórico completo de renovações, repactuações e alterações contratuais em cada operação de crédito.</p>
@@ -898,7 +949,13 @@
         <article class="tpl-card">
           <div class="tpl-card__head">
             <h2 class="tpl-card__title">Relação Completa de Produtos e Serviços</h2>
-            <span class="tpl-card__badge">Geral</span>
+            <div class="tpl-card__head-right">
+              <span class="tpl-card__badge">Geral</span>
+              <div class="tpl-status">
+                <button type="button" class="tpl-toggle is-on" role="switch" aria-checked="true" aria-label="Ativar ou desativar template" onclick="toggleTemplate(this)"><span class="tpl-toggle__knob"></span></button>
+                <span class="tpl-status__label">Ativo</span>
+              </div>
+            </div>
           </div>
           <div class="tpl-card__divider"></div>
           <p class="tpl-card__body">Pedido detalhado de todos os produtos e serviços contratados — datas, condições e taxas aplicadas em cada um.</p>
@@ -929,7 +986,13 @@
         <article class="tpl-card">
           <div class="tpl-card__head">
             <h2 class="tpl-card__title">Cópia Íntegra de Autorizações de Débito</h2>
-            <span class="tpl-card__badge">Geral</span>
+            <div class="tpl-card__head-right">
+              <span class="tpl-card__badge">Geral</span>
+              <div class="tpl-status">
+                <button type="button" class="tpl-toggle is-on" role="switch" aria-checked="true" aria-label="Ativar ou desativar template" onclick="toggleTemplate(this)"><span class="tpl-toggle__knob"></span></button>
+                <span class="tpl-status__label">Ativo</span>
+              </div>
+            </div>
           </div>
           <div class="tpl-card__divider"></div>
           <p class="tpl-card__body">Solicitação das cópias originais e completas de todas as autorizações de débito automático vinculadas à conta.</p>
@@ -960,7 +1023,13 @@
         <article class="tpl-card">
           <div class="tpl-card__head">
             <h2 class="tpl-card__title">Comprovante de Serviços e Tarifas</h2>
-            <span class="tpl-card__badge">Geral</span>
+            <div class="tpl-card__head-right">
+              <span class="tpl-card__badge">Geral</span>
+              <div class="tpl-status">
+                <button type="button" class="tpl-toggle is-on" role="switch" aria-checked="true" aria-label="Ativar ou desativar template" onclick="toggleTemplate(this)"><span class="tpl-toggle__knob"></span></button>
+                <span class="tpl-status__label">Ativo</span>
+              </div>
+            </div>
           </div>
           <div class="tpl-card__divider"></div>
           <p class="tpl-card__body">Pedido de detalhamento de todas as tarifas e serviços cobrados ao longo do relacionamento bancário.</p>
@@ -1366,6 +1435,18 @@ CPF {{lead_cpf}}</p></textarea>
     document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('panel--active'); });
     tab.classList.add('tab--active');
     document.getElementById('panel-' + panel).classList.add('panel--active');
+  }
+
+  /* ── Toggle Ativo/Inativo do template ────────────────────── */
+  function toggleTemplate(btn) {
+    var on = btn.classList.toggle('is-on');
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    var status = btn.closest('.tpl-status');
+    var label = status ? status.querySelector('.tpl-status__label') : null;
+    if (label) label.textContent = on ? 'Ativo' : 'Inativo';
+    var card = btn.closest('.tpl-card');
+    if (card) card.classList.toggle('is-inactive', !on);
+    /* INTEGRAÇÃO: persistir o estado ativo/inativo do template. */
   }
 
   /* ── Drawer ──────────────────────────────────────────────── */
