@@ -240,9 +240,10 @@
        onde o logo flutuante lateral não existe. */
     .hero-logo-mobile {
       display: block;
-      height: clamp(64px, 18vw, 104px);
-      width: auto;
-      margin-bottom: 28px;
+      /* Quase full-width; teto em vh encolhe em telas baixas p/ manter o CTA na dobra */
+      width: min(100%, 48vh);
+      height: auto;
+      margin-bottom: 20px;
       color: var(--white);
     }
     .hero-logo-mobile path,
