@@ -170,13 +170,13 @@
     .mobile-nav.open {
       opacity: 1; pointer-events: all; transform: translateY(0);
     }
-    .mobile-nav a {
+    .mobile-nav nav a {
       font-size: 36px; font-weight: 800; color: var(--white);
       letter-spacing: -0.02em; border-bottom: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
       padding: 20px 0; display: block;
       transition: color var(--t);
     }
-    .mobile-nav a:hover { color: var(--gray-300); }
+    .mobile-nav nav a:hover { color: var(--gray-300); }
     /* Logo tokens (sem cores inline) */
     .logo-svg-lg { height: 36px; }
     .logo-svg-md { height: 48px; }
@@ -236,19 +236,31 @@
     }
     .hero-logo path,
     .hero-logo use { fill: var(--white) !important; }
+    /* Logo-shout no topo da hero — presença de marca só no mobile/tablet (<900px),
+       onde o logo flutuante lateral não existe. */
+    .hero-logo-mobile {
+      display: block;
+      height: clamp(64px, 18vw, 104px);
+      width: auto;
+      margin-bottom: 28px;
+      color: var(--white);
+    }
+    .hero-logo-mobile path,
+    .hero-logo-mobile use { fill: var(--white) !important; }
+    @media (min-width: 900px) {
+      .hero-logo-mobile { display: none; }
+    }
     .mobile-nav-actions {
-      margin-top: 40px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      padding-top: 32px;
-      border-top: 1px solid color-mix(in srgb, var(--white) 10%, transparent);
+      gap: 16px;          /* par de ações coeso */
+      margin-top: 20px;   /* cadência do menu: ~40px do texto de "Manifesto" */
     }
     .mobile-nav-actions .btn {
       width: 100%;
       justify-content: center;
-      min-height: 52px;
-      font-size: 14px;
+      min-height: 56px;
+      font-size: 15px;
     }
     /* Desktop breakpoint: show header-right, hide hamburger */
     @media (min-width: 900px) {
@@ -1154,6 +1166,7 @@
       <div class="container">
         <div class="hero-content">
           <!-- hero-kicker suprimido -->
+          <svg class="hero-logo-mobile logo--on-dark" viewBox="0 0 602.25 254.23" aria-hidden="true"><use href="#logo-basta"/></svg>
           <h1 class="hero-headline" id="hero-headline">
             Saia do endividamento<br>
             de forma <span class="hl-sua">justa!</span>
@@ -1239,14 +1252,14 @@
             <div class="step-num" aria-hidden="true">01</div>
             <div class="step-content">
               <h3 class="step-title">Entenda sua real situação</h3>
-              <p class="step-desc">Veja o que nunca te mostraram: quanto deve, para quem, quanto<br> da sua renda está comprometida — e por quantos meses.</p>
+              <p class="step-desc">Veja o que nunca te mostraram: quanto deve, para quem, quanto<br class="d-break"> da sua renda está comprometida — e por quantos meses.</p>
             </div>
           </li>
           <li class="step" id="step-2">
             <div class="step-num" aria-hidden="true">02</div>
             <div class="step-content">
               <h3 class="step-title">Use seus dados a seu favor.</h3>
-              <p class="step-desc">Não movimentamos suas contas.<br> É acesso de leitura, seguro, sem risco.</p>
+              <p class="step-desc">Não movimentamos suas contas.<br class="d-break"> É acesso de leitura, seguro, sem risco.</p>
               <p class="step-desc" style="margin-top:8px; font-size:15px; color:var(--gray-400);">Conecte sua conta bancária com Open Finance.</p>
             </div>
           </li>
@@ -1254,28 +1267,28 @@
             <div class="step-num" aria-hidden="true">03</div>
             <div class="step-content">
               <h3 class="step-title">Aja com instrumentos</h3>
-              <p class="step-desc">Receba documentos prontos e instruções claras de como usá-los para proteger<br> sua renda, cancelar serviços, exigir explicações e registrar reclamações.</p>
+              <p class="step-desc">Receba documentos prontos e instruções claras de como usá-los para proteger<br class="d-break"> sua renda, cancelar serviços, exigir explicações e registrar reclamações.</p>
             </div>
           </li>
           <li class="step" id="step-4">
             <div class="step-num" aria-hidden="true">04</div>
             <div class="step-content">
               <h3 class="step-title">Contrate seu crédito justo</h3>
-              <p class="step-desc">Tenha acesso às melhores condições de crédito disponíveis para você.<br> Troque taxas altas pelas melhores taxas oferecidas no mercado.</p>
+              <p class="step-desc">Tenha acesso às melhores condições de crédito disponíveis para você.<br class="d-break"> Troque taxas altas pelas melhores taxas oferecidas no mercado.</p>
             </div>
           </li>
           <li class="step" id="step-5">
             <div class="step-num" aria-hidden="true">05</div>
             <div class="step-content">
               <h3 class="step-title">Busque reparação de abusos</h3>
-              <p class="step-desc">Se o credor agiu de forma abusiva, receba apoio especializado para<br> exigir reparação — do jeito certo.</p>
+              <p class="step-desc">Se o credor agiu de forma abusiva, receba apoio especializado para<br class="d-break"> exigir reparação — do jeito certo.</p>
             </div>
           </li>
           <li class="step" id="step-6">
             <div class="step-num" aria-hidden="true">06</div>
             <div class="step-content">
               <h3 class="step-title">Tenha autonomia financeira</h3>
-              <p class="step-desc">Coloque suas dívidas em uma trajetória de pagamento real, com data<br> para acabar. Retome o controle da sua vida financeira.</p>
+              <p class="step-desc">Coloque suas dívidas em uma trajetória de pagamento real, com data<br class="d-break"> para acabar. Retome o controle da sua vida financeira.</p>
             </div>
           </li>
         </ol>
