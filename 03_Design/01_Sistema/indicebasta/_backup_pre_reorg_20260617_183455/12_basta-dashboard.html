@@ -298,7 +298,7 @@
        ══════════════════════════════════════════════════════════ */
     .stats {
       display: grid;
-      margin-bottom: 24px;
+      margin-bottom: 40px;
     }
 
     .stat {
@@ -339,72 +339,6 @@
       font-size: 12px;
       color: var(--gray-600);
       font-weight: 400;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       CTA BAND — Conecte suas contas (Open Finance)
-       ══════════════════════════════════════════════════════════ */
-    /* Grid de duas chamadas lado a lado */
-    .cta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .cta-band {
-      background: var(--white);
-      border: 2px solid var(--black);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .cta-band__info { width: 100%; min-width: 0; }
-
-    .cta-band__title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      color: var(--black);
-      text-wrap: balance;
-    }
-
-    .cta-band__action {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-
-    .cta-band .btn {
-      min-height: 52px;
-      padding: 16px 28px;
-    }
-
-    /* Tablet / mobile: empilha as duas chamadas numa coluna só */
-    @media (max-width: 768px) {
-      .cta-grid { grid-template-columns: 1fr; }
-    }
-
-    /* Mobile: centraliza título e botão ocupa a largura */
-    @media (max-width: 639px) {
-      .cta-band__info { width: 100%; text-align: center; }
-      .cta-band__title { width: 100%; text-align: center; }
-      .cta-band { align-items: center; }
-      .cta-band__action { width: 100%; align-items: center; }
-      .cta-band__action .btn { width: 100%; }
-      .cta-band__action .step-card__secure { justify-content: center; }
-    }
-
-    @media (min-width: 960px) {
-      .cta-band { padding: 24px 28px; }
-      .cta-band__title { font-size: 20px; }
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -705,29 +639,6 @@
       transition: transform 0.2s var(--ease);
     }
 
-    /* ── Open Finance — botão primário + selo de segurança (Passo 03) ── */
-    .step-card__action {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .step-card__action .btn { min-height: 52px; padding: 16px 28px; }
-
-    .step-card__secure {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--gray-600);
-      letter-spacing: 0.01em;
-    }
-
-    .step-card__secure svg { opacity: 0.7; flex-shrink: 0; }
-
     /* ── CTA pulse ── */
     @keyframes ctaGlow {
       0%, 100% { text-shadow: 0 0 0 rgba(66, 180, 73, 0); }
@@ -784,11 +695,7 @@
 
     .greeting { font-size: clamp(28px, 6vw, 40px); margin-bottom: 20px; }
 
-    .progress-card { padding: 20px 20px 16px; margin-bottom: 12px; }
-
-    /* Aproxima os blocos principais no mobile (metade dos 24px) */
-    .stats { margin-bottom: 12px; }
-    .cta-grid { margin-bottom: 12px; }
+    .progress-card { padding: 20px 20px 16px; }
 
     .progress-card__header {
       flex-direction: row;
@@ -838,7 +745,7 @@
 
     .step-card {
       gap: 12px;
-      padding: 8px 16px;
+      padding: 16px 16px;
       margin-left: -16px;
       margin-right: -16px;
       -webkit-tap-highlight-color: transparent;
@@ -871,16 +778,13 @@
     @media (min-width: 640px) {
       .main { padding: 84px 24px 100px; }
       .greeting { font-size: clamp(28px, 6vw, 40px); margin-bottom: 24px; }
-      .progress-card { padding: 24px 24px 20px; margin-bottom: 24px; }
+      .progress-card { padding: 24px 24px 20px; }
       .progress-card__pct { font-size: 48px; margin-top: 0; }
 
       .stats {
         grid-template-columns: repeat(3, 1fr);
         gap: 12px;
-        margin-bottom: 24px;
       }
-
-      .cta-grid { margin-bottom: 24px; }
 
       .stat {
         display: flex;
@@ -1112,62 +1016,25 @@
       <a href="14_basta-contas-bancarias.html" class="stat">
         <span class="stat__label">Contas conectadas</span>
         <span class="stat__value" data-target="3">0</span>
-        <span class="stat__detail">Contas</span>
+        <span class="stat__detail">BANCO, OUROCARD</span>
       </a>
       <a href="13_basta-documentos.html" class="stat">
         <span class="stat__label">Documentos coletados</span>
-        <span class="stat__value" data-target="3">0</span>
-        <span class="stat__detail">de 4 essenciais</span>
+        <span class="stat__value" data-target="0">0</span>
+        <span class="stat__detail">enviados ao sistema</span>
       </a>
       <a href="15_basta-requerimentos.html" class="stat">
         <span class="stat__label">Requerimentos assinados</span>
-        <span class="stat__value" data-target="9">0</span>
-        <span class="stat__detail">de 9 no total</span>
+        <span class="stat__value" data-target="2">0</span>
+        <span class="stat__detail">de 0 pendentes</span>
       </a>
     </div>
-
-    <!-- ── CTA GRID — duas chamadas ─────────────────────────── -->
-    <div class="cta-grid">
-    <!-- ── CTA — CONECTE SUAS CONTAS ──────────────────────── -->
-    <div class="cta-band">
-      <div class="cta-band__info">
-        <h2 class="cta-band__title">Quanto mais contas, mais completas suas ações contra o endividamento.</h2>
-      </div>
-      <div class="cta-band__action">
-        <a href="07_basta-of-selecao-banco.html" class="btn btn--primary" aria-label="Conectar conta bancária">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Conectar Conta Bancária
-        </a>
-        <span class="step-card__secure">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Open Finance · Conexão Segura · Acesso de Leitura
-        </span>
-      </div>
-    </div>
-
-    <!-- ── CTA — SEGUROS PARA CANCELAR ─────────────────────── -->
-    <div class="cta-band">
-      <div class="cta-band__info">
-        <h2 class="cta-band__title">Verifique se você tem seguros para cancelar com valores a restituir.</h2>
-      </div>
-      <div class="cta-band__action">
-        <a href="#" class="btn btn--primary" aria-label="Veja seus seguros">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Veja seus seguros
-        </a>
-        <span class="step-card__secure">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          SUSEP · Órgão Regulador de Seguros
-        </span>
-      </div>
-    </div>
-    </div><!-- /cta-grid -->
 
     <!-- ── PRÓXIMOS PASSOS ────────────────────────────────── -->
     <div class="section">
       <div class="section__header">
-        <h2 class="section__heading">São apenas 4 próximos passos</h2>
-        <p class="section__desc">Siga os 4 passos para se preparar completamente para sair do endividamento.<br><strong>Alguns benefícios são imediatos.</strong></p>
+        <h2 class="section__heading">São apenas 3 próximos passos</h2>
+        <p class="section__desc">Siga os 3 passos para se preparar completamente para sair do endividamento.<br><strong>Alguns benefícios são imediatos.</strong></p>
       </div>
 
       <div class="steps-list" role="list">
@@ -1180,7 +1047,7 @@
               <h3 class="step-card__title">Se defenda em igualdade de condições</h3>
               <span class="step-card__badge step-card__badge--done">Enviado</span>
             </div>
-            <p class="step-card__desc">Leia, assine e envie ao(s) banco(s) documentos que impedem cobranças automáticas em sua(s) conta(s) e que exigem explicações da evolução de sua(s) dívida(s) e que pedem cópias de documentos. <strong>É alívio imediato.</strong></p>
+            <p class="step-card__desc">Leia, assine e envie ao(s) banco(s) documentos que impedem cobranças automáticas em sua conta e que exigem explicações de como sua dívida chegou na situação atual. <strong>É alívio imediato.</strong></p>
             <a href="15_basta-requerimentos.html" class="step-card__cta">
               Ler e assinar via ClickSign <span class="step-card__cta-arrow" aria-hidden="true">→</span>
             </a>
@@ -1211,38 +1078,9 @@
               <span class="step-card__badge step-card__badge--pending">Pendente</span>
             </div>
             <p class="step-card__desc">Se você tem operações de crédito em outros bancos, conecte suas outras contas seguindo as mesmas etapas. <strong>Aja em todas as dívidas.</strong></p>
-            <div class="step-card__action">
-              <a href="07_basta-of-selecao-banco.html" class="btn btn--primary" aria-label="Conectar conta bancária">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Conectar Conta Bancária
-              </a>
-              <span class="step-card__secure">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                Open Finance · Conexão Segura · Acesso de Leitura
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Passo 04 — Cancele seguros, capitalizações e mais -->
-        <div class="step-card" role="listitem">
-          <div class="step-card__number" aria-hidden="true">04</div>
-          <div class="step-card__content">
-            <div class="step-card__title-row">
-              <h3 class="step-card__title">Cancele seguros, capitalizações e mais</h3>
-              <span class="step-card__badge step-card__badge--pending">Pendente</span>
-            </div>
-            <p class="step-card__desc">Cancele serviços que você não usa, ou nem sabe que tem. Verifique se quer manter algum e cancele o restante. <strong>Pode haver valores a restituir.</strong></p>
-            <div class="step-card__action">
-              <a href="#" class="btn btn--primary" aria-label="Veja seus seguros">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Veja seus seguros
-              </a>
-              <span class="step-card__secure">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                SUSEP · Órgão Regulador de Seguros
-              </span>
-            </div>
+            <a href="07_basta-of-selecao-banco.html" class="step-card__cta">
+              Conectar conta via Open Finance <span class="step-card__cta-arrow" aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
 
@@ -1322,56 +1160,7 @@
   /* ── PROGRESS TOGGLE FUNCTION ────────────────────────── */
   /* ── ANIMATE ON LOAD ───────────────────────────────── */
   (function() {
-    /* ════════════════════════════════════════════════════════
-       ESTADO — fonte única de verdade do progresso.
-       Em produção vem do backend; aqui são valores de demonstração.
-       ════════════════════════════════════════════════════════ */
-    var ESTADO = {
-      contasConectadas: 3,         // nº de contas conectadas via Open Finance
-      docsEnviados: 3,             // 0..4 documentos únicos
-      requerimentosAssinados: 9,   // 0..(3 × contas)
-      renegociacoesRegistradas: 0  // 0..contas
-    };
-
-    /* ── MODELO Y2 — pesos somam 100% ──────────────────────────
-       1ª conexão Open Finance ... 50%  (binário: conectou ou não)
-       Contas adicionais ......... 20%  (+10% por conta, teto 20%)
-       Documentos únicos ......... 20%  (4 × 5%)
-       Requerimentos assinados ...  5%  (proporcional a 3 × contas)
-       Registro de renegociação ..  5%  (proporcional a contas)
-    */
-    function calcularProgresso(e) {
-      var N = e.contasConectadas;
-      if (N <= 0) return 0;
-
-      var pConexao1   = 50;
-      var pAdicionais = Math.min(Math.max(N - 1, 0) * 10, 20);
-      var pDocs       = 20 * (Math.min(e.docsEnviados, 4) / 4);
-      var pRequerim   = 5  * (Math.min(e.requerimentosAssinados, 3 * N) / (3 * N));
-      var pReneg      = 5  * (Math.min(e.renegociacoesRegistradas, N) / N);
-
-      return Math.round(pConexao1 + pAdicionais + pDocs + pRequerim + pReneg);
-    }
-
-    /* ── Copy dinâmico: aponta a maior alavanca pendente ─────── */
-    function montarCopy(e) {
-      var N = e.contasConectadas;
-      if (N <= 0) {
-        return { titulo: 'Comece conectando uma conta.', sub: 'A primeira conexão já avança metade do processo.' };
-      }
-      if (e.docsEnviados < 4) {
-        return { titulo: 'Envie seus documentos essenciais.', sub: 'Falta enviar RG/CNH, SCR ou Holerite.' };
-      }
-      if (e.renegociacoesRegistradas < N) {
-        return { titulo: 'Registre sua tentativa de renegociação.', sub: 'Documente a negociação de cada conta conectada.' };
-      }
-      if (e.requerimentosAssinados < 3 * N) {
-        return { titulo: 'Assine seus requerimentos.', sub: 'Ainda há requerimentos pendentes de assinatura.' };
-      }
-      return { titulo: 'Preparação concluída.', sub: 'Você completou todas as etapas iniciais.' };
-    }
-
-    var TARGET_PCT = calcularProgresso(ESTADO);
+    var TARGET_PCT = 33;
     var DURATION = 1400;
     var DELAY = 400;
     var STAGGER = 150;
@@ -1401,13 +1190,6 @@
         var fill = document.querySelector('.progress-card__fill');
         var bar = document.querySelector('.progress-card__bar');
         var pctEl = document.querySelector('.progress-card__pct');
-
-        // Copy dinâmico derivado do ESTADO
-        var copy = montarCopy(ESTADO);
-        var titleEl = document.querySelector('.progress-card__title');
-        var subEl = document.querySelector('.progress-card__subtitle');
-        if (titleEl) titleEl.textContent = copy.titulo;
-        if (subEl) subEl.textContent = copy.sub;
 
         if (fill) fill.style.width = TARGET_PCT + '%';
         if (bar) {

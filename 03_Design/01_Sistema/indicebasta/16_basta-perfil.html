@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Basta. — Contas Bancárias</title>
+  <title>Basta. — Perfil</title>
   <meta name="theme-color" content="#000000" />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,11 +19,10 @@
   <link rel="stylesheet" href="_foundation/typography.css" />
   <link rel="stylesheet" href="_foundation/layout.css" />
   <link rel="stylesheet" href="_components/btn.css" />
-  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/form.css" />
   <link rel="stylesheet" href="_components/modal.css" />
   <link rel="stylesheet" href="_components/sidebar.css" />
   <link rel="stylesheet" href="_components/topbar.css" />
-  <link rel="stylesheet" href="_components/bank-card.css" />
   <style>
     /* Hover-only: em devices touch (sem hover real), neutraliza estados hover
        que ficam "stuck" depois do tap (transform, translate). Cosmética; não toca em color/background. */
@@ -39,7 +38,7 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }    /* ══════════════════════════════════════════════════════════
-       LAYOUT — sidebar + main
+       LAYOUT
        ══════════════════════════════════════════════════════════ */
     .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
 
@@ -111,188 +110,114 @@
       letter-spacing: -0.02em; margin-bottom: 6px;
     }
     .accent { color: var(--black); }
-
     .page-desc {
       font-size: 13px; color: var(--gray-600); font-weight: 400;
-      line-height: 1.5; margin-bottom: 32px;
+      line-height: 1.5; margin-bottom: 16px;
     }
 
-    /* ── CTA Conectar nova conta ──────────────────────────── */
-    .btn-connect {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 18px 24px;
+    /* ══════════════════════════════════════════════════════════
+       FORM CARDS
+       ══════════════════════════════════════════════════════════ */
+    .form-cards { max-width: 600px; }
+
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 18px 16px;
+    }
+    .form-card + .form-card { margin-top: -1px; }
+
+    /* Section heading */
+    .form-section-title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black);
+      margin-bottom: 14px;
+    }
+
+    /* Field groups */    .form-group:last-of-type { margin-bottom: 0; }
+
+    /* 2-col row (CPF+nasc, WA+email) */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    /* Localidade grid: mobile = CEP full + Cidade + UF 2-col */
+    .loc-grid {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      gap: 12px;
+    }
+    .loc-cep  { grid-column: 1 / -1; }
+    .loc-city { }
+    .loc-uf   { }
+
+    /* Label */
+    /* Input */
+    /* ── FORM VALIDATION ───────────────────────────────────── */
+    .form-input--readonly {
+      background: var(--gray-100);
+      color: var(--gray-600);
+      cursor: not-allowed;
+    }
+    .form-input--masked {
+      background: var(--gray-100);
+      color: var(--gray-600);
+      cursor: not-allowed;
+      letter-spacing: 0.06em;
+    }
+
+    /* Input wrapper for inline action (e.g. Revelar) */
+    .input-wrap { position: relative; }
+    .input-wrap .form-input { padding-right: 72px; }
+    .input-action {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--green); cursor: pointer;
+      transition: color var(--t); background: none; border: none;
+      font-family: var(--f); padding: 0;
+    }
+    .input-action:hover { color: var(--green-hover); }
+
+    /* Hint text */
+    .form-hint {
+      font-size: 11px; color: var(--gray-600); font-weight: 400;
+      line-height: 1.4; margin-top: 4px;
+    }
+
+    /* ── Save button + feedback ───────────────────────────── */
+    .form-actions {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap; margin-top: 16px; padding-top: 16px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .btn-save {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 100%;
+      padding: 12px 24px;
       background: var(--green); color: var(--white);
       font-family: var(--f); font-size: 12px; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.06em;
       border: 2px solid var(--black);
-      margin-top: 24px;
-      transition: background var(--t), color var(--t);
-    }
-    .btn-connect:hover { background: var(--black); color: var(--white); }
-    .btn-connect:active { transform: scale(0.98); }
-    .btn-connect__plus {
-      font-size: 16px; font-weight: 700; line-height: 1;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       SECTION LABEL
-       ══════════════════════════════════════════════════════════ */
-    .section-label {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--black); margin-bottom: 16px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       ACCOUNT CARD
-       ══════════════════════════════════════════════════════════ */
-    .account-list {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .account-card {
-      background: var(--white);
-      border: 1px solid var(--gray-300);
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: -1px;
       transition: background var(--t);
+      cursor: pointer;
     }
+    .btn-save:hover { background: var(--black); }
+    .btn-save:active { transform: scale(0.98); }
 
-    .account-card:first-child {
-      border-top: 1px solid var(--gray-300);
+    .save-feedback {
+      display: none; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      border-left: 3px solid var(--green);
+      background: #edf7ee;
     }
-
-    .account-card:hover {
-      background: var(--off-white);
-    }
-
-    /* Bank badge */
-    .bank-badge {
-      width: 44px; height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800; color: var(--white);
-      flex-shrink: 0; letter-spacing: 0.02em;
-    }
-
-    /* Bank info */
-    .account-card__info { flex: 1; min-width: 0; }
-
-    .account-card__name {
-      font-weight: 700; font-size: 14px; color: var(--black); line-height: 1.3;
-    }
-
-    .account-card__details {
-      font-size: 12px; color: var(--gray-600); font-weight: 400;
-      line-height: 1.4; margin-top: 2px;
-    }
-
-    /* Status */
-    .account-card__status {
-      display: flex; flex-direction: column;
-      align-items: flex-end; gap: 2px; flex-shrink: 0;
-    }
-
-    .account-card__status-label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.04em; color: var(--green);
-    }
-
-    .account-card__status-label--off { color: var(--gray-600); }
-
-    .account-card__status-sub {
-      font-size: 11px; color: var(--gray-600); font-weight: 400;
-      text-transform: uppercase; letter-spacing: 0.02em;
-    }
-
-    /* ── Icon action buttons + tooltip (padrão unificado) ── */
-    .icon-btn {
-      position: relative;
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--white); color: var(--gray-600);
-      border: 1px solid var(--gray-300);
-      cursor: pointer; flex-shrink: 0;
-      transition: color var(--t), border-color var(--t), background var(--t);
-    }
-    .icon-btn:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
-    .icon-btn--danger:hover { color: var(--error); border-color: var(--error); background: var(--white); }
-    .icon-btn::after {
-      content: attr(data-tip);
-      position: absolute;
-      bottom: calc(100% + 7px);
-      left: 50%; transform: translateX(-50%);
-      background: var(--black); color: var(--white);
-      font-size: 11px; font-weight: 700; font-family: var(--f);
+    .save-feedback.is-visible { display: flex; }
+    .save-feedback__text {
+      font-size: 12px; font-weight: 700; color: var(--green);
       text-transform: uppercase; letter-spacing: 0.04em;
-      white-space: nowrap;
-      padding: 4px 8px;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.15s;
-      z-index: 10;
     }
-    .icon-btn:hover::after { opacity: 1; }
-
-    /* Account card removal animation */
-    .account-card.account-removing {
-      opacity: 0;
-      transform: translateX(-20px);
-      pointer-events: none;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       CONFIRMATION MODAL
-       ══════════════════════════════════════════════════════════ */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.55);
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.2s var(--ease);
-    }
-    .modal-overlay.is-open { opacity: 1; pointer-events: all; }
-
-    .modal {
-      background: var(--white);
-      border: 2px solid var(--black);
-      padding: 32px;
-      width: 100%; max-width: 400px;
-    }
-    .modal__eyebrow {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--error); margin-bottom: 10px;
-    }
-    .modal__title {
-      font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
-      line-height: 1.2; margin-bottom: 10px;
-    }
-    .modal__desc {
-      font-size: 13px; color: var(--gray-600); line-height: 1.55;
-      margin-bottom: 28px; text-wrap: pretty;
-    }
-    .modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
-
-    .btn-modal-cancel {
-      padding: 10px 20px; font-family: var(--f); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;
-      background: transparent; color: var(--black);
-      border: 2px solid var(--gray-300);
-      transition: border-color var(--t), background var(--t);
-    }
-    .btn-modal-cancel:hover { border-color: var(--black); background: var(--off-white); }
-
-    .btn-modal-confirm {
-      padding: 10px 20px; font-family: var(--f); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;
-      background: var(--error); color: var(--white);
-      border: 2px solid var(--error);
-      transition: background var(--t), border-color var(--t);
-    }
-    .btn-modal-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
 
     /* ══════════════════════════════════════════════════════════
        WHATSAPP FAB
@@ -308,24 +233,46 @@
     .fab:hover { background: var(--black); border-color: var(--black); }
     .fab__icon { width: 36px; height: 36px; flex-shrink: 0; }
 
+    /* ── LOADING STATE ──────────────────────────────────────── */    .btn--loading {
+      pointer-events: none;
+      opacity: 0.7;
+      position: relative;
+    }
+    .btn--loading .btn__text { visibility: hidden; }
+    .btn--loading::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      top: 50%;
+      left: 50%;
+      margin: -9px 0 0 -9px;
+      border: 2.5px solid rgba(0,0,0,0.3);
+      border-top-color: var(--black);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
     /* ══════════════════════════════════════════════════════════
        MOBILE-FIRST RESPONSIVE
        ══════════════════════════════════════════════════════════ */
     .sidebar { display: none; }
     .topbar { display: flex; }
     .main { padding: 84px 24px 100px; max-width: 100%; }
-    .page-title { font-size: 22px; }
+    .page-title { font-size: 22px; }/* previne zoom iOS */
     .fab { bottom: max(16px, env(safe-area-inset-bottom)); right: 16px; }
 
-    /* Mobile: account card compact */
-    .account-card { padding: 16px; gap: 12px; }
-    .bank-badge { width: 40px; height: 40px; font-size: 11px; }
+    @media (min-width: 480px) {
+      .form-row { grid-template-columns: 1fr 1fr; }
+      .loc-grid { grid-template-columns: 148px 1fr 72px; }
+      .loc-cep  { grid-column: auto; }
+      .btn-save { width: auto; }
+    }
 
     @media (min-width: 640px) {
       .main { padding: 84px 24px 100px; }
       .page-title { font-size: 26px; }
-      .account-card { padding: 20px 24px; gap: 16px; }
-      .bank-badge { width: 44px; height: 44px; font-size: 11px; }
+      .form-card { padding: 20px 24px; }
     }
 
     @media (min-width: 960px) {
@@ -333,10 +280,9 @@
       .topbar  { display: none; }
       .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 960px; }
       .page-title { font-size: 28px; }
-      .account-card__name { font-size: 15px; }
-      .account-card__details { font-size: 13px; }
       .fab { width: 80px; height: 80px; bottom: max(36px, env(safe-area-inset-bottom)); right: 36px; }
       .fab__icon { width: 40px; height: 40px; }
+      .form-card { padding: 24px 28px; }
     }
 
     @media (min-width: 1200px) {
@@ -421,8 +367,36 @@
       background: var(--error); color: var(--white); cursor: pointer;
       border: 1.5px solid var(--error);
       transition: background var(--t), border-color var(--t);
-    }    .btn-modal-cancel:active, .btn-modal-confirm:active, .btn-close:active, .btn-logout-cancel:active, .btn-logout-confirm:active { transform: scale(0.98); }
-
+    }
+    /* ── TOAST / SNACKBAR ──────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--f);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 500;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: calc(100% - 48px);
+    }
+    .toast--visible {
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast--success .toast__icon { color: var(--green); }
+    .toast--error .toast__icon { color: var(--error); }
+    .toast__icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
 
   </style>
 </head>
@@ -471,18 +445,18 @@
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         Meus Documentos
       </a>
-      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
         Contas Bancárias
-      </span>
+      </a>
       <a href="15_basta-requerimentos.html" class="nav-item">
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
         Requerimentos
       </a>
-      <a href="16_basta-perfil.html" class="nav-item">
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Perfil
-      </a>
+      </span>
       <a href="17_basta-ajuda.html" class="nav-item">
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         Ajuda
@@ -495,7 +469,7 @@
         <div class="sidebar__user-name">Maria Carvalho</div>
         <div class="sidebar__user-email">maria.c@gmail.com</div>
       </div>
-      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+      <button type="button" class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       </button>
     </div>
@@ -506,217 +480,309 @@
        ════════════════════════════════════════════════════════ -->
   <main class="main">
 
-    <h1 class="page-title">Suas Contas Conectadas<span class="accent">.</span></h1>
-    <p class="page-desc">Essas são suas contas que estão sendo verificadas.</p>
+    <h1 class="page-title">Suas Informações<span class="accent">.</span></h1>
+    <p class="page-desc">Mantenha as informações completas, elas serão usadas em outros documentos.</p>
 
-    <!-- ── Section label: Contas conectadas ─────────────── -->
-    <div class="section-label">Contas conectadas</div>
+    <form class="form-cards" id="profile-form" novalidate onsubmit="event.preventDefault(); if(validatePerfil()) salvar();">
 
-    <!-- ── Account cards: contas correntes / poupança ──── -->
-    <div class="account-list">
+      <!-- ── Card 1: Informações Pessoais ─────────────────── -->
+      <div class="form-card">
+        <div class="form-section-title">Informações Pessoais</div>
 
-      <!-- Banco do Brasil — Conta Corrente -->
-      <div class="account-card">
-        <div class="bank-badge" style="background: #CC092F;">BA</div>
-        <div class="account-card__info">
-          <div class="account-card__name">BANCO DO BRASIL S/A</div>
-          <div class="account-card__details">Ag. - · Conta 00006850-0 · Conta Corrente</div>
+        <!-- Nome completo -->
+        <div class="form-group">
+          <label class="form-label" for="nome">Nome Completo</label>
+          <input
+            id="nome"
+            type="text"
+            class="form-input form-input--readonly"
+            value="Maria Carvalho"
+            readonly
+            aria-describedby="nome-hint"
+          />
+          <p class="form-hint" id="nome-hint">Importado do login. Somente leitura.</p>
         </div>
-        <div class="account-card__status">
-          <span class="account-card__status-label">Conectada</span>
-          <span class="account-card__status-sub">Sincronizado 03/07/2026</span>
+
+        <!-- CPF + Data de Nascimento -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="cpf">CPF</label>
+            <div class="input-wrap">
+              <input
+                id="cpf"
+                type="text"
+                class="form-input form-input--masked"
+                value="•••.•••.456-09"
+                readonly
+                data-cpf-masked="•••.•••.456-09"
+                data-cpf-clear="123.456.456-09"
+              />
+              <button type="button" class="input-action" id="btnRevelar" onclick="toggleCpf()" aria-label="Revelar CPF">Revelar</button>
+            </div>
+            <p class="form-hint">Campo protegido.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="nascimento">Data de Nascimento</label>
+            <input
+              id="nascimento"
+              type="text"
+              class="form-input"
+              placeholder="DD/MM/AAAA"
+              maxlength="10"
+            />
+            <div class="form-error" id="nascimento-error" hidden>
+              <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Informe uma data válida.</span>
+            </div>
+          </div>
         </div>
-        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Banco do Brasil" onclick="openConfirm('Banco do Brasil S/A')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
+
+        <!-- WhatsApp + Email -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="whatsapp">WhatsApp</label>
+            <input
+              id="whatsapp"
+              type="text"
+              class="form-input form-input--masked"
+              value="(19) ••••• -5723"
+              readonly
+            />
+            <p class="form-hint">Capturado no cadastro. Campo protegido.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              class="form-input"
+              value="maria.c@gmail.com"
+            />
+            <div class="form-error" id="email-error" hidden>
+              <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Informe um email válido.</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Nubank — Conta de Pagamento -->
-      <div class="account-card">
-        <div class="bank-badge" style="background: #820AD1;">NU</div>
-        <div class="account-card__info">
-          <div class="account-card__name">NU PAGAMENTOS S/A</div>
-          <div class="account-card__details">Ag. 0001 · Conta 3948217-6 · Conta de Pagamento</div>
+      <!-- ── Card 2: Localidade ────────────────────────────── -->
+      <div class="form-card">
+        <div class="form-section-title">Localidade</div>
+
+        <!-- CEP + Cidade + UF -->
+        <div class="loc-grid">
+          <div class="form-group loc-cep">
+            <label class="form-label" for="cep">CEP</label>
+            <input
+              id="cep"
+              type="text"
+              class="form-input"
+              placeholder="00000-000"
+              maxlength="9"
+              oninput="maskCep(this)"
+            />
+            <div class="form-error" id="cep-error" hidden>
+              <svg class="form-error__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Informe um CEP válido.</span>
+            </div>
+          </div>
+          <div class="form-group loc-city">
+            <label class="form-label" for="cidade">Cidade</label>
+            <input
+              id="cidade"
+              type="text"
+              class="form-input form-input--readonly"
+              placeholder="—"
+              readonly
+            />
+          </div>
+          <div class="form-group loc-uf">
+            <label class="form-label" for="uf">UF</label>
+            <input
+              id="uf"
+              type="text"
+              class="form-input form-input--readonly"
+              placeholder="—"
+              readonly
+              maxlength="2"
+            />
+          </div>
         </div>
-        <div class="account-card__status">
-          <span class="account-card__status-label">Conectada</span>
-          <span class="account-card__status-sub">Sincronizado 02/07/2026</span>
+
+        <!-- Salvar -->
+        <div class="form-actions">
+          <button type="submit" class="btn-save" aria-disabled="false"><span class="btn__text">Salvar Alterações</span></button>
+          <div class="save-feedback" id="saveFeedback" role="status" aria-live="polite">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="save-feedback__text">Alterações salvas</span>
+          </div>
         </div>
-        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Nubank" onclick="openConfirm('Nu Pagamentos S/A')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
       </div>
 
-      <!-- Itaú — Conta Corrente -->
-      <div class="account-card">
-        <div class="bank-badge" style="background: #EC7000;">IT</div>
-        <div class="account-card__info">
-          <div class="account-card__name">ITAÚ UNIBANCO S/A</div>
-          <div class="account-card__details">Ag. 1582 · Conta 04729-1 · Conta Corrente</div>
-        </div>
-        <div class="account-card__status">
-          <span class="account-card__status-label account-card__status-label--off">Desconectada</span>
-          <span class="account-card__status-sub">Sincronizado 18/06/2026</span>
-        </div>
-        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Itaú" onclick="openConfirm('Itaú Unibanco S/A')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- ── Section label: Cartões de crédito ──────────── -->
-    <div class="section-label" style="margin-top: 32px;">Cartões de crédito</div>
-
-    <!-- ── Account cards: cartões, consignados, financiamentos ── -->
-    <div class="account-list">
-
-      <!-- Ourocard Visa International — Cartão de Crédito -->
-      <div class="account-card">
-        <div class="bank-badge" style="background: #820AD1;">OU</div>
-        <div class="account-card__info">
-          <div class="account-card__name">OUROCARD VISA INTERNATIONAL</div>
-          <div class="account-card__details">Ag. - · Conta 7685 · Cartão de Crédito</div>
-        </div>
-        <div class="account-card__status">
-          <span class="account-card__status-label">Conectada</span>
-          <span class="account-card__status-sub">Sincronizado 03/07/2026</span>
-        </div>
-        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Ourocard Visa" onclick="openConfirm('Ourocard Visa International')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
-      </div>
-
-      <!-- Itaucard Mastercard — Cartão de Crédito -->
-      <div class="account-card">
-        <div class="bank-badge" style="background: #EC7000;">IT</div>
-        <div class="account-card__info">
-          <div class="account-card__name">ITAUCARD MASTERCARD GOLD</div>
-          <div class="account-card__details">Ag. 1582 · Conta 0494 · Cartão de Crédito</div>
-        </div>
-        <div class="account-card__status">
-          <span class="account-card__status-label account-card__status-label--off">Desconectada</span>
-          <span class="account-card__status-sub">Sincronizado 18/06/2026</span>
-        </div>
-        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Itaucard Mastercard" onclick="openConfirm('Itaucard Mastercard Gold')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
-      </div>
-
-      <!-- Nubank Mastercard — Cartão de Crédito -->
-      <div class="account-card">
-        <div class="bank-badge" style="background: #820AD1;">NU</div>
-        <div class="account-card__info">
-          <div class="account-card__name">NUBANK MASTERCARD PLATINUM</div>
-          <div class="account-card__details">Ag. 0001 · Conta 3948217-6 · Cartão de Crédito</div>
-        </div>
-        <div class="account-card__status">
-          <span class="account-card__status-label">Conectada</span>
-          <span class="account-card__status-sub">Sincronizado 02/07/2026</span>
-        </div>
-        <button class="icon-btn icon-btn--danger" data-tip="Desconectar" aria-label="Desconectar conta Nubank Mastercard" onclick="openConfirm('Nubank Mastercard Platinum')">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-        </button>
-      </div>
-
-    </div>
-
-    <!-- ── CTA Conectar nova conta ─────────────────────── -->
-    <a href="07_basta-of-selecao-banco.html" class="btn-connect">
-      <span class="btn-connect__plus">+</span>
-      Conectar nova conta bancária via Open Finance
-    </a>
+    </form><!-- /#profile-form -->
 
   </main>
 </div>
 
-<!-- ════════════════════════════════════════════════════════
-     CONFIRMATION MODAL
-     ════════════════════════════════════════════════════════ -->
-<div class="modal-overlay" id="confirmModal">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal__eyebrow">Atenção</div>
-    <h2 class="modal__title" id="modalTitle">Desconectar <span id="modalBankName"></span>?</h2>
-    <p class="modal__desc">Ao desconectar, os dados desta conta não serão mais atualizados via Open Finance.</p>
-    <div class="modal__actions">
-      <button class="btn-modal-cancel" id="confirmCancel" onclick="closeConfirm()">Cancelar</button>
-      <button class="btn-modal-confirm" id="confirmConfirm" onclick="confirmDisconnect()">Desconectar</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  let lastFocusedElementConfirm = null;
-  let cardToRemove = null;
-
-  function openConfirm(bankName) {
-    lastFocusedElementConfirm = document.activeElement;
-    // Guardar referência ao card que será removido
-    cardToRemove = lastFocusedElementConfirm.closest('.account-card');
-    document.getElementById('modalBankName').textContent = bankName;
-    const modal = document.getElementById('confirmModal');
-    modal.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-    // Mover foco para o primeiro botão
-    document.getElementById('confirmCancel').focus();
+  /* ── FORM VALIDATION ────────────────────────────────────── */
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  function confirmDisconnect() {
-    if (cardToRemove) {
-      // Adicionar classe de remoção para animação
-      cardToRemove.classList.add('account-removing');
-      // Remover do DOM após animação
-      setTimeout(function() {
-        cardToRemove.remove();
-        // Verificar se ainda há cards
-        cardToRemove = null;
-      }, 300);
-    }
-    closeConfirm();
-  }
+  function validateField(fieldId, isValid, errorMsg = '') {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById(fieldId + '-error');
 
-  function closeConfirm() {
-    const modal = document.getElementById('confirmModal');
-    modal.classList.remove('is-open');
-    document.body.style.overflow = '';
-    // Restaurar foco ao elemento que abriu o modal
-    if (lastFocusedElementConfirm) {
-      lastFocusedElementConfirm.focus();
+    if (!isValid) {
+      field.classList.add('form-input--error');
+      if (errorEl) {
+        errorEl.removeAttribute('hidden');
+        if (errorMsg) errorEl.querySelector('span').textContent = errorMsg;
+      }
+      return false;
+    } else {
+      field.classList.remove('form-input--error');
+      if (errorEl) errorEl.setAttribute('hidden', '');
+      return true;
     }
   }
 
-  // Focus trap e Escape para fechar
-  const confirmModal = document.getElementById('confirmModal');
-  const confirmBox = confirmModal.querySelector('.modal');
-  const confirmCancelBtn = document.getElementById('confirmCancel');
-  const confirmConfirmBtn = document.getElementById('confirmConfirm');
+  function validatePerfil() {
+    const email = document.getElementById('email').value.trim();
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
 
-  confirmModal.addEventListener('click', function(e) {
-    if (e.target === this) closeConfirm();
+    let isValid = true;
+
+    isValid = validateField('email', email && validateEmail(email), 'Informe um email válido.') && isValid;
+    if (cep) {
+      isValid = validateField('cep', cep.length === 8, 'Informe um CEP válido.') && isValid;
+    }
+
+    return isValid;
+  }
+
+  // Validação no blur de cada campo
+  document.getElementById('email')?.addEventListener('blur', function() {
+    if (this.value.trim()) {
+      validateField('email', validateEmail(this.value.trim()), 'Informe um email válido.');
+    }
   });
 
-  confirmBox.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      closeConfirm();
+  document.getElementById('cep')?.addEventListener('blur', function() {
+    if (this.value.trim()) {
+      const cep = this.value.replace(/\D/g, '');
+      validateField('cep', cep.length === 8, 'Informe um CEP válido.');
     }
+  });
 
-    if (e.key === 'Tab') {
-      const focusableElements = [confirmCancelBtn, confirmConfirmBtn];
-      const currentIndex = focusableElements.indexOf(document.activeElement);
+  /* ── CPF reveal ───────────────────────────────────────── */
+  let cpfRevealed = false;
+  function toggleCpf() {
+    const input = document.getElementById('cpf');
+    const btn   = document.getElementById('btnRevelar');
+    cpfRevealed = !cpfRevealed;
+    if (cpfRevealed) {
+      input.value = input.dataset.cpfClear;
+      input.classList.remove('form-input--masked');
+      btn.textContent = 'Ocultar';
+    } else {
+      input.value = input.dataset.cpfMasked;
+      input.classList.add('form-input--masked');
+      btn.textContent = 'Revelar';
+    }
+  }
 
-      if (e.shiftKey) {
-        // Shift + Tab (backward)
-        e.preventDefault();
-        const nextIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
-        focusableElements[nextIndex].focus();
-      } else {
-        // Tab (forward)
-        e.preventDefault();
-        const nextIndex = currentIndex === focusableElements.length - 1 ? 0 : currentIndex + 1;
-        focusableElements[nextIndex].focus();
+  /* ── CEP mask ─────────────────────────────────────────── */
+  function maskCep(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 5) v = v.slice(0,5) + '-' + v.slice(5);
+    input.value = v;
+  }
+
+  /* ── CEP lookup (ViaCEP) ──────────────────────────────── */
+  async function lookupCep(cep) {
+    const raw = cep.replace(/\D/g, '');
+    if (raw.length !== 8) return;
+    try {
+      const res  = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+      const data = await res.json();
+      if (!data.erro) {
+        document.getElementById('cidade').value = data.localidade || '';
+        document.getElementById('uf').value      = data.uf || '';
+        // Visual feedback: green border on success
+        const cepField = document.getElementById('cep');
+        cepField.style.borderColor = 'var(--green)';
+        setTimeout(() => {
+          cepField.style.borderColor = '';
+        }, 1500);
       }
+    } catch (_) { /* silently fail in prototype */ }
+  }
+
+  /* ── CEP lookup com debounce ───────────────────────── */
+  let cepDebounceTimer = null;
+  function setupCepLookupDebounce() {
+    const cepField = document.getElementById('cep');
+    if (!cepField) return;
+
+    cepField.addEventListener('input', function() {
+      clearTimeout(cepDebounceTimer);
+      const cep = this.value;
+      cepDebounceTimer = setTimeout(() => {
+        lookupCep(cep);
+      }, 500);
+    });
+  }
+
+  // Initialize on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCepLookupDebounce);
+  } else {
+    setupCepLookupDebounce();
+  }
+
+  /* ── Toast notification ───────────────────────────────── */
+  function showToast(message, type) {
+    var toast = document.getElementById('toast');
+    var text = toast.querySelector('.toast__text');
+    var icon = toast.querySelector('.toast__icon');
+
+    text.textContent = message || 'Dados salvos com sucesso.';
+    toast.className = 'toast toast--' + (type || 'success');
+
+    // Change icon based on type
+    if (type === 'error') {
+      icon.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+    } else {
+      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
     }
+
+    toast.classList.add('toast--visible');
+
+    setTimeout(function() {
+      toast.classList.remove('toast--visible');
+    }, 3000);
+  }
+
+  /* ── Save feedback ────────────────────────────────────── */
+  function salvar() {
+    showToast('Dados salvos com sucesso.', 'success');
+  }
+
+  /* ── Data de nascimento mask ──────────────────────────── */
+  document.getElementById('nascimento').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '').slice(0, 8);
+    if (v.length > 4) v = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4);
+    else if (v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+    this.value = v;
   });
 </script>
 
@@ -729,8 +795,8 @@
     <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
     <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
     <div class="logout-modal__actions">
-      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
-      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
+      <button type="button" class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button type="button" class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='12_basta-dashboard.html'">Sair</button>
     </div>
   </div>
 </div>
@@ -791,6 +857,16 @@
     }
   });
 </script>
+
+<!-- ════════════════════════════════════════════════════════
+     TOAST
+     ════════════════════════════════════════════════════════ -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="toast__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  <span class="toast__text">Dados salvos com sucesso.</span>
+</div>
 
 </body>
 </html>

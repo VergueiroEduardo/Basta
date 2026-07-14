@@ -121,7 +121,7 @@
 
     .page-desc {
       font-size: 13px; color: var(--gray-600); font-weight: 400;
-      line-height: 1.5; margin-bottom: 32px;
+      line-height: 1.5; margin-bottom: 28px;
     }
 
     /* ── Section label ────────────────────────────────────── */
@@ -602,17 +602,41 @@
             <div class="doc-row__circle"></div>
             <span class="doc-row__name">RG / CNH</span>
           </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar RG / CNH">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar RG / CNH">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
         </div>
         <div class="doc-row">
           <div class="doc-row__left">
             <div class="doc-row__circle"></div>
             <span class="doc-row__name">CPF</span>
           </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar CPF">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar CPF">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
         </div>
         <div class="doc-row">
           <div class="doc-row__left">
             <div class="doc-row__circle"></div>
             <span class="doc-row__name">Comprovante de Residência</span>
+          </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar Comprovante de Residência">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar Comprovante de Residência">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
           </div>
         </div>
       </div>
@@ -669,6 +693,14 @@
             <div class="doc-row__circle"></div>
             <span class="doc-row__name">SUSEP</span>
           </div>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar SUSEP">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar SUSEP">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+          </div>
         </div>
         <!-- INSS — PENDENTE -->
         <div class="doc-row">
@@ -676,54 +708,20 @@
             <div class="doc-row__circle"></div>
             <span class="doc-row__name">INSS</span>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════
-         ACCORDION 3 — Contrato de Prestação de Serviços e Atos de Adesão
-         ══════════════════════════════════════════════════════ -->
-    <div class="acc acc--closed" id="acc-contratos">
-      <div class="acc__header" onclick="toggle('acc-contratos')" role="button" tabindex="0" aria-expanded="false" aria-controls="acc-contratos-body">
-        <div>
-          <div class="acc__title">Contrato de Prestação de Serviços e Atos de Adesão</div>
-          <div class="acc__subtitle">Contrato de prestação de serviços e atos de adesão que o efetivam</div>
-        </div>
-        <div class="acc__meta">
-          <span class="acc__count acc__count--zero">0</span>
-          <svg class="acc__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-      </div>
-      <div class="acc__body" id="acc-contratos-body">
-        <div class="doc-row">
-          <div class="doc-row__left">
-            <div class="doc-row__circle"></div>
-            <span class="doc-row__name">Contrato de Prestação de Serviços</span>
-          </div>
-        </div>
-        <div class="doc-row">
-          <div class="doc-row__left">
-            <div class="doc-row__circle"></div>
-            <span class="doc-row__name">Cancelamento de Seguros</span>
-          </div>
-        </div>
-        <div class="doc-row">
-          <div class="doc-row__left">
-            <div class="doc-row__circle"></div>
-            <span class="doc-row__name">Reestruturação de Crédito</span>
-          </div>
-        </div>
-        <div class="doc-row">
-          <div class="doc-row__left">
-            <div class="doc-row__circle"></div>
-            <span class="doc-row__name">Solicitação de Indicação de Advogado</span>
+          <div class="doc-actions">
+            <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar INSS">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+            <button class="icon-btn" data-tip="Baixar PDF" aria-label="Baixar INSS">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════
-         ACCORDION 4 — Documentos Bancários (expandido)
+         ACCORDION 3 — Documentos Bancários (expandido)
          Com sub-acordeões por banco
          ══════════════════════════════════════════════════════ -->
     <div class="acc acc--closed" id="acc-bancarios">
@@ -743,7 +741,7 @@
         <div class="sub-acc" id="sub-bcb">
           <div class="sub-acc__header" onclick="toggle('sub-bcb')" role="button" tabindex="0" aria-expanded="true" aria-controls="sub-bcb-body">
             <div>
-              <div class="sub-acc__title">Itaú</div>
+              <div class="sub-acc__title">Banco Central do Brasil</div>
               <div class="sub-acc__subtitle">Ag. 4449 / CC 282883</div>
             </div>
             <div class="sub-acc__meta">
@@ -794,7 +792,7 @@
         <div class="sub-acc sub-acc--closed" id="sub-acesso">
           <div class="sub-acc__header" onclick="toggle('sub-acesso')" role="button" tabindex="0" aria-expanded="false" aria-controls="sub-acesso-body">
             <div>
-              <div class="sub-acc__title">Bradesco</div>
+              <div class="sub-acc__title">Acesso Soluções De Pagamento S.A.</div>
               <div class="sub-acc__subtitle">Ag. 0001 / CC 111111</div>
             </div>
             <div class="sub-acc__meta">
@@ -844,6 +842,21 @@
       </div>
     </div>
 
+    <!-- ── EMPTY STATE (hidden by default) ──────────────── -->
+    <div id="docs-content">
+    </div>
+
+    <div class="empty-state" id="empty-docs" hidden>
+      <div class="empty-state__icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </div>
+      <h3 class="empty-state__title">Nenhum documento ainda.</h3>
+      <p class="empty-state__desc">Seus documentos aparecerão aqui assim que forem coletados via Open Finance.</p>
+    </div>
+
   </main>
 </div>
 
@@ -854,6 +867,14 @@
     var isNowClosed = el.classList.toggle(closedClass);
     var header = el.querySelector('[role="button"]');
     if (header) header.setAttribute('aria-expanded', String(!isNowClosed));
+  }
+
+  function toggleEmpty() {
+    var content = document.getElementById('docs-content');
+    var empty = document.getElementById('empty-docs');
+    var isHidden = empty.hidden;
+    empty.hidden = !isHidden;
+    content.hidden = isHidden;
   }
 
   /* ── Keyboard support for accordion headers and sub-rows ─── */
@@ -1014,6 +1035,8 @@
     }
   });
 </script>
+
+<button onclick="toggleEmpty()" style="position:fixed;bottom:16px;left:16px;z-index:999;padding:6px 12px;font-size:11px;font-family:var(--f);font-weight:700;background:var(--off-white);border:1px solid var(--gray-300);cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;">Demo: toggle vazio</button>
 
 </body>
 </html>

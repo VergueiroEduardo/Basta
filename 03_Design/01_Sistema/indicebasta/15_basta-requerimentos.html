@@ -102,7 +102,7 @@
     .accent { color: var(--black); }
     .page-desc {
       font-size: 13px; color: var(--gray-600); font-weight: 400;
-      line-height: 1.5; margin-bottom: 32px;
+      line-height: 1.5; margin-bottom: 20px;
     }
 
     /* ── ClickSign Banner ── */
@@ -281,7 +281,7 @@
       font-size: 11px; font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.04em; flex-shrink: 0; white-space: nowrap;
     }
-    .req-row__status--signed { color: var(--green-hover); font-weight: 800; }
+    .req-row__status--signed { color: var(--green); }
     .req-row__status--pending { color: var(--warning); }
 
     /* Diferenciação de linhas assinadas */
@@ -644,7 +644,7 @@
         <div class="bank-group__badge" style="background: #820AD1;">NU</div>
         <div class="bank-group__info">
           <div class="bank-group__name">Nubank</div>
-          <div class="bank-group__summary">1 pendente · 2 assinado</div>
+          <div class="bank-group__summary">3 pendente · 0 assinado</div>
         </div>
         <div class="bank-group__count">3</div>
         <svg class="bank-group__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -676,7 +676,7 @@
           <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
         </div>
         <div class="req-row__actions">
-          <span class="req-row__status req-row__status--signed">Assinado</span>
+          <span class="req-row__status req-row__status--pending">Pendente</span>
           <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Res. CMN 4.790 – Cancelamento de débitos', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
@@ -693,7 +693,7 @@
           <div class="req-row__meta">Banco: Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026</div>
         </div>
         <div class="req-row__actions">
-          <span class="req-row__status req-row__status--signed">Assinado</span>
+          <span class="req-row__status req-row__status--pending">Pendente</span>
           <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Solicitação de segunda via de contratos, apólices, extratos e faturas', 'Nubank · Ag. 0001 · Conta 4321 · Gerado em 19/01/2026')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
@@ -715,7 +715,7 @@
         <div class="bank-group__badge" style="background: #CC092F;">BR</div>
         <div class="bank-group__info">
           <div class="bank-group__name">Bradesco</div>
-          <div class="bank-group__summary">2 pendente · 1 assinado</div>
+          <div class="bank-group__summary">3 pendente · 0 assinado</div>
         </div>
         <div class="bank-group__count">3</div>
         <svg class="bank-group__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -730,7 +730,7 @@
           <div class="req-row__meta">Banco: Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026</div>
         </div>
         <div class="req-row__actions">
-          <span class="req-row__status req-row__status--signed">Assinado</span>
+          <span class="req-row__status req-row__status--pending">Pendente</span>
           <button class="icon-btn" data-tip="Visualizar" aria-label="Visualizar documento" onclick="openPreview('Demonstrativo de Evolução da Dívida e Memória de Cálculo', 'Bradesco · Ag. 1234 · Conta 5678 · Gerado em 19/01/2026')">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>

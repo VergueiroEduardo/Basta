@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Modelos de Requerimentos</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <style>
+    /* RESET LOCAL */    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* LAYOUT */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+      overflow-y: auto;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+
+    .sidebar__section-title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--gray-600);
+      padding: 24px 16px 8px; margin-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    .main { flex: 1; }
+
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* PAGE HEADER */
+    .page-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .page-title .accent { color: var(--black); }
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400; line-height: 1.5;
+    }
+
+    .btn-add {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 16px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--black); color: var(--white);
+      border: 1.5px solid var(--black);
+      transition: background var(--t), border-color var(--t);
+      cursor: pointer; flex-shrink: 0;
+    }
+    .btn-add:hover { background: var(--green); border-color: var(--green); }
+    .btn-add svg { width: 12px; height: 12px; }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: 28px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+    .tab {
+      padding: 14px 4px;
+      margin-right: 28px;
+      font-family: var(--f); font-size: 12px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+      background: none; border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; white-space: nowrap;
+      transition: color var(--t), border-color var(--t);
+      position: relative;
+      margin-bottom: -1px;
+    }
+    .tab:hover { color: var(--black); }
+    .tab--active { color: var(--black); border-bottom-color: var(--green); }
+    .tab__count {
+      display: inline-block; margin-left: 6px;
+      font-size: 10px; font-weight: 800;
+      color: var(--gray-600); background: var(--gray-200);
+      padding: 1px 6px; vertical-align: 1px;
+    }
+    .tab--active .tab__count { color: var(--white); background: var(--green); }
+
+    /* TAB PANELS */
+    .panel { display: none; }
+    .panel--active { display: block; }
+
+    /* ══════════════════════════════════════════════════════════
+       TEMPLATE GRID
+       ══════════════════════════════════════════════════════════ */
+    .tpl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .tpl-card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 24px;
+      display: flex; flex-direction: column;
+      transition: border-color var(--t);
+      min-height: 320px;
+    }
+    .tpl-card:hover { border-color: var(--black); }
+
+    .tpl-card__head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 12px; margin-bottom: 18px;
+    }
+    .tpl-card__title {
+      font-size: 16px; font-weight: 800; line-height: 1.25;
+      letter-spacing: -0.01em; color: var(--black);
+    }
+    .tpl-card__badge {
+      display: inline-block;
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 4px 10px;
+      background: var(--gray-600); color: var(--white);
+      flex-shrink: 0;
+    }
+    .tpl-card__badge--bank { background: var(--blue); }
+    .tpl-card__badge--draft { background: var(--warning); }
+
+    .tpl-card__divider {
+      height: 1px; background: var(--gray-200);
+      margin: 0 0 18px;
+    }
+
+    .tpl-card__body {
+      flex: 1;
+      font-size: 13px; line-height: 1.6;
+      color: var(--gray-600);
+      margin-bottom: 18px;
+    }
+
+    .tpl-card__meta {
+      display: flex; gap: 14px;
+      font-size: 10px; font-weight: 700;
+      color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .tpl-card__meta-item {
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .tpl-card__meta-item svg { width: 11px; height: 11px; opacity: 0.7; }
+    .tpl-card__meta-item strong { color: var(--black); font-weight: 800; }
+
+    .tpl-card__actions {
+      display: flex; gap: 8px;
+    }
+    .tpl-btn {
+      flex: 1;
+      padding: 11px 10px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      transition: all var(--t); cursor: pointer;
+      text-align: center; line-height: 1.2;
+    }
+    .tpl-btn:hover { border-color: var(--black); }
+    .tpl-btn--icon {
+      flex: 0 0 auto; width: 44px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .tpl-btn--icon:hover { color: var(--error); border-color: var(--error); }
+    .tpl-btn--icon svg { width: 14px; height: 14px; }
+
+    /* "Adicionar" placeholder card */
+    .tpl-card--add {
+      background: transparent;
+      border: 2px dashed var(--gray-300);
+      color: var(--gray-600);
+      align-items: center; justify-content: center;
+      text-align: center;
+      transition: all var(--t);
+      cursor: pointer; min-height: 320px;
+    }
+    .tpl-card--add:hover {
+      border-color: var(--black); color: var(--black);
+      background: var(--white);
+    }
+    .tpl-card--add svg { width: 32px; height: 32px; margin-bottom: 12px; }
+    .tpl-card--add__label {
+      font-size: 12px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       VARIABLES (CHAVES) PANEL
+       ══════════════════════════════════════════════════════════ */
+    .var-section {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .var-section__head {
+      display: flex; align-items: baseline; gap: 12px;
+      padding-bottom: 14px; margin-bottom: 14px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .var-section__title {
+      font-size: 14px; font-weight: 800;
+      letter-spacing: -0.01em; color: var(--black);
+    }
+    .var-section__count {
+      font-size: 11px; color: var(--gray-600); font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .var-section__desc {
+      font-size: 12px; color: var(--gray-600); margin-left: auto;
+    }
+
+    .var-table {
+      display: grid;
+      grid-template-columns: minmax(180px, max-content) 1fr max-content;
+      gap: 0;
+      font-size: 13px;
+    }
+    .var-row {
+      display: contents;
+    }
+    .var-key, .var-desc, .var-sample {
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex; align-items: center;
+    }
+    .var-row:last-child .var-key,
+    .var-row:last-child .var-desc,
+    .var-row:last-child .var-sample {
+      border-bottom: none;
+    }
+    .var-key {
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px; font-weight: 600;
+      color: var(--blue);
+    }
+    .var-desc { color: var(--gray-600); }
+    .var-sample {
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--black);
+      justify-content: flex-end;
+      white-space: nowrap;
+    }
+
+    .var-callout {
+      background: var(--off-white);
+      border-left: 3px solid var(--green);
+      padding: 14px 18px;
+      font-size: 13px; color: var(--gray-600); line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .var-callout strong { color: var(--black); font-weight: 700; }
+    .var-callout code {
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      background: var(--white); padding: 2px 6px;
+      border: 1px solid var(--gray-300); font-size: 12px;
+      color: var(--blue);
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       EDITOR DRAWER
+       ══════════════════════════════════════════════════════════ */
+    .drawer-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.55);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.24s var(--ease);
+    }
+    .drawer-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 100%; max-width: 1100px;
+      background: var(--white);
+      border-left: 2px solid var(--black);
+      z-index: 210;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.32s var(--ease);
+    }
+    .drawer-overlay.is-open + .drawer,
+    .drawer.is-open { transform: translateX(0); }
+
+    .drawer__head {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--gray-300);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .drawer__head-info { flex: 1; min-width: 200px; }
+    .drawer__eyebrow {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+      margin-bottom: 4px;
+    }
+    .drawer__title-input {
+      font-family: var(--f);
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.01em; color: var(--black);
+      background: transparent; border: none;
+      width: 100%;
+      padding: 2px 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color var(--t);
+    }
+    .drawer__title-input:focus { outline: none; border-bottom-color: var(--green); }
+
+    .drawer__head-actions {
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+    .drawer-btn {
+      padding: 10px 16px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      cursor: pointer; transition: all var(--t);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .drawer-btn:hover { border-color: var(--black); }
+    .drawer-btn--primary {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .drawer-btn--primary:hover { background: var(--green); border-color: var(--green); }
+    .drawer-btn svg { width: 12px; height: 12px; }
+
+    .drawer__body {
+      flex: 1; overflow: hidden;
+      display: grid; grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    @media (min-width: 900px) {
+      .drawer__body { grid-template-columns: 1fr 1fr; }
+    }
+
+    .drawer__pane {
+      display: flex; flex-direction: column;
+      min-width: 0; min-height: 0;
+      border-right: 1px solid var(--gray-300);
+    }
+    .drawer__pane:last-child { border-right: none; }
+
+    .pane-head {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--gray-200);
+      background: var(--off-white);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+    }
+    .pane-head__title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+    }
+
+    .insert-key {
+      position: relative;
+    }
+    .insert-key__btn {
+      padding: 6px 10px;
+      font-family: var(--f); font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      transition: all var(--t); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .insert-key__btn:hover { border-color: var(--black); }
+    .insert-key__btn svg { width: 10px; height: 10px; }
+    .insert-key__menu {
+      position: absolute; top: calc(100% + 4px); right: 0;
+      background: var(--white); border: 1.5px solid var(--black);
+      min-width: 240px; max-height: 280px; overflow-y: auto;
+      z-index: 5; box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      display: none;
+    }
+    .insert-key__menu.is-open { display: block; }
+    .insert-key__group-title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+      padding: 8px 12px 6px;
+      background: var(--off-white);
+    }
+    .insert-key__item {
+      display: flex; justify-content: space-between; align-items: center;
+      width: 100%; padding: 8px 12px;
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--black);
+      border: none; background: var(--white); cursor: pointer;
+      text-align: left;
+    }
+    .insert-key__item:hover { background: var(--off-white); }
+    .insert-key__item-key { color: var(--blue); font-weight: 600; }
+    .insert-key__item-sample { color: var(--gray-600); font-size: 10px; }
+
+    .editor {
+      flex: 1; min-height: 0;
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px; line-height: 1.7;
+      color: var(--black); background: var(--white);
+      padding: 18px;
+      border: none; resize: none;
+      width: 100%;
+      tab-size: 2;
+    }
+    .editor:focus { outline: none; }
+
+    .preview {
+      flex: 1; overflow-y: auto;
+      padding: 28px 32px;
+      background: var(--white);
+      font-size: 13px; line-height: 1.7; color: var(--black);
+    }
+    .preview h1,
+    .preview .preview-document-h1 {
+      font-size: 18px; font-weight: 800; letter-spacing: -0.01em;
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .preview h2 {
+      font-size: 14px; font-weight: 800; letter-spacing: -0.005em;
+      margin: 20px 0 10px; text-transform: uppercase;
+    }
+    .preview p { margin-bottom: 12px; }
+    .preview .var-pill {
+      display: inline-block;
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+      font-size: 11px; font-weight: 600; color: var(--blue);
+      background: rgba(59,158,232,0.08);
+      padding: 1px 6px; border: 1px solid rgba(59,158,232,0.3);
+    }
+    .preview hr { margin: 18px 0; border: none; border-top: 1px solid var(--gray-300); }
+    .preview .signature {
+      margin-top: 36px; text-align: center;
+      font-size: 12px; color: var(--gray-600);
+    }
+    .preview .signature .line {
+      width: 240px; margin: 28px auto 6px;
+      border-top: 1px solid var(--black);
+    }
+
+    .drawer__foot {
+      padding: 14px 24px;
+      border-top: 1px solid var(--gray-300);
+      background: var(--off-white);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .drawer__status {
+      font-size: 11px; color: var(--gray-600);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .drawer__status-dot {
+      width: 6px; height: 6px; background: var(--green); border-radius: 50%;
+    }
+    .drawer__status strong { color: var(--black); font-weight: 700; }
+
+    /* MOBILE */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main    { padding: 72px 16px 60px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 72px 24px 80px; }
+      .page-title { font-size: 26px; }
+    }
+
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main    { margin-left: var(--sidebar-w); padding: 32px 32px 60px; max-width: 1280px; }
+      .page-title { font-size: 28px; }
+    }
+
+    @media (min-width: 1280px) {
+      .main { padding: 32px 40px 60px; }
+    }
+
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main   { padding-bottom: max(60px, calc(40px + env(safe-area-inset-bottom))); }
+    }
+
+    /* Variables table mobile */
+    @media (max-width: 720px) {
+      .var-table { grid-template-columns: 1fr; }
+      .var-key, .var-desc, .var-sample {
+        padding: 8px 0;
+        border-bottom: none;
+      }
+      .var-row {
+        display: block;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .var-sample { justify-content: flex-start; }
+      .var-section__head { flex-wrap: wrap; }
+      .var-section__desc { margin-left: 0; width: 100%; margin-top: 4px; }
+    }
+
+    /* DELETE MODAL */
+    .delete-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .delete-overlay.is-open { opacity: 1; pointer-events: all; }
+    .delete-modal {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 28px 28px 24px; width: 100%; max-width: 420px;
+    }
+    .delete-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px;
+    }
+    .delete-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .delete-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 14px;
+    }
+    .delete-modal__name {
+      font-size: 13px; font-weight: 800; color: var(--black);
+      padding: 10px 14px; background: var(--off-white);
+      border-left: 3px solid var(--error);
+      margin-bottom: 24px;
+    }
+    .delete-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+    }
+    .btn-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-danger {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+    }
+    .btn-danger:hover { background: #b91c1c; border-color: #b91c1c; }
+
+    /* LOGOUT MODAL (replicado) */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+    .logout-modal {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 28px 28px 24px; width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 24px;
+    }
+    .logout-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+    }    /* nav-item placeholder "em breve" — sem destino ainda */
+    .nav-item--soon { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .nav-item--soon::after {
+      content: "Em breve";
+      margin-left: auto;
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--gray-600);
+      border: 1px solid var(--gray-300); padding: 2px 6px;
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- TOPBAR mobile -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">EV</a>
+</div>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+
+      <div class="sidebar__section-title">Admin</div>
+
+      <a href="18_basta-hoje.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Hoje
+      </a>
+      <a href="19_basta-admin-conversas.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversas
+      </a>
+      <a href="20_basta-admin-pipeline.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        CRM
+      </a>
+      <a href="23_basta-diagnostico-admin.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 5c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+        Diagnóstico
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Templates
+      </span>
+      <a href="22_basta-admin-usuarios.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Usuários
+      </a>
+      <a href="#" class="nav-item nav-item--soon" aria-disabled="true" tabindex="-1" title="Em breve">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Consulta Extrato
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">EV</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Eduardo Vergueiro</div>
+        <div class="sidebar__user-email">eavergueiro@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Modelos de Requerimentos<span class="accent">.</span></h1>
+        <p class="page-desc">Gerencie os templates HTML e suas variáveis de substituição.</p>
+      </div>
+      <button class="btn-add" onclick="openDrawer('new')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Adicionar template
+      </button>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab tab--active" role="tab" data-panel="modelos" onclick="switchTab(this)">
+        Meus modelos <span class="tab__count">2</span>
+      </button>
+      <button class="tab" role="tab" data-panel="chaves" onclick="switchTab(this)">
+        Chaves (variáveis) <span class="tab__count">28</span>
+      </button>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         PANEL: MEUS MODELOS
+         ════════════════════════════════════════════════════════ -->
+    <section class="panel panel--active" id="panel-modelos">
+
+      <div class="tpl-grid">
+
+        <!-- TEMPLATE 1 -->
+        <article class="tpl-card">
+          <div class="tpl-card__head">
+            <h2 class="tpl-card__title">Demonstrativo de Evolução da Dívida e Memória de Cálculo</h2>
+            <span class="tpl-card__badge">Geral</span>
+          </div>
+          <div class="tpl-card__divider"></div>
+          <p class="tpl-card__body">Pedido para que a instituição financeira explique como você chegou na sua situação financeira atual, sob sua perspectiva.</p>
+          <div class="tpl-card__meta">
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <strong>14</strong> chaves
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <strong>87</strong> usos
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+              Atualizado em 11/05/2026
+            </span>
+          </div>
+          <div class="tpl-card__actions">
+            <button class="tpl-btn">Ver HTML</button>
+            <button class="tpl-btn" onclick="openDrawer('demonstrativo')">Editar</button>
+            <button class="tpl-btn tpl-btn--icon" aria-label="Excluir" onclick="openDelete('Demonstrativo de Evolução da Dívida e Memória de Cálculo')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- TEMPLATE 2 -->
+        <article class="tpl-card">
+          <div class="tpl-card__head">
+            <h2 class="tpl-card__title">Res. CMN 4.790 — Cancelamento de débitos</h2>
+            <span class="tpl-card__badge">Geral</span>
+          </div>
+          <div class="tpl-card__divider"></div>
+          <p class="tpl-card__body">Revogue todas as cobranças automáticas que o banco faz em suas contas.</p>
+          <div class="tpl-card__meta">
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <strong>11</strong> chaves
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <strong>62</strong> usos
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+              Atualizado em 09/05/2026
+            </span>
+          </div>
+          <div class="tpl-card__actions">
+            <button class="tpl-btn">Ver HTML</button>
+            <button class="tpl-btn" onclick="openDrawer('cmn4790')">Editar</button>
+            <button class="tpl-btn tpl-btn--icon" aria-label="Excluir" onclick="openDelete('Res. CMN 4.790 — Cancelamento de débitos')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- TEMPLATE 3 -->
+        <article class="tpl-card">
+          <div class="tpl-card__head">
+            <h2 class="tpl-card__title">Histórico de Renovações e Alterações</h2>
+            <span class="tpl-card__badge">Geral</span>
+          </div>
+          <div class="tpl-card__divider"></div>
+          <p class="tpl-card__body">Solicitação ao banco do histórico completo de renovações, repactuações e alterações contratuais em cada operação de crédito.</p>
+          <div class="tpl-card__meta">
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <strong>9</strong> chaves
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <strong>0</strong> usos
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+              Atualizado em 12/05/2026
+            </span>
+          </div>
+          <div class="tpl-card__actions">
+            <button class="tpl-btn">Ver HTML</button>
+            <button class="tpl-btn" onclick="openDrawer('historico-renovacoes')">Editar</button>
+            <button class="tpl-btn tpl-btn--icon" aria-label="Excluir" onclick="openDelete('Histórico de Renovações e Alterações')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- TEMPLATE 4 -->
+        <article class="tpl-card">
+          <div class="tpl-card__head">
+            <h2 class="tpl-card__title">Relação Completa de Produtos e Serviços</h2>
+            <span class="tpl-card__badge">Geral</span>
+          </div>
+          <div class="tpl-card__divider"></div>
+          <p class="tpl-card__body">Pedido detalhado de todos os produtos e serviços contratados — datas, condições e taxas aplicadas em cada um.</p>
+          <div class="tpl-card__meta">
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <strong>10</strong> chaves
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <strong>0</strong> usos
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+              Atualizado em 12/05/2026
+            </span>
+          </div>
+          <div class="tpl-card__actions">
+            <button class="tpl-btn">Ver HTML</button>
+            <button class="tpl-btn" onclick="openDrawer('relacao-produtos')">Editar</button>
+            <button class="tpl-btn tpl-btn--icon" aria-label="Excluir" onclick="openDelete('Relação Completa de Produtos e Serviços')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- TEMPLATE 5 -->
+        <article class="tpl-card">
+          <div class="tpl-card__head">
+            <h2 class="tpl-card__title">Cópia Íntegra de Autorizações de Débito</h2>
+            <span class="tpl-card__badge">Geral</span>
+          </div>
+          <div class="tpl-card__divider"></div>
+          <p class="tpl-card__body">Solicitação das cópias originais e completas de todas as autorizações de débito automático vinculadas à conta.</p>
+          <div class="tpl-card__meta">
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <strong>8</strong> chaves
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <strong>0</strong> usos
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+              Atualizado em 12/05/2026
+            </span>
+          </div>
+          <div class="tpl-card__actions">
+            <button class="tpl-btn">Ver HTML</button>
+            <button class="tpl-btn" onclick="openDrawer('autorizacoes-debito')">Editar</button>
+            <button class="tpl-btn tpl-btn--icon" aria-label="Excluir" onclick="openDelete('Cópia Íntegra de Autorizações de Débito')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- TEMPLATE 6 -->
+        <article class="tpl-card">
+          <div class="tpl-card__head">
+            <h2 class="tpl-card__title">Comprovante de Serviços e Tarifas</h2>
+            <span class="tpl-card__badge">Geral</span>
+          </div>
+          <div class="tpl-card__divider"></div>
+          <p class="tpl-card__body">Pedido de detalhamento de todas as tarifas e serviços cobrados ao longo do relacionamento bancário.</p>
+          <div class="tpl-card__meta">
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <strong>9</strong> chaves
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <strong>0</strong> usos
+            </span>
+            <span class="tpl-card__meta-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 14"/></svg>
+              Atualizado em 12/05/2026
+            </span>
+          </div>
+          <div class="tpl-card__actions">
+            <button class="tpl-btn">Ver HTML</button>
+            <button class="tpl-btn" onclick="openDrawer('servicos-tarifas')">Editar</button>
+            <button class="tpl-btn tpl-btn--icon" aria-label="Excluir" onclick="openDelete('Comprovante de Serviços e Tarifas')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            </button>
+          </div>
+        </article>
+
+        <!-- ADD CARD -->
+        <button class="tpl-card tpl-card--add" onclick="openDrawer('new')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <div class="tpl-card--add__label">Novo template</div>
+          <div style="font-size:11px; margin-top:6px; color:var(--gray-600);">Comece em branco ou duplique um existente</div>
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PANEL: CHAVES (VARIÁVEIS)
+         ════════════════════════════════════════════════════════ -->
+    <section class="panel" id="panel-chaves">
+
+      <div class="var-callout">
+        Use as chaves abaixo dentro de qualquer template no formato <code>{{nome_da_chave}}</code>. Na geração do PDF, cada chave é substituída pelos dados reais do lead, banco e contexto da operação. Chaves sem valor caem para o <strong>fallback</strong> definido (vazio por padrão).
+      </div>
+
+      <!-- LEAD -->
+      <div class="var-section">
+        <div class="var-section__head">
+          <span class="var-section__title">Lead</span>
+          <span class="var-section__count">8 chaves</span>
+          <span class="var-section__desc">Dados pessoais do titular do requerimento.</span>
+        </div>
+        <div class="var-table">
+          <div class="var-row">
+            <div class="var-key">{{lead_nome}}</div>
+            <div class="var-desc">Nome completo do lead</div>
+            <div class="var-sample">Maria Carvalho</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_cpf}}</div>
+            <div class="var-desc">CPF formatado</div>
+            <div class="var-sample">123.456.789-00</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_rg}}</div>
+            <div class="var-desc">RG (opcional)</div>
+            <div class="var-sample">12.345.678-9</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_email}}</div>
+            <div class="var-desc">E-mail principal</div>
+            <div class="var-sample">maria.c@gmail.com</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_telefone}}</div>
+            <div class="var-desc">Telefone com DDD</div>
+            <div class="var-sample">(19) 99179-5723</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_endereco}}</div>
+            <div class="var-desc">Endereço completo</div>
+            <div class="var-sample">Rua X, 123 — Campinas/SP</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_cidade}}</div>
+            <div class="var-desc">Cidade do lead</div>
+            <div class="var-sample">Campinas</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{lead_estado}}</div>
+            <div class="var-desc">UF (sigla)</div>
+            <div class="var-sample">SP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANCO -->
+      <div class="var-section">
+        <div class="var-section__head">
+          <span class="var-section__title">Banco / Instituição</span>
+          <span class="var-section__count">7 chaves</span>
+          <span class="var-section__desc">Identificação da instituição financeira destinatária.</span>
+        </div>
+        <div class="var-table">
+          <div class="var-row">
+            <div class="var-key">{{banco_nome}}</div>
+            <div class="var-desc">Razão social do banco</div>
+            <div class="var-sample">Itaú Unibanco S.A.</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{banco_cnpj}}</div>
+            <div class="var-desc">CNPJ do banco</div>
+            <div class="var-sample">60.701.190/0001-04</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{banco_endereco}}</div>
+            <div class="var-desc">Endereço da matriz</div>
+            <div class="var-sample">Praça Alfredo E. de S. Aranha, 100</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{banco_canal_ouvidoria}}</div>
+            <div class="var-desc">Canal de ouvidoria oficial</div>
+            <div class="var-sample">0800 570 0011</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{banco_canal_email}}</div>
+            <div class="var-desc">E-mail de protocolo</div>
+            <div class="var-sample">ouvidoria@itau.com.br</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{banco_codigo}}</div>
+            <div class="var-desc">Código FEBRABAN</div>
+            <div class="var-sample">341</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{banco_logo_url}}</div>
+            <div class="var-desc">URL do logo (opcional)</div>
+            <div class="var-sample">/logos/itau.svg</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTA / CONTRATO -->
+      <div class="var-section">
+        <div class="var-section__head">
+          <span class="var-section__title">Conta &amp; Contrato</span>
+          <span class="var-section__count">7 chaves</span>
+          <span class="var-section__desc">Operação financeira específica que está sendo questionada.</span>
+        </div>
+        <div class="var-table">
+          <div class="var-row">
+            <div class="var-key">{{conta_agencia}}</div>
+            <div class="var-desc">Agência da conta</div>
+            <div class="var-sample">0123</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{conta_numero}}</div>
+            <div class="var-desc">Número da conta corrente</div>
+            <div class="var-sample">45678-9</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{contrato_numero}}</div>
+            <div class="var-desc">Número do contrato</div>
+            <div class="var-sample">2024.0001.5544</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{contrato_modalidade}}</div>
+            <div class="var-desc">Tipo de operação</div>
+            <div class="var-sample">Crédito pessoal</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{contrato_valor_original}}</div>
+            <div class="var-desc">Valor contratado original</div>
+            <div class="var-sample">R$ 18.500,00</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{contrato_saldo_atual}}</div>
+            <div class="var-desc">Saldo devedor atual</div>
+            <div class="var-sample">R$ 27.840,12</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{contrato_data_assinatura}}</div>
+            <div class="var-desc">Data de início</div>
+            <div class="var-sample">14/03/2024</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTEXTO -->
+      <div class="var-section">
+        <div class="var-section__head">
+          <span class="var-section__title">Contexto &amp; sistema</span>
+          <span class="var-section__count">6 chaves</span>
+          <span class="var-section__desc">Dados gerados automaticamente no momento da emissão.</span>
+        </div>
+        <div class="var-table">
+          <div class="var-row">
+            <div class="var-key">{{data_emissao}}</div>
+            <div class="var-desc">Data de geração do PDF</div>
+            <div class="var-sample">06/05/2026</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{data_emissao_extenso}}</div>
+            <div class="var-desc">Data por extenso</div>
+            <div class="var-sample">6 de maio de 2026</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{cidade_emissao}}</div>
+            <div class="var-desc">Cidade da emissão</div>
+            <div class="var-sample">São Paulo</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{protocolo}}</div>
+            <div class="var-desc">Protocolo único Basta</div>
+            <div class="var-sample">BST-2026-05-A8F2</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{hash_documento}}</div>
+            <div class="var-desc">Hash de integridade</div>
+            <div class="var-sample">f3c1…d922</div>
+          </div>
+          <div class="var-row">
+            <div class="var-key">{{url_validacao}}</div>
+            <div class="var-desc">URL pública de verificação</div>
+            <div class="var-sample">basta.com.br/v/A8F2</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     EDITOR DRAWER
+     ════════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+  <header class="drawer__head">
+    <div class="drawer__head-info">
+      <div class="drawer__eyebrow" id="drawerEyebrow">Editando template · v3 (rascunho)</div>
+      <input type="text" class="drawer__title-input" id="drawerTitle" value="Demonstrativo de Evolução da Dívida e Memória de Cálculo" aria-label="Nome do template" />
+    </div>
+    <div class="drawer__head-actions">
+      <button class="drawer-btn" onclick="closeDrawer()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Cancelar
+      </button>
+      <button class="drawer-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6"/><path d="M19 9l-7-7-7 7"/><rect x="2" y="14" width="20" height="8" rx="0"/></svg>
+        Salvar rascunho
+      </button>
+      <button class="drawer-btn drawer-btn--primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Publicar v4
+      </button>
+    </div>
+  </header>
+
+  <div class="drawer__body">
+
+    <!-- HTML EDITOR -->
+    <section class="drawer__pane">
+      <div class="pane-head">
+        <span class="pane-head__title">HTML do template</span>
+        <div class="insert-key">
+          <button class="insert-key__btn" onclick="toggleInsertMenu()">
+            Inserir chave
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="insert-key__menu" id="insertMenu">
+            <div class="insert-key__group-title">Lead</div>
+            <button class="insert-key__item" onclick="insertKey('lead_nome')"><span class="insert-key__item-key">{{lead_nome}}</span><span class="insert-key__item-sample">Maria C.</span></button>
+            <button class="insert-key__item" onclick="insertKey('lead_cpf')"><span class="insert-key__item-key">{{lead_cpf}}</span><span class="insert-key__item-sample">123.456.789-00</span></button>
+            <div class="insert-key__group-title">Banco</div>
+            <button class="insert-key__item" onclick="insertKey('banco_nome')"><span class="insert-key__item-key">{{banco_nome}}</span><span class="insert-key__item-sample">Itaú Unibanco</span></button>
+            <button class="insert-key__item" onclick="insertKey('banco_cnpj')"><span class="insert-key__item-key">{{banco_cnpj}}</span><span class="insert-key__item-sample">60.701.190/…</span></button>
+            <div class="insert-key__group-title">Conta &amp; Contrato</div>
+            <button class="insert-key__item" onclick="insertKey('contrato_numero')"><span class="insert-key__item-key">{{contrato_numero}}</span><span class="insert-key__item-sample">2024.0001…</span></button>
+            <button class="insert-key__item" onclick="insertKey('contrato_saldo_atual')"><span class="insert-key__item-key">{{contrato_saldo_atual}}</span><span class="insert-key__item-sample">R$ 27.840,12</span></button>
+            <div class="insert-key__group-title">Contexto</div>
+            <button class="insert-key__item" onclick="insertKey('data_emissao_extenso')"><span class="insert-key__item-key">{{data_emissao_extenso}}</span><span class="insert-key__item-sample">6 de maio de 2026</span></button>
+            <button class="insert-key__item" onclick="insertKey('protocolo')"><span class="insert-key__item-key">{{protocolo}}</span><span class="insert-key__item-sample">BST-2026-…</span></button>
+          </div>
+        </div>
+      </div>
+      <textarea class="editor" id="editor" spellcheck="false"><h1>{{cidade_emissao}}, {{data_emissao_extenso}}.</h1>
+
+<h2>À {{banco_nome}}</h2>
+<p>CNPJ: {{banco_cnpj}}<br>
+Endereço: {{banco_endereco}}</p>
+
+<h2>Ref.: Demonstrativo de evolução da dívida e memória de cálculo</h2>
+<p>Contrato nº {{contrato_numero}} — {{contrato_modalidade}}</p>
+
+<p>Eu, <strong>{{lead_nome}}</strong>, inscrito(a) no CPF sob o nº {{lead_cpf}}, titular da conta nº {{conta_numero}}, agência {{conta_agencia}}, venho respeitosamente requerer:</p>
+
+<p>1. O <strong>demonstrativo completo da evolução da dívida</strong> referente à operação acima, contendo: valor original contratado ({{contrato_valor_original}}), saldo devedor atual ({{contrato_saldo_atual}}), todos os encargos aplicados, juros remuneratórios, juros moratórios, multas e demais cobranças incidentes;</p>
+
+<p>2. A <strong>memória de cálculo</strong> que evidencie a forma de incidência de cada encargo;</p>
+
+<p>3. A <strong>cópia integral do contrato</strong> assinado em {{contrato_data_assinatura}}.</p>
+
+<p>Pede deferimento.</p>
+
+<p>Protocolo: {{protocolo}}</p>
+
+<hr>
+
+<p style="text-align:center;">_______________________________________<br>
+{{lead_nome}}<br>
+CPF {{lead_cpf}}</p></textarea>
+    </section>
+
+    <!-- LIVE PREVIEW -->
+    <section class="drawer__pane">
+      <div class="pane-head">
+        <span class="pane-head__title">Preview com dados de exemplo</span>
+        <button class="insert-key__btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Exportar PDF
+        </button>
+      </div>
+      <article class="preview" id="preview" aria-label="Pré-visualização do requerimento">
+        <h2 class="preview-document-h1">São Paulo, 6 de maio de 2026.</h2>
+
+        <h2>À Itaú Unibanco S.A.</h2>
+        <p>CNPJ: 60.701.190/0001-04<br>
+        Endereço: Praça Alfredo E. de S. Aranha, 100</p>
+
+        <h2>Ref.: Demonstrativo de evolução da dívida e memória de cálculo</h2>
+        <p>Contrato nº 2024.0001.5544 — Crédito pessoal</p>
+
+        <p>Eu, <strong>Maria Carvalho</strong>, inscrita no CPF sob o nº 123.456.789-00, titular da conta nº 45678-9, agência 0123, venho respeitosamente requerer:</p>
+
+        <p>1. O <strong>demonstrativo completo da evolução da dívida</strong> referente à operação acima, contendo: valor original contratado (R$ 18.500,00), saldo devedor atual (R$ 27.840,12), todos os encargos aplicados, juros remuneratórios, juros moratórios, multas e demais cobranças incidentes;</p>
+
+        <p>2. A <strong>memória de cálculo</strong> que evidencie a forma de incidência de cada encargo;</p>
+
+        <p>3. A <strong>cópia integral do contrato</strong> assinado em 14/03/2024.</p>
+
+        <p>Pede deferimento.</p>
+
+        <p>Protocolo: BST-2026-05-A8F2</p>
+
+        <hr>
+
+        <div class="signature">
+          <div class="line"></div>
+          <strong>Maria Carvalho</strong><br>
+          CPF 123.456.789-00
+        </div>
+      </article>
+    </section>
+
+  </div>
+
+  <footer class="drawer__foot">
+    <div class="drawer__status">
+      <span class="drawer__status-dot"></span>
+      <strong>Salvo automaticamente</strong> · 3 alterações desde a última publicação
+    </div>
+    <div class="drawer__status">
+      14 chaves usadas · 0 chaves desconhecidas
+    </div>
+  </footer>
+</aside>
+
+<!-- DELETE MODAL -->
+<div class="delete-overlay" id="deleteModal">
+  <div class="delete-modal" role="dialog" aria-modal="true">
+    <div class="delete-modal__eyebrow">Ação destrutiva</div>
+    <h2 class="delete-modal__title">Excluir template?</h2>
+    <p class="delete-modal__desc">Os requerimentos já gerados a partir deste template <strong>não são afetados</strong>. Mas você não conseguirá gerar novos.</p>
+    <div class="delete-modal__name" id="deleteName">—</div>
+    <div class="delete-modal__actions">
+      <button class="btn-cancel" onclick="closeDelete()">Cancelar</button>
+      <button class="btn-danger" onclick="closeDelete()">Excluir definitivamente</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='03_basta-login.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Tabs ────────────────────────────────────────────────── */
+  function switchTab(tab) {
+    var panel = tab.dataset.panel;
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('tab--active'); });
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('panel--active'); });
+    tab.classList.add('tab--active');
+    document.getElementById('panel-' + panel).classList.add('panel--active');
+  }
+
+  /* ── Drawer ──────────────────────────────────────────────── */
+  function openDrawer(which) {
+    var ov = document.getElementById('drawerOverlay');
+    var dr = document.getElementById('drawer');
+    var title = document.getElementById('drawerTitle');
+    var eyebrow = document.getElementById('drawerEyebrow');
+    if (which === 'new') {
+      title.value = '';
+      title.placeholder = 'Nome do novo template…';
+      eyebrow.textContent = 'Novo template · sem versão';
+    } else if (which === 'cmn4790') {
+      title.value = 'Res. CMN 4.790 — Cancelamento de débitos';
+      eyebrow.textContent = 'Editando template · v2 (publicado)';
+    } else {
+      title.value = 'Demonstrativo de Evolução da Dívida e Memória de Cálculo';
+      eyebrow.textContent = 'Editando template · v3 (rascunho)';
+    }
+    ov.classList.add('is-open');
+    dr.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ title.focus(); }, 320);
+  }
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('is-open');
+    document.getElementById('drawer').classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.getElementById('insertMenu').classList.remove('is-open');
+  }
+
+  /* ── Insert key dropdown ─────────────────────────────────── */
+  function toggleInsertMenu() {
+    document.getElementById('insertMenu').classList.toggle('is-open');
+  }
+  function insertKey(key) {
+    var t = document.getElementById('editor');
+    var snippet = '{{' + key + '}}';
+    var s = t.selectionStart, e = t.selectionEnd;
+    t.value = t.value.slice(0, s) + snippet + t.value.slice(e);
+    t.focus();
+    t.selectionStart = t.selectionEnd = s + snippet.length;
+    document.getElementById('insertMenu').classList.remove('is-open');
+  }
+  document.addEventListener('click', function(e){
+    var menu = document.getElementById('insertMenu');
+    var btn = document.querySelector('.insert-key__btn');
+    if (menu && menu.classList.contains('is-open') && !menu.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+      menu.classList.remove('is-open');
+    }
+  });
+
+  /* ── Delete modal ────────────────────────────────────────── */
+  function openDelete(name) {
+    document.getElementById('deleteName').textContent = name;
+    document.getElementById('deleteModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDelete() {
+    document.getElementById('deleteModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('deleteModal').addEventListener('click', function(e){
+    if (e.target === this) closeDelete();
+  });
+
+  /* ── Logout ──────────────────────────────────────────────── */
+  let lastFocusedElement = null;
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    document.getElementById('logoutModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+  function closeLogout() {
+    document.getElementById('logoutModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+  document.getElementById('logoutModal').addEventListener('click', function(e){ if (e.target === this) closeLogout(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      if (document.getElementById('drawer').classList.contains('is-open')) closeDrawer();
+      if (document.getElementById('deleteModal').classList.contains('is-open')) closeDelete();
+      if (document.getElementById('logoutModal').classList.contains('is-open')) closeLogout();
+    }
+  });
+</script>
+
+</body>
+</html>

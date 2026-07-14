@@ -112,15 +112,7 @@
     .accent { color: var(--black); }
     .page-desc {
       font-size: 13px; color: var(--gray-600); font-weight: 400;
-      line-height: 1.5; margin-bottom: 32px;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       SECTION LABEL (tema fora do box — padrão das demais telas)
-       ══════════════════════════════════════════════════════════ */
-    .section-label {
-      font-size: 11px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--black); margin-bottom: 16px;
+      line-height: 1.5; margin-bottom: 16px;
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -139,7 +131,7 @@
     .form-section-title {
       font-size: 11px; font-weight: 800; text-transform: uppercase;
       letter-spacing: 0.08em; color: var(--black);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     /* Field groups */    .form-group:last-of-type { margin-bottom: 0; }
@@ -491,13 +483,11 @@
     <h1 class="page-title">Suas Informações<span class="accent">.</span></h1>
     <p class="page-desc">Mantenha as informações completas, elas serão usadas em outros documentos.</p>
 
-    <!-- ── Section label: Informações pessoais (fora do box) ── -->
-    <div class="section-label">Informações pessoais</div>
-
     <form class="form-cards" id="profile-form" novalidate onsubmit="event.preventDefault(); if(validatePerfil()) salvar();">
 
       <!-- ── Card 1: Informações Pessoais ─────────────────── -->
       <div class="form-card">
+        <div class="form-section-title">Informações Pessoais</div>
 
         <!-- Nome completo -->
         <div class="form-group">

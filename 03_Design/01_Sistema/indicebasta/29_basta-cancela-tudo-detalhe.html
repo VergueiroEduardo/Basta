@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Cancela Tudo · Detalhe do cliente</title>
+  <meta name="description" content="Console Cancela Tudo — seguros e serviços bancários ativos do cliente via Open Finance." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/progress.css" />
+  <style>
+    /* ── BASE ───────────────────────────────────────────────── */
+    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT — sidebar + main
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR (preta) ──────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--black);
+      border-right: 1px solid var(--black);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 600;
+      color: var(--white); transition: background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--white); background: rgba(255, 255, 255, 0.08); }
+    .sidebar .nav-item--active { font-weight: 800; color: var(--green); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--white); }
+    .nav-item--active .nav-item__icon { color: var(--green); }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--white); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: rgba(255, 255, 255, 0.55); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: rgba(255, 255, 255, 0.5); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { flex: 1; }
+
+    /* ── TOPBAR (mobile) ──────────────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 20px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* mobile base */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main { margin-left: 0; padding: 84px 20px 80px; max-width: 100%; }
+
+    @media (min-width: 640px) { .main { padding: 84px 24px 80px; } }
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 1180px; }
+    }
+    @media (min-width: 1200px) { .main { padding: 40px 48px 80px; } }
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(80px, calc(64px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .page-lead {
+      font-size: 14px; line-height: 1.65; color: var(--gray-600);
+      max-width: 64ch; margin-bottom: 0;
+    }
+    .page-lead strong { color: var(--black); font-weight: 700; }
+
+    /* ── CABEÇALHO / IDENTIDADE ─────────────────────────────── */
+    .detail-header {
+      display: flex; align-items: flex-start;
+      gap: 16px 24px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    .detail-header__main { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 280px; }
+    .id { display: flex; flex-wrap: wrap; gap: 22px 48px; align-items: flex-start; }
+    .id__item { display: flex; flex-direction: column; gap: 5px; }
+    .id__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--gray-600);
+    }
+    .id__name {
+      font-size: clamp(26px, 4vw, 38px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.0; color: var(--black);
+    }
+    .id__cpf {
+      font-size: clamp(26px, 4vw, 38px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.0; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+    /* Selo de etapa do funil junto à identidade */
+    .id__stage {
+      display: inline-flex; align-items: center; align-self: center;
+      font-size: 11px; font-weight: 700; letter-spacing: -0.01em;
+      padding: 4px 10px; border: 1px solid var(--green); color: var(--green);
+      white-space: nowrap;
+    }
+
+    /* ── AÇÕES + FECHAR ─────────────────────────────────────── */
+    .actions__row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn-download, .review-btn, .btn-whatsapp {
+      display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px;
+      font-family: var(--f); font-size: 12px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-download svg, .review-btn svg, .btn-whatsapp svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .btn-whatsapp {
+      background: var(--green); color: var(--white); border: 1.5px solid var(--green);
+      transition: background var(--t), border-color var(--t), transform var(--t);
+    }
+    .btn-whatsapp:hover { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-1px); }
+    .btn-whatsapp:active { transform: translateY(0); }
+    .btn-whatsapp svg { width: 18px; height: 18px; }
+    .btn-download {
+      background: var(--white); color: var(--black); border: 1.5px solid var(--gray-300);
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .btn-download:hover { border-color: var(--black); background: var(--off-white); }
+    .review-btn {
+      background: var(--white); color: var(--black); border: 1.5px solid var(--black);
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .review-btn:hover { background: var(--off-white); }
+    .review-btn.is-done { background: var(--black); color: var(--white); border-color: var(--black); }
+    .review-btn.is-done:hover { background: #1a1a1a; }
+    .review-btn__label { display: grid; justify-items: start; }
+    .review-btn__label > span { grid-column: 1; grid-row: 1; white-space: nowrap; }
+    .review-btn__sizer { visibility: hidden; pointer-events: none; }
+    .btn-close {
+      flex-shrink: 0; margin-left: auto; width: 44px; height: 44px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: 1.5px solid var(--gray-300); color: var(--gray-600);
+      transition: color var(--t), border-color var(--t), background var(--t);
+      text-decoration: none;
+    }
+    .btn-close:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
+    .btn-close:active { transform: scale(0.97); }
+
+    /* ── AÇÕES ──────────────────────────────────────────────── */
+    .actions { margin-bottom: 28px; }
+    .docs__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--gray-600); margin-bottom: 12px;
+    }
+
+    /* ── ACORDEÃO ───────────────────────────────────────────── */
+    .results__bar { cursor: pointer; user-select: none; }
+    .results__bar:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
+    .results__left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .results__chevron { width: 16px; height: 16px; color: var(--gray-600); transition: transform var(--t); flex-shrink: 0; }
+    .results.is-collapsed .results__chevron { transform: rotate(-90deg); }
+    .results.is-collapsed .table-scroll,
+    .results.is-collapsed .scroll-hint { display: none; }
+
+    /* ── TABELA DE PRODUTOS/SERVIÇOS ────────────────────────── */
+    .results { background: var(--white); border: 1px solid var(--gray-300); }
+    .results__bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; padding: 14px 16px;
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .results__heading {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--black);
+    }
+    .results__count {
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+    .results__count b { color: var(--green); }
+
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.ops {
+      width: 100%; border-collapse: collapse; min-width: 900px;
+      table-layout: fixed; font-variant-numeric: tabular-nums;
+    }
+    .ops .col-prod, .ops .col-bank, .ops .type-chip { overflow-wrap: anywhere; }
+    .ops thead th {
+      text-align: left; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-600);
+      padding: 10px 8px; border-bottom: 2px solid var(--black);
+      background: var(--off-white); white-space: normal; line-height: 1.2; vertical-align: bottom;
+    }
+    .ops thead th.num, .ops tbody td.num { text-align: right; }
+    .ops tbody td {
+      padding: 12px 8px; border-bottom: 1px solid var(--gray-200);
+      font-size: 12px; vertical-align: top; line-height: 1.3;
+    }
+    .ops tbody tr:last-child td { border-bottom: none; }
+    .ops tbody tr:hover td { background: var(--off-white); }
+    .ops .col-idx { color: var(--gray-600); font-weight: 800; width: 24px; }
+    .ops .col-bank { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 76px; }
+    .ops .col-prod { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 104px; }
+    .ops .money { font-weight: 700; color: var(--black); white-space: nowrap; }
+    .ops .contract-id {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px; font-weight: 700; color: var(--gray-600); white-space: nowrap;
+    }
+    .type-chip {
+      display: inline-block; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.35;
+      color: var(--gray-600);
+    }
+    /* Botão "Gerar cancelamento" (ação por linha) */
+    .gen-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 12px; font-family: var(--f);
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--black); background: var(--white); border: 1.5px solid var(--black);
+      cursor: pointer; white-space: nowrap; line-height: 1;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .gen-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .gen-btn:hover { background: var(--green); color: var(--white); border-color: var(--green); }
+    .gen-btn.is-done {
+      background: var(--off-white); color: var(--green); border-color: var(--green);
+      pointer-events: none;
+    }
+    /* Linha de total */
+    .ops tfoot td {
+      padding: 12px 9px; border-top: 2px solid var(--black);
+      font-size: 12px; font-weight: 800; background: var(--off-white);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .ops tfoot .money { font-size: 14px; }
+
+    .scroll-hint {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-600);
+      border-top: 1px solid var(--gray-200);
+    }
+    @media (min-width: 980px) { .scroll-hint { display: none; } }
+
+    /* ── ARQUIVOS ENVIADOS PELO CLIENTE (fotos da apólice) ──── */
+    .files { margin-bottom: 40px; }
+    .files__head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 8px 16px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .files__label {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--black);
+    }
+    .files__hint {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; color: var(--gray-600);
+    }
+    .files__hint svg { width: 13px; height: 13px; color: var(--green); flex-shrink: 0; }
+    .files__grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 760px) { .files__grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* Cartão de foto */
+    .shot { background: var(--white); border: 1.5px solid var(--gray-300); display: flex; flex-direction: column; }
+    .shot--ok { border-color: var(--green); }
+    .shot--warn { border-color: var(--warning); }
+
+    /* "Foto" — documento sobre superfície escura */
+    .shot__frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #111; }
+    .shot__photo { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .shot__doc {
+      width: 74%; background: var(--white); padding: 11px 14px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.45); transform: rotate(-1.5deg);
+    }
+    /* Caso fora de enquadramento: documento cortado e torto + reflexo */
+    .shot--warn .shot__doc { width: 92%; transform: translate(16%, 12%) rotate(5deg); }
+    .shot--warn .shot__frame::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(118deg, transparent 42%, rgba(255,255,255,0.30) 55%, transparent 68%);
+    }
+    .shot__doc-tag { font-size: 7px; font-weight: 800; letter-spacing: 0.14em; color: var(--green); margin-bottom: 8px; }
+    .shot__doc-h { height: 8px; width: 58%; background: var(--black); margin-bottom: 10px; }
+    .shot__doc-l { height: 5px; background: var(--gray-300); margin-bottom: 6px; }
+
+    /* Guia de enquadramento (cantos tipo visor) */
+    .shot__guide { position: absolute; inset: 12px; pointer-events: none; }
+    .shot__guide span { position: absolute; width: 20px; height: 20px; border: 2.5px solid var(--green); }
+    .shot--warn .shot__guide span { border-color: var(--warning); }
+    .shot__guide .tl { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+    .shot__guide .tr { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+    .shot__guide .bl { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+    .shot__guide .br { bottom: 0; right: 0; border-left: 0; border-top: 0; }
+
+    .shot__verdict {
+      position: absolute; left: 12px; bottom: 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 5px 9px;
+    }
+    .shot__verdict svg { width: 12px; height: 12px; flex-shrink: 0; }
+    .shot__verdict--ok { background: var(--green); color: var(--white); }
+    .shot__verdict--warn { background: var(--warning); color: var(--black); }
+
+    .shot__body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .shot__name { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; font-weight: 700; color: var(--gray-600); }
+    .checks { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .check { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; line-height: 1.3; }
+    .check svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .check--ok { color: var(--black); }
+    .check--ok svg { color: var(--green); }
+    .check--fail { color: var(--error); }
+    .check--fail svg { color: var(--error); }
+
+    .shot__actions { display: flex; gap: 8px; margin-top: 2px; }
+    .shot-btn {
+      flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      height: 40px; padding: 0 12px; font-family: var(--f);
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+      cursor: pointer; white-space: nowrap;
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .shot-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .shot-btn--primary { background: var(--green); color: var(--white); border: 1.5px solid var(--green); }
+    .shot-btn--primary:hover { background: var(--green-hover); border-color: var(--green-hover); }
+    .shot-btn--warn { background: var(--warning); color: var(--black); border: 1.5px solid var(--warning); }
+    .shot-btn--warn:hover { filter: brightness(0.95); }
+    .shot-btn--ghost { background: var(--white); color: var(--black); border: 1.5px solid var(--gray-300); }
+    .shot-btn--ghost:hover { border-color: var(--black); background: var(--off-white); }
+    .shot-btn.is-approved { background: var(--black); color: var(--white); border-color: var(--black); pointer-events: none; }
+
+    /* Visualizador (ampliar) */
+    .lb-overlay {
+      position: fixed; inset: 0; z-index: 320; background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s var(--ease);
+    }
+    .lb-overlay.is-open { opacity: 1; pointer-events: all; }
+    .lb { position: relative; width: 100%; max-width: 680px; }
+    .lb__stage { border: 2px solid var(--white); }
+    .lb__stage .shot__frame { aspect-ratio: 16 / 9; }
+    .lb__close {
+      position: absolute; top: -16px; right: -16px; width: 40px; height: 40px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--white); border: 2px solid var(--black); color: var(--black);
+      cursor: pointer; transition: background var(--t);
+    }
+    .lb__close:hover { background: var(--off-white); }
+    .lb__caption {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin-top: 14px; color: var(--white);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; font-weight: 700;
+    }
+    .lb__caption .lb__zoom { font-family: var(--f); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.6); }
+    @media (min-width: 760px) { .lb__stage .shot__doc { padding: 22px 26px; } }
+
+    /* ── LOGOUT MODAL ───────────────────────────────────────── */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+    .logout-modal { background: var(--white); border: 2px solid var(--black); padding: 28px 28px 24px; width: 100%; max-width: 360px; }
+    .logout-modal__eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px; }
+    .logout-modal__title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 8px; }
+    .logout-modal__desc { font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 24px; }
+    .logout-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-logout-cancel { padding: 10px 18px; font-family: var(--f); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: transparent; color: var(--black); cursor: pointer; border: 1.5px solid var(--gray-300); transition: border-color var(--t), background var(--t); }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm { padding: 10px 18px; font-family: var(--f); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--error); color: var(--white); cursor: pointer; border: 1.5px solid var(--error); transition: background var(--t), border-color var(--t); }
+    .btn-logout-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="29_basta-dashboard-cancelamentos.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="27_basta-parceiro-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">CT</a>
+</div>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="29_basta-dashboard-cancelamentos.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-dark" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="29_basta-dashboard-cancelamentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+        Cancelamentos
+      </span>
+      <a href="27_basta-parceiro-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">CT</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Cancela Tudo</div>
+        <div class="sidebar__user-email">parceria@cancelatudo.com.br</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT — DETALHE DO CLIENTE
+       ════════════════════════════════════════════════════════ -->
+  <main class="main" id="detalhe">
+
+  <!-- HEADER -->
+  <div class="detail-header">
+    <div class="detail-header__main">
+      <div class="id">
+        <div class="id__item">
+          <span class="id__label">Cliente</span>
+          <span class="id__name">Beatriz Camargo Nunes</span>
+        </div>
+        <div class="id__item">
+          <span class="id__label">CPF</span>
+          <span class="id__cpf">001.814.691-03</span>
+        </div>
+        <span class="id__stage">Funil concluído · Recebeu Ofertas</span>
+      </div>
+      <p class="page-lead">Abaixo estão as <strong>imagens dos seguros ativos</strong> em nome do cliente, que ele já acessou e enviou.</p>
+    </div>
+    <a href="29_basta-dashboard-cancelamentos.html" class="btn-close" aria-label="Fechar e voltar ao Resumo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </a>
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="actions">
+    <div class="docs__label">Ações</div>
+    <div class="actions__row">
+        <button type="button" id="clientReviewBtn" class="review-btn" aria-pressed="false" onclick="toggleClientReview()">
+          <svg class="review-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+          <span class="review-btn__label">
+            <span class="review-btn__sizer" aria-hidden="true">Contatado em 00/00/0000</span>
+            <span class="review-btn__text">Marcar como contatado</span>
+          </span>
+        </button>
+        <button type="button" class="btn-download" onclick="downloadDossie()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar
+        </button>
+        <button type="button" class="btn-whatsapp" onclick="callClient()" aria-label="Chamar cliente no WhatsApp">
+          Chamar Cliente
+          <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 4C9.93 4 4.97 8.96 4.97 15.07c0 2.13.6 4.12 1.64 5.81L4.5 27l6.3-2.05a11 11 0 0 0 5.24 1.34h.01c6.11 0 11.07-4.96 11.07-11.07S22.15 4 16.04 4zm0 20.2h-.01a9.2 9.2 0 0 1-4.69-1.28l-.34-.2-3.74 1.22 1.25-3.64-.22-.37a9.13 9.13 0 0 1-1.4-4.87c0-5.05 4.11-9.16 9.18-9.16 2.45 0 4.75.96 6.48 2.69a9.1 9.1 0 0 1 2.68 6.48c0 5.05-4.11 9.16-9.18 9.16zm5.03-6.86c-.28-.14-1.63-.8-1.88-.9-.25-.09-.43-.14-.62.14-.18.28-.71.9-.87 1.08-.16.18-.32.21-.6.07-.28-.14-1.16-.43-2.21-1.36-.82-.73-1.37-1.63-1.53-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.53-.08 1.63-.67 1.86-1.31.23-.64.23-1.19.16-1.31-.07-.12-.25-.18-.53-.32z"/></svg>
+        </button>
+      </div>
+    </div>
+
+  <!-- ARQUIVOS ENVIADOS PELO CLIENTE -->
+  <section class="files" aria-label="Apólice enviada pelo cliente">
+    <div class="files__head">
+      <div class="files__label">Apólice enviada pelo cliente · 2 fotos</div>
+      <span class="files__hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Validação automática de enquadramento
+      </span>
+    </div>
+
+    <div class="files__grid">
+      <!-- Foto bem enquadrada -->
+      <article class="shot shot--ok">
+        <div class="shot__frame">
+          <div class="shot__photo">
+            <div class="shot__doc">
+              <div class="shot__doc-tag">APÓLICE · SEGURO DE VIDA</div>
+              <div class="shot__doc-h"></div>
+              <div class="shot__doc-l" style="width:100%"></div>
+              <div class="shot__doc-l" style="width:92%"></div>
+              <div class="shot__doc-l" style="width:97%"></div>
+              <div class="shot__doc-l" style="width:64%"></div>
+            </div>
+          </div>
+          <div class="shot__guide" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+          <span class="shot__verdict shot__verdict--ok">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Bem enquadrada
+          </span>
+        </div>
+        <div class="shot__body">
+          <div class="shot__name">apolice-frente.jpg</div>
+          <ul class="checks">
+            <li class="check check--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Documento inteiro dentro do quadro</li>
+            <li class="check check--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Nitidez e foco suficientes</li>
+            <li class="check check--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Sem reflexo ou sombra</li>
+            <li class="check check--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Texto legível</li>
+          </ul>
+          <div class="shot__actions">
+            <button type="button" class="shot-btn shot-btn--primary" onclick="approveShot(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="shot-btn__lbl">Aprovar</span>
+            </button>
+            <button type="button" class="shot-btn shot-btn--ghost" onclick="openShot(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+              Ampliar
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Foto fora de enquadramento -->
+      <article class="shot shot--warn">
+        <div class="shot__frame">
+          <div class="shot__photo">
+            <div class="shot__doc">
+              <div class="shot__doc-tag">APÓLICE · SEGURO DE VIDA</div>
+              <div class="shot__doc-h"></div>
+              <div class="shot__doc-l" style="width:100%"></div>
+              <div class="shot__doc-l" style="width:90%"></div>
+              <div class="shot__doc-l" style="width:95%"></div>
+              <div class="shot__doc-l" style="width:60%"></div>
+            </div>
+          </div>
+          <div class="shot__guide" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+          <span class="shot__verdict shot__verdict--warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            Reenquadrar
+          </span>
+        </div>
+        <div class="shot__body">
+          <div class="shot__name">apolice-verso.jpg</div>
+          <ul class="checks">
+            <li class="check check--fail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Documento cortado nas bordas</li>
+            <li class="check check--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Nitidez e foco suficientes</li>
+            <li class="check check--fail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Reflexo sobre o texto</li>
+            <li class="check check--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Texto parcialmente legível</li>
+          </ul>
+          <div class="shot__actions">
+            <button type="button" class="shot-btn shot-btn--warn" onclick="requestResend(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Solicitar reenvio
+            </button>
+            <button type="button" class="shot-btn shot-btn--ghost" onclick="openShot(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+              Ampliar
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- TABELA DE PRODUTOS/SERVIÇOS (acordeão) -->
+  <section class="results" aria-label="Seguros e serviços ativos">
+    <div class="results__bar" role="button" tabindex="0" aria-expanded="true" aria-controls="opsBody"
+         onclick="toggleOps(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleOps(this);}">
+      <div class="results__left">
+        <svg class="results__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="results__heading">Seguros e serviços ativos</span>
+        <span class="results__count"><b>5</b> registros · Open Finance</span>
+      </div>
+    </div>
+    <div id="opsBody">
+
+    <div class="table-scroll">
+      <table class="ops">
+        <colgroup>
+          <col style="width: 4%" />    <!-- # -->
+          <col style="width: 13%" />   <!-- Instituição -->
+          <col style="width: 24%" />   <!-- Produto / Serviço -->
+          <col style="width: 13%" />   <!-- Custo mensal -->
+          <col style="width: 11%" />   <!-- Tipo -->
+          <col style="width: 13%" />   <!-- Vínculo -->
+          <col style="width: 22%" />   <!-- Gerar cancelamento -->
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="col-idx">#</th>
+            <th>Instituição</th>
+            <th>Produto / Serviço</th>
+            <th class="num">Custo mensal</th>
+            <th>Tipo</th>
+            <th>Vínculo</th>
+            <th>Gerar cancelamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-idx">1</td>
+            <td class="col-bank">Banco do Brasil</td>
+            <td class="col-prod">Seguro prestamista — consignado</td>
+            <td class="num money">R$ 49,90</td>
+            <td><span class="type-chip">Seguro</span></td>
+            <td><span class="contract-id">C307303353</span></td>
+            <td><button type="button" class="gen-btn" onclick="generateCancellation(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+          </tr>
+          <tr>
+            <td class="col-idx">2</td>
+            <td class="col-bank">Caixa Econômica</td>
+            <td class="col-prod">Seguro de vida individual</td>
+            <td class="num money">R$ 89,90</td>
+            <td><span class="type-chip">Seguro</span></td>
+            <td><span class="contract-id">C107306987</span></td>
+            <td><button type="button" class="gen-btn" onclick="generateCancellation(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+          </tr>
+          <tr>
+            <td class="col-idx">3</td>
+            <td class="col-bank">Bradesco</td>
+            <td class="col-prod">Título de capitalização — pé quente</td>
+            <td class="num money">R$ 60,00</td>
+            <td><span class="type-chip">Capitalização</span></td>
+            <td><span class="contract-id">C207355630</span></td>
+            <td><button type="button" class="gen-btn" onclick="generateCancellation(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+          </tr>
+          <tr>
+            <td class="col-idx">4</td>
+            <td class="col-bank">Banco BMG</td>
+            <td class="col-prod">Pacote de tarifas — cesta de serviços</td>
+            <td class="num money">R$ 34,90</td>
+            <td><span class="type-chip">Tarifas</span></td>
+            <td><span class="contract-id">C107320963</span></td>
+            <td><button type="button" class="gen-btn" onclick="generateCancellation(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+          </tr>
+          <tr>
+            <td class="col-idx">5</td>
+            <td class="col-bank">Santander</td>
+            <td class="col-prod">Seguro residencial</td>
+            <td class="num money">R$ 55,20</td>
+            <td><span class="type-chip">Seguro</span></td>
+            <td><span class="contract-id">C207304234</span></td>
+            <td><button type="button" class="gen-btn" onclick="generateCancellation(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span class="gen-btn__lbl">Gerar cancelamento</span></button></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td colspan="2">Custo mensal total</td>
+            <td class="num money">R$ 289,90</td>
+            <td colspan="3"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="scroll-hint">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      Arraste para o lado para ver todas as colunas
+    </div>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     VISUALIZADOR DE FOTO (ampliar)
+     ════════════════════════════════════════════════════════ -->
+<div class="lb-overlay" id="lbModal" role="dialog" aria-modal="true" aria-label="Visualização da foto">
+  <div class="lb">
+    <button class="lb__close" id="lbClose" onclick="closeShot()" aria-label="Fechar visualização">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="lb__stage" id="lbStage"></div>
+    <div class="lb__caption">
+      <span id="lbName">—</span>
+      <span class="lb__zoom">Confira bordas, foco e reflexos</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar o painel do parceiro.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='05_basta-login-parceiros.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── LOGOUT MODAL ────────────────────────────────────────── */
+  let lastFocusedElement = null;
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    document.getElementById('logoutModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+  function closeLogout() {
+    document.getElementById('logoutModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+  (function() {
+    const overlay = document.getElementById('logoutModal');
+    const box = overlay.querySelector('.logout-modal');
+    const cancelBtn = document.getElementById('logoutCancel');
+    const confirmBtn = document.getElementById('logoutConfirm');
+    overlay.addEventListener('click', function(e) { if (e.target === this) closeLogout(); });
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { e.preventDefault(); closeLogout(); }
+      if (e.key === 'Tab') {
+        const els = [cancelBtn, confirmBtn];
+        const i = els.indexOf(document.activeElement);
+        e.preventDefault();
+        if (e.shiftKey) els[i === 0 ? els.length - 1 : i - 1].focus();
+        else els[i === els.length - 1 ? 0 : i + 1].focus();
+      }
+    });
+  })();
+
+  /* ── ACORDEÃO ────────────────────────────────────────────── */
+  function toggleOps(bar) {
+    var section = bar.closest('.results');
+    var collapsed = section.classList.toggle('is-collapsed');
+    bar.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  }
+
+  /* ── CONTATO A NÍVEL DE CLIENTE ──────────────────────────── */
+  function toggleClientReview() {
+    var btn = document.getElementById('clientReviewBtn');
+    var done = btn.classList.toggle('is-done');
+    btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    var txt = btn.querySelector('.review-btn__text');
+    var icon = btn.querySelector('.review-btn__icon');
+    if (done) {
+      var d = new Date();
+      var dd = String(d.getDate()).padStart(2, '0');
+      var mm = String(d.getMonth() + 1).padStart(2, '0');
+      txt.textContent = 'Contatado em ' + dd + '/' + mm + '/' + d.getFullYear();
+      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+    } else {
+      txt.textContent = 'Marcar como contatado';
+      icon.innerHTML = '<circle cx="12" cy="12" r="9"/>';
+    }
+  }
+
+  /* ── DOWNLOAD ────────────────────────────────────────────── */
+  function downloadDossie() {
+    /* INTEGRAÇÃO: gerar/baixar o dossiê de produtos do cliente (PDF/CSV). */
+    alert('Download do dossiê do cliente — em breve.');
+  }
+
+  /* ── CHAMAR CLIENTE NO WHATSAPP ──────────────────────────── */
+  function callClient() {
+    /* INTEGRAÇÃO: substituir pelo telefone real do cliente (apenas dígitos, com DDI 55). */
+    var phone = '5521991234488';                 /* Beatriz Camargo Nunes — (21) 99123-4488 */
+    var firstName = 'Beatriz';
+    var partner = 'Cancela Tudo';
+    var msg = 'Olá, ' + firstName + '! Aqui é da ' + partner + ', parceira do Basta. ' +
+      'Identificamos seguros e serviços bancários ativos em seu nome que podem estar pesando na sua conta. ' +
+      'Posso te mostrar o que dá para cancelar?';
+    var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank', 'noopener');
+  }
+
+  /* ── GERAR CANCELAMENTO (por produto/serviço) ───────────── */
+  function generateCancellation(btn) {
+    /* INTEGRAÇÃO: gerar a solicitação/carta de cancelamento do item e registrar no fluxo. */
+    btn.classList.add('is-done');
+    var lbl = btn.querySelector('.gen-btn__lbl');
+    if (lbl) lbl.textContent = 'Cancelamento gerado';
+  }
+
+  /* ── VALIDAÇÃO DE FOTOS DA APÓLICE ───────────────────────── */
+  function approveShot(btn) {
+    btn.classList.add('is-approved');
+    var lbl = btn.querySelector('.shot-btn__lbl');
+    if (lbl) lbl.textContent = 'Aprovada';
+    /* INTEGRAÇÃO: registrar a aprovação da foto e liberar o uso na análise. */
+  }
+
+  function requestResend(btn) {
+    /* INTEGRAÇÃO: notificar o cliente (WhatsApp/app) pedindo uma nova foto enquadrada. */
+    alert('Pedido de reenvio enviado ao cliente — em breve.');
+  }
+
+  /* Ampliar: clona a "foto" do cartão para o visualizador */
+  var lbTrigger = null;
+  function openShot(btn) {
+    lbTrigger = btn;
+    var card = btn.closest('.shot');
+    var frame = card.querySelector('.shot__frame').cloneNode(true);
+    var stage = document.getElementById('lbStage');
+    stage.innerHTML = '';
+    stage.appendChild(frame);
+    var name = card.querySelector('.shot__name');
+    document.getElementById('lbName').textContent = name ? name.textContent : '';
+    document.getElementById('lbModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('lbClose').focus();
+  }
+  function closeShot() {
+    document.getElementById('lbModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lbTrigger) lbTrigger.focus();
+  }
+  (function () {
+    var overlay = document.getElementById('lbModal');
+    overlay.addEventListener('click', function (e) { if (e.target === this) closeShot(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) { e.preventDefault(); closeShot(); }
+    });
+  })();
+</script>
+
+</body>
+</html>

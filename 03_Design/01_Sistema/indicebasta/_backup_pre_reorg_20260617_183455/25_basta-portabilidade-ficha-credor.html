@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Ficha do tomador · Portabilidade</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <style>
+    /* ──────────────────────────────────────────────────────────
+       BASE
+       ────────────────────────────────────────────────────────── */
+    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       PÁGINA / WRAPPER
+       ────────────────────────────────────────────────────────── */
+    .page { max-width: 880px; margin: 0 auto; padding: 24px 20px 80px; }
+    @media (min-width: 720px)  { .page { padding: 40px 32px 120px; } }
+    @media (min-width: 1024px) { .page { padding: 48px 40px 140px; } }
+
+    /* ──────────────────────────────────────────────────────────
+       HEADER MINIMAL
+       ────────────────────────────────────────────────────────── */
+    .doc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding-bottom: 24px;
+      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: 36px;
+    }
+    .doc-header__logo { height: 40px; width: auto; display: block; }
+    @media (min-width: 720px) { .doc-header__logo { height: 56px; } }
+    .doc-header__meta {
+      text-align: right; font-size: 10px; font-weight: 700;
+      color: var(--gray-600); line-height: 1.5;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .doc-header__meta strong { color: var(--black); font-weight: 800; }
+    .doc-header__meta .tag-conf {
+      display: inline-block; margin-top: 4px;
+      padding: 2px 7px; background: var(--black); color: var(--white);
+      letter-spacing: 0.1em;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       KICKER + HERO + LEAD
+       ────────────────────────────────────────────────────────── */
+    .kicker {
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600); margin-bottom: 18px;
+    }
+    .kicker__dot { color: var(--green); }
+    .hero-name {
+      font-size: clamp(34px, 6.4vw, 58px);
+      font-weight: 800; letter-spacing: -0.04em;
+      line-height: 0.97; color: var(--black); margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 12px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600); margin-bottom: 24px;
+    }
+    .lead {
+      font-size: clamp(15px, 1.6vw, 17px);
+      line-height: 1.7; color: var(--black);
+      max-width: 64ch; margin-bottom: 28px;
+    }
+    .section:has(+ .kpis)        { margin-bottom: 16px; }
+    .section:has(+ .kpis) .lead  { margin-bottom: 0; }
+    .lead strong { font-weight: 800; }
+    .lead .num { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+    /* ──────────────────────────────────────────────────────────
+       KPI CARDS
+       ────────────────────────────────────────────────────────── */
+    .kpis {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+      border: 1px solid var(--gray-300); background: var(--white);
+      margin-bottom: 72px;
+    }
+    @media (min-width: 720px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+    .kpi { padding: 14px 16px; border-right: 1px solid var(--gray-300); border-bottom: 1px solid var(--gray-300); }
+    .kpi:nth-child(2n) { border-right: none; }
+    .kpi:nth-last-child(-n+1) { border-bottom: none; }
+    @media (min-width: 720px) {
+      .kpi { border-bottom: none; }
+      .kpi:nth-child(2n) { border-right: 1px solid var(--gray-300); }
+      .kpi:last-child { border-right: none; }
+    }
+    .kpi__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gray-600); margin-bottom: 6px;
+    }
+    .kpi__value {
+      font-size: clamp(15px, 2.4vw, 22px); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.05; color: var(--black);
+      font-variant-numeric: tabular-nums; margin-bottom: 4px;
+    }
+    .kpi__sub { font-size: 10px; color: var(--gray-600); font-weight: 700; letter-spacing: 0.04em; }
+    .kpi--good .kpi__value { color: var(--green); }
+
+    /* ──────────────────────────────────────────────────────────
+       SECTION HEADERS
+       ────────────────────────────────────────────────────────── */
+    .section { margin-bottom: 64px; }
+    .section-head { margin-bottom: 20px; }
+    .section-head__eyebrow {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--gray-600); margin-bottom: 8px;
+    }
+    .section-head__title {
+      font-size: clamp(22px, 3.2vw, 28px); font-weight: 800;
+      letter-spacing: -0.025em; line-height: 1.15; color: var(--black); max-width: 38ch;
+    }
+    .section-head__lead {
+      font-size: 14px; line-height: 1.65; color: var(--black);
+      max-width: 60ch; margin-top: 10px;
+    }
+    .section-head__lead strong { font-weight: 800; }
+    .transition {
+      font-size: clamp(16px, 2vw, 20px); font-weight: 700;
+      letter-spacing: -0.015em; color: var(--black); line-height: 1.4; margin-bottom: 14px;
+    }
+
+    /* ──────────────────────────────────────────────────────────
+       IDENTIFICAÇÃO — data grid
+       ────────────────────────────────────────────────────────── */
+    .id-grid {
+      display: grid; grid-template-columns: 1fr; gap: 0;
+      border: 1px solid var(--gray-300); background: var(--white);
+    }
+    @media (min-width: 600px) { .id-grid { grid-template-columns: 1fr 1fr; } }
+    .id-item {
+      padding: 16px 18px;
+      border-right: 1px solid var(--gray-300);
+      border-bottom: 1px solid var(--gray-300);
+    }
+    @media (min-width: 600px) { .id-item:nth-child(2n) { border-right: none; } }
+    @media (max-width: 599px)  { .id-item { border-right: none; } }
+    .id-item--wide { grid-column: 1 / -1; border-right: none; }
+    .id-item__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600); margin-bottom: 6px;
+    }
+    .id-item__value {
+      font-size: 15px; font-weight: 700; color: var(--black);
+      line-height: 1.4; font-variant-numeric: tabular-nums;
+    }
+    .id-item__value small { display: block; font-size: 11px; font-weight: 600; color: var(--gray-600); margin-top: 2px; letter-spacing: 0; }
+
+    /* ──────────────────────────────────────────────────────────
+       HOLERITE — breakdown
+       ────────────────────────────────────────────────────────── */
+    .payslip {
+      background: var(--white); border: 1px solid var(--gray-300); padding: 24px;
+    }
+    @media (min-width: 720px) { .payslip { padding: 28px 32px; } }
+    .payslip__row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-200);
+    }
+    .payslip__row:last-child { border-bottom: none; }
+    .payslip__label { font-size: 13px; font-weight: 700; color: var(--gray-600); }
+    .payslip__label small { display: block; font-size: 10px; font-weight: 600; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .payslip__value { font-size: 16px; font-weight: 800; color: var(--black); font-variant-numeric: tabular-nums; letter-spacing: -0.015em; }
+    .payslip__value--neg { color: var(--error); }
+    .payslip__row--total { border-top: 2px solid var(--black); border-bottom: none; margin-top: 4px; padding-top: 16px; }
+    .payslip__row--total .payslip__label { color: var(--black); font-weight: 800; font-size: 14px; }
+    .payslip__row--total .payslip__value { color: var(--green); font-size: 22px; }
+
+    /* ──────────────────────────────────────────────────────────
+       CONTRATOS A PORTAR
+       ────────────────────────────────────────────────────────── */
+    .contracts { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .contract {
+      background: var(--white); border: 1px solid var(--gray-300);
+      display: grid; grid-template-columns: 4px 1fr;
+      transition: border-color var(--t);
+    }
+    .contract:hover { border-color: var(--black); }
+    .contract__rail { background: var(--green); }
+    .contract--cartao .contract__rail { background: var(--warning); }
+    .contract__main { padding: 18px 20px; }
+    .contract__head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .contract__tags { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .contract__type {
+      display: inline-flex; align-items: center;
+      padding: 3px 9px; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1.5px solid var(--black); color: var(--black);
+    }
+    .contract--cartao .contract__type { border-color: var(--warning); color: var(--warning); }
+    .contract__creditor { font-size: 13px; font-weight: 800; color: var(--black); letter-spacing: -0.01em; }
+    .contract__id { font-size: 9px; font-weight: 800; letter-spacing: 0.06em; color: var(--gray-600); font-variant-numeric: tabular-nums; }
+    .contract__metrics {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+      padding-top: 14px; border-top: 1px dashed var(--gray-200);
+    }
+    @media (min-width: 600px) { .contract__metrics { grid-template-columns: repeat(4, 1fr); } }
+    .contract__metric { display: flex; flex-direction: column; gap: 3px; }
+    .contract__metric-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-600); }
+    .contract__metric-value { font-size: 14px; font-weight: 800; color: var(--black); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .contract__metric-value--money { color: var(--black); }
+
+    .contracts-total {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px; margin-top: 14px; padding: 18px 24px;
+      background: var(--black); color: var(--white);
+    }
+    .contracts-total__label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.8); }
+    .contracts-total__value { font-size: 24px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+
+    /* ──────────────────────────────────────────────────────────
+       OPORTUNIDADE PARA O CREDOR
+       ────────────────────────────────────────────────────────── */
+    .opportunity {
+      background: var(--black); color: var(--white); padding: 32px 28px;
+      margin-bottom: 56px; display: grid; grid-template-columns: 1fr; gap: 20px;
+    }
+    @media (min-width: 800px) { .opportunity { grid-template-columns: 1fr 1fr; gap: 32px; padding: 40px; } }
+    .opportunity__eyebrow { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--green); margin-bottom: 10px; }
+    .opportunity__title { font-size: clamp(22px, 2.8vw, 30px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; color: var(--white); }
+    .opportunity__title strong { color: var(--green); }
+    .opportunity__lead { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.78); margin-top: 12px; }
+    .opportunity__breakdown { display: grid; grid-template-columns: 1fr; gap: 14px; align-self: center; }
+    .opp-line { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .opp-line:last-child { border-bottom: none; padding-bottom: 0; }
+    .opp-line__label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.04em; }
+    .opp-line__value { font-size: 18px; font-weight: 800; color: var(--white); font-variant-numeric: tabular-nums; letter-spacing: -0.015em; }
+    .opp-line--total .opp-line__label { color: var(--white); font-weight: 800; }
+    .opp-line--total .opp-line__value { color: var(--green); font-size: 24px; }
+
+    /* ──────────────────────────────────────────────────────────
+       DISCLAIMER
+       ────────────────────────────────────────────────────────── */
+    .disclaimer { background: var(--off-white); border-left: 4px solid var(--green); padding: 24px 24px 24px 28px; margin-bottom: 56px; }
+    @media (min-width: 720px) { .disclaimer { padding: 28px 32px 28px 36px; } }
+    .disclaimer__eyebrow { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--green); margin-bottom: 10px; }
+    .disclaimer__title { font-size: clamp(16px, 2vw, 19px); font-weight: 800; letter-spacing: -0.015em; color: var(--black); line-height: 1.3; margin-bottom: 12px; }
+    .disclaimer__body { font-size: 13px; line-height: 1.7; color: var(--black); max-width: 64ch; }
+    .disclaimer__body p { margin-bottom: 10px; }
+    .disclaimer__body p:last-child { margin-bottom: 0; }
+    .disclaimer__body strong { font-weight: 800; }
+
+    /* ──────────────────────────────────────────────────────────
+       RESPOSTA DO CREDOR (CTA)
+       ────────────────────────────────────────────────────────── */
+    .respond { background: var(--white); border: 2px solid var(--black); padding: 32px 28px; margin-bottom: 24px; }
+    @media (min-width: 720px) { .respond { padding: 40px; } }
+    .respond__eyebrow { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: var(--green); margin-bottom: 10px; }
+    .respond__title { font-size: clamp(22px, 2.8vw, 30px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; color: var(--black); margin-bottom: 14px; }
+    .respond__lead { font-size: 14px; line-height: 1.7; color: var(--gray-600); max-width: 60ch; margin-bottom: 24px; }
+    .respond__lead strong { color: var(--black); font-weight: 700; }
+    .respond__grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 24px; }
+    @media (min-width: 600px) { .respond__grid { grid-template-columns: repeat(3, 1fr); } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field__label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); }
+    .field__input { padding: 12px 14px; font-family: var(--f); font-size: 14px; background: var(--white); color: var(--black); border: 1.5px solid var(--gray-300); transition: border-color var(--t); }
+    .field__input:focus { border-color: var(--black); outline: none; }
+    .respond__cta { display: block; width: 100%; padding: 18px 24px; font-family: var(--f); font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; background: var(--black); color: var(--white); border: 2px solid var(--black); cursor: pointer; transition: background var(--t), border-color var(--t); }
+    .respond__cta:hover { background: var(--green); border-color: var(--green); }
+    .respond__legal { font-size: 11px; line-height: 1.55; color: var(--gray-600); margin-top: 18px; }
+    .respond__legal strong { color: var(--black); font-weight: 700; }
+
+    /* ──────────────────────────────────────────────────────────
+       RODAPÉ
+       ────────────────────────────────────────────────────────── */
+    .doc-footer { padding-top: 32px; border-top: 1px solid var(--gray-300); font-size: 11px; line-height: 1.7; color: var(--gray-600); }
+    .doc-footer__row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 720px) { .doc-footer__row { grid-template-columns: 1fr 1fr; } }
+    .doc-footer strong { color: var(--black); font-weight: 800; }
+    .doc-footer a { text-decoration: underline; text-underline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<main class="page">
+
+  <!-- HEADER MINIMAL -->
+  <header class="doc-header">
+    <svg class="doc-header__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
+    <div class="doc-header__meta">
+      Ficha nº <strong>BST-PORT-2026-000507</strong><br>
+      <strong>14 jun 2026</strong><br>
+      <span class="tag-conf">Confidencial</span>
+    </div>
+  </header>
+
+  <!-- KICKER + HERO + LEAD -->
+  <section class="section">
+    <div class="kicker">Ficha do tomador <span class="kicker__dot">·</span> Portabilidade de crédito</div>
+    <h1 class="hero-name">Maria Aparecida<br>da Silva</h1>
+    <p class="hero-sub">Encaminhada à sua instituição para análise de proposta</p>
+
+    <p class="lead">
+      Esta tomadora autorizou o Basta a compartilhar seu perfil para
+      <strong>portabilidade de crédito</strong>. O saldo total elegível é de
+      <span class="num">R$ 124.400,00</span>, distribuído em <strong>4 operações</strong>.
+      A renda líquida comprovada é de <span class="num">R$ 6.366,72</span>.
+    </p>
+  </section>
+
+  <!-- KPI 5-up -->
+  <div class="kpis" aria-label="Síntese do tomador">
+    <div class="kpi">
+      <div class="kpi__label">Saldo a portar</div>
+      <div class="kpi__value">R$ 124.400</div>
+      <div class="kpi__sub">4 operações</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Renda Bruta</div>
+      <div class="kpi__value">R$ 8.457</div>
+      <div class="kpi__sub">Holerite (CLT)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Renda Líquida</div>
+      <div class="kpi__value">R$ 6.367</div>
+      <div class="kpi__sub">Após descontos legais</div>
+    </div>
+  </div>
+
+  <!-- IDENTIFICAÇÃO -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head__eyebrow">Bloco 1 · Identificação</div>
+      <h2 class="section-head__title">Dados cadastrais do tomador.</h2>
+      <p class="section-head__lead">
+        Dados conferidos com documento e <strong>validados via Open Finance</strong>.
+      </p>
+    </div>
+
+    <div class="id-grid">
+      <div class="id-item">
+        <div class="id-item__label">Nome completo</div>
+        <div class="id-item__value">Maria Aparecida da Silva</div>
+      </div>
+      <div class="id-item">
+        <div class="id-item__label">Data de nascimento</div>
+        <div class="id-item__value">12/03/1986 <small>40 anos</small></div>
+      </div>
+      <div class="id-item">
+        <div class="id-item__label">CPF</div>
+        <div class="id-item__value">123.456.789-00</div>
+      </div>
+      <div class="id-item">
+        <div class="id-item__label">RG</div>
+        <div class="id-item__value">34.567.890-1 <small>SSP/SP</small></div>
+      </div>
+      <div class="id-item id-item--wide">
+        <div class="id-item__label">Endereço</div>
+        <div class="id-item__value">Rua das Acácias, 245, apto 52 — Vila Mariana<br>São Paulo / SP — CEP 04106-000</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOLERITE / RENDA -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head__eyebrow">Bloco 2 · Comprovação de renda</div>
+      <h2 class="section-head__title">Holerite e capacidade de pagamento.</h2>
+      <p class="section-head__lead">
+        Referência <strong>maio/2026</strong>.
+      </p>
+    </div>
+
+    <div class="payslip">
+      <div class="payslip__row">
+        <div class="payslip__label">Renda bruta<small>Salário base + adicionais</small></div>
+        <div class="payslip__value">R$ 8.457,89</div>
+      </div>
+      <div class="payslip__row">
+        <div class="payslip__label">(−) INSS</div>
+        <div class="payslip__value payslip__value--neg">− R$ 908,85</div>
+      </div>
+      <div class="payslip__row">
+        <div class="payslip__label">(−) IRRF</div>
+        <div class="payslip__value payslip__value--neg">− R$ 1.182,32</div>
+      </div>
+      <div class="payslip__row">
+        <div class="payslip__label">(−) Consignado em folha<small>Operações já descontadas</small></div>
+        <div class="payslip__value payslip__value--neg">− R$ 2.200,00</div>
+      </div>
+      <div class="payslip__row payslip__row--total">
+        <div class="payslip__label">Renda líquida disponível</div>
+        <div class="payslip__value">R$ 4.166,72</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTRATOS A PORTAR -->
+  <section class="section">
+    <div class="section-head">
+      <div class="section-head__eyebrow">Bloco 3 · Operações elegíveis</div>
+      <h2 class="section-head__title">Contratos disponíveis para portabilidade.</h2>
+      <p class="section-head__lead">
+        Saldos devedores apurados via Open Finance na data desta ficha.
+      </p>
+    </div>
+
+    <div class="contracts">
+
+      <article class="contract">
+        <div class="contract__rail"></div>
+        <div class="contract__main">
+          <div class="contract__head">
+            <div class="contract__tags">
+              <span class="contract__type">Consignado</span>
+              <span class="contract__creditor">Banco do Brasil</span>
+            </div>
+            <span class="contract__id">OP-01</span>
+          </div>
+          <div class="contract__metrics">
+            <div class="contract__metric"><span class="contract__metric-label">Saldo devedor</span><span class="contract__metric-value contract__metric-value--money">R$ 28.400</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Prazo restante</span><span class="contract__metric-value">58 / 72 meses</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Taxa atual</span><span class="contract__metric-value">1,90% a.m.</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Parcela</span><span class="contract__metric-value">R$ 712</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="contract">
+        <div class="contract__rail"></div>
+        <div class="contract__main">
+          <div class="contract__head">
+            <div class="contract__tags">
+              <span class="contract__type">Habitação</span>
+              <span class="contract__creditor">Caixa Econômica Federal</span>
+            </div>
+            <span class="contract__id">OP-02</span>
+          </div>
+          <div class="contract__metrics">
+            <div class="contract__metric"><span class="contract__metric-label">Saldo devedor</span><span class="contract__metric-value contract__metric-value--money">R$ 65.200</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Prazo restante</span><span class="contract__metric-value">268 / 360 meses</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Taxa atual</span><span class="contract__metric-value">0,79% a.m.</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Parcela</span><span class="contract__metric-value">R$ 884</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="contract">
+        <div class="contract__rail"></div>
+        <div class="contract__main">
+          <div class="contract__head">
+            <div class="contract__tags">
+              <span class="contract__type">Pessoal</span>
+              <span class="contract__creditor">Banco Bradesco</span>
+            </div>
+            <span class="contract__id">OP-03</span>
+          </div>
+          <div class="contract__metrics">
+            <div class="contract__metric"><span class="contract__metric-label">Saldo devedor</span><span class="contract__metric-value contract__metric-value--money">R$ 18.500</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Prazo restante</span><span class="contract__metric-value">14 / 24 meses</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Taxa atual</span><span class="contract__metric-value">3,10% a.m.</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Parcela</span><span class="contract__metric-value">R$ 1.540</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="contract contract--cartao">
+        <div class="contract__rail"></div>
+        <div class="contract__main">
+          <div class="contract__head">
+            <div class="contract__tags">
+              <span class="contract__type">Cartão</span>
+              <span class="contract__creditor">Banco Sicredi</span>
+            </div>
+            <span class="contract__id">OP-04</span>
+          </div>
+          <div class="contract__metrics">
+            <div class="contract__metric"><span class="contract__metric-label">Saldo devedor</span><span class="contract__metric-value contract__metric-value--money">R$ 12.300</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Prazo (parcelado)</span><span class="contract__metric-value">12 meses</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Taxa atual</span><span class="contract__metric-value">11,90% a.m.</span></div>
+            <div class="contract__metric"><span class="contract__metric-label">Parcela mínima</span><span class="contract__metric-value">R$ 1.210</span></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="contracts-total">
+      <span class="contracts-total__label">Saldo total elegível à portabilidade</span>
+      <span class="contracts-total__value">R$ 124.400</span>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER -->
+  <section class="disclaimer" aria-label="Sobre estes dados">
+    <div class="disclaimer__eyebrow">Sobre estes dados</div>
+    <h2 class="disclaimer__title">Dados informados pela tomadora e apurados via Open Finance e SCR/Bacen. Sujeitos a confirmação documental antes da contratação.</h2>
+    <div class="disclaimer__body">
+      <p>
+        O Basta atua como intermediário tecnológico autorizado pela tomadora a compartilhar seu perfil
+        para fins de portabilidade. <strong>Nenhuma proposta gera obrigação</strong> até aceite formal da
+        tomadora. Saldos devedores e taxas refletem a última atualização disponível e podem variar até a
+        data efetiva da liquidação junto à instituição de origem.
+      </p>
+    </div>
+  </section>
+
+  <!-- RESPOSTA DO CREDOR -->
+  <section class="respond" id="respond">
+    <div class="respond__eyebrow">Sua proposta</div>
+    <h2 class="respond__title">Responda com suas condições<br>de portabilidade.</h2>
+    <p class="respond__lead">
+      Indique as condições que sua instituição oferece. O Basta apresenta sua proposta à tomadora
+      junto às demais recebidas, de forma <strong>comparável e transparente</strong>.
+    </p>
+
+    <div class="respond__grid">
+      <div class="field">
+        <label class="field__label" for="prop-taxa">Taxa proposta (a.m.)</label>
+        <input class="field__input" id="prop-taxa" type="text" placeholder="0,00%" inputmode="decimal" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="prop-prazo">Prazo (meses)</label>
+        <input class="field__input" id="prop-prazo" type="text" placeholder="000" inputmode="numeric" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="prop-parcela">Parcela estimada</label>
+        <input class="field__input" id="prop-parcela" type="text" placeholder="R$ 0,00" inputmode="numeric" autocomplete="off" />
+      </div>
+    </div>
+
+    <div class="respond__grid">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label class="field__label" for="prop-ops">Operações que deseja portar</label>
+        <input class="field__input" id="prop-ops" type="text" placeholder="Ex.: OP-03 e OP-04 (pessoal e cartão)" autocomplete="off" />
+      </div>
+    </div>
+
+    <button class="respond__cta" type="button" onclick="handlePropose()">
+      Enviar proposta ao Basta
+    </button>
+
+    <p class="respond__legal">
+      Ao enviar, sua instituição declara que as condições informadas são <strong>válidas por no mínimo
+      7 dias</strong> e que a contratação observará as normas de portabilidade do Banco Central
+      (Res. CMN 5.057/2022). O Basta não cobra da tomadora para apresentar propostas.
+    </p>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer class="doc-footer">
+    <div class="doc-footer__row">
+      <div>
+        <strong>Basta Tecnologia LTDA</strong><br>
+        CNPJ <strong>00.000.000/0001-00</strong> · São Paulo, SP<br>
+        Parcerias: <a href="https://wa.me/5511000000000">+55 (11) 0000-0000</a>
+      </div>
+      <div>
+        Ficha nº <strong>BST-PORT-2026-000507</strong> · gerada em 14/06/2026.<br>
+        Documento confidencial — uso restrito à análise de portabilidade.
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  function handlePropose() {
+    const payload = {
+      fichaId: 'BST-PORT-2026-000507',
+      taxa:    document.getElementById('prop-taxa').value.trim(),
+      prazo:   document.getElementById('prop-prazo').value.trim(),
+      parcela: document.getElementById('prop-parcela').value.trim(),
+      operacoes: document.getElementById('prop-ops').value.trim(),
+      enviadaEm: new Date().toISOString()
+    };
+    /* INTEGRAÇÃO: enviar payload ao backend, registrar credor + IP,
+       notificar a tomadora e adicionar à comparação de propostas. */
+    alert('Proposta registrada. O Basta vai apresentá-la à tomadora junto às demais condições recebidas. Você será avisado caso ela aceite.');
+  }
+</script>
+
+</body>
+</html>

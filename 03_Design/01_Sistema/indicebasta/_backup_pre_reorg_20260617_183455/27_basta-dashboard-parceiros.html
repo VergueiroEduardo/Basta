@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Basta. — Painel Cancela Tudo</title>
+  <title>Basta. — Painel do parceiro</title>
   <meta name="theme-color" content="#000000" />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -222,33 +222,6 @@
       font-weight: 400;
       margin-bottom: 28px;
       max-width: 64ch;
-    }
-
-    /* ── CABEÇALHO + AÇÃO DE PÁGINA (atualizar dados) ─────── */
-    .dash-header {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 16px 24px; flex-wrap: wrap; margin-bottom: 28px;
-    }
-    .dash-header__text { flex: 1; min-width: 260px; }
-    .dash-header .greeting-sub { margin-bottom: 0; }   /* respiro fica por conta dos stats */
-
-    .refresh { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-    .btn-refresh {
-      display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px;
-      font-family: var(--f); font-size: 11px; font-weight: 800;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      color: var(--black); background: var(--white); border: 1.5px solid var(--black);
-      cursor: pointer; transition: background var(--t), color var(--t); white-space: nowrap;
-    }
-    .btn-refresh:hover { background: var(--off-white); }
-    .btn-refresh svg { width: 15px; height: 15px; flex-shrink: 0; }
-    .btn-refresh.is-loading { pointer-events: none; opacity: 0.65; }
-    .btn-refresh.is-loading svg { animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .refresh__stamp { font-size: 11px; font-weight: 600; color: var(--gray-600); }
-
-    @media (max-width: 639px) {
-      .refresh { align-items: flex-start; width: 100%; }
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -576,9 +549,9 @@
       .progress-card__header { flex-direction: row; gap: 24px; }
       .progress-card__pct { font-size: 56px; }
 
-      .stats { grid-template-columns: repeat(2, minmax(220px, 320px)); gap: 16px; }
+      .stats { gap: 16px; }
       .stat { padding: 20px 24px; }
-      .stat__value { font-size: 36px; }
+      .stat__value { font-size: 40px; }
 
       .step-card { gap: 20px; padding: 20px 20px; }
       .step-card__number { font-size: 48px; width: 56px; min-width: 56px; }
@@ -646,6 +619,15 @@
     }
     .clients__count b { color: var(--green); }
 
+    /* Filtro: apenas não revisados */
+    .filter-toggle {
+      display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-600); transition: color var(--t);
+    }
+    .filter-toggle:hover { color: var(--black); }
+    .filter-toggle input { width: 15px; height: 15px; accent-color: var(--green); cursor: pointer; }
+
     /* Selo de revisão */
     .rev-badge {
       display: inline-flex; align-items: center; gap: 5px;
@@ -656,19 +638,9 @@
     .rev-badge--ok { color: var(--green); border-color: var(--green); }
     .rev-badge--no { color: var(--gray-600); border-color: var(--gray-300); }
 
-    /* Coluna "Última avaliação" — data da última avaliação */
-    .c-eval {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 13px; font-weight: 600; color: var(--gray-600); white-space: nowrap;
-    }
-    .c-eval svg { width: 13px; height: 13px; color: var(--green); flex-shrink: 0; }
-
-
-    /* Mostra ~10 linhas; o restante (até 20) acessa por rolagem vertical */
-    .table-scroll { overflow-x: auto; overflow-y: auto; max-height: 540px; -webkit-overflow-scrolling: touch; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table.clients-table {
-      width: 100%; border-collapse: collapse; min-width: 880px;
+      width: 100%; border-collapse: collapse; min-width: 840px;
       font-variant-numeric: tabular-nums;
     }
     .clients-table thead th {
@@ -676,7 +648,6 @@
       text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-600);
       padding: 12px 16px; border-bottom: 2px solid var(--black);
       background: var(--off-white); white-space: nowrap;
-      position: sticky; top: 0; z-index: 2;   /* cabeçalho fixo ao rolar */
     }
     .clients-table th.num, .clients-table td.num { text-align: right; }
 
@@ -696,66 +667,16 @@
     .clients-table tbody tr:last-child td { border-bottom: none; }
     .clients-table tbody tr { cursor: pointer; transition: background var(--t); }
     .clients-table tbody tr:hover td { background: var(--off-white); }
-    .clients-table td.c-idx { color: var(--gray-600); font-weight: 800; font-variant-numeric: tabular-nums; }
     .c-name { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 160px; }
-    .c-cpf, .c-date {
+    .c-cpf, .c-cel, .c-date {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
       font-size: 13px; font-weight: 600; color: var(--gray-600); white-space: nowrap;
     }
     .c-debt { font-weight: 800; color: var(--error); white-space: nowrap; }
-    .c-ops { font-weight: 800; color: var(--black); font-variant-numeric: tabular-nums; }
     .clients__empty {
       display: none; padding: 28px 16px; text-align: center;
       font-size: 13px; font-weight: 700; color: var(--gray-600);
     }
-
-    /* ══════════════════════════════════════════════════════════
-       FILTRO DE PERÍODO DE REVISÃO
-       ══════════════════════════════════════════════════════════ */
-    .period {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px 14px;
-      margin-bottom: 16px;
-    }
-    .period__label {
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gray-600);
-    }
-
-    /* Segmented control — cantos retos, conectado */
-    .period__seg {
-      display: inline-flex;
-      border: 1.5px solid var(--black);
-      max-width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .period__btn {
-      font-family: var(--f);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      padding: 9px 16px;
-      background: var(--white);
-      color: var(--black);
-      cursor: pointer;
-      border: none;
-      border-right: 1.5px solid var(--black);
-      transition: background var(--t), color var(--t);
-      white-space: nowrap;
-    }
-    .period__seg .period__btn:last-child { border-right: none; }
-    .period__btn:hover { background: var(--off-white); }
-    .period__btn--active,
-    .period__btn--active:hover { background: var(--green); color: var(--white); }
-
-    /* Dois segmentos lado a lado: filtro por dias + lentes (Todos/Não avaliados) */
-    .period__group { display: inline-flex; align-items: stretch; gap: 8px; max-width: 100%; flex-wrap: wrap; }
 
     /* ══════════════════════════════════════════════════════════
        LOGOUT MODAL
@@ -797,8 +718,8 @@
      MOBILE TOP BAR
      ════════════════════════════════════════════════════════ -->
 <div class="topbar">
-  <a href="29_basta-dashboard-cancelamentos.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
-  <a href="27_basta-parceiro-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">CT</a>
+  <a href="26_basta-dashboard-parceiros.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="#perfil" class="topbar__avatar" aria-label="Ir para Perfil">CS</a>
 </div>
 
 <div class="dashboard">
@@ -808,7 +729,7 @@
        ════════════════════════════════════════════════════════ -->
   <aside class="sidebar">
     <div class="sidebar__header">
-      <a href="29_basta-dashboard-cancelamentos.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-dark" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+      <a href="26_basta-dashboard-parceiros.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-dark" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
     </div>
 
     <nav class="sidebar__nav">
@@ -816,21 +737,29 @@
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Resumo
       </span>
-      <a href="29_basta-cancela-tudo-detalhe.html" class="nav-item">
-        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
-        Cancelamentos
+      <a href="26_basta-parceiro-consulta-cpf.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        Portabilidade
       </a>
-      <a href="27_basta-parceiro-perfil.html" class="nav-item">
+      <a href="#abusos" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Abusos
+      </a>
+      <a href="#renegociacoes" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3z"/><line x1="7" y1="22" x2="7" y2="11"/></svg>
+        Renegociações
+      </a>
+      <a href="#perfil" class="nav-item">
         <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Perfil
       </a>
     </nav>
 
     <div class="sidebar__user">
-      <div class="sidebar__avatar">CT</div>
+      <div class="sidebar__avatar">CS</div>
       <div class="sidebar__user-info">
-        <div class="sidebar__user-name">Cancela Tudo</div>
-        <div class="sidebar__user-email">parceria@cancelatudo.com.br</div>
+        <div class="sidebar__user-name">Crédito Sul Financeira</div>
+        <div class="sidebar__user-email">parceria@creditosul.com.br</div>
       </div>
       <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -843,37 +772,21 @@
        ════════════════════════════════════════════════════════ -->
   <main class="main" id="resumo">
 
-    <!-- Greeting + ação de página -->
-    <div class="dash-header">
-      <div class="dash-header__text">
-        <h1 class="greeting">Olá, Cancela Tudo<span class="accent">.</span></h1>
-        <p class="greeting-sub">Aqui você acompanha os clientes encaminhados para cancelamento de seguros.</p>
-      </div>
-    </div>
+    <!-- Greeting -->
+    <h1 class="greeting">Olá, Crédito Sul<span class="accent">.</span></h1>
+    <p class="greeting-sub">Aqui você acompanha as oportunidades de portabilidade e os abusos sinalizados pelos tomadores que autorizaram o compartilhamento.</p>
 
     <!-- ── STATS ──────────────────────────────────────────── -->
     <div class="stats">
       <div class="stat stat--debt">
-        <span class="stat__label">Endividamento</span>
-        <span class="stat__value" id="statDebt">R$ 1.283.149</span>
+        <span class="stat__label">Total de endividamento</span>
+        <span class="stat__value">R$ 445.116</span>
         <span class="stat__detail">saldo devedor da carteira</span>
       </div>
       <div class="stat">
         <span class="stat__label">Total de clientes</span>
-        <span class="stat__value" id="statClients" data-target="17">0</span>
-        <span class="stat__detail">encaminhados ao setor</span>
-      </div>
-    </div>
-
-    <!-- ── FILTRO DE PROPOSTA ─────────────────────────────── -->
-    <div class="period" role="group" aria-label="Filtrar por antiguidade da entrada">
-      <span class="period__label">Entrada há mais de</span>
-      <div class="period__group">
-        <div class="period__seg">
-          <button type="button" class="period__btn" onclick="setPeriod('7', this)">7 dias</button>
-          <button type="button" class="period__btn" onclick="setPeriod('30', this)">30 dias</button>
-          <button type="button" class="period__btn" onclick="setPeriod('60', this)">60 dias</button>
-        </div>
+        <span class="stat__value" data-target="6">0</span>
+        <span class="stat__detail">com compartilhamento ativo</span>
       </div>
     </div>
 
@@ -894,182 +807,86 @@
       <div class="clients__bar">
         <div class="clients__bar-left">
           <span class="clients__heading">Clientes</span>
-          <span class="clients__count"><b id="clientCount">17</b> de 17</span>
+          <span class="clients__count"><b id="clientCount">6</b> de 6</span>
         </div>
+        <label class="filter-toggle">
+          <input type="checkbox" id="filterUnreviewed" onchange="filterClients()" />
+          Apenas não revisados
+        </label>
       </div>
 
       <div class="table-scroll">
         <table class="clients-table">
-          <colgroup>
-            <col style="width: 5%" />    <!-- # -->
-            <col style="width: 32%" />   <!-- Nome + origem -->
-            <col style="width: 16%" />   <!-- CPF -->
-            <col style="width: 18%" />   <!-- Endividamento vencido -->
-            <col style="width: 13%" />   <!-- # Seguros -->
-            <col style="width: 16%" />   <!-- Entrada em -->
-          </colgroup>
           <thead>
             <tr>
-              <th class="c-idx">#</th>
               <th class="sortable" data-key="name" onclick="sortClients('name')">
                 <span class="th-sort">Nome
                   <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                 </span>
               </th>
               <th>CPF</th>
-              <th class="sortable num" data-key="debt" onclick="sortClients('debt')">
-                <span class="th-sort">Endividamento
-                  <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-                </span>
-              </th>
-              <th class="sortable num" data-key="ops" onclick="sortClients('ops')">
-                <span class="th-sort"># Seguros
+              <th>Cel</th>
+              <th class="num sortable" data-key="debt" onclick="sortClients('debt')">
+                <span class="th-sort">Endividamento total
                   <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                 </span>
               </th>
               <th class="sortable" data-key="date" onclick="sortClients('date')">
-                <span class="th-sort">Entrada em
+                <span class="th-sort">Data
                   <svg class="th-sort__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
                 </span>
               </th>
+              <th>Revisão</th>
             </tr>
           </thead>
           <tbody id="clientRows">
-            <tr data-reviewed="1" data-origin="funil" data-search="beatriz camargo nunes 00181469103" data-name="beatriz camargo nunes" data-debt="96870.00" data-date="2026-03-12" data-ops="2" onclick="openClient(this)">
-              <td class="c-idx">1</td>
-              <td class="c-name">Beatriz Camargo Nunes</td>
+            <tr data-reviewed="1" data-search="maria aparecida da silva 00181469103" data-name="maria aparecida da silva" data-debt="124400.00" data-date="2026-03-12" onclick="openClient(this)">
+              <td class="c-name">Maria Aparecida da Silva</td>
               <td class="c-cpf">001.814.691-03</td>
-              <td class="c-debt num">R$ 96.870,00</td>
-              <td class="c-ops num">2</td>
+              <td class="c-cel">(11) 98456-7712</td>
+              <td class="num c-debt">R$ 124.400,00</td>
               <td class="c-date">12/03/2026</td>
+              <td><span class="rev-badge rev-badge--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Revisado</span></td>
             </tr>
-            <tr data-reviewed="1" data-origin="inativo" data-search="otavio resende pacheco 04822190577" data-name="otávio resende pacheco" data-debt="142310.55" data-date="2026-01-28" data-ops="4" onclick="openClient(this)">
-              <td class="c-idx">2</td>
-              <td class="c-name">Otávio Resende Pacheco</td>
+            <tr data-reviewed="1" data-search="jose carlos ferreira 04822190577" data-name="josé carlos ferreira" data-debt="113890.70" data-date="2026-01-28" onclick="openClient(this)">
+              <td class="c-name">José Carlos Ferreira</td>
               <td class="c-cpf">048.221.905-77</td>
-              <td class="c-debt num">R$ 142.310,55</td>
-              <td class="c-ops num">4</td>
+              <td class="c-cel">(21) 99123-4488</td>
+              <td class="num c-debt">R$ 113.890,70</td>
               <td class="c-date">28/01/2026</td>
+              <td><span class="rev-badge rev-badge--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Revisado</span></td>
             </tr>
-            <tr data-reviewed="0" data-origin="inativo" data-search="claudia bittencourt reis 13255630019" data-name="cláudia bittencourt reis" data-debt="41520.00" data-date="2025-11-05" data-ops="1" onclick="openClient(this)">
-              <td class="c-idx">3</td>
-              <td class="c-name">Cláudia Bittencourt Reis</td>
+            <tr data-reviewed="0" data-search="antonia souza lima 13255630019" data-name="antônia souza lima" data-debt="38200.00" data-date="2025-11-05" onclick="openClient(this)">
+              <td class="c-name">Antônia Souza Lima</td>
               <td class="c-cpf">132.556.300-19</td>
-              <td class="c-debt num">R$ 41.520,00</td>
-              <td class="c-ops num">1</td>
+              <td class="c-cel">(31) 98701-2233</td>
+              <td class="num c-debt">R$ 38.200,00</td>
               <td class="c-date">05/11/2025</td>
+              <td><span class="rev-badge rev-badge--no">Pendente</span></td>
             </tr>
-            <tr data-reviewed="0" data-origin="funil" data-search="rogerio tavares pina 20791844350" data-name="rogério tavares pina" data-debt="73640.80" data-date="2026-02-19" data-ops="3" onclick="openClient(this)">
-              <td class="c-idx">4</td>
-              <td class="c-name">Rogério Tavares Pina</td>
+            <tr data-reviewed="0" data-search="paulo henrique mendes 20791844350" data-name="paulo henrique mendes" data-debt="61540.30" data-date="2026-02-19" onclick="openClient(this)">
+              <td class="c-name">Paulo Henrique Mendes</td>
               <td class="c-cpf">207.918.443-50</td>
-              <td class="c-debt num">R$ 73.640,80</td>
-              <td class="c-ops num">3</td>
+              <td class="c-cel">(51) 99655-0190</td>
+              <td class="num c-debt">R$ 61.540,30</td>
               <td class="c-date">19/02/2026</td>
+              <td><span class="rev-badge rev-badge--no">Pendente</span></td>
             </tr>
-            <tr data-reviewed="0" data-origin="inativo" data-search="simone vasconcelos brito 33910487266" data-name="simone vasconcelos brito" data-debt="22180.00" data-date="2025-09-30" data-ops="1" onclick="openClient(this)">
-              <td class="c-idx">5</td>
-              <td class="c-name">Simone Vasconcelos Brito</td>
+            <tr data-reviewed="0" data-search="rita de cassia oliveira 33910487266" data-name="rita de cássia oliveira" data-debt="19870.00" data-date="2025-09-30" onclick="openClient(this)">
+              <td class="c-name">Rita de Cássia Oliveira</td>
               <td class="c-cpf">339.104.872-66</td>
-              <td class="c-debt num">R$ 22.180,00</td>
-              <td class="c-ops num">1</td>
+              <td class="c-cel">(85) 98233-7745</td>
+              <td class="num c-debt">R$ 19.870,00</td>
               <td class="c-date">30/09/2025</td>
+              <td><span class="rev-badge rev-badge--no">Pendente</span></td>
             </tr>
-            <tr data-reviewed="0" data-origin="funil" data-search="helio macedo fontes 41566723008" data-name="hélio macedo fontes" data-debt="108450.20" data-date="2026-06-14" data-ops="3" onclick="openClient(this)">
-              <td class="c-idx">6</td>
-              <td class="c-name">Hélio Macedo Fontes</td>
+            <tr data-reviewed="0" data-search="carlos eduardo ramos 41566723008" data-name="carlos eduardo ramos" data-debt="87215.45" data-date="2026-06-14" onclick="openClient(this)">
+              <td class="c-name">Carlos Eduardo Ramos</td>
               <td class="c-cpf">415.667.230-08</td>
-              <td class="c-debt num">R$ 108.450,20</td>
-              <td class="c-ops num">3</td>
+              <td class="c-cel">(41) 99100-5521</td>
+              <td class="num c-debt">R$ 87.215,45</td>
               <td class="c-date">14/06/2026</td>
-            </tr>
-            <tr data-reviewed="1" data-origin="inativo" data-search="adriana queiroz sampaio 52390111840" data-name="adriana queiroz sampaio" data-debt="57900.00" data-date="2025-08-22" data-ops="2" onclick="openClient(this)">
-              <td class="c-idx">7</td>
-              <td class="c-name">Adriana Queiroz Sampaio</td>
-              <td class="c-cpf">523.901.118-40</td>
-              <td class="c-debt num">R$ 57.900,00</td>
-              <td class="c-ops num">2</td>
-              <td class="c-date">22/08/2025</td>
-            </tr>
-            <tr data-reviewed="0" data-origin="funil" data-search="wagner bastos cordeiro 61045233792" data-name="wagner bastos cordeiro" data-debt="134275.90" data-date="2026-04-03" data-ops="4" onclick="openClient(this)">
-              <td class="c-idx">8</td>
-              <td class="c-name">Wagner Bastos Cordeiro</td>
-              <td class="c-cpf">610.452.337-92</td>
-              <td class="c-debt num">R$ 134.275,90</td>
-              <td class="c-ops num">4</td>
-              <td class="c-date">03/04/2026</td>
-            </tr>
-            <tr data-reviewed="1" data-origin="inativo" data-search="larissa pecanha goulart 27411890563" data-name="larissa peçanha goulart" data-debt="35640.00" data-date="2025-12-17" data-ops="1" onclick="openClient(this)">
-              <td class="c-idx">9</td>
-              <td class="c-name">Larissa Peçanha Goulart</td>
-              <td class="c-cpf">274.118.905-63</td>
-              <td class="c-debt num">R$ 35.640,00</td>
-              <td class="c-ops num">1</td>
-              <td class="c-date">17/12/2025</td>
-            </tr>
-            <tr data-reviewed="1" data-origin="funil" data-search="domingos ferraz quintana 38872601455" data-name="domingos ferraz quintana" data-debt="168020.00" data-date="2026-05-21" data-ops="4" onclick="openClient(this)">
-              <td class="c-idx">10</td>
-              <td class="c-name">Domingos Ferraz Quintana</td>
-              <td class="c-cpf">388.726.014-55</td>
-              <td class="c-debt num">R$ 168.020,00</td>
-              <td class="c-ops num">4</td>
-              <td class="c-date">21/05/2026</td>
-            </tr>
-            <tr data-reviewed="1" data-origin="inativo" data-search="tatiane marques vidal 49120387618" data-name="tatiane marques vidal" data-debt="29310.45" data-date="2025-10-09" data-ops="1" onclick="openClient(this)">
-              <td class="c-idx">11</td>
-              <td class="c-name">Tatiane Marques Vidal</td>
-              <td class="c-cpf">491.203.876-18</td>
-              <td class="c-debt num">R$ 29.310,45</td>
-              <td class="c-ops num">1</td>
-              <td class="c-date">09/10/2025</td>
-            </tr>
-            <tr data-reviewed="0" data-origin="funil" data-search="renan coutinho bezerra 56284719037" data-name="renan coutinho bezerra" data-debt="81760.00" data-date="2026-03-30" data-ops="2" onclick="openClient(this)">
-              <td class="c-idx">12</td>
-              <td class="c-name">Renan Coutinho Bezerra</td>
-              <td class="c-cpf">562.847.190-37</td>
-              <td class="c-debt num">R$ 81.760,00</td>
-              <td class="c-ops num">2</td>
-              <td class="c-date">30/03/2026</td>
-            </tr>
-            <tr data-reviewed="1" data-origin="inativo" data-search="monica salgado furtado 14569032874" data-name="mônica salgado furtado" data-debt="49870.30" data-date="2025-07-14" data-ops="2" onclick="openClient(this)">
-              <td class="c-idx">13</td>
-              <td class="c-name">Mônica Salgado Furtado</td>
-              <td class="c-cpf">145.690.328-74</td>
-              <td class="c-debt num">R$ 49.870,30</td>
-              <td class="c-ops num">2</td>
-              <td class="c-date">14/07/2025</td>
-            </tr>
-            <tr data-reviewed="0" data-origin="funil" data-search="ivan drummond vasques 70351864209" data-name="ivan drummond vasques" data-debt="112540.00" data-date="2026-02-06" data-ops="3" onclick="openClient(this)">
-              <td class="c-idx">14</td>
-              <td class="c-name">Ivan Drummond Vasques</td>
-              <td class="c-cpf">703.518.642-09</td>
-              <td class="c-debt num">R$ 112.540,00</td>
-              <td class="c-ops num">3</td>
-              <td class="c-date">06/02/2026</td>
-            </tr>
-            <tr data-reviewed="0" data-origin="inativo" data-search="priscila andrade bueno 25608347126" data-name="priscila andrade bueno" data-debt="17450.00" data-date="2026-06-02" data-ops="1" onclick="openClient(this)">
-              <td class="c-idx">15</td>
-              <td class="c-name">Priscila Andrade Bueno</td>
-              <td class="c-cpf">256.083.471-26</td>
-              <td class="c-debt num">R$ 17.450,00</td>
-              <td class="c-ops num">1</td>
-              <td class="c-date">02/06/2026</td>
-            </tr>
-            <tr data-reviewed="1" data-origin="funil" data-search="cesar augusto maia 83721456081" data-name="cesar augusto maia" data-debt="67230.75" data-date="2025-11-28" data-ops="2" onclick="openClient(this)">
-              <td class="c-idx">16</td>
-              <td class="c-name">Cesar Augusto Maia</td>
-              <td class="c-cpf">837.214.560-81</td>
-              <td class="c-debt num">R$ 67.230,75</td>
-              <td class="c-ops num">2</td>
-              <td class="c-date">28/11/2025</td>
-            </tr>
-            <tr data-reviewed="0" data-origin="inativo" data-search="nubia falcao teixeira 41967523044" data-name="núbia falcão teixeira" data-debt="44180.00" data-date="2026-01-12" data-ops="1" onclick="openClient(this)">
-              <td class="c-idx">17</td>
-              <td class="c-name">Núbia Falcão Teixeira</td>
-              <td class="c-cpf">419.675.230-44</td>
-              <td class="c-debt num">R$ 44.180,00</td>
-              <td class="c-ops num">1</td>
-              <td class="c-date">12/01/2026</td>
+              <td><span class="rev-badge rev-badge--no">Pendente</span></td>
             </tr>
           </tbody>
         </table>
@@ -1136,128 +953,28 @@
 
   /* ── ABRIR FICHA DO CLIENTE ──────────────────────────── */
   function openClient() {
-    /* INTEGRAÇÃO: usar o CPF da linha para abrir o detalhe do cliente. */
-    window.location.href = '29_basta-cancela-tudo-detalhe.html';
+    /* INTEGRAÇÃO: usar o CPF da linha para abrir a consulta do cliente. */
+    window.location.href = '26_basta-parceiro-consulta-cpf.html';
   }
 
-  /* ── FILTRO DE AVALIAÇÃO (seleção única) ─────────────── */
-  /* Lentes: 'todos' | 'naoavaliados' (não contatados) | dias ('7'…'120' = contatados há mais de N dias).
-     "Todos" ativo por padrão. */
-  var period = { preset: 'todos', cutoff: null };
-
-  function isoOf(d) {
-    var y = d.getFullYear();
-    var m = String(d.getMonth() + 1).padStart(2, '0');
-    var day = String(d.getDate()).padStart(2, '0');
-    return y + '-' + m + '-' + day;
-  }
-
-  /* "há mais de N dias" → entrada anterior a (hoje − N): data <= corte */
-  function staleCutoff(days) {
-    var d = new Date(); d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() - days);
-    return isoOf(d);
-  }
-
-  function setPeriod(preset, btn) {
-    var alreadyActive = btn.classList.contains('period__btn--active');
-
-    document.querySelectorAll('.period__btn').forEach(function (b) {
-      b.classList.remove('period__btn--active');
-    });
-
-    if (alreadyActive) {
-      /* clicar de novo no botão ativo remove o filtro e volta a mostrar todos */
-      period.preset = 'todos';
-      period.cutoff = null;
-    } else {
-      btn.classList.add('period__btn--active');
-      period.preset = preset;
-      period.cutoff = (preset === 'todos' || preset === 'naoavaliados')
-        ? null
-        : staleCutoff(parseInt(preset, 10));
-    }
-    filterClients();
-  }
-
-  function fmtBRL(n) {
-    return 'R$ ' + Math.round(n).toLocaleString('pt-BR');
-  }
-
-  /* ── ATUALIZAR DADOS (re-sync Open Finance) ──────────── */
-  function refreshData() {
-    var btn = document.getElementById('refreshBtn');
-    if (btn.classList.contains('is-loading')) return;     /* evita clique duplo */
-    var label = btn.querySelector('.btn-refresh__label');
-    var prev = label.textContent;
-
-    btn.classList.add('is-loading');
-    label.textContent = 'Atualizando…';
-
-    /* INTEGRAÇÃO: disparar o re-sync via Open Finance e recarregar os dados. */
-    setTimeout(function () {
-      btn.classList.remove('is-loading');
-      label.textContent = prev;
-      var n = new Date();
-      var hh = String(n.getHours()).padStart(2, '0');
-      var mm = String(n.getMinutes()).padStart(2, '0');
-      document.getElementById('refreshStamp').textContent = 'Atualizado hoje às ' + hh + ':' + mm;
-    }, 1200);
-  }
-
-  /* ── BUSCA + LENTE DE AVALIAÇÃO ──────────────────────── */
+  /* ── BUSCA + FILTRO DE REVISÃO ───────────────────────── */
   function filterClients() {
     var q = document.getElementById('clientSearch').value
       .toLowerCase().replace(/[.\-\s()]/g, '');
+    var onlyUnreviewed = document.getElementById('filterUnreviewed').checked;
     var rows = document.querySelectorAll('#clientRows tr');
     var visible = 0;
-    var totalDebt = 0;
     rows.forEach(function(row) {
       var hay = (row.getAttribute('data-search') || '').replace(/\s/g, '');
       var searchMatch = q === '' || hay.indexOf(q) !== -1;
-
-      var reviewed = row.getAttribute('data-reviewed') === '1';
-      var d = row.getAttribute('data-date');
-
-      /* Regra de cada lente */
-      var lensMatch;
-      if (period.preset === 'todos') {
-        lensMatch = true;
-      } else if (period.preset === 'naoavaliados') {
-        lensMatch = !reviewed;
-      } else {
-        /* dias: com proposta (Sim) há mais de N dias */
-        lensMatch = reviewed && d <= period.cutoff;
-      }
-
-      var show = searchMatch && lensMatch;
+      var revMatch = !onlyUnreviewed || row.getAttribute('data-reviewed') === '0';
+      var show = searchMatch && revMatch;
       row.style.display = show ? '' : 'none';
-      if (show) {
-        visible++;
-        totalDebt += parseFloat(row.getAttribute('data-debt')) || 0;
-      }
+      if (show) visible++;
     });
     document.getElementById('clientCount').textContent = visible;
     document.getElementById('clientEmpty').style.display = visible === 0 ? 'block' : 'none';
-
-    /* Cards principais refletem o recorte filtrado */
-    document.getElementById('statClients').textContent = visible;
-    document.getElementById('statDebt').textContent = fmtBRL(totalDebt);
-
-    renumberClients();
   }
-
-  /* Numeração posicional (#) — segue a ordem/visibilidade atual */
-  function renumberClients() {
-    var n = 0;
-    document.querySelectorAll('#clientRows tr').forEach(function (row) {
-      if (row.style.display === 'none') return;
-      var idx = row.querySelector('.c-idx');
-      if (idx) idx.textContent = ++n;
-    });
-  }
-
-  /* "Todos" ativo por padrão → toda a base visível */
 
   /* ── ORDENAÇÃO DA TABELA ─────────────────────────────── */
   var sortState = { key: null, dir: 1 };
@@ -1273,9 +990,6 @@
       if (key === 'debt') {
         return (parseFloat(a.dataset.debt) - parseFloat(b.dataset.debt)) * dir;
       }
-      if (key === 'ops') {
-        return (parseFloat(a.dataset.ops) - parseFloat(b.dataset.ops)) * dir;
-      }
       if (key === 'date') {
         return (a.dataset.date < b.dataset.date ? -1 : a.dataset.date > b.dataset.date ? 1 : 0) * dir;
       }
@@ -1289,8 +1003,6 @@
     });
     var active = document.querySelector('.clients-table th[data-key="' + key + '"]');
     if (active) active.setAttribute('aria-sort', dir === 1 ? 'ascending' : 'descending');
-
-    renumberClients();   /* renumera após reordenar */
   }
 
   /* ── CONTADOR DE ENTRADA (Total de clientes) ─────────── */
