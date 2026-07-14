@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Basta — Auditoria de Sistema · Segurança · Performance · Design</title>
+<link rel="stylesheet" href="../_foundation/fonts.css" />
+<style>
+  :root{
+    --black:#000; --white:#fff; --off:#F5F3EF; --green:#42b449;
+    --g600:#4A4A4A; --g300:#D4D4D4; --warn:#F59E0B; --err:#EF4444;
+    --f:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--f);color:var(--black);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px}
+  .rule{height:1px;background:var(--g300)}
+
+  header.top{background:var(--black);color:var(--white);padding:64px 0 56px}
+  .eyebrow{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);display:flex;align-items:center;gap:14px;margin-bottom:28px}
+  .eyebrow::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.18)}
+  h1{font-size:clamp(38px,6vw,64px);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin-bottom:20px}
+  .sub{font-size:18px;color:rgba(255,255,255,.72);max-width:60ch;line-height:1.7}
+  .meta{margin-top:28px;display:flex;flex-wrap:wrap;gap:0;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+  .meta span{padding-right:18px;margin-right:18px;border-right:1px solid rgba(255,255,255,.18)}
+  .meta span:last-child{border:0}
+
+  section{padding:56px 0}
+  h2{font-size:clamp(26px,3.5vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+  .lead{font-size:17px;color:var(--g600);max-width:66ch;margin-bottom:32px}
+  h3{font-size:20px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px}
+
+  .scorecard{display:grid;grid-template-columns:1fr;gap:0;border-top:2px solid var(--black);border-bottom:2px solid var(--black)}
+  @media(min-width:680px){.scorecard{grid-template-columns:repeat(4,1fr)}}
+  .score{padding:24px 20px;border-bottom:1px solid var(--g300)}
+  @media(min-width:680px){.score{border-bottom:0;border-right:1px solid var(--g300)}.score:last-child{border-right:0}}
+  .score .n{font-size:40px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .score .l{font-size:13px;color:var(--g600);margin-top:6px;line-height:1.4}
+
+  .finding{border-top:1px solid var(--g300);padding:28px 0;display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:720px){.finding{grid-template-columns:88px 1fr;gap:28px}}
+  .finding:last-child{border-bottom:1px solid var(--g300)}
+  .tag{display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;letter-spacing:.04em;padding:6px 10px;height:fit-content;border:2px solid var(--black);text-transform:uppercase;white-space:nowrap}
+  .tag.p0{background:var(--err);color:#fff;border-color:var(--err)}
+  .tag.p1{background:var(--warn);color:#111;border-color:var(--warn)}
+  .tag.p2{background:var(--white);color:var(--black)}
+  .tag.win{background:var(--green);color:#fff;border-color:var(--green)}
+  .body p{margin-bottom:10px;max-width:70ch}
+  .body p:last-child{margin-bottom:0}
+  .k{font-weight:700}
+  .fix{margin-top:10px;padding:12px 16px;background:var(--off);border-left:3px solid var(--black);font-size:15px}
+  .fix .k{text-transform:uppercase;font-size:12px;letter-spacing:.08em;color:var(--g600);display:block;margin-bottom:4px}
+  .where{font-size:13px;color:var(--g600);font-weight:600}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--off);padding:1px 5px}
+
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--g300)}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--g600);border-bottom:2px solid var(--black)}
+  td.num{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+  .pill{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.04em;padding:2px 8px;text-transform:uppercase}
+  .pill.fail{background:var(--err);color:#fff}
+  .pill.pass{background:var(--green);color:#fff}
+  .pill.warn{background:var(--warn);color:#111}
+
+  ul.plain{list-style:none;margin-top:8px}
+  ul.plain li{padding:12px 0;border-top:1px solid var(--g300);display:flex;gap:14px;align-items:flex-start}
+  ul.plain li:first-child{border-top:0}
+
+  footer{background:var(--off);border-top:2px solid var(--black);padding:44px 0;font-size:14px;color:var(--g600)}
+  footer .k{color:var(--black)}
+  .band{background:var(--black);color:#fff;padding:44px 0}
+  .band h2{color:#fff}
+  .band p{color:rgba(255,255,255,.72);max-width:66ch}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Auditoria de Sistema</div>
+    <h1>Basta — Segurança,<br>Performance &amp; Design.</h1>
+    <p class="sub">Varredura estática das 34 telas, review heurístico profundo em 4 representativas (landing, login, dashboard, Open&nbsp;Finance) e cálculo objetivo de contraste WCAG sobre o palette canônico.</p>
+    <div class="meta">
+      <span>14 Jul 2026</span>
+      <span>34 telas</span>
+      <span>Lente UX/UI</span>
+      <span>Diagnóstico — sem alterações aplicadas</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Resumo executivo</h2>
+    <p class="lead">A base é sólida e a postura de segurança ficou <span class="k">forte</span> após a migração de fonte — zero dependência de terceiro, zero rastreador, nenhum segredo exposto. O problema material é de <span class="k">design acessível</span>, e é objetivo, não estético: <span class="k">o botão de ação primário de todo o produto reprova contraste WCAG AA</span>. Para um público endividado, muitas vezes lendo no celular sob estresse, isso não é detalhe — é a barreira entre a pessoa agir ou desistir.</p>
+
+    <div class="scorecard">
+      <div class="score"><div class="n">1</div><div class="l">P0 — bloqueia lançamento</div></div>
+      <div class="score"><div class="n">4</div><div class="l">P1 — antes de escalar</div></div>
+      <div class="score"><div class="n">5</div><div class="l">P2 — dívida / produção</div></div>
+      <div class="score"><div class="n" style="color:var(--green)">6</div><div class="l">Pontos fortes confirmados</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="band">
+  <div class="wrap">
+    <h2>O achado que governa tudo</h2>
+    <p style="margin-top:14px;font-size:18px">O verde da marca <code style="background:rgba(255,255,255,.12);color:#fff">#42b449</code> entrega apenas <span class="k" style="color:#fff">2,67:1</span> de contraste com texto branco — o mínimo AA é <span class="k" style="color:#fff">4,5:1</span>. Ele falha exatamente no seu uso principal: o preenchimento do CTA ("Começar agora", "Criar conta gratuita") e o verde como texto/link. Não é opinião de gosto; é medida.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <h2>Prioridade 0</h2>
+    <p class="lead">Corrigir antes de qualquer lançamento público.</p>
+
+    <div class="finding">
+      <span class="tag p0">P0</span>
+      <div class="body">
+        <h3>Contraste do CTA primário reprova WCAG AA</h3>
+        <p class="where">Sistêmico · <code>.btn-primary</code>, <code>.btn-header-cta</code>, verde-como-texto — todas as telas</p>
+        <p>Branco sobre <code>#42b449</code> = <span class="k">2,67:1</span>. O botão mais importante do funil, em peso 700/16px (não é "texto grande" pela norma), fica abaixo do limite. O mesmo verde como texto sobre branco também dá 2,67:1, e o <code>green-hover</code> 3,47:1 — ambos reprovam.</p>
+        <div class="fix"><span class="k">Correção proposta</span>Criar um token <code>--green-action</code> mais escuro (alvo ≥ 4,5:1 com branco — na faixa de <code>#2E8B35</code> ou mais fechado) para preenchimento de botão e para verde-como-texto. Manter o <code>#42b449</code> vibrante só onde ele passa: elementos grandes e decorativos (dots, eyebrow sobre preto = 7,86:1). É decisão de marca — precisa da sua chancela no tom exato.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Prioridade 1</h2>
+    <p class="lead">Corrigir antes de escalar tráfego.</p>
+
+    <div class="finding">
+      <span class="tag p1">P1</span>
+      <div class="body">
+        <h3>Textos de baixa opacidade e cores de status reprovam contraste</h3>
+        <p class="where">Landing + telas de status</p>
+        <p><code>trust-signal</code> (branco 45% sobre preto) 4,43:1 · <code>of-seal</code> (branco 35%) 3,00:1 · <code>warning #F59E0B</code> sobre branco 2,15:1 · <code>error #EF4444</code> sobre branco 3,76:1. Textos pequenos que reprovam o AA normal.</p>
+        <div class="fix"><span class="k">Correção proposta</span>Subir opacidades mínimas para ≥60% sobre preto; escurecer <code>--warning</code> e <code>--error</code> quando usados como texto sobre branco (ou reservá-los a ícone/fundo, com o texto em preto).</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="tag p1">P1</span>
+      <div class="body">
+        <h3>Borda de input quase invisível</h3>
+        <p class="where"><code>.form-input</code> · telas de formulário (cadastro, login, perfil, OF)</p>
+        <p>Borda <code>gray-300</code> sobre branco = <span class="k">1,48:1</span>. Componentes de UI exigem 3:1. O limite do campo mal se distingue do fundo — afeta affordance de formulário para baixa visão, justo nas telas onde o usuário digita dados sensíveis.</p>
+        <div class="fix"><span class="k">Correção proposta</span>Escurecer a borda do campo (ex.: <code>gray-500 ≈ #6B6B6B</code>, ~3:1) ou engrossar para 2px. Mantém o brutalismo, ganha legibilidade.</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="tag p1">P1</span>
+      <div class="body">
+        <h3>Hierarquia de headings quebrada</h3>
+        <p class="where"><code>21-admin-templates</code> (2×h1) · <code>27-consulta-cpf</code>, <code>28-renegociacao</code>, <code>29-cancela-detalhe</code> (0×h1)</p>
+        <p>Cada página deve ter exatamente um <code>h1</code>. Zero h1 quebra a navegação por leitor de tela e, nas telas públicas, o SEO. Dois h1 dilui a âncora semântica.</p>
+        <div class="fix"><span class="k">Correção proposta</span>Garantir 1 <code>h1</code> por tela; rebaixar os excedentes para <code>h2</code>; promover o título principal das telas sem h1.</div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <span class="tag p1">P1</span>
+      <div class="body">
+        <h3>Links de Privacidade e Termos são becos sem saída</h3>
+        <p class="where"><code>href="#"</code> — landing (4), cadastro, login, e outras (~20 no total)</p>
+        <p>No rodapé do landing, "Privacidade" e "Termos de Uso" apontam para <code>#</code>. Numa fintech que lida com dados bancários via Open Finance, documentos legais quebrados são risco de confiança e de conformidade (LGPD exige política acessível).</p>
+        <div class="fix"><span class="k">Correção proposta</span>Publicar as páginas de Política de Privacidade e Termos e conectar os links antes do lançamento. Auditar todos os <code>href="#"</code> restantes: navegação real ou placeholder honesto.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Prioridade 2</h2>
+    <p class="lead">Dívida técnica e itens de produção — não bloqueiam o protótipo.</p>
+
+    <ul class="plain">
+      <li><span class="tag p2">P2</span><div class="body"><h3>Handlers inline em massa vs. CSP</h3><p>Centenas de <code>onclick</code>/<code>oninput</code> inline (telas admin chegam a 45–52) + <code>&lt;script&gt;</code>/<code>&lt;style&gt;</code> inline impedem uma Content-Security-Policy estrita sem <code>'unsafe-inline'</code>. Tolerável no protótipo; em produção, migrar para <code>addEventListener</code> e servir com CSP + nonce.</p></div></li>
+      <li><span class="tag p2">P2</span><div class="body"><h3>Contraste do próprio anel de foco</h3><p>O <code>:focus-visible</code> usa outline verde <code>#42b449</code> — 2,67:1 sobre fundos claros. O padrão de foco (só no teclado) está correto, mas o indicador é fraco no claro. O <code>--green-action</code> escuro do P0 resolve junto.</p></div></li>
+      <li><span class="tag p2">P2</span><div class="body"><h3>Peso de CSS por tela</h3><p>Cada tela carrega ~216KB de CSS (foundation + components), dos quais 81KB são a fonte base64 embutida — decisão consciente do protótipo (abrir por <code>file://</code>). Em produção: <code>next/font</code> + bundle fingerprintado.</p></div></li>
+      <li><span class="tag p2">P2</span><div class="body"><h3>Sprawl de breakpoints no landing</h3><p>9 breakpoints distintos num arquivo (480/600/640/680/767/768/780/800/900). Padronizar em 4 (640/768/1024/1200) reduz superfície de bug. Herança da auditoria de abril, ainda aberta.</p></div></li>
+      <li><span class="tag p2">P2</span><div class="body"><h3>Landmarks inconsistentes no fluxo OF</h3><p><code>10-of-progresso</code> não expõe <code>&lt;main&gt;</code>. Padronizar <code>header/main/footer</code> nas telas de fluxo (o <code>aria-live</code> já presente aqui é um acerto — manter).</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Pontos fortes — confirmados</h2>
+    <p class="lead">O que já está certo e deve ser preservado como padrão.</p>
+    <ul class="plain">
+      <li><span class="tag win">OK</span><div class="body"><p><span class="k">Segurança de dependências: excelente.</span> Após a migração de fonte, zero terceiro carregado — nenhum CDN, nenhum rastreador. Únicos externos são links de saída legítimos (redes sociais, wa.me, badge NVIDIA, consumidor.gov.br), todos com <code>rel="noopener noreferrer"</code>. Nenhum segredo/token/PII no código.</p></div></li>
+      <li><span class="tag win">OK</span><div class="body"><p><span class="k">Formulários seguros.</span> Campos com <code>type=email/password</code> e <code>autocomplete</code> corretos (<code>current-password</code>, <code>new-password</code>, <code>email</code>); labels associados por <code>for</code>. Telas de app com <code>noindex</code>.</p></div></li>
+      <li><span class="tag win">OK</span><div class="body"><p><span class="k">Foco de teclado correto.</span> Padrão <code>:focus-visible</code> com outline só no teclado — evita o erro comum de <code>outline:none</code> sem substituto.</p></div></li>
+      <li><span class="tag win">OK</span><div class="body"><p><span class="k">Base de acessibilidade.</span> Skip-link, focus-trap no menu mobile, <code>aria-live</code> no fluxo Open Finance, landmarks e <code>aria-expanded</code> nos accordions.</p></div></li>
+      <li><span class="tag win">OK</span><div class="body"><p><span class="k">Achados de abril resolvidos.</span> Todas as 34 telas com <code>viewport-fit=cover</code>; inputs a 16px no mobile (o auto-zoom do iOS não dispara mais). A auditoria anterior está desatualizada nesses pontos.</p></div></li>
+      <li><span class="tag win">OK</span><div class="body"><p><span class="k">Imagens disciplinadas.</span> Todo <code>&lt;img&gt;</code> com <code>width/height</code> e <code>alt</code> — sem CLS por imagem, sem alt faltando.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <h2>Evidência — contraste WCAG do palette</h2>
+    <p class="lead">Cálculo determinístico (fórmula de luminância relativa sRGB). AA normal = 4,5:1 · AA grande = 3,0:1 · componente de UI = 3,0:1.</p>
+    <table>
+      <thead><tr><th>Par cor / fundo</th><th style="text-align:right">Ratio</th><th>AA normal</th></tr></thead>
+      <tbody>
+        <tr><td>Branco sobre verde <code>#42b449</code> — CTA primário</td><td class="num">2,67</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>Verde <code>#42b449</code> como texto sobre branco</td><td class="num">2,67</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>warning <code>#F59E0B</code> sobre branco</td><td class="num">2,15</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>green-hover <code>#389d3e</code> sobre branco</td><td class="num">3,47</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>error <code>#EF4444</code> sobre branco</td><td class="num">3,76</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>trust-signal — branco 45% sobre preto</td><td class="num">4,43</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>of-seal — branco 35% sobre preto</td><td class="num">3,00</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>Borda input <code>gray-300</code> sobre branco (UI 3:1)</td><td class="num">1,48</td><td><span class="pill fail">Falha</span></td></tr>
+        <tr><td>hero-kicker / nav — branco 55% sobre preto</td><td class="num">6,25</td><td><span class="pill pass">Passa</span></td></tr>
+        <tr><td>manifesto / cta-sub — branco 60% sobre preto</td><td class="num">7,37</td><td><span class="pill pass">Passa</span></td></tr>
+        <tr><td>gray-600 sobre off-white — texto secundário</td><td class="num">8,00</td><td><span class="pill pass">Passa</span></td></tr>
+        <tr><td>Verde <code>#42b449</code> sobre preto — eyebrow dark</td><td class="num">7,86</td><td><span class="pill pass">Passa</span></td></tr>
+        <tr><td>hero-sub — branco 72% sobre preto</td><td class="num">10,59</td><td><span class="pill pass">Passa</span></td></tr>
+        <tr><td>sage <code>#bdc0ac</code> sobre preto</td><td class="num">11,30</td><td><span class="pill pass">Passa</span></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--g600);margin-top:14px">Leitura: o preto/branco/off-white e os textos de opacidade ≥55% estão sólidos. O ponto único de falha sistêmica é o <span class="k">verde da marca em uso funcional</span> (preenchimento e texto), além de cores de status e da borda de input.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><span class="k">Método.</span> Varredura estática automatizada nas 34 telas (recursos externos, tabnabbing, tamanho de fonte de input, links placeholder, handlers inline, dimensões de imagem, headings, segredos) + cálculo de contraste sobre <code>tokens.css</code> + review heurístico em 01/03/10/12 + reconciliação com a auditoria de 26 abr 2026.</p>
+    <p style="margin-top:12px"><span class="k">Escopo.</span> Este é um diagnóstico — nenhuma tela foi alterada. As correções P0/P1 (em especial o token de verde de ação) envolvem decisão de marca e serão executadas mediante aprovação. Fronteira: contraste e conformidade legal (LGPD/LBI) merecem, no limite, validação de um especialista formal — a direção técnica aqui é inequívoca, a chancela final não.</p>
+  </div>
+</footer>
+
+</body>
+</html>
