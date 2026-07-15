@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Conectar conta</title>
+  <meta name="theme-color" content="#1A1A1A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --black:     #1A1A1A;
+      --white:     #FFFFFF;
+      --off-white: #F5F3EF;
+      --green:     #42b449;
+      --gray-600:  #4A4A4A;
+      --gray-300:  #D4D4D4;
+
+      --f: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --t: 240ms var(--ease);
+    }
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overflow-x: clip; }
+    body {
+      font-family: var(--f);
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input { font-family: inherit; }
+    :where(button, a, input) { border-radius: 0; -webkit-appearance: none; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+    :focus:not(:focus-visible) { outline: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+
+    /* ── OVERLAY ────────────────────────────────────────────── */
+    .overlay {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background-color: var(--black);
+      background-image:
+        linear-gradient(135deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(45deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+    }
+
+    /* ── MODAL ──────────────────────────────────────────────── */
+    .modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 480px;
+      max-height: calc(100vh - 64px);
+      max-height: calc(100dvh - 64px);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      animation: modalIn 0.32s var(--ease) both;
+      border: 1.5px solid var(--black);
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HEADER — logo esquerda + fechar direita ────────────── */
+    .modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 40px 28px;
+      flex-shrink: 0;
+    }
+
+    .modal__close {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--gray-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: none;
+      color: var(--gray-600);
+      transition: border-color var(--t), color var(--t);
+      flex-shrink: 0;
+    }
+
+    .modal__close:hover {
+      border-color: var(--black);
+      color: var(--black);
+    }
+
+    /* ── BODY (scrollável) ──────────────────────────────────── */
+    .modal__body {
+      padding: 0 40px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ── TÍTULO — mesmo padrão de .modal__title (tela 06) ───── */
+    .modal__title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .modal__title span { color: var(--green); }
+
+    /* ── LABEL DE INSTRUÇÃO — bloco primário com o título ──── */
+    .section-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--gray-600);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    /* ── BUSCA — mesmo padrão de .form-input (telas de auth) ── */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 4px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      font-family: var(--f);
+      font-size: 15px;
+      font-weight: 400;
+      border: 2px solid var(--gray-300);
+      background: var(--white);
+      color: var(--black);
+      transition: border-color var(--t), box-shadow var(--t);
+      border-radius: 0;
+      -webkit-appearance: none;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--black);
+      box-shadow: 0 0 0 1px var(--black);
+    }
+
+    .search-input::placeholder { color: #999; font-weight: 400; }
+
+    /* ── LISTA DE BANCOS — bordas fundidas ──────────────────── */
+    .bank-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bank-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 2px solid var(--gray-300);
+      margin-top: -2px;
+      cursor: pointer;
+      background: var(--white);
+      transition: border-color var(--t), background var(--t);
+      width: 100%;
+      text-align: left;
+      position: relative;
+      z-index: 0;
+    }
+
+    .bank-item:hover {
+      border-color: var(--black);
+      z-index: 1;
+    }
+    .bank-item:active { transform: scale(0.98); }
+
+    .bank-item.is-selected {
+      border-color: var(--green);
+      background: var(--off-white);
+      z-index: 2;
+    }
+
+    /* ── ÍCONE DO BANCO ─────────────────────────────────────── */
+    .bank-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    /* ── NOME DO BANCO ──────────────────────────────────────── */
+    .bank-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.2;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── SETA ───────────────────────────────────────────────── */
+    .bank-arrow {
+      font-size: 16px;
+      color: var(--gray-300);
+      transition: color var(--t), transform var(--t);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .bank-item:hover .bank-arrow,
+    .bank-item.is-selected .bank-arrow {
+      color: var(--green);
+      transform: translateX(3px);
+    }
+
+    /* ── EMPTY STATE ────────────────────────────────────────── */
+    .bank-empty {
+      display: none;
+      padding: 32px 0;
+      text-align: center;
+      font-size: 15px;
+      color: #999;
+      border: 2px solid var(--gray-300);
+      margin-top: -2px;
+    }
+
+    /* ── FOOTER — mesmo padrão do .info-block (tela 06) ─────── */
+    .modal__footer {
+      background: var(--off-white);
+      padding: 16px 40px 20px;
+      flex-shrink: 0;
+    }
+
+    .modal__footer p {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--gray-600);
+    }
+
+    .modal__footer p strong {
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    /* ── RESPONSIVO — MOBILE BOTTOM SHEET ──────────────────── */
+    @media (max-width: 540px) {
+
+      /* Overlay cobre tela inteira, modal centralizado */
+      .overlay {
+        padding: 20px;
+        align-items: center;
+        background-color: rgba(26, 26, 26, 0.72);
+        background-image: none;
+      }
+
+      .modal {
+        max-width: 100%;
+        max-height: calc(100dvh - 40px);
+        max-height: calc(100vh - 40px);
+        animation: slideUp 0.32s var(--ease) both;
+      }
+
+      @keyframes slideUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Header compacto: logo menor, fechar acessível */
+      .modal__header {
+        padding: 24px 24px 20px;
+      }
+      .modal__header > svg { height: 28px; }
+      .modal__close {
+        width: 44px;
+        height: 44px; /* touch target Apple HIG */
+      }
+
+      /* Body com padding lateral de 24px */
+      .modal__body { padding: 0 24px 16px; }
+
+      /* Tipografia ajustada */
+      .modal__title  { font-size: 24px; margin-bottom: 6px; }
+      .section-label { font-size: 14px; margin-bottom: 12px; }
+
+      /* Campo de busca: font-size 16px evita zoom no iOS */
+      .search-input  { font-size: 16px; border-width: 1px; }
+      .search-input:focus { box-shadow: none; }
+
+      /* Itens de banco com touch target generoso (min 52px) */
+      .bank-item  { padding: 15px 14px; min-height: 52px; }
+      .bank-icon  { width: 36px; height: 36px; font-size: 10px; }
+      .bank-name  { font-size: 14px; }
+
+      /* Footer compacto */
+      .modal__footer { padding: 14px 24px 16px; }
+      .modal__footer p { font-size: 12px; }
+    }
+
+    /* iPhone SE (375px) */
+    @media (max-width: 390px) {
+      .modal__title  { font-size: 22px; }
+      .section-label { font-size: 13px; }
+    }
+
+    /* Safe area — notch e home indicator */
+    @supports (padding: env(safe-area-inset-bottom)) {
+      .modal__footer {
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+      }
+      @media (max-width: 540px) {
+        .modal__header {
+          padding-top: max(24px, env(safe-area-inset-top));
+        }
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+    <!-- ── HEADER ──────────────────────────────────────────── -->
+    <div class="modal__header">
+
+      <!-- Logo — canto superior esquerdo, como na tela 06 -->
+      <svg height="36" viewBox="0 0 602.25 254.23" xmlns="http://www.w3.org/2000/svg" aria-label="Basta.">
+        <path fill="#1A1A1A" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+        <path fill="#1A1A1A" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+        <path fill="#1A1A1A" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+        <path fill="#1A1A1A" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+        <path fill="#1A1A1A" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+        <path fill="#1A1A1A" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+      </svg>
+
+      <!-- Fechar — envia para a página anterior -->
+      <button class="modal__close" aria-label="Fechar" onclick="history.back()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- ── BODY ────────────────────────────────────────────── -->
+    <div class="modal__body">
+
+      <h2 class="modal__title" id="modal-title">
+        Escolha seu banco<span>.</span>
+      </h2>
+
+      <!-- Label + Busca -->
+      <span class="section-label">Escolha o banco em que suas contas precisam de uma revisão completa.<br>Onde estão as operações de crédito.</span>
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+        <input
+          type="search"
+          class="search-input"
+          id="bank-search"
+          placeholder="Digite o nome do seu banco."
+          autocomplete="off"
+          aria-label="Buscar instituição bancária"
+          oninput="filterBanks(this.value)"
+        >
+      </div>
+
+      <!-- Lista de bancos -->
+      <div class="bank-list" id="bank-list" role="listbox" aria-label="Selecionar banco">
+
+        <button class="bank-item" role="option" data-name="nubank" aria-label="Selecionar Nubank" tabindex="0" onclick="selectBank(this)">
+          <div class="bank-icon" style="background:#8A05BE;">NU</div>
+          <div class="bank-name">Nubank</div>
+          <span class="bank-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="bank-item" role="option" data-name="itaú itau" aria-label="Selecionar Itaú" tabindex="0" onclick="selectBank(this)">
+          <div class="bank-icon" style="background:#E06000;">IT</div>
+          <div class="bank-name">Itaú</div>
+          <span class="bank-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="bank-item" role="option" data-name="banco do brasil bb" aria-label="Selecionar Banco do Brasil" tabindex="0" onclick="selectBank(this)">
+          <div class="bank-icon" style="background:#003882;">BB</div>
+          <div class="bank-name">Banco do Brasil</div>
+          <span class="bank-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="bank-item" role="option" data-name="bradesco" aria-label="Selecionar Bradesco" tabindex="0" onclick="selectBank(this)">
+          <div class="bank-icon" style="background:#CC092F;">BD</div>
+          <div class="bank-name">Bradesco</div>
+          <span class="bank-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="bank-item" role="option" data-name="caixa economica federal cef" aria-label="Selecionar Caixa" tabindex="0" onclick="selectBank(this)">
+          <div class="bank-icon" style="background:#005CA9;">CX</div>
+          <div class="bank-name">Caixa</div>
+          <span class="bank-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="bank-item" role="option" data-name="santander" aria-label="Selecionar Santander" tabindex="0" onclick="selectBank(this)">
+          <div class="bank-icon" style="background:#EC0000;">ST</div>
+          <div class="bank-name">Santander</div>
+          <span class="bank-arrow" aria-hidden="true">→</span>
+        </button>
+
+      </div>
+
+      <div class="bank-empty" id="bank-empty" role="status" aria-live="polite">
+        Nenhuma instituição encontrada.
+      </div>
+
+    </div>
+
+    <!-- ── FOOTER ──────────────────────────────────────────── -->
+    <div class="modal__footer">
+      <p>
+        <strong>Conexão segura via Open Finance</strong> — regulado pelo Banco Central do Brasil. <strong>Acesso de leitura, não de movimentação.</strong>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function selectBank(el) {
+    document.querySelectorAll('.bank-item').forEach(b => b.classList.remove('is-selected'));
+    el.classList.add('is-selected');
+    window.location.href = '08_basta-of-credenciais.html';
+  }
+
+  function filterBanks(query) {
+    const q = query.toLowerCase().trim();
+    const items = document.querySelectorAll('.bank-item');
+    let visible = 0;
+
+    items.forEach(item => {
+      const match = !q || (item.dataset.name || '').includes(q);
+
+      if (q) {
+        // Corresponde: sobe para o topo da lista (order 0), visível
+        // Não corresponde: fica no lugar (order 1), invisível — modal não encolhe
+        item.style.order         = match ? '0' : '1';
+        item.style.visibility    = match ? ''  : 'hidden';
+        item.style.pointerEvents = match ? ''  : 'none';
+        item.style.zIndex        = match ? '2' : '0';
+      } else {
+        // Sem filtro: restaura tudo
+        item.style.order         = '';
+        item.style.visibility    = '';
+        item.style.pointerEvents = '';
+        item.style.zIndex        = '';
+      }
+
+      if (match) visible++;
+    });
+
+    document.getElementById('bank-empty').style.display = visible === 0 ? 'block' : 'none';
+  }
+</script>
+
+</body>
+</html>

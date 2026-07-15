@@ -1,0 +1,22 @@
+/* ============================================================================
+   BASTA — KEYFRAMES (animations)
+   Conjunto compartilhado entre múltiplas telas. Carregado antes dos
+   componentes que consomem essas animações (btn, modal, etc.).
+   ============================================================================ */
+
+/* Loader rotacional — usado em .btn--loading e similares. */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Entrada de modal — fade + slide up suave. */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Slide up genérico — usado em sucessos, banners, etc. */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}

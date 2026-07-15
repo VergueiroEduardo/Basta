@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Usuários</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="_foundation/fonts.css" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <style>
+    /* RESET LOCAL */    body {
+      font-family: var(--f);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--black);
+      background: var(--off-white);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }    /* LAYOUT */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    .sidebar {
+      width: var(--sidebar-w); background: var(--white);
+      border-right: 1px solid var(--gray-300);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+      overflow-y: auto;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 500;
+      color: var(--gray-600); transition: color var(--t), background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--black); background: var(--off-white); }
+    .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+    .nav-item--active .nav-item__icon { opacity: 1; }
+    .sidebar__section-title {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--gray-600);
+      padding: 24px 16px 8px; margin-top: 12px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--black); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: var(--gray-600); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: var(--gray-300); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    .main { flex: 1; }
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 24px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; letter-spacing: 0.02em;
+    }
+
+    /* USER TYPE HEADER (Admin · User toggle) */
+    .user-type {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .user-type__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--gray-600);
+    }
+    .user-type__group {
+      display: inline-flex; border: 1.5px solid var(--black);
+    }
+    .user-type__opt {
+      padding: 8px 18px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: none; cursor: pointer;
+      transition: background var(--t), color var(--t);
+    }
+    .user-type__opt + .user-type__opt { border-left: 1.5px solid var(--black); }
+    .user-type__opt:hover { background: var(--off-white); }
+    .user-type__opt--active { background: var(--black); color: var(--white); }
+    .user-type__opt--active:hover { background: var(--black); }
+
+    /* PAGE HEADER */
+    .page-head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .page-title {
+      font-size: clamp(22px, 5vw, 32px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .page-title .accent { color: var(--black); }
+    .page-desc {
+      font-size: 13px; color: var(--gray-600); font-weight: 400; line-height: 1.5;
+    }
+    .btn-add {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 16px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--black); color: var(--white);
+      border: 1.5px solid var(--black);
+      transition: background var(--t), border-color var(--t);
+      cursor: pointer; flex-shrink: 0;
+    }
+    .btn-add:hover { background: var(--green); border-color: var(--green); }
+    .btn-add svg { width: 12px; height: 12px; }
+
+    /* ══════════════════════════════════════════════════════════
+       KPI STRIP
+       ══════════════════════════════════════════════════════════ */
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (min-width: 720px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+    .kpi {
+      background: var(--white); border: 1px solid var(--gray-300);
+      padding: 16px;
+    }
+    .kpi__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+    }
+    .kpi__value {
+      font-size: 28px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.05; margin: 4px 0 4px;
+      color: var(--black); font-variant-numeric: tabular-nums;
+    }
+    .kpi__delta {
+      font-size: 11px; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .kpi__delta--up { color: var(--green); }
+    .kpi__delta--down { color: var(--error); }
+    .kpi__delta--flat { color: var(--gray-600); }
+
+    /* ══════════════════════════════════════════════════════════
+       FILTERS
+       ══════════════════════════════════════════════════════════ */
+    .filters {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .filter-search {
+      position: relative; flex: 1; min-width: 220px;
+    }
+    .filter-search__input {
+      width: 100%; padding: 11px 12px 11px 38px;
+      font-family: var(--f); font-size: 13px;
+      border: 1px solid var(--gray-300); background: var(--white);
+      transition: border-color var(--t);
+    }
+    .filter-search__input:focus { outline: none; border-color: var(--black); }
+    .filter-search__icon {
+      position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--gray-300); pointer-events: none;
+    }
+    .filter-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 14px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--gray-600);
+      border: 1.5px solid var(--gray-300);
+      transition: all var(--t); cursor: pointer; white-space: nowrap;
+    }
+    .filter-pill:hover { color: var(--black); border-color: var(--black); }
+    .filter-pill--active {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .filter-pill__count {
+      display: inline-block;
+      font-size: 10px; font-weight: 800;
+      padding: 1px 6px;
+      background: var(--gray-200); color: var(--gray-600);
+    }
+    .filter-pill--active .filter-pill__count {
+      background: rgba(255,255,255,0.18); color: var(--white);
+    }
+
+    .filter-select {
+      position: relative;
+    }
+    .filter-select__btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 12px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      cursor: pointer; transition: border-color var(--t);
+    }
+    .filter-select__btn:hover { border-color: var(--black); }
+    .filter-select__btn svg { width: 11px; height: 11px; opacity: 0.6; }
+
+    /* ══════════════════════════════════════════════════════════
+       BULK BAR (visible when selection > 0)
+       ══════════════════════════════════════════════════════════ */
+    .bulk-bar {
+      display: none;
+      align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+      padding: 12px 18px;
+      background: var(--black); color: var(--white);
+      margin-bottom: 16px;
+    }
+    .bulk-bar.is-active { display: flex; }
+    .bulk-bar__count {
+      font-size: 12px; font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+    .bulk-bar__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .bulk-btn {
+      padding: 8px 14px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      cursor: pointer; transition: all var(--t);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .bulk-btn:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+    .bulk-btn--danger { color: #FCA5A5; border-color: #FCA5A5; }
+    .bulk-btn--danger:hover { background: rgba(220,38,38,0.18); border-color: #FCA5A5; }
+    .bulk-btn svg { width: 12px; height: 12px; }
+
+    /* ══════════════════════════════════════════════════════════
+       TABLE
+       ══════════════════════════════════════════════════════════ */
+    .table-wrap {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      overflow: hidden;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1120px;
+    }
+    .table thead th {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+      text-align: left;
+      padding: 14px 16px;
+      background: var(--off-white);
+      border-bottom: 1px solid var(--gray-300);
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .table thead th.is-sortable { cursor: pointer; user-select: none; }
+    .table thead th.is-sortable:hover { color: var(--black); }
+    .table thead th.is-sortable svg {
+      width: 10px; height: 10px; vertical-align: -1px;
+      margin-left: 3px; opacity: 0.5;
+    }
+    .table thead th.col--check { width: 36px; padding-right: 0; }
+    .table thead th.col--actions { width: 40px; }
+
+    .table tbody tr {
+      border-bottom: 1px solid var(--gray-200);
+      transition: background var(--t);
+    }
+    .table tbody tr:last-child { border-bottom: none; }
+    .table tbody tr:hover { background: var(--off-white); }
+    .table tbody tr.is-selected {
+      background: rgba(66,180,73,0.06);
+      box-shadow: inset 3px 0 0 var(--green);
+    }
+    .table tbody td {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--black);
+      vertical-align: middle;
+    }
+
+    /* ROW: checkbox */
+    .row-check { width: 36px; padding-right: 0; }
+    .check {
+      appearance: none;
+      width: 16px; height: 16px;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white);
+      cursor: pointer;
+      position: relative;
+      transition: border-color var(--t), background var(--t);
+      vertical-align: middle;
+    }
+    .check:hover { border-color: var(--black); }
+    .check:checked {
+      background: var(--black); border-color: var(--black);
+    }
+    .check:checked::after {
+      content: '';
+      position: absolute; left: 4px; top: 1px;
+      width: 5px; height: 9px;
+      border: solid var(--white);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* ROW: user cell */
+    .user-cell {
+      display: flex; align-items: center; gap: 12px;
+      min-width: 220px;
+    }
+    .user-cell__avatar {
+      position: relative;
+      width: 36px; height: 36px;
+      background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; letter-spacing: 0.02em;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .user-cell__avatar--admin { background: var(--black); }
+    .user-cell__avatar--ghost { background: var(--gray-300); color: var(--gray-600); }
+    .user-cell__status {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 10px; height: 10px;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+    .user-cell__status--active { background: var(--green); }
+    .user-cell__status--inactive { background: var(--gray-300); }
+    .user-cell__status--blocked { background: var(--error); }
+
+    .user-cell__body { min-width: 0; }
+    .user-cell__name {
+      font-size: 13px; font-weight: 700; color: var(--black);
+      line-height: 1.25;
+    }
+    .user-cell__name-empty { color: var(--gray-600); font-style: italic; font-weight: 500; }
+    .user-cell__id {
+      font-size: 10px; color: var(--gray-600); font-weight: 600;
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ROW: contact cell */
+    .contact {
+      display: flex; flex-direction: column; gap: 2px;
+      min-width: 200px;
+    }
+    .contact__email {
+      font-size: 12px; color: var(--black); font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      max-width: 220px;
+    }
+    .contact__cpf {
+      font-size: 11px; color: var(--gray-600); font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Stage chip */
+    .stage-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 8px 4px 4px;
+      font-size: 11px; font-weight: 700;
+      color: var(--black);
+      background: var(--off-white);
+      border: 1px solid var(--gray-300);
+      transition: border-color var(--t);
+      max-width: 100%;
+    }
+    .stage-chip:hover { border-color: var(--black); }
+    .stage-chip__num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      font-size: 9px; font-weight: 800;
+      background: var(--white); border: 1px solid var(--gray-300);
+      color: var(--black);
+      letter-spacing: 0;
+    }
+    .stage-chip__name {
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .stage-chip--done .stage-chip__num { background: var(--green); border-color: var(--green); color: var(--white); }
+    .stage-chip--blocked { color: var(--gray-600); background: var(--gray-100); }
+
+    /* Module status badge (DOCs, Open Finance, Requerimentos, Seguros, Crédito, Abusos) */
+    .table thead th.col--mod { text-align: center; width: 92px; }
+    .mod-cell { text-align: center; }
+    .mod {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white); color: var(--gray-300);
+      font-size: 13px; font-weight: 800; line-height: 1;
+    }
+    .mod svg { width: 13px; height: 13px; }
+    .mod--done {
+      border-color: var(--green); color: var(--green);
+      background: rgba(66,180,73,0.08);
+    }
+    .mod--pending { border-color: var(--gray-300); color: var(--gray-300); }
+    .mod--warn {
+      border-color: var(--warning); color: var(--warning);
+      background: rgba(245,158,11,0.08);
+    }
+    .mod--alert {
+      border-color: var(--error); color: var(--error);
+      background: rgba(220,38,38,0.06);
+    }
+
+    /* Time / dates */
+    .time {
+      font-size: 12px; color: var(--gray-600); font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .time strong { color: var(--black); font-weight: 700; }
+
+    /* Role pill (clickable to change) */
+    .role-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white); color: var(--gray-600);
+      cursor: pointer; transition: all var(--t);
+      white-space: nowrap;
+    }
+    .role-pill:hover { border-color: var(--black); color: var(--black); }
+    .role-pill--admin {
+      color: var(--green); border-color: var(--green);
+    }
+    .role-pill--admin:hover { background: var(--green); color: var(--white); border-color: var(--green); }
+    .role-pill--invited {
+      color: var(--warning); border-color: var(--warning);
+    }
+    .role-pill--blocked {
+      color: var(--error); border-color: var(--error);
+    }
+    .role-pill svg { width: 9px; height: 9px; opacity: 0.6; }
+
+    /* Kebab menu */
+    .kebab {
+      position: relative;
+    }
+    .kebab__btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      background: transparent; border: 1px solid transparent;
+      color: var(--gray-600); cursor: pointer;
+      transition: all var(--t);
+    }
+    .kebab__btn:hover { border-color: var(--gray-300); color: var(--black); background: var(--white); }
+    .kebab__btn svg { width: 16px; height: 16px; }
+    .kebab__menu {
+      position: absolute; top: calc(100% + 4px); right: 0;
+      background: var(--white); border: 1.5px solid var(--black);
+      min-width: 180px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 20;
+      display: none;
+    }
+    .kebab__menu.is-open { display: block; }
+    .kebab__item {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 10px 14px;
+      font-family: var(--f); font-size: 12px; font-weight: 600;
+      color: var(--black);
+      background: transparent; border: none; cursor: pointer;
+      text-align: left;
+      transition: background var(--t);
+    }
+    .kebab__item:hover { background: var(--off-white); }
+    .kebab__item--danger { color: var(--error); }
+    .kebab__item--danger:hover { background: rgba(220,38,38,0.06); }
+    .kebab__item svg { width: 13px; height: 13px; flex-shrink: 0; }
+    .kebab__sep {
+      height: 1px; background: var(--gray-200); margin: 4px 0;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 14px 16px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 12px; color: var(--gray-600);
+      flex-wrap: wrap;
+    }
+    .pagination__nav { display: flex; gap: 4px; }
+    .pagination__btn {
+      padding: 6px 10px;
+      font-family: var(--f); font-size: 11px; font-weight: 700;
+      background: var(--white); color: var(--black);
+      border: 1px solid var(--gray-300);
+      cursor: pointer; transition: all var(--t);
+      min-width: 32px;
+    }
+    .pagination__btn:hover { border-color: var(--black); }
+    .pagination__btn--active {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .pagination__btn:disabled {
+      opacity: 0.4; cursor: not-allowed;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       USER DETAIL DRAWER
+       ══════════════════════════════════════════════════════════ */
+    .drawer-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.55);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.24s var(--ease);
+    }
+    .drawer-overlay.is-open { opacity: 1; pointer-events: all; }
+
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 100%; max-width: 720px;
+      background: var(--white);
+      border-left: 2px solid var(--black);
+      z-index: 210;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.32s var(--ease);
+    }
+    .drawer.is-open { transform: translateX(0); }
+
+    .drawer__head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-300);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .drawer__avatar {
+      position: relative;
+      width: 56px; height: 56px;
+      background: var(--green); color: var(--white);
+      font-size: 16px; font-weight: 800; letter-spacing: 0.02em;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .drawer__avatar--admin { background: var(--black); }
+    .drawer__avatar-status {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 14px; height: 14px;
+      border: 2px solid var(--white);
+      border-radius: 50%;
+      background: var(--green);
+    }
+    .drawer__head-info { flex: 1; min-width: 0; }
+    .drawer__name {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.01em; color: var(--black);
+      line-height: 1.2;
+    }
+    .drawer__email {
+      font-size: 12px; color: var(--gray-600); font-weight: 500;
+      margin-top: 4px;
+    }
+    .drawer__close {
+      width: 36px; height: 36px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: 1px solid var(--gray-300);
+      color: var(--gray-600); cursor: pointer; transition: all var(--t);
+    }
+    .drawer__close:hover { border-color: var(--black); color: var(--black); }
+    .drawer__close svg { width: 14px; height: 14px; }
+
+    .drawer__body {
+      flex: 1; overflow-y: auto;
+      padding: 24px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .field {
+      padding: 12px 14px;
+      background: var(--off-white);
+      border-left: 3px solid var(--gray-300);
+    }
+    .field__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+      margin-bottom: 4px;
+    }
+    .field__value {
+      font-size: 13px; font-weight: 700; color: var(--black);
+      font-variant-numeric: tabular-nums;
+      word-break: break-word;
+    }
+    .field--accent { border-left-color: var(--green); }
+
+    .section-title {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--black);
+      margin: 24px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-300);
+    }
+
+    .quick-actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .quick-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 14px;
+      font-family: var(--f); font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300);
+      cursor: pointer; transition: all var(--t);
+    }
+    .quick-btn:hover { border-color: var(--black); }
+    .quick-btn--primary {
+      background: var(--black); color: var(--white); border-color: var(--black);
+    }
+    .quick-btn--primary:hover { background: var(--green); border-color: var(--green); }
+    .quick-btn--danger { color: var(--error); border-color: var(--error); }
+    .quick-btn--danger:hover { background: var(--error); color: var(--white); }
+    .quick-btn svg { width: 12px; height: 12px; }
+
+    /* Audit log */
+    .audit { display: flex; flex-direction: column; gap: 0; }
+    .audit__item {
+      display: grid;
+      grid-template-columns: 16px 1fr;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .audit__item:last-child { border-bottom: none; }
+    .audit__dot {
+      width: 8px; height: 8px; background: var(--gray-300);
+      border-radius: 50%;
+      margin-top: 6px; margin-left: 4px;
+    }
+    .audit__dot--login { background: var(--green); }
+    .audit__dot--admin { background: var(--blue); }
+    .audit__dot--warn { background: var(--warning); }
+    .audit__action {
+      font-size: 12px; font-weight: 700; color: var(--black);
+      line-height: 1.4;
+    }
+    .audit__action span { font-weight: 500; color: var(--gray-600); }
+    .audit__time {
+      font-size: 11px; color: var(--gray-600); font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .summary {
+      padding: 12px;
+      background: var(--white); border: 1px solid var(--gray-300);
+      text-align: center;
+    }
+    .summary__value {
+      font-size: 22px; font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.02em; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+    .summary__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--gray-600);
+      margin-top: 4px;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       INVITE MODAL
+       ══════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .modal-overlay.is-open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 28px; width: 100%; max-width: 480px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--green);
+      margin-bottom: 8px;
+    }
+    .modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .form-field {
+      margin-bottom: 16px;
+    }
+    /* Reset de fieldset/legend defaults do browser para casar com .form-field */
+    fieldset.form-field {
+      border: 0; padding: 0; min-width: 0;
+    }
+    fieldset.form-field > legend.form-label {
+      padding: 0; float: none; width: auto;
+    }
+    .form-label {
+      display: block;
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 11px 14px;
+      font-family: var(--f); font-size: 13px;
+      border: 1px solid var(--gray-300); background: var(--white);
+      transition: border-color var(--t);
+      color: var(--black);
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none; border-color: var(--black);
+    }
+    .form-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    .role-options {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+    .role-opt {
+      padding: 12px;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white); cursor: pointer;
+      transition: border-color var(--t), background var(--t);
+      text-align: left;
+    }
+    .role-opt:hover { border-color: var(--black); }
+    .role-opt--active {
+      border-color: var(--green); background: rgba(66,180,73,0.05);
+    }
+    .role-opt__name {
+      font-size: 13px; font-weight: 800; color: var(--black);
+      letter-spacing: -0.01em; margin-bottom: 2px;
+    }
+    .role-opt__desc {
+      font-size: 11px; color: var(--gray-600); line-height: 1.4;
+    }
+    .modal__actions {
+      display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px;
+    }
+    .btn-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+    }
+    .btn-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-primary {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--black); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--black);
+      transition: background var(--t);
+    }
+    .btn-primary:hover { background: var(--green); border-color: var(--green); }
+    .btn-danger {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+    }
+    .btn-danger:hover { background: #b91c1c; border-color: #b91c1c; }
+
+    /* ══════════════════════════════════════════════════════════
+       MOBILE
+       ══════════════════════════════════════════════════════════ */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main    { padding: 72px 16px 60px; max-width: 100%; }
+    .page-title { font-size: 22px; }
+
+    @media (min-width: 640px) {
+      .main { padding: 72px 24px 80px; }
+      .page-title { font-size: 26px; }
+    }
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main    { margin-left: var(--sidebar-w); padding: 32px 32px 60px; max-width: 1280px; }
+      .page-title { font-size: 28px; }
+    }
+    @media (min-width: 1280px) {
+      .main { padding: 32px 40px 60px; }
+    }
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main   { padding-bottom: max(60px, calc(40px + env(safe-area-inset-bottom))); }
+    }
+
+    /* LOGOUT MODAL */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+    .logout-modal {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 28px 28px 24px; width: 100%; max-width: 360px;
+    }
+    .logout-modal__eyebrow {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px;
+    }
+    .logout-modal__title {
+      font-size: 20px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 8px;
+    }
+    .logout-modal__desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 24px;
+    }
+    .logout-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-logout-cancel {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: transparent; color: var(--black); cursor: pointer;
+      border: 1.5px solid var(--gray-300);
+    }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm {
+      padding: 10px 18px; font-family: var(--f); font-size: 11px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      background: var(--error); color: var(--white); cursor: pointer;
+      border: 1.5px solid var(--error);
+    }    /* nav-item placeholder "em breve" — sem destino ainda */
+    .nav-item--soon { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+    .nav-item--soon::after {
+      content: "Em breve";
+      margin-left: auto;
+      font-size: 9px; font-weight: 800;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--gray-600);
+      border: 1px solid var(--gray-300); padding: 2px 6px;
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- TOPBAR mobile -->
+<div class="topbar">
+  <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="16_basta-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">EV</a>
+</div>
+
+<div class="dashboard">
+
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="12_basta-dashboard.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="12_basta-dashboard.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <a href="13_basta-documentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Meus Documentos
+      </a>
+      <a href="14_basta-contas-bancarias.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="0"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Contas Bancárias
+      </a>
+      <a href="15_basta-requerimentos.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+        Requerimentos
+      </a>
+      <a href="16_basta-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+      <a href="17_basta-ajuda.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Ajuda
+      </a>
+
+      <div class="sidebar__section-title">Admin</div>
+
+      <a href="18_basta-hoje.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Hoje
+      </a>
+      <a href="19_basta-admin-conversas.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Conversas
+      </a>
+      <a href="20_basta-admin-pipeline.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        CRM
+      </a>
+      <a href="23_basta-diagnostico-admin.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 5c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+        Diagnóstico
+      </a>
+      <a href="21_basta-admin-templates.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Templates
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Usuários
+      </span>
+      <a href="#" class="nav-item nav-item--soon" aria-disabled="true" tabindex="-1" title="Em breve">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Consulta Extrato
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">EV</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Eduardo Vergueiro</div>
+        <div class="sidebar__user-email">eavergueiro@gmail.com</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ── USER TYPE HEADER ───────────────────────────────── -->
+    <div class="user-type" role="group" aria-label="Tipo de acesso">
+      <span class="user-type__label">Tipo de acesso</span>
+      <div class="user-type__group" role="tablist">
+        <button class="user-type__opt user-type__opt--active" type="button" role="tab" aria-selected="true" onclick="setUserType(this)">Admin</button>
+        <button class="user-type__opt" type="button" role="tab" aria-selected="false" onclick="setUserType(this)">User</button>
+      </div>
+    </div>
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Usuários<span class="accent">.</span></h1>
+        <p class="page-desc">Gerencie as contas, papéis e o acesso ao sistema.</p>
+      </div>
+      <button class="btn-add" onclick="openInvite()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Convidar admin
+      </button>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi__label">Total de usuários</div>
+        <div class="kpi__value">214</div>
+        <div class="kpi__delta kpi__delta--up">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          +12 esta semana
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Ativos (≤30d)</div>
+        <div class="kpi__value">186</div>
+        <div class="kpi__delta kpi__delta--up">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+          87% engajamento
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Administradores</div>
+        <div class="kpi__value">3</div>
+        <div class="kpi__delta kpi__delta--flat">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          1 convite pendente
+        </div>
+      </div>
+      <div class="kpi">
+        <div class="kpi__label">Bloqueados</div>
+        <div class="kpi__value">2</div>
+        <div class="kpi__delta kpi__delta--down">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          -1 vs mês anterior
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters">
+      <div class="filter-search">
+        <svg class="filter-search__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="filter-search__input" placeholder="Buscar por nome, email ou CPF…" aria-label="Buscar usuário" />
+      </div>
+      <button class="filter-pill filter-pill--active" onclick="togglePill(this)">
+        Todos <span class="filter-pill__count">214</span>
+      </button>
+      <button class="filter-pill" onclick="togglePill(this)">
+        Usuários <span class="filter-pill__count">211</span>
+      </button>
+      <button class="filter-pill" onclick="togglePill(this)">
+        Admins <span class="filter-pill__count">3</span>
+      </button>
+      <button class="filter-pill" onclick="togglePill(this)">
+        Convidados <span class="filter-pill__count">1</span>
+      </button>
+      <button class="filter-pill" onclick="togglePill(this)">
+        Bloqueados <span class="filter-pill__count">2</span>
+      </button>
+
+      <div class="filter-select">
+        <button class="filter-select__btn">
+          Etapa: Todas
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="filter-select">
+        <button class="filter-select__btn">
+          Cadastrado: 30 dias
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- BULK BAR -->
+    <div class="bulk-bar" id="bulkBar">
+      <div class="bulk-bar__count" id="bulkCount">0 selecionados</div>
+      <div class="bulk-bar__actions">
+        <button class="bulk-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Exportar CSV
+        </button>
+        <button class="bulk-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Enviar mensagem
+        </button>
+        <button class="bulk-btn bulk-btn--danger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          Bloquear acesso
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="col--check">
+                <input type="checkbox" class="check" id="checkAll" onclick="toggleAll(this)" aria-label="Selecionar todos" />
+              </th>
+              <th>Usuário</th>
+              <th>Contato</th>
+              <th>Etapa funil</th>
+              <th class="col--mod">DOCs Completos</th>
+              <th class="col--mod">Open Finance</th>
+              <th class="col--mod">Requerimentos</th>
+              <th class="col--mod">Seguros</th>
+              <th class="col--mod">Crédito</th>
+              <th class="col--mod">Abusos</th>
+              <th class="col--actions" aria-label="Ações"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- ROW 1: Eduardo Vergueiro (admin, current user) -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar user-cell__avatar--admin">
+                    AL
+                    <span class="user-cell__status user-cell__status--active" title="Online agora"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">Eduardo Vergueiro <span style="font-size:9px; font-weight:700; color:var(--green); margin-left:4px; letter-spacing:0.04em;">VOCÊ</span></div>
+                    <div class="user-cell__id">#000001</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">eavergueiro@gmail.com</div>
+                  <div class="contact__cpf">CPF 193.•••.•••-14</div>
+                </div>
+              </td>
+              <td><span class="time">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('Eduardo Vergueiro','eavergueiro@gmail.com','admin')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 2: Thadeu -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar">
+                    TH
+                    <span class="user-cell__status user-cell__status--active"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">Thadeu Arias</div>
+                    <div class="user-cell__id">#000087</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">thadeuarias@gmail.com</div>
+                  <div class="contact__cpf">CPF 347.•••.•••-16</div>
+                </div>
+              </td>
+              <td>
+                <button class="stage-chip">
+                  <span class="stage-chip__num">06</span>
+                  <span class="stage-chip__name">Open Finance</span>
+                </button>
+              </td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('Thadeu Arias','thadeuarias@gmail.com','user')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      Abrir conversa
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                      Forçar logout
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('Thadeu Arias')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 3: Stella Campos -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar">
+                    ST
+                    <span class="user-cell__status user-cell__status--active"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">Stella Campos</div>
+                    <div class="user-cell__id">#000076</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">stecampos78@gmail.com</div>
+                  <div class="contact__cpf">CPF 279.•••.•••-45</div>
+                </div>
+              </td>
+              <td>
+                <button class="stage-chip stage-chip--done">
+                  <span class="stage-chip__num">07</span>
+                  <span class="stage-chip__name">Concluído</span>
+                </button>
+              </td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--alert" title="Abusos identificados">!</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('Stella Campos','stecampos78@gmail.com','user')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      Abrir conversa
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('Stella Campos')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 4: any karolyne (CPF inválido — repetido) -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar">
+                    AN
+                    <span class="user-cell__status user-cell__status--inactive"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">any karolyne</div>
+                    <div class="user-cell__id">#000054</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">akarolgaldino@gmail.com</div>
+                  <div class="contact__cpf" style="color:var(--error);" title="CPF aparenta ser inválido">CPF 111.•••.•••-11 ⚠</div>
+                </div>
+              </td>
+              <td>
+                <button class="stage-chip">
+                  <span class="stage-chip__num">02</span>
+                  <span class="stage-chip__name">Pessoais</span>
+                </button>
+              </td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('any karolyne','akarolgaldino@gmail.com','user')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      Abrir conversa
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('any karolyne')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 5: Eduardo Avergueiro (admin) -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar user-cell__avatar--admin">
+                    EA
+                    <span class="user-cell__status user-cell__status--active"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">Eduardo Avergueiro</div>
+                    <div class="user-cell__id">#000002</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">eduardo@bastaeponto.com.br</div>
+                  <div class="contact__cpf">CPF 555.•••.•••-22</div>
+                </div>
+              </td>
+              <td><span class="time">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('Eduardo Avergueiro','eduardo@bastaeponto.com.br','admin')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                      Forçar logout
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('Eduardo Avergueiro')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Remover privilégio admin
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 6: Any Karolyne Galdino (provável duplicata da #4) -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar">
+                    AN
+                    <span class="user-cell__status user-cell__status--active"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">Any Karolyne Galdino <span style="font-size:9px; font-weight:700; color:var(--warning); margin-left:4px; letter-spacing:0.04em;">POSSÍVEL DUPLICATA</span></div>
+                    <div class="user-cell__id">#000033</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">anykarolyne@gmail.com</div>
+                  <div class="contact__cpf">CPF 108.•••.•••-39</div>
+                </div>
+              </td>
+              <td>
+                <button class="stage-chip">
+                  <span class="stage-chip__num">04</span>
+                  <span class="stage-chip__name">Análise gratuita</span>
+                </button>
+              </td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                      Mesclar com duplicata
+                    </button>
+                    <button class="kebab__item" onclick="openDrawer('Any Karolyne Galdino','anykarolyne@gmail.com','user')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('Any Karolyne Galdino')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 7: Sem nome (cadastro incompleto) -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar user-cell__avatar--ghost">
+                    ?
+                    <span class="user-cell__status user-cell__status--inactive"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name user-cell__name-empty">Sem nome <span style="font-size:9px; font-weight:700; color:var(--warning); margin-left:4px; letter-spacing:0.04em;">CADASTRO INCOMPLETO</span></div>
+                    <div class="user-cell__id">#000019</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">do.siqueira@gmail.com</div>
+                  <div class="contact__cpf">CPF 283.•••.•••-56</div>
+                </div>
+              </td>
+              <td>
+                <button class="stage-chip stage-chip--blocked">
+                  <span class="stage-chip__num">01</span>
+                  <span class="stage-chip__name">Atendimento</span>
+                </button>
+              </td>
+              <td class="mod-cell"><span class="mod mod--warn" title="Documentos incompletos">!</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('Sem nome','do.siqueira@gmail.com','user')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                      Reengajar via WhatsApp
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('Sem nome (do.siqueira@gmail.com)')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Excluir
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 8: Convite pendente -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar user-cell__avatar--ghost">
+                    JP
+                    <span class="user-cell__status" style="background:var(--warning);"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">João Pereira</div>
+                    <div class="user-cell__id">convidado em 04 mai</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">joao.pereira@bastaeponto.com.br</div>
+                  <div class="contact__cpf" style="color:var(--gray-600); font-style:italic;">aguardando aceitar convite</div>
+                </div>
+              </td>
+              <td><span class="time">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M21 5c0 1.66-4 3-9 3s-9-1.34-9-3 4-3 9-3 9 1.34 9 3z"/></svg>
+                      Reenviar convite
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>
+                      Gerar novo link
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                      Cancelar convite
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- ROW 9: Bloqueado -->
+            <tr>
+              <td class="row-check"><input type="checkbox" class="check row-check__input" onclick="rowCheck(this)" /></td>
+              <td>
+                <div class="user-cell">
+                  <div class="user-cell__avatar user-cell__avatar--ghost">
+                    RS
+                    <span class="user-cell__status user-cell__status--blocked"></span>
+                  </div>
+                  <div class="user-cell__body">
+                    <div class="user-cell__name">Rogério Silveira</div>
+                    <div class="user-cell__id">#000041</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="contact">
+                  <div class="contact__email">rsilveira@gmail.com</div>
+                  <div class="contact__cpf">CPF 982.•••.•••-04</div>
+                </div>
+              </td>
+              <td>
+                <button class="stage-chip stage-chip--blocked">
+                  <span class="stage-chip__num">03</span>
+                  <span class="stage-chip__name">Pesquisa</span>
+                </button>
+              </td>
+              <td class="mod-cell"><span class="mod mod--done">✓</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td class="mod-cell"><span class="mod mod--pending">—</span></td>
+              <td>
+                <div class="kebab">
+                  <button class="kebab__btn" onclick="toggleKebab(this, event)" aria-label="Ações">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
+                  <div class="kebab__menu">
+                    <button class="kebab__item" onclick="openDrawer('Rogério Silveira','rsilveira@gmail.com','user')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      Ver perfil
+                    </button>
+                    <button class="kebab__item">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                      Restaurar acesso
+                    </button>
+                    <div class="kebab__sep"></div>
+                    <button class="kebab__item kebab__item--danger" onclick="openDelete('Rogério Silveira')">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/></svg>
+                      Excluir definitivamente
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination">
+        <span>Mostrando <strong style="color:var(--black);">1–9</strong> de <strong style="color:var(--black);">214</strong></span>
+        <div class="pagination__nav">
+          <button class="pagination__btn" disabled>‹</button>
+          <button class="pagination__btn pagination__btn--active">1</button>
+          <button class="pagination__btn">2</button>
+          <button class="pagination__btn">3</button>
+          <button class="pagination__btn">…</button>
+          <button class="pagination__btn">24</button>
+          <button class="pagination__btn">›</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     USER DETAIL DRAWER
+     ════════════════════════════════════════════════════════ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <header class="drawer__head">
+    <div class="drawer__avatar" id="drawerAvatar">
+      MC
+      <span class="drawer__avatar-status"></span>
+    </div>
+    <div class="drawer__head-info">
+      <div class="drawer__name" id="drawerName">Maria Carvalho</div>
+      <div class="drawer__email" id="drawerEmail">maria.c@email.com</div>
+    </div>
+    <button class="drawer__close" onclick="closeDrawer()" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </header>
+
+  <div class="drawer__body">
+
+    <div class="quick-actions">
+      <button class="quick-btn quick-btn--primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Abrir conversa
+      </button>
+      <button class="quick-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>
+        Ver no pipeline
+      </button>
+      <button class="quick-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        Resetar senha
+      </button>
+      <button class="quick-btn quick-btn--danger" id="drawerBlockBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        Bloquear acesso
+      </button>
+    </div>
+
+    <div class="section-title">Resumo do progresso</div>
+    <div class="summary-grid">
+      <div class="summary">
+        <div class="summary__value">2</div>
+        <div class="summary__label">Bancos conectados</div>
+      </div>
+      <div class="summary">
+        <div class="summary__value">4</div>
+        <div class="summary__label">Requerimentos assinados</div>
+      </div>
+      <div class="summary">
+        <div class="summary__value">14</div>
+        <div class="summary__label">Documentos enviados</div>
+      </div>
+    </div>
+
+    <div class="section-title">Dados</div>
+    <div class="field-grid">
+      <div class="field field--accent">
+        <div class="field__label">CPF</div>
+        <div class="field__value" id="drawerCpf">347.•••.•••-16</div>
+      </div>
+      <div class="field field--accent">
+        <div class="field__label">Telefone</div>
+        <div class="field__value">+55 19 99179-5723</div>
+      </div>
+      <div class="field">
+        <div class="field__label">Cidade</div>
+        <div class="field__value">Campinas, SP</div>
+      </div>
+      <div class="field">
+        <div class="field__label">Origem</div>
+        <div class="field__value">Instagram Ads</div>
+      </div>
+      <div class="field">
+        <div class="field__label">Cadastrado em</div>
+        <div class="field__value">05 mai 2026 (ontem)</div>
+      </div>
+      <div class="field">
+        <div class="field__label">Último acesso</div>
+        <div class="field__value">2 horas atrás</div>
+      </div>
+      <div class="field">
+        <div class="field__label">Termos aceitos em</div>
+        <div class="field__value">05 mai 2026 14:32</div>
+      </div>
+      <div class="field">
+        <div class="field__label">2FA</div>
+        <div class="field__value" style="color: var(--warning);">Não configurado</div>
+      </div>
+    </div>
+
+    <div class="section-title">Histórico de atividade</div>
+    <div class="audit">
+      <div class="audit__item">
+        <div class="audit__dot audit__dot--login"></div>
+        <div>
+          <div class="audit__action">Login bem-sucedido <span>· iOS Safari · São Paulo, SP</span></div>
+          <div class="audit__time">Hoje, 10:42</div>
+        </div>
+      </div>
+      <div class="audit__item">
+        <div class="audit__dot audit__dot--admin"></div>
+        <div>
+          <div class="audit__action">Eduardo Vergueiro abriu o perfil <span>(papel: admin)</span></div>
+          <div class="audit__time">Hoje, 10:30</div>
+        </div>
+      </div>
+      <div class="audit__item">
+        <div class="audit__dot"></div>
+        <div>
+          <div class="audit__action">Conectou banco <span>· Banco do Brasil via Pluggy</span></div>
+          <div class="audit__time">Ontem, 18:14</div>
+        </div>
+      </div>
+      <div class="audit__item">
+        <div class="audit__dot"></div>
+        <div>
+          <div class="audit__action">Assinou requerimento <span>· Demonstrativo de Evolução · Itaú</span></div>
+          <div class="audit__time">Ontem, 16:02</div>
+        </div>
+      </div>
+      <div class="audit__item">
+        <div class="audit__dot audit__dot--warn"></div>
+        <div>
+          <div class="audit__action">Falha de conexão Open Finance <span>· Itaú · timeout no consentimento</span></div>
+          <div class="audit__time">04 mai, 11:20</div>
+        </div>
+      </div>
+      <div class="audit__item">
+        <div class="audit__dot audit__dot--login"></div>
+        <div>
+          <div class="audit__action">Conta criada <span>· via WhatsApp</span></div>
+          <div class="audit__time">04 mai, 09:48</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<!-- ════════════════════════════════════════════════════════
+     INVITE ADMIN MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="inviteModal">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal__eyebrow">Novo acesso administrativo</div>
+    <h2 class="modal__title">Convidar admin</h2>
+    <p class="modal__desc">A pessoa receberá um e-mail com um link único para criar a senha. O convite expira em 7 dias.</p>
+
+    <div class="form-field">
+      <label class="form-label" for="inv-email">E-mail corporativo</label>
+      <input type="email" class="form-input" id="inv-email" placeholder="nome@bastaeponto.com.br" />
+    </div>
+
+    <fieldset class="form-field">
+      <legend class="form-label">Papel</legend>
+      <div class="role-options" role="radiogroup" aria-label="Papel do usuário">
+        <button type="button" class="role-opt role-opt--active" onclick="selectRole(this)">
+          <div class="role-opt__name">Administrador</div>
+          <div class="role-opt__desc">Acesso completo: usuários, pipeline, conversas e templates.</div>
+        </button>
+        <button type="button" class="role-opt" onclick="selectRole(this)">
+          <div class="role-opt__name">Operador</div>
+          <div class="role-opt__desc">Atende conversas e move leads. Sem acesso a templates ou usuários.</div>
+        </button>
+      </div>
+    </fieldset>
+
+    <div class="form-field">
+      <label class="form-label" for="inv-msg">Mensagem (opcional)</label>
+      <textarea class="form-textarea" id="inv-msg" placeholder="Bem-vindo ao time. Qualquer dúvida, me chame."></textarea>
+    </div>
+
+    <div class="modal__actions">
+      <button class="btn-cancel" onclick="closeInvite()">Cancelar</button>
+      <button class="btn-primary">Enviar convite</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     DELETE MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" role="dialog" aria-modal="true" style="max-width: 440px;">
+    <div class="modal__eyebrow" style="color: var(--error);">Ação destrutiva</div>
+    <h2 class="modal__title">Excluir usuário?</h2>
+    <p class="modal__desc">Os dados pessoais são apagados imediatamente em conformidade com a LGPD. Documentos e requerimentos assinados são <strong>preservados anonimizados</strong>.</p>
+    <div style="background: var(--off-white); border-left: 3px solid var(--error); padding: 12px 16px; font-size: 13px; font-weight: 800; color: var(--black); margin-bottom: 22px;" id="deleteName">—</div>
+    <div class="form-field">
+      <label class="form-label" for="del-confirm">Digite <code style="font-family: ui-monospace,monospace; background: var(--white); padding: 1px 5px; border: 1px solid var(--gray-300); font-size: 11px;">EXCLUIR</code> para confirmar</label>
+      <input type="text" class="form-input" id="del-confirm" placeholder="EXCLUIR" />
+    </div>
+    <div class="modal__actions">
+      <button class="btn-cancel" onclick="closeDelete()">Cancelar</button>
+      <button class="btn-danger" onclick="closeDelete()">Excluir definitivamente</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar sua área.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='03_basta-login.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── Filter pills (Todos / Usuários / Admins / etc.) ─────── */
+  function togglePill(pill) {
+    document.querySelectorAll('.filter-pill').forEach(function(p){ p.classList.remove('filter-pill--active'); });
+    pill.classList.add('filter-pill--active');
+  }
+
+  /* ── Bulk selection ───────────────────────────────────────── */
+  function rowCheck(input) {
+    var row = input.closest('tr');
+    if (input.checked) row.classList.add('is-selected');
+    else row.classList.remove('is-selected');
+    updateBulkBar();
+  }
+  function toggleAll(input) {
+    document.querySelectorAll('.row-check__input').forEach(function(c){
+      c.checked = input.checked;
+      var r = c.closest('tr');
+      if (input.checked) r.classList.add('is-selected');
+      else r.classList.remove('is-selected');
+    });
+    updateBulkBar();
+  }
+  function updateBulkBar() {
+    var n = document.querySelectorAll('.row-check__input:checked').length;
+    var bar = document.getElementById('bulkBar');
+    var count = document.getElementById('bulkCount');
+    if (n > 0) {
+      bar.classList.add('is-active');
+      count.textContent = n + (n === 1 ? ' selecionado' : ' selecionados');
+    } else {
+      bar.classList.remove('is-active');
+    }
+  }
+
+  /* ── Kebab dropdowns ──────────────────────────────────────── */
+  function toggleKebab(btn, e) {
+    if (e) e.stopPropagation();
+    var menu = btn.nextElementSibling;
+    var isOpen = menu.classList.contains('is-open');
+    document.querySelectorAll('.kebab__menu').forEach(function(m){ m.classList.remove('is-open'); });
+    if (!isOpen) menu.classList.add('is-open');
+  }
+  document.addEventListener('click', function(){
+    document.querySelectorAll('.kebab__menu').forEach(function(m){ m.classList.remove('is-open'); });
+  });
+
+  /* ── User detail drawer ──────────────────────────────────── */
+  function openDrawer(name, email, role) {
+    var av = document.getElementById('drawerAvatar');
+    av.firstChild.textContent = (name.split(' ').map(function(s){return s[0];}).join('').slice(0,2).toUpperCase()) + ' ';
+    av.classList.toggle('drawer__avatar--admin', role === 'admin');
+    document.getElementById('drawerName').textContent = name;
+    document.getElementById('drawerEmail').textContent = email;
+    document.getElementById('drawerOverlay').classList.add('is-open');
+    document.getElementById('drawer').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    document.getElementById('drawerOverlay').classList.remove('is-open');
+    document.getElementById('drawer').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Invite modal ─────────────────────────────────────────── */
+  function openInvite() {
+    document.getElementById('inviteModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeInvite() {
+    document.getElementById('inviteModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('inviteModal').addEventListener('click', function(e){
+    if (e.target === this) closeInvite();
+  });
+
+  function selectRole(el) {
+    document.querySelectorAll('.role-opt').forEach(function(r){ r.classList.remove('role-opt--active'); });
+    el.classList.add('role-opt--active');
+  }
+
+  /* ── Delete modal ─────────────────────────────────────────── */
+  function openDelete(name) {
+    document.getElementById('deleteName').textContent = name;
+    document.getElementById('deleteModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDelete() {
+    document.getElementById('deleteModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('deleteModal').addEventListener('click', function(e){
+    if (e.target === this) closeDelete();
+  });
+
+  /* ── Logout ───────────────────────────────────────────────── */
+  let lastFocusedElement = null;
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    document.getElementById('logoutModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+  function closeLogout() {
+    document.getElementById('logoutModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+  document.getElementById('logoutModal').addEventListener('click', function(e){ if (e.target === this) closeLogout(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      if (document.getElementById('drawer').classList.contains('is-open')) closeDrawer();
+      if (document.getElementById('inviteModal').classList.contains('is-open')) closeInvite();
+      if (document.getElementById('deleteModal').classList.contains('is-open')) closeDelete();
+      if (document.getElementById('logoutModal').classList.contains('is-open')) closeLogout();
+      document.querySelectorAll('.kebab__menu').forEach(function(m){ m.classList.remove('is-open'); });
+    }
+  });
+
+  /* ── User type toggle (Admin · User) ───────────────────── */
+  function setUserType(btn) {
+    var group = btn.parentElement;
+    group.querySelectorAll('.user-type__opt').forEach(function(b){
+      b.classList.remove('user-type__opt--active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('user-type__opt--active');
+    btn.setAttribute('aria-selected', 'true');
+  }
+</script>
+
+</body>
+</html>

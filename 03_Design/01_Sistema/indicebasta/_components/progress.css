@@ -6,7 +6,7 @@
 /* Card de progresso (dashboard) */
 .progress-card {
   background: var(--white);
-  border: var(--border-width-thick) solid var(--green);
+  border: var(--border-width-thick) solid var(--green-action);
   padding: var(--space-2xl);
   margin-bottom: var(--space-3xl);
   border-radius: var(--border-radius);
@@ -38,7 +38,7 @@
   font-size: var(--fs-5xl);
   font-weight: var(--font-weight-black);
   letter-spacing: var(--ls-tight);
-  color: var(--green);
+  color: var(--green-action);
   line-height: 1;
 }
 
@@ -54,7 +54,7 @@
 .progress-card__fill,
 .progress-bar__fill {
   height: 100%;
-  background: var(--green);
+  background: var(--green-action);
   transition: width var(--duration-deliberate) var(--ease-out);
 }
 
@@ -79,7 +79,7 @@
 }
 .progress-circle__fg {
   fill: none;
-  stroke: var(--green);
+  stroke: var(--green-action);
   stroke-width: 8;
   stroke-linecap: round;
   transition: stroke-dashoffset var(--duration-deliberate) var(--ease-out);

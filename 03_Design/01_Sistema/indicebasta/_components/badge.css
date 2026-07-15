@@ -14,8 +14,8 @@
 }
 .badge--success {
   background: transparent;
-  color: var(--green);
-  border: var(--border-width-thin) solid var(--green);
+  color: var(--green-action);
+  border: var(--border-width-thin) solid var(--green-action);
 }
 .badge--warning {
   background: transparent;
@@ -34,6 +34,6 @@
 }
 
 /* Aliases de legado */
-.badge-success { background: transparent; color: var(--green); border: var(--border-width-thin) solid var(--green); }
+.badge-success { background: transparent; color: var(--green-action); border: var(--border-width-thin) solid var(--green-action); }
 .badge-warning { background: transparent; color: var(--warning); border: var(--border-width-thin) solid var(--warning); }
 .badge-info    { background: var(--info); color: var(--white); }

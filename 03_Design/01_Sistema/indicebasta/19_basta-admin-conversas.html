@@ -58,7 +58,7 @@
     .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
     .nav-item--active::before {
       content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-      width: 3px; background: var(--green);
+      width: 3px; background: var(--green-action);
     }
     .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
     .nav-item--active .nav-item__icon { opacity: 1; }
@@ -75,7 +75,7 @@
       display: flex; align-items: center; gap: 10px;
     }
     .sidebar__avatar {
-      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      width: 32px; height: 32px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
     }
@@ -99,7 +99,7 @@
     }
     .topbar__logo { height: 48px; width: auto; }
     .topbar__avatar {
-      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      width: 28px; height: 28px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; letter-spacing: 0.02em;
     }
@@ -132,7 +132,7 @@
     }
     .agent-banner.is-paused { border-left-color: var(--warning); background: #FFF8E6; }
     .agent-banner__dot {
-      width: 8px; height: 8px; background: var(--green);
+      width: 8px; height: 8px; background: var(--green-action);
       border-radius: 50%; flex-shrink: 0;
       box-shadow: 0 0 0 4px rgba(66,180,73,0.18);
       animation: pulse 1.6s infinite;
@@ -377,7 +377,7 @@
     }
     .conv-item__unread {
       min-width: 18px; height: 18px; padding: 0 5px;
-      background: var(--green); color: var(--white);
+      background: var(--green-action); color: var(--white);
       font-size: 10px; font-weight: 800; letter-spacing: 0;
       display: inline-flex; align-items: center; justify-content: center;
     }
@@ -449,7 +449,7 @@
     .thread-action--primary {
       border-color: var(--black); background: var(--black); color: var(--white);
     }
-    .thread-action--primary:hover { background: var(--green); border-color: var(--green); }
+    .thread-action--primary:hover { background: var(--green-action); border-color: var(--green); }
     .thread-action--finalize:hover { color: var(--error); border-color: var(--error); }
     .thread-action svg { width: 12px; height: 12px; }
 
@@ -677,7 +677,7 @@
       cursor: pointer; flex-shrink: 0;
       display: inline-flex; align-items: center; gap: 6px;
     }
-    .composer__send:hover { background: var(--green); border-color: var(--green); }
+    .composer__send:hover { background: var(--green-action); border-color: var(--green); }
     .composer__send svg { width: 12px; height: 12px; }
     .composer__hint {
       margin-top: 8px;
@@ -794,7 +794,7 @@
       border: 1.5px solid var(--black); cursor: pointer;
       transition: background var(--t);
     }
-    .notes__btn:hover { background: var(--green); border-color: var(--green); }
+    .notes__btn:hover { background: var(--green-action); border-color: var(--green); }
 
     /* ══════════════════════════════════════════════════════════
        MOBILE-FIRST RESPONSIVE

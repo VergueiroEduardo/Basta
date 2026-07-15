@@ -32,7 +32,7 @@
     /* ── ACESSIBILIDADE ─────────────────────────────────────── */
     .skip-link {
       position: absolute; top: -6rem; left: var(--px);
-      background: var(--green); color: var(--white);
+      background: var(--green-action); color: var(--white);
       font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
       padding: 14px 24px; z-index: 9999; transition: top var(--t);
     }
@@ -66,7 +66,7 @@
       .btn { font-size: 16px; padding: 20px 48px; min-height: 60px; }
     }
     .btn-primary {
-      background: var(--green); color: var(--white);
+      background: var(--green-action); color: var(--white);
     }
     .btn-primary:hover {
       background: var(--black);
@@ -140,7 +140,7 @@
     .btn-header-login:hover { background: var(--white); color: var(--black); }
     .btn-header-cta {
       font-size: 14px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--white); background: var(--green);
+      color: var(--white); background: var(--green-action);
       padding: 10px 24px; min-height: 48px; display: flex; align-items: center;
       transition: background var(--t), transform var(--t);
     }
@@ -212,9 +212,10 @@
       opacity: 0;
       transform: translateY(-8px) scale(0.96);
     }
-    /* Logo grande na hero — canto inferior direito, presença brutal */
-    /* Logo do hero — branco, alinhado pelo TOPO ao TOPO do botão "Começar agora".
-       Anchored no .hero-actions (que envolve o botão), top:0 garante a coincidência. */
+    /* Logo grande na hero — sangramento brutalista pelo canto inferior direito.
+       Ancorado ao .hero (não ao .hero-actions): a base é a borda inferior do hero,
+       então o corte é SEMPRE o mesmo — sai limpo pela direita, nunca serrado embaixo.
+       Altura com teto em vh: em telas baixas (13,3") encolhe e cabe. */
     .hero-content { position: relative; }
     .hero-actions { position: relative; }
     .hero-logo {
@@ -225,12 +226,17 @@
       .hero-logo {
         display: block;
         position: absolute;
-        top: 0;                                /* topo do logo = topo do .hero-actions = topo do botão */
-        left: calc(100% + clamp(16px, 2vw, 32px));   /* ~1 coluna de respiro do CTA — composição coesa */
-        height: clamp(140px, 18vw, 240px);
-        width: auto;
+        /* Borda direita travada na linha direita do .container (grid), não na viewport —
+           assinatura alinhada à mesma margem de tudo na página. */
+        right: max(32px, calc((100vw - 1200px) / 2 + 32px));
+        bottom: clamp(24px, 5vh, 56px);        /* respiro da borda inferior do hero */
+        /* Maior possível, SEMPRE inteiro: largura limitada pela coluna de texto + teto.
+           39vw = postura conservadora (folga confortável da headline em 1280×800). */
+        width: min(39vw, 720px);
+        height: auto;
+        max-height: 34vh;                      /* rede para telas baixas: encolhe, nunca corta */
         color: var(--white);
-        opacity: 0.95;
+        opacity: 1;
         z-index: 2;
         pointer-events: none;
       }
@@ -357,6 +363,7 @@
       line-height: 1.7; color: color-mix(in srgb, var(--white) 72%, transparent);
       max-width: 48ch; margin-bottom: 32px;
     }
+    .hero-sub strong { color: var(--white); }
     .hero-actions {
       display: flex;
       flex-direction: column;
@@ -613,7 +620,7 @@
       background: var(--off-white);
       animation: step-flash 1.2s var(--ease) both;
     }
-    .step.is-highlighted .step-num { color: var(--green); opacity: 1; }
+    .step.is-highlighted .step-num { color: var(--green-action); opacity: 1; }
     @keyframes step-flash {
       0%   { background: color-mix(in srgb, var(--green) 10%, var(--off-white)); }
       100% { background: transparent; }
@@ -647,7 +654,7 @@
       transition: color var(--t), opacity var(--t);
       user-select: none;
     }
-    .step:hover .step-num { color: var(--green); opacity: 1; }
+    .step:hover .step-num { color: var(--green-action); opacity: 1; }
     /* Bloco de texto desloca levemente no hover */
     .step-content {
       transition: transform var(--t);
@@ -892,7 +899,7 @@
       margin-top: 20px;
       padding: 16px 20px;
       background: var(--off-white);
-      border-left: 3px solid var(--green);
+      border-left: 3px solid var(--green-action);
       font-size: 15px;
       line-height: 1.6;
       color: var(--gray-600);
@@ -907,7 +914,7 @@
     }
     .faq-answer .faq-highlight em {
       font-style: normal;
-      color: var(--green);
+      color: var(--green-action);
     }
     .faq-btn {
       width: 100%; display: flex; justify-content: space-between;
@@ -1075,7 +1082,7 @@
     .wa-fab {
       position: fixed; bottom: max(20px, env(safe-area-inset-bottom)); right: 20px; z-index: 200;
       width: 56px; height: 56px;
-      background: var(--green); border-radius: 0;
+      background: var(--green-action); border-radius: 0;
       display: flex; align-items: center; justify-content: center;
       box-shadow: none;
       border: 2px solid var(--black);
@@ -1177,19 +1184,15 @@
             Crie sua conta em 2 minutos. A análise é gratuita,<br class="d-break"> o diagnóstico é completo — <strong>e a conversa pode mudar<br class="d-break"> sua situação financeira, definitivamente.</strong>
           </p>
           <div class="hero-actions">
-            <a href="#como-funciona" class="hero-link-secondary">
-              Como funciona
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-            </a>
             <a href="02_basta-cadastro.html" class="btn btn-primary">
               Começar agora
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
-            <!-- Logo: anchored DENTRO do .hero-actions; top:0 alinha topo logo com topo do botão -->
-            <svg id="hero-logo" class="hero-logo logo--on-dark" viewBox="0 0 602.25 254.23" aria-label="Basta." role="img"><use href="#logo-basta"/></svg>
           </div>
         </div>
       </div>
+      <!-- Logo grande: filho direto do .hero → ancoragem à base do hero, sangramento controlado pela direita -->
+      <svg id="hero-logo" class="hero-logo logo--on-dark" viewBox="0 0 602.25 254.23" aria-label="Basta." role="img"><use href="#logo-basta"/></svg>
     </section>
     <!-- ══════════════════════════════════════════════════════════
          TRUST BAR — cards grandes com tipografia de display
@@ -1415,29 +1418,13 @@
               <div class="faq-answer">
                 <span class="faq-highlight">Nenhum <em>pagamento adiantado.</em></span>
                 <ul>
-                  <li><strong>Análise financeira</strong> — Gratuita. Diagnóstico completo da sua situação de crédito.</li>
-                  <li><strong>Requerimentos e assinaturas</strong> — Gratuitos. Geramos e enviamos todos os documentos sem custo.</li>
-                  <li><strong>Taxa de êxito</strong> — Cobramos um percentual somente se conseguirmos resultado concreto: redução de dívida, cancelamento de cobranças ou recuperação de valores. Se não houver resultado, você não paga nada.</li>
+                  <li><strong>Análise financeira</strong> — Gratuita. Diagnóstico preliminar da sua situação financeira.</li>
+                  <li><strong>Conta na Plataforma</strong> — Gratuita. Seu guia de etapas e seu repositório de documentos.</li>
+                  <li><strong>Requerimentos e assinaturas</strong> — Gratuito. Instrumentos simples que te colocam em igualdade de condições com os credores.</li>
+                  <li><strong>Open Finance</strong> — Gratuito. Tenha seus dados bancários verificados gratuitamente para identificar indícios de abusos nas relações com credores.</li>
+                  <li><strong>Pagamentos</strong> — Nenhum pagamento antecipado. Só cobramos uma participação dos resultados reais obtidos por você. Só ganhamos quando você ganha.</li>
                 </ul>
                 <div class="faq-callout"><strong>Sem surpresas.</strong> O percentual de êxito é acordado antes do início do processo. Nada é cobrado sem sua ciência e aprovação.</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Q3: O que cada tela faz? -->
-          <div class="faq-item" role="listitem">
-            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a3">
-              <span class="faq-question">O que cada tela faz?</span>
-              <span class="faq-indicator" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-body" id="faq-a3" role="region">
-              <div class="faq-answer">
-                <ul>
-                  <li><strong>Resumo</strong> — Visão geral do seu progresso e principal tela de ação. Todos os próximos passos necessários estão aqui.</li>
-                  <li><strong>Meus Documentos</strong> — Onde ficam seus documentos pessoais, de renda e de endividamento. Visualize e baixe tudo em um só lugar.</li>
-                  <li><strong>Contas Bancárias</strong> — Mostra as contas conectadas pelo Open Finance e o status de cada uma.</li>
-                  <li><strong>Requerimentos</strong> — Os requerimentos gerados para cada banco. Visualize, baixe e assine digitalmente via ClickSign.</li>
-                </ul>
               </div>
             </div>
           </div>
@@ -1458,43 +1445,6 @@
                   <li><strong>Você revoga quando quiser.</strong> No app do banco, em "Open Finance" ou "Compartilhamento de dados", você cancela o acesso a qualquer momento — sem precisar falar com a Basta.</li>
                 </ol>
                 <div class="faq-callout"><strong>Regulado pelo Banco Central.</strong> O Open Finance segue normas rígidas. Empresas como a Basta passam por credenciamento e auditoria contínua.</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Q5: O que são os requerimentos? -->
-          <div class="faq-item" role="listitem">
-            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a5">
-              <span class="faq-question">O que são os requerimentos?</span>
-              <span class="faq-indicator" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-body" id="faq-a5" role="region">
-              <div class="faq-answer">
-                <p>Documentos administrativos formais endereçados diretamente ao banco. Cada um tem uma função específica para solicitar informações e revisões sobre a sua conta.</p>
-                <ul>
-                  <li><strong>Demonstrativo de Evolução da Dívida e Memória de Cálculo</strong> — Solicita ao banco que apresente, em detalhes, como sua dívida chegou ao valor atual. Permite identificar cobranças e encargos que merecem revisão.</li>
-                  <li><strong>Res. CMN 4.790 – Cancelamento de débitos</strong> — Solicita o cancelamento de cobranças irregulares com base na resolução do Banco Central que proíbe práticas abusivas nas relações de crédito.</li>
-                </ul>
-                <div class="faq-callout"><strong>Processo administrativo formal.</strong> Os requerimentos são endereçados diretamente ao banco pelos canais adequados. A Basta acompanha cada etapa e orienta os próximos passos com base nas respostas recebidas.</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Q6: Como funciona a assinatura digital? -->
-          <div class="faq-item" role="listitem">
-            <button class="faq-btn" aria-expanded="false" aria-controls="faq-a6">
-              <span class="faq-question">Como funciona a assinatura digital?</span>
-              <span class="faq-indicator" aria-hidden="true">+</span>
-            </button>
-            <div class="faq-body" id="faq-a6" role="region">
-              <div class="faq-answer">
-                <ol>
-                  <li><strong>Você acessa os requerimentos na plataforma.</strong> Quando um requerimento está pronto, ele aparece disponível na aba Requerimentos. O link de assinatura também é enviado pelo WhatsApp.</li>
-                  <li><strong>Você lê o documento antes de assinar.</strong> Abra o link, leia o conteúdo completo. Nunca assine sem entender o que está sendo solicitado ao banco.</li>
-                  <li><strong>Assina com um clique.</strong> A assinatura é feita pelo celular, sem impressão. Leva menos de 1 minuto.</li>
-                  <li><strong>Você recebe o comprovante por e-mail.</strong> A ClickSign envia automaticamente o documento assinado com registro e autenticação digital.</li>
-                </ol>
-                <div class="faq-callout"><strong>ClickSign é parceira do Basta.</strong> Uma das principais plataformas de assinatura digital do Brasil. Cada assinatura é registrada, autenticada e rastreável — com comprovante em seu email.</div>
               </div>
             </div>
           </div>

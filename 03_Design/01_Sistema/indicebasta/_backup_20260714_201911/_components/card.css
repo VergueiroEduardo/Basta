@@ -1,0 +1,50 @@
+/* ============================================================================
+   CARD COMPONENTS — Basta
+   ============================================================================ */
+
+.card {
+  background: var(--white);
+  border: var(--border-width-thick) solid var(--black);
+  padding: var(--space-2xl);
+  transition: transform var(--transition), box-shadow var(--transition);
+  border-radius: var(--border-radius);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 6px 6px 0 var(--black);
+}
+.card--dark {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+.card--soft {
+  border-width: var(--border-width-thin);
+  border-color: var(--gray-300);
+}
+.card--soft:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--black);
+}
+
+.card-title {
+  font-size: var(--fs-xs);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--gray-600);
+  margin-bottom: var(--space-md);
+}
+.card--dark .card-title {
+  color: rgba(255, 255, 255, 0.6);
+}
+.card-content {
+  font-size: var(--fs-lg);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--lh-relaxed);
+  color: var(--gray-600);
+}
+.card--dark .card-content {
+  color: rgba(255, 255, 255, 0.6);
+}

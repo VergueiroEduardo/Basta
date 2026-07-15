@@ -54,7 +54,7 @@
     .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
     .nav-item--active::before {
       content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-      width: 3px; background: var(--green);
+      width: 3px; background: var(--green-action);
     }
     .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
     .nav-item--active .nav-item__icon { opacity: 1; }
@@ -71,7 +71,7 @@
       display: flex; align-items: center; gap: 10px;
     }
     .sidebar__avatar {
-      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      width: 32px; height: 32px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
     }
@@ -93,7 +93,7 @@
     }
     .topbar__logo { height: 48px; width: auto; }
     .topbar__avatar {
-      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      width: 28px; height: 28px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; letter-spacing: 0.02em;
     }
@@ -122,7 +122,7 @@
       transition: background var(--t), border-color var(--t);
       cursor: pointer; flex-shrink: 0;
     }
-    .btn-add:hover { background: var(--green); border-color: var(--green); }
+    .btn-add:hover { background: var(--green-action); border-color: var(--green); }
     .btn-add svg { width: 12px; height: 12px; }
 
     /* TABS */
@@ -153,7 +153,7 @@
       color: var(--gray-600); background: var(--gray-200);
       padding: 1px 6px; vertical-align: 1px;
     }
-    .tab--active .tab__count { color: var(--white); background: var(--green); }
+    .tab--active .tab__count { color: var(--white); background: var(--green-action); }
 
     /* TAB PANELS */
     .panel { display: none; }
@@ -401,7 +401,7 @@
     .drawer-btn--primary {
       background: var(--black); color: var(--white); border-color: var(--black);
     }
-    .drawer-btn--primary:hover { background: var(--green); border-color: var(--green); }
+    .drawer-btn--primary:hover { background: var(--green-action); border-color: var(--green); }
     .drawer-btn svg { width: 12px; height: 12px; }
 
     .drawer__body {
@@ -529,7 +529,7 @@
       display: flex; align-items: center; gap: 8px;
     }
     .drawer__status-dot {
-      width: 6px; height: 6px; background: var(--green); border-radius: 50%;
+      width: 6px; height: 6px; background: var(--green-action); border-radius: 50%;
     }
     .drawer__status strong { color: var(--black); font-weight: 700; }
 

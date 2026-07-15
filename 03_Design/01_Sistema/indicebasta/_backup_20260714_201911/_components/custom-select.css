@@ -1,0 +1,87 @@
+/* ============================================================================
+   CUSTOM SELECT (acessível) — Basta
+   Usar com _scripts/custom-select.js para keyboard + ARIA.
+   ============================================================================ */
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.custom-select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  width: 100%;
+  padding: 12px var(--space-lg);
+  font-family: var(--font-family);
+  font-size: var(--fs-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  background: var(--white);
+  color: var(--gray-600);
+  border: var(--border-width-thin) solid var(--gray-300);
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition);
+}
+.custom-select__trigger:hover,
+.custom-select__trigger[aria-expanded="true"] {
+  border-color: var(--black);
+  color: var(--black);
+}
+
+.custom-select__chevron {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--transition);
+}
+.custom-select__trigger[aria-expanded="true"] .custom-select__chevron {
+  transform: rotate(180deg);
+}
+
+.custom-select__listbox {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: var(--border-width-thin) solid var(--black);
+  z-index: 50;
+  display: none;
+  max-height: 280px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.custom-select.is-open .custom-select__listbox {
+  display: block;
+}
+
+.custom-select__option {
+  display: block;
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--fs-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-600);
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: background var(--transition), color var(--transition);
+}
+.custom-select__option:hover,
+.custom-select__option--active,
+.custom-select__option[aria-selected="true"] {
+  background: var(--off-white);
+  color: var(--black);
+}
+.custom-select__option:focus-visible {
+  outline: 2px solid var(--black);
+  outline-offset: -2px;
+}

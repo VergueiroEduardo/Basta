@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Basta. — Console do parceiro · Consulta por CPF</title>
+  <meta name="description" content="Console de provedores de crédito Basta — consulta de operações por CPF via Open Finance." />
+  <meta name="theme-color" content="#000000" />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="_foundation/fonts.css" />
+  <!-- BASTA FOUNDATION INJECTED -->
+  <link rel="stylesheet" href="_foundation/tokens.css" />
+  <link rel="stylesheet" href="_foundation/reset.css" />
+  <link rel="stylesheet" href="_foundation/responsive.css" />
+  <link rel="stylesheet" href="_foundation/animations.css" />
+  <link rel="stylesheet" href="_foundation/grid.css" />
+  <link rel="stylesheet" href="_components/logo.css" />
+  <link rel="stylesheet" href="_foundation/typography.css" />
+  <link rel="stylesheet" href="_foundation/layout.css" />
+  <link rel="stylesheet" href="_components/btn.css" />
+  <link rel="stylesheet" href="_components/card.css" />
+  <link rel="stylesheet" href="_components/badge.css" />
+  <link rel="stylesheet" href="_components/modal.css" />
+  <link rel="stylesheet" href="_components/sidebar.css" />
+  <link rel="stylesheet" href="_components/topbar.css" />
+  <link rel="stylesheet" href="_components/progress.css" />
+  <style>
+    /* ── BASE ───────────────────────────────────────────────── */
+    body {
+      font-family: var(--f); font-size: 16px; line-height: 1.6;
+      color: var(--black); background: var(--off-white);
+      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ══════════════════════════════════════════════════════════
+       LAYOUT — sidebar + main
+       ══════════════════════════════════════════════════════════ */
+    .dashboard { display: flex; min-height: 100vh; min-height: 100dvh; }
+
+    /* ── SIDEBAR (preta) ──────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--black);
+      border-right: 1px solid var(--black);
+      display: flex; flex-direction: column; flex-shrink: 0;
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+    }
+    .sidebar__header { padding: 28px 24px 32px; }
+    .sidebar__logo { height: 72px; width: auto; display: block; }
+    .sidebar__nav { flex: 1; padding: 0 12px; }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; font-size: 13px; font-weight: 600;
+      color: var(--white); transition: background var(--t);
+      margin-bottom: 2px; position: relative;
+    }
+    .nav-item:hover { color: var(--white); background: rgba(255, 255, 255, 0.08); }
+    /* Especificidade .sidebar para vencer sidebar.css (.nav-item[aria-current]) */
+    .sidebar .nav-item--active {
+      font-weight: 800; color: var(--green);
+    }
+    /* Estado ativo reforçado pela barra verde */
+    .nav-item--active::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--green);
+    }
+    .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--white); }
+    .nav-item--active .nav-item__icon { color: var(--green); }
+
+    .sidebar__user {
+      padding: 20px 24px; border-top: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sidebar__avatar {
+      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
+    }
+    .sidebar__user-info { flex: 1; min-width: 0; }
+    .sidebar__user-name { font-size: 12px; font-weight: 700; color: var(--white); line-height: 1.2; }
+    .sidebar__user-email {
+      font-size: 11px; color: rgba(255, 255, 255, 0.55); font-weight: 400; line-height: 1.3;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .sidebar__logout { color: rgba(255, 255, 255, 0.5); transition: color var(--t); }
+    .sidebar__logout:hover { color: var(--error); }
+
+    /* ── MAIN ─────────────────────────────────────────────── */
+    .main { flex: 1; }
+
+    /* ── TOPBAR (mobile, preta) ───────────────────────────── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+      background: var(--white); border-bottom: 1px solid var(--gray-300);
+      padding: 14px 20px; align-items: center; justify-content: space-between;
+    }
+    .topbar__logo { height: 48px; width: auto; }
+    .topbar__avatar {
+      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* mobile base */
+    .sidebar { display: none; }
+    .topbar  { display: flex; }
+    .main { margin-left: 0; padding: 84px 20px 80px; max-width: 100%; }
+
+    @media (min-width: 640px) { .main { padding: 84px 24px 80px; } }
+    @media (min-width: 960px) {
+      .sidebar { display: flex; }
+      .topbar  { display: none; }
+      .main { margin-left: var(--sidebar-w); padding: 40px 40px 80px; max-width: 1180px; }
+    }
+    @media (min-width: 1200px) { .main { padding: 40px 48px 80px; } }
+    @supports (padding: env(safe-area-inset-top)) {
+      .topbar { padding-top: max(14px, env(safe-area-inset-top)); }
+      .main { padding-bottom: max(80px, calc(64px + env(safe-area-inset-bottom))); }
+    }
+
+    /* ── HEADER ─────────────────────────────────────────────── */
+    .kicker {
+      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--gray-600); margin-bottom: 14px;
+    }
+    .kicker__dot { color: var(--green); }
+    .page-title {
+      font-size: clamp(28px, 6vw, 40px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.05; color: var(--black); margin-bottom: 8px;
+    }
+    .page-lead {
+      font-size: 14px; line-height: 1.65; color: var(--gray-600);
+      max-width: 64ch; margin-bottom: 0;
+    }
+    .page-lead strong { color: var(--black); font-weight: 700; }
+
+    /* ── PAINEL DE CONSULTA ─────────────────────────────────── */
+    .query {
+      background: var(--white); border: 2px solid var(--black);
+      padding: 24px; margin-bottom: 40px;
+    }
+    @media (min-width: 720px) { .query { padding: 28px 32px; } }
+    .query__head {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+    }
+    .query__title {
+      font-size: clamp(18px, 2vw, 20px); font-weight: 800;
+      letter-spacing: -0.02em; line-height: 1.2; color: var(--black);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .query__title svg { width: 20px; height: 20px; color: var(--green); flex-shrink: 0; }
+    .endpoint-pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      padding: 5px 10px; background: var(--off-white);
+      border: 1px solid var(--gray-300); color: var(--gray-600); white-space: nowrap;
+    }
+    .endpoint-pill b { color: var(--green); }
+
+    .query__form { display: flex; flex-direction: column; gap: 10px; }
+    @media (min-width: 640px) { .query__form { flex-direction: row; align-items: flex-end; } }
+    .query__field { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .query__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gray-600);
+    }
+    .query__input {
+      padding: 15px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 16px; letter-spacing: 0.04em;
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-300); transition: border-color var(--t);
+      font-variant-numeric: tabular-nums; width: 100%;
+    }
+    .query__input:focus { border-color: var(--black); outline: none; }
+    .query__submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-family: var(--f); font-size: 13px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 15px 32px; min-height: 52px;
+      background: var(--green); color: var(--white);
+      border: 2px solid var(--green); cursor: pointer;
+      transition: background var(--t), border-color var(--t), transform var(--t);
+      white-space: nowrap;
+    }
+    .query__submit:hover { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-2px); }
+    .query__submit:active { transform: translateY(0); }
+    .query__return {
+      margin-top: 16px; font-size: 12px; font-weight: 700; color: var(--gray-600);
+      letter-spacing: 0.02em; display: flex; align-items: center; gap: 8px;
+    }
+    .query__return b { color: var(--black); font-variant-numeric: tabular-nums; }
+    .query__return .ok {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--green); border: 1px solid var(--green); padding: 2px 7px;
+    }
+
+    /* ── CABEÇALHO DO DETALHE ───────────────────────────────── */
+    /* ── CABEÇALHO / IDENTIDADE ─────────────────────────────── */
+    .detail-header {
+      display: flex; align-items: flex-start;
+      gap: 16px 24px; flex-wrap: wrap; margin-bottom: 28px;
+    }
+    /* identidade + descrição = um bloco único */
+    .detail-header__main {
+      display: flex; flex-direction: column; gap: 12px;
+      flex: 1; min-width: 280px;
+    }
+    .id { display: flex; flex-wrap: wrap; gap: 22px 48px; align-items: flex-start; }
+    .id__item { display: flex; flex-direction: column; gap: 5px; }
+    .id__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--gray-600);
+    }
+    .id__name {
+      font-size: clamp(26px, 4vw, 38px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.0; color: var(--black);
+    }
+    .id__cpf {
+      font-size: clamp(26px, 4vw, 38px); font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.0; color: var(--black);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── AÇÕES (avaliar / baixar) + FECHAR ──────────────────── */
+    .actions__row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    /* base comum dos botões de ação */
+    .btn-download, .review-btn, .btn-whatsapp {
+      display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px;
+      font-family: var(--f); font-size: 12px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      cursor: pointer; white-space: nowrap;
+    }
+    .btn-download svg, .review-btn svg, .btn-whatsapp svg { width: 16px; height: 16px; flex-shrink: 0; }
+    /* Chamar Cliente — verde (primário / ação-fim, abre o WhatsApp) */
+    .btn-whatsapp {
+      background: var(--green); color: var(--white); border: 1.5px solid var(--green);
+      transition: background var(--t), border-color var(--t), transform var(--t);
+    }
+    .btn-whatsapp:hover { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-1px); }
+    .btn-whatsapp:active { transform: translateY(0); }
+    .btn-whatsapp svg { width: 18px; height: 18px; }
+    /* Baixar — secundário (outline neutro) */
+    .btn-download {
+      background: var(--white); color: var(--black); border: 1.5px solid var(--gray-300);
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .btn-download:hover { border-color: var(--black); background: var(--off-white); }
+    /* Marcar como avaliado — tom preto (secundário / toggle) */
+    .review-btn {
+      background: var(--white); color: var(--black); border: 1.5px solid var(--black);
+      transition: background var(--t), color var(--t), border-color var(--t);
+    }
+    .review-btn:hover { background: var(--off-white); }
+    .review-btn.is-done { background: var(--black); color: var(--white); border-color: var(--black); }
+    .review-btn.is-done:hover { background: #1a1a1a; }
+    /* Largura fixa pela maior string — sem salto de layout entre estados */
+    .review-btn__label { display: grid; justify-items: start; }
+    .review-btn__label > span { grid-column: 1; grid-row: 1; white-space: nowrap; }
+    .review-btn__sizer { visibility: hidden; pointer-events: none; }
+    /* Fechar — utilitário, no canto superior direito */
+    .btn-close {
+      flex-shrink: 0; margin-left: auto; width: 44px; height: 44px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: 1.5px solid var(--gray-300); color: var(--gray-600);
+      transition: color var(--t), border-color var(--t), background var(--t);
+      text-decoration: none;
+    }
+    .btn-close:hover { color: var(--black); border-color: var(--black); background: var(--off-white); }
+    .btn-close:active { transform: scale(0.97); }
+
+    /* ── DOCUMENTOS + AÇÕES ─────────────────────────────────── */
+    .meta {
+      display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 28px;
+    }
+    @media (min-width: 760px) { .meta { grid-template-columns: 1fr auto; gap: 48px; align-items: start; } }
+    .docs__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--gray-600); margin-bottom: 12px;
+    }
+    .docs__list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .doc-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      height: 44px; padding: 0 14px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      border: 1.5px solid var(--gray-300);
+      color: var(--gray-600); background: var(--white);
+    }
+    .doc-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .doc-chip--ok { border-color: var(--green); color: var(--black); }
+    .doc-chip--ok svg { color: var(--green); }
+    .doc-chip--missing { border-style: dashed; border-color: var(--gray-300); color: var(--gray-300); }
+
+    /* ── ACORDEÃO (operações) ───────────────────────────────── */
+    .results__bar { cursor: pointer; user-select: none; }
+    .results__bar:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
+    .results__left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .results__chevron { width: 16px; height: 16px; color: var(--gray-600); transition: transform var(--t); flex-shrink: 0; }
+    .results.is-collapsed .results__chevron { transform: rotate(-90deg); }
+    .results.is-collapsed .table-scroll,
+    .results.is-collapsed .scroll-hint { display: none; }
+
+    /* ── KPIs ───────────────────────────────────────────────── */
+    /* Divisores via gap (robusto para qualquer nº de colunas) */
+    .kpis {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      border: 1px solid var(--gray-300); background: var(--gray-300); margin-bottom: 16px;
+    }
+    @media (min-width: 900px) { .kpis { grid-template-columns: repeat(5, 1fr); } }
+    .kpi { padding: 16px 18px; background: var(--white); }
+    /* Card ímpar final ocupa a linha toda no mobile (2 col) */
+    .kpi:last-child { grid-column: 1 / -1; }
+    @media (min-width: 900px) { .kpi:last-child { grid-column: auto; } }
+    .kpi__label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--gray-600); margin-bottom: 8px;
+    }
+    .kpi__value {
+      font-size: clamp(18px, 2.6vw, 26px); font-weight: 800;
+      letter-spacing: -0.025em; line-height: 1.0; color: var(--black);
+      font-variant-numeric: tabular-nums; margin-bottom: 5px;
+    }
+    .kpi__sub { font-size: 10px; color: var(--gray-600); font-weight: 700; letter-spacing: 0.03em; }
+    .kpi--debt .kpi__value { color: var(--error); }
+
+    /* ── TABELA DE OPERAÇÕES ────────────────────────────────── */
+    .results { background: var(--white); border: 1px solid var(--gray-300); }
+    .results__bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; padding: 14px 16px;
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .results__heading {
+      font-size: 11px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--black);
+    }
+    .results__count {
+      font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--gray-600);
+    }
+    .results__count b { color: var(--green); }
+
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table.ops {
+      width: 100%; border-collapse: collapse; min-width: 900px;
+      table-layout: fixed; font-variant-numeric: tabular-nums;
+    }
+    /* Colunas de texto quebram; numéricas têm largura garantida (não cortam) */
+    .ops .col-prod, .ops .col-bank, .ops .type-chip { overflow-wrap: anywhere; }
+    .ops thead th {
+      text-align: left; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-600);
+      padding: 10px 8px; border-bottom: 2px solid var(--black);
+      background: var(--off-white); white-space: normal; line-height: 1.2; vertical-align: bottom;
+    }
+    .ops thead th.num, .ops tbody td.num { text-align: right; }
+    .ops tbody td {
+      padding: 12px 8px; border-bottom: 1px solid var(--gray-200);
+      font-size: 12px; vertical-align: top; line-height: 1.3;
+    }
+    .ops tbody tr:last-child td { border-bottom: none; }
+    .ops tbody tr:hover td { background: var(--off-white); }
+    .ops .col-idx { color: var(--gray-600); font-weight: 800; width: 24px; }
+    .ops .col-bank { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 76px; }
+    .ops .col-prod { font-weight: 800; color: var(--black); letter-spacing: -0.01em; min-width: 104px; }
+    .ops .money { font-weight: 700; color: var(--black); white-space: nowrap; }
+    .ops .money--debt { font-weight: 800; color: var(--error); white-space: nowrap; }
+    .ops .contract-id {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 11px; font-weight: 700; color: var(--gray-600); white-space: nowrap;
+    }
+    .ops .cet { font-weight: 800; color: var(--black); white-space: nowrap; }
+    .ops .date { font-size: 11px; color: var(--gray-600); font-weight: 700; white-space: nowrap; }
+    /* Tipo = rótulo de texto (sem caixa) — metadado secundário, menos ruído */
+    .type-chip {
+      display: inline-block; font-size: 9px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.35;
+      color: var(--gray-600);
+    }
+    /* Linha de total */
+    .ops tfoot td {
+      padding: 12px 9px; border-top: 2px solid var(--black);
+      font-size: 12px; font-weight: 800; background: var(--off-white);
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .ops tfoot .money { font-size: 14px; }
+    .ops tfoot .money--debt { font-size: 14px; color: var(--error); }
+
+    .scroll-hint {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray-600);
+      border-top: 1px solid var(--gray-200);
+    }
+    @media (min-width: 980px) { .scroll-hint { display: none; } }
+
+    /* ── DISCLAIMER ─────────────────────────────────────────── */
+    .note {
+      margin-top: 16px; background: var(--off-white);
+      border-left: 4px solid var(--green); padding: 16px 20px;
+      font-size: 12px; line-height: 1.65; color: var(--gray-600); max-width: none;
+    }
+    .note strong { color: var(--black); font-weight: 700; }
+
+    /* ── PRÉ-VISUALIZAÇÃO DE DOCUMENTOS ─────────────────────── */
+    /* Gatilho único ao lado do header (chips permanecem só status) */
+    .docs__head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .docs__head .docs__label { margin-bottom: 0; }
+    .docs__preview {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--f); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--green); background: transparent; border: none; padding: 0; cursor: pointer;
+      transition: color var(--t);
+    }
+    .docs__preview:hover { color: var(--black); }
+    .docs__preview:focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
+    .docs__preview svg { width: 15px; height: 15px; }
+
+    /* Overlay + visualizador */
+    .doc-overlay {
+      position: fixed; inset: 0; z-index: 320;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .doc-overlay.is-open { opacity: 1; pointer-events: all; }
+    .doc-modal {
+      background: var(--white); border: 2px solid var(--black);
+      width: 100%; max-width: 720px; max-height: 92vh;
+      display: flex; flex-direction: column;
+    }
+    .doc-modal__bar {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; padding: 20px 22px; border-bottom: 2px solid var(--black);
+    }
+    .doc-modal__eyebrow { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-600); margin-bottom: 4px; }
+    .doc-modal__title { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; color: var(--black); }
+    .doc-modal__close {
+      flex-shrink: 0; width: 36px; height: 36px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; border: 1.5px solid var(--gray-300); color: var(--black);
+      cursor: pointer; transition: border-color var(--t), background var(--t);
+    }
+    .doc-modal__close:hover { border-color: var(--black); background: var(--off-white); }
+
+    .doc-modal__tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 22px 0; }
+    .doc-tab {
+      font-family: var(--f); font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+      padding: 7px 12px; background: var(--white); color: var(--gray-600);
+      border: 1.5px solid var(--gray-300); cursor: pointer; transition: border-color var(--t), color var(--t), background var(--t);
+    }
+    .doc-tab:hover { border-color: var(--black); color: var(--black); }
+    .doc-tab--active, .doc-tab--active:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    .doc-modal__viewer { flex: 1; overflow-y: auto; padding: 22px; background: var(--off-white); }
+
+    /* Folha (mock de documento) */
+    .doc-paper { background: var(--white); border: 1px solid var(--gray-300); padding: 28px 30px; max-width: 600px; margin: 0 auto; }
+    .doc-paper__head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 2px solid var(--black); padding-bottom: 14px; margin-bottom: 16px; }
+    .doc-paper__org { font-size: 13px; font-weight: 800; letter-spacing: -0.01em; color: var(--black); line-height: 1.3; }
+    .doc-paper__sub { font-size: 11px; color: var(--gray-600); margin-top: 3px; line-height: 1.4; }
+    .doc-paper__tag { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); border: 1px solid var(--green); padding: 3px 7px; white-space: nowrap; flex-shrink: 0; }
+    .doc-paper__label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-600); margin: 18px 0 6px; }
+    .doc-paper__label:first-of-type { margin-top: 0; }
+    .doc-row { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--gray-200); font-size: 13px; }
+    .doc-row span:first-child { color: var(--gray-600); }
+    .doc-row span:last-child { font-weight: 700; color: var(--black); font-variant-numeric: tabular-nums; text-align: right; }
+    .doc-row--debt span:last-child { color: var(--error); }
+    .doc-paper__total { display: flex; justify-content: space-between; gap: 16px; padding-top: 12px; margin-top: 6px; border-top: 2px solid var(--black); font-size: 14px; font-weight: 800; }
+    .doc-paper__total span:last-child { font-variant-numeric: tabular-nums; }
+    .doc-watermark { text-align: center; font-size: 10px; color: var(--gray-300); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 18px; font-weight: 700; }
+
+    .doc-modal__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 22px; border-top: 1.5px solid var(--gray-300); }
+    .doc-modal__metatext { font-size: 11px; color: var(--gray-600); line-height: 1.4; }
+    .doc-modal__download {
+      display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
+      font-family: var(--f); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 10px 18px; background: var(--green); color: var(--white); border: 1.5px solid var(--green);
+      cursor: pointer; transition: background var(--t), border-color var(--t);
+    }
+    .doc-modal__download:hover { background: var(--green-hover); border-color: var(--green-hover); }
+    .doc-modal__download svg { width: 15px; height: 15px; }
+
+    @media (max-width: 640px) {
+      .doc-modal { max-height: 96vh; }
+      .doc-modal__viewer { padding: 14px; }
+      .doc-paper { padding: 20px 18px; }
+      .doc-modal__foot { flex-direction: column; align-items: stretch; }
+      .doc-modal__download { justify-content: center; }
+    }
+
+    /* ── LOGOUT MODAL ───────────────────────────────────────── */
+    .logout-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .logout-overlay.is-open { opacity: 1; pointer-events: all; }
+    .logout-modal { background: var(--white); border: 2px solid var(--black); padding: 28px 28px 24px; width: 100%; max-width: 360px; }
+    .logout-modal__eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--error); margin-bottom: 8px; }
+    .logout-modal__title { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 8px; }
+    .logout-modal__desc { font-size: 13px; color: var(--gray-600); line-height: 1.55; margin-bottom: 24px; }
+    .logout-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-logout-cancel { padding: 10px 18px; font-family: var(--f); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: transparent; color: var(--black); cursor: pointer; border: 1.5px solid var(--gray-300); transition: border-color var(--t), background var(--t); }
+    .btn-logout-cancel:hover { border-color: var(--black); background: var(--off-white); }
+    .btn-logout-confirm { padding: 10px 18px; font-family: var(--f); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; background: var(--error); color: var(--white); cursor: pointer; border: 1.5px solid var(--error); transition: background var(--t), border-color var(--t); }
+    .btn-logout-confirm:hover { background: #b91c1c; border-color: #b91c1c; }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="logo-basta" viewBox="0 0 602.25 254.23">
+    <path fill="currentColor" d="M0,1.25h48.07c27.52,0,43.03,9.7,53.5,43.21l2.71,8.77c6.59,21.29.78,32.56-13.96,38.51l.78,2.5c23.26,3.76,30.24,14.09,36.44,33.5l22.49,72.01c10.85,35.07-8.14,51.97-37.6,51.97h-34.89L0,1.25ZM63.58,81.72h4.26c4.26,0,5.81-3.13,4.26-8.14l-10.86-35.07c-1.94-5.95-3.88-7.51-9.3-7.51h-3.88l15.51,50.72ZM106.99,221.98h4.26c4.26,0,5.81-3.45,4.26-8.45l-30.24-97.68c-1.55-5.64-3.88-7.2-9.3-7.2h-3.88l34.89,113.34Z"/>
+    <path fill="currentColor" d="M172.67,231.06l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM206.4,217.6c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M270.71,210.08l-7.75-25.36h37.99l9.69,31.62c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-3.1-10.02c-14.34-46.65-69-64.81-85.67-118.98l-.78-2.5c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.29,42.89l7.75,25.36h-37.99l-9.69-31.62c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l3.1,10.02c14.34,46.65,69,64.81,85.67,118.97l.77,2.5c10.86,35.07-7.75,51.97-36.83,51.97-25.2,0-37.21-10.02-47.3-42.89Z"/>
+    <path fill="currentColor" d="M389.48,230.43l-51.56-166.88h-11.63l-8.91-29.12h11.63L318.15,0h37.99l10.85,34.44h11.63l8.92,29.12h-11.63l47.68,154.35c.78,2.82,1.94,3.44,5.43,3.44h7.37l8.91,29.12h-22.48c-18.61,0-28.69-5.01-33.34-20.04Z"/>
+    <path fill="currentColor" d="M451.94,229.81l-17.83-57.61c-7.37-23.48-5.43-31.62,9.3-49.15l9.69-11.58c6.2-7.51,7.37-11.9,3.88-22.86l-6.2-20.04c-1.55-5.64-2.71-7.51-6.2-7.51-4.26,0-5.82,3.44-4.26,8.45l9.3,30.68h-37.99l-5.04-16.28c-10.85-35.07,7.75-51.97,36.83-51.97,25.2,0,37.21,10.02,47.3,42.89l44.19,143.08c.77,2.5,1.55,3.44,4.65,3.44h3.1l8.92,29.12h-22.49c-16.28,0-23.26-5.01-27.13-18.16l-.78-2.5h-2.32c1.55,14.72-5.04,23.17-20.16,23.17s-21.71-7.51-26.75-23.17ZM485.66,216.34c1.55,5.64,2.71,7.51,6.2,7.51,4.26,0,5.82-3.44,4.26-8.45l-25.2-81.72c0,2.19-1.16,3.76-1.94,4.7-3.88,4.38-5.04,7.83-1.55,19.1l18.22,58.86Z"/>
+    <path fill="currentColor" d="M563.49,208.2h38.77v42.27h-38.77v-42.27Z"/>
+  </symbol>
+</svg>
+
+<!-- ════════════════════════════════════════════════════════
+     MOBILE TOP BAR
+     ════════════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a href="28_basta-dashboard-parceiros.html" aria-label="Ir para Resumo"><svg class="topbar__logo logo--on-light" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+  <a href="27_basta-parceiro-perfil.html" class="topbar__avatar" aria-label="Ir para Perfil">RM</a>
+</div>
+
+<div class="dashboard">
+
+  <!-- ════════════════════════════════════════════════════════
+       SIDEBAR
+       ════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar__header">
+      <a href="28_basta-dashboard-parceiros.html" aria-label="Ir para Resumo"><svg class="sidebar__logo logo--on-dark" aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg></a>
+    </div>
+
+    <nav class="sidebar__nav">
+      <a href="28_basta-dashboard-parceiros.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Resumo
+      </a>
+      <span class="nav-item nav-item--active" aria-current="page" role="link" tabindex="0">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        Renegociação
+      </span>
+      <a href="27_basta-parceiro-perfil.html" class="nav-item">
+        <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </a>
+    </nav>
+
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">RM</div>
+      <div class="sidebar__user-info">
+        <div class="sidebar__user-name">Renegocia Mais</div>
+        <div class="sidebar__user-email">parceria@renegociamais.com.br</div>
+      </div>
+      <button class="sidebar__logout" aria-label="Sair" onclick="openLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN CONTENT — PORTABILIDADE
+       ════════════════════════════════════════════════════════ -->
+  <main class="main" id="portabilidade">
+
+  <!-- HEADER -->
+  <div class="detail-header">
+    <div class="detail-header__main">
+      <div class="id">
+        <div class="id__item">
+          <span class="id__label">Cliente</span>
+          <span class="id__name">Não terminado</span>
+        </div>
+        <div class="id__item">
+          <span class="id__label">CPF</span>
+          <span class="id__cpf">058.342.716-09</span>
+        </div>
+      </div>
+      <p class="page-lead">Abaixo estão os contratos de dívidas vencidas que podem<br>se interessar em quitar com condições favoráveis.</p>
+    </div>
+    <a href="27_basta-dashboard-parceiros.html" class="btn-close" aria-label="Fechar e voltar ao Resumo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </a>
+  </div>
+
+  <!-- DOCUMENTOS + AÇÕES -->
+  <div class="meta">
+    <div class="docs">
+      <div class="docs__head">
+        <div class="docs__label">Documentos compartilhados</div>
+        <button type="button" class="docs__preview" onclick="openDocPreview('scr', this)" aria-label="Visualizar documentos compartilhados">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          Visualizar
+        </button>
+      </div>
+      <div class="docs__list">
+        <span class="doc-chip doc-chip--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>SCR</span>
+        <span class="doc-chip doc-chip--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Holerites</span>
+        <span class="doc-chip doc-chip--ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Docs pessoais</span>
+        <span class="doc-chip doc-chip--missing" title="Não compartilhado pelo cliente" aria-label="Comprovante de endereço — não compartilhado"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>Comp. endereço</span>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="docs__label">Ações</div>
+      <div class="actions__row">
+        <button type="button" id="clientReviewBtn" class="review-btn" aria-pressed="false" onclick="toggleClientReview()">
+          <svg class="review-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+          <span class="review-btn__label">
+            <span class="review-btn__sizer" aria-hidden="true">Proposto em 00/00/0000</span>
+            <span class="review-btn__text">Marcar como proposto</span>
+          </span>
+        </button>
+        <button type="button" class="btn-download" onclick="downloadDossie()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar
+        </button>
+        <button type="button" class="btn-whatsapp" onclick="callClient()" aria-label="Chamar cliente no WhatsApp">
+          Chamar Cliente
+          <svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.04 4C9.93 4 4.97 8.96 4.97 15.07c0 2.13.6 4.12 1.64 5.81L4.5 27l6.3-2.05a11 11 0 0 0 5.24 1.34h.01c6.11 0 11.07-4.96 11.07-11.07S22.15 4 16.04 4zm0 20.2h-.01a9.2 9.2 0 0 1-4.69-1.28l-.34-.2-3.74 1.22 1.25-3.64-.22-.37a9.13 9.13 0 0 1-1.4-4.87c0-5.05 4.11-9.16 9.18-9.16 2.45 0 4.75.96 6.48 2.69a9.1 9.1 0 0 1 2.68 6.48c0 5.05-4.11 9.16-9.18 9.16zm5.03-6.86c-.28-.14-1.63-.8-1.88-.9-.25-.09-.43-.14-.62.14-.18.28-.71.9-.87 1.08-.16.18-.32.21-.6.07-.28-.14-1.16-.43-2.21-1.36-.82-.73-1.37-1.63-1.53-1.91-.16-.28-.02-.43.12-.57.13-.13.28-.32.42-.49.14-.16.18-.28.28-.46.09-.18.05-.35-.02-.49-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.47l-.53-.01c-.18 0-.48.07-.73.35-.25.28-.96.94-.96 2.3s.98 2.66 1.12 2.85c.14.18 1.93 2.95 4.68 4.14.65.28 1.16.45 1.56.58.66.21 1.25.18 1.72.11.53-.08 1.63-.67 1.86-1.31.23-.64.23-1.19.16-1.31-.07-.12-.25-.18-.53-.32z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis" aria-label="Síntese das operações">
+    <div class="kpi">
+      <div class="kpi__label">Operações em renegociação</div>
+      <div class="kpi__value">6</div>
+      <div class="kpi__sub">Total no período</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi__label">Valor original</div>
+      <div class="kpi__value">R$ 170.764</div>
+      <div class="kpi__sub">Soma original das operações</div>    </div>
+    <div class="kpi kpi--debt">
+      <div class="kpi__label">Saldo devedor</div>
+      <div class="kpi__value">R$ 113.891</div>
+      <div class="kpi__sub">66,7% do contratado</div>    </div>
+    <div class="kpi">
+      <div class="kpi__label">Proposta limite</div>
+      <div class="kpi__value">R$ —</div>
+      <div class="kpi__sub">A definir</div>    </div>
+  </div>
+
+  <!-- TABELA DE OPERAÇÕES (acordeão) -->
+  <section class="results" aria-label="Operações de crédito">
+    <div class="results__bar" role="button" tabindex="0" aria-expanded="true" aria-controls="opsBody"
+         onclick="toggleOps(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleOps(this);}">
+      <div class="results__left">
+        <svg class="results__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        <span class="results__heading">Operações de crédito</span>
+        <span class="results__count"><b>6</b> registros · Open Finance</span>
+      </div>
+    </div>
+    <div id="opsBody">
+
+    <div class="table-scroll">
+      <table class="ops">
+        <colgroup>
+          <col style="width: 4%" />    <!-- # -->
+          <col style="width: 11%" />   <!-- Banco -->
+          <col style="width: 16%" />   <!-- Produto -->
+          <col style="width: 12%" />   <!-- Valor contratado -->
+          <col style="width: 12%" />   <!-- Saldo devedor -->
+          <col style="width: 11%" />   <!-- Tipo -->
+          <col style="width: 9%" />    <!-- Contrato -->
+          <col style="width: 7%" />    <!-- CET -->
+          <col style="width: 9%" />    <!-- Contratação -->
+          <col style="width: 9%" />    <!-- Vencimento -->
+        </colgroup>
+        <thead>
+          <tr>
+            <th class="col-idx">#</th>
+            <th>Banco</th>
+            <th>Produto</th>
+            <th class="num">Valor contratado</th>
+            <th class="num">Saldo devedor</th>
+            <th>Tipo</th>
+            <th>Contrato</th>
+            <th class="num">CET</th>
+            <th>Contratação</th>
+            <th>Vencimento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-idx">1</td>
+            <td class="col-bank">Banco do Brasil</td>
+            <td class="col-prod">Consignação em folha — Empresas públicas</td>
+            <td class="num money">R$ 7.179,55</td>
+            <td class="num money--debt">R$ 6.072,57</td>
+            <td><span class="type-chip">Crédito pessoal<br>c/ consignação</span></td>
+            <td><span class="contract-id">C307303353</span></td>
+            <td class="num cet">18,05%</td>
+            <td><span class="date">26/01/2023</span></td>
+            <td><span class="date">28/02/2033</span></td>
+          </tr>
+          <tr>
+            <td class="col-idx">2</td>
+            <td class="col-bank">Caixa Econômica</td>
+            <td class="col-prod">Crédito pessoal — sem consignação em folha</td>
+            <td class="num money">R$ 15.800,00</td>
+            <td class="num money--debt">R$ 9.944,38</td>
+            <td><span class="type-chip">Crédito pessoal<br>s/ consignação</span></td>
+            <td><span class="contract-id">C107306987</span></td>
+            <td class="num cet">12,28%</td>
+            <td><span class="date">12/02/2021</span></td>
+            <td><span class="date">30/03/2031</span></td>
+          </tr>
+          <tr>
+            <td class="col-idx">3</td>
+            <td class="col-bank">Bradesco</td>
+            <td class="col-prod">Crédito rotativo vinculado a cartão de crédito</td>
+            <td class="num money">R$ 16.170,00</td>
+            <td class="num money--debt">R$ 13.616,10</td>
+            <td><span class="type-chip">Crédito rotativo<br>de cartão</span></td>
+            <td><span class="contract-id">C207355630</span></td>
+            <td class="num cet">18,08%</td>
+            <td><span class="date">21/12/2022</span></td>
+            <td><span class="date">30/01/2033</span></td>
+          </tr>
+          <tr>
+            <td class="col-idx">4</td>
+            <td class="col-bank">Banco BMG</td>
+            <td class="col-prod">Cartão de crédito</td>
+            <td class="num money">R$ 2.875,00</td>
+            <td class="num money--debt">R$ 1.873,25</td>
+            <td><span class="type-chip">Cartão de<br>crédito</span></td>
+            <td><span class="contract-id">C107320963</span></td>
+            <td class="num cet">12,29%</td>
+            <td><span class="date">26/05/2021</span></td>
+            <td><span class="date">30/06/2031</span></td>
+          </tr>
+          <tr>
+            <td class="col-idx">5</td>
+            <td class="col-bank">Santander</td>
+            <td class="col-prod">Home equity</td>
+            <td class="num money">R$ 11.415,00</td>
+            <td class="num money--debt">R$ 8.541,44</td>
+            <td><span class="type-chip">Crédito c/ garantia<br>de imóvel</span></td>
+            <td><span class="contract-id">C207304234</span></td>
+            <td class="num cet">15,77%</td>
+            <td><span class="date">27/01/2022</span></td>
+            <td><span class="date">29/02/2032</span></td>
+          </tr>
+          <tr>
+            <td class="col-idx">6</td>
+            <td class="col-bank">Banco Pan</td>
+            <td class="col-prod">Renovação consignado público</td>
+            <td class="num money">R$ 117.324,57</td>
+            <td class="num money--debt">R$ 73.842,96</td>
+            <td><span class="type-chip">Crédito pessoal<br>c/ consignação</span></td>
+            <td><span class="contract-id">C107306855</span></td>
+            <td class="num cet">11,38%</td>
+            <td><span class="date">12/02/2021</span></td>
+            <td><span class="date">30/03/2031</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scroll-hint">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      Arraste para o lado para ver todas as colunas
+    </div>
+    </div>
+  </section>
+
+  <!-- NOTA — metadado das operações; fora do bloco, agrupada por proximidade -->
+  <p class="note">
+    Dados apurados via <strong>Open Finance</strong> mediante consentimento ativo do titular, válido por
+    <strong>12 meses</strong>. Saldos e taxas refletem a última atualização disponível e podem variar até a data
+    de liquidação. Uso restrito à análise de crédito e portabilidade — vedado o compartilhamento com terceiros.
+  </p>
+
+  </main>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     LOGOUT MODAL
+     ════════════════════════════════════════════════════════ -->
+<div class="logout-overlay" id="logoutModal">
+  <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="logout-modal__eyebrow">Confirmação</div>
+    <h2 class="logout-modal__title" id="logoutTitle">Sair da conta?</h2>
+    <p class="logout-modal__desc">Você precisará fazer login novamente para acessar o painel do parceiro.</p>
+    <div class="logout-modal__actions">
+      <button class="btn-logout-cancel" id="logoutCancel" onclick="closeLogout()">Cancelar</button>
+      <button class="btn-logout-confirm" id="logoutConfirm" onclick="window.location.href='05_basta-login-parceiros.html'">Sair</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PRÉ-VISUALIZAÇÃO DE DOCUMENTOS
+     ════════════════════════════════════════════════════════ -->
+<div class="doc-overlay" id="docModal">
+  <div class="doc-modal" role="dialog" aria-modal="true" aria-labelledby="docTitle">
+    <div class="doc-modal__bar">
+      <div>
+        <div class="doc-modal__eyebrow" id="docEyebrow">Documento compartilhado</div>
+        <h2 class="doc-modal__title" id="docTitle">—</h2>
+      </div>
+      <button class="doc-modal__close" id="docClose" onclick="closeDocPreview()" aria-label="Fechar visualização">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="doc-modal__tabs" id="docTabs">
+      <button type="button" class="doc-tab" data-doc="scr" onclick="renderDoc('scr')">SCR</button>
+      <button type="button" class="doc-tab" data-doc="holerites" onclick="renderDoc('holerites')">Holerites</button>
+      <button type="button" class="doc-tab" data-doc="docs" onclick="renderDoc('docs')">Docs pessoais</button>
+    </div>
+    <div class="doc-modal__viewer" id="docViewer"></div>
+    <div class="doc-modal__foot">
+      <span class="doc-modal__metatext" id="docMeta">Compartilhado via Open Finance</span>
+      <button class="doc-modal__download" id="docDownload" onclick="downloadDoc()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Baixar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ── LOGOUT MODAL ────────────────────────────────────────── */
+  let lastFocusedElement = null;
+  function openLogout() {
+    lastFocusedElement = document.activeElement;
+    document.getElementById('logoutModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('logoutCancel').focus();
+  }
+  function closeLogout() {
+    document.getElementById('logoutModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (lastFocusedElement) lastFocusedElement.focus();
+  }
+  (function() {
+    const overlay = document.getElementById('logoutModal');
+    const box = overlay.querySelector('.logout-modal');
+    const cancelBtn = document.getElementById('logoutCancel');
+    const confirmBtn = document.getElementById('logoutConfirm');
+    overlay.addEventListener('click', function(e) { if (e.target === this) closeLogout(); });
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { e.preventDefault(); closeLogout(); }
+      if (e.key === 'Tab') {
+        const els = [cancelBtn, confirmBtn];
+        const i = els.indexOf(document.activeElement);
+        e.preventDefault();
+        if (e.shiftKey) els[i === 0 ? els.length - 1 : i - 1].focus();
+        else els[i === els.length - 1 ? 0 : i + 1].focus();
+      }
+    });
+  })();
+
+  /* ── ACORDEÃO DE OPERAÇÕES ───────────────────────────── */
+  function toggleOps(bar) {
+    var section = bar.closest('.results');
+    var collapsed = section.classList.toggle('is-collapsed');
+    bar.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  }
+
+  /* ── AVALIAÇÃO A NÍVEL DE CLIENTE ────────────────────── */
+  function toggleClientReview() {
+    var btn = document.getElementById('clientReviewBtn');
+    var done = btn.classList.toggle('is-done');
+    btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    var txt = btn.querySelector('.review-btn__text');
+    var icon = btn.querySelector('.review-btn__icon');
+    if (done) {
+      var d = new Date();
+      var dd = String(d.getDate()).padStart(2, '0');
+      var mm = String(d.getMonth() + 1).padStart(2, '0');
+      txt.textContent = 'Proposto em ' + dd + '/' + mm + '/' + d.getFullYear();
+      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+    } else {
+      txt.textContent = 'Marcar como proposto';
+      icon.innerHTML = '<circle cx="12" cy="12" r="9"/>';
+    }
+  }
+
+  /* ── DOWNLOAD (conteúdo tratado depois) ──────────────── */
+  function downloadDossie() {
+    /* INTEGRAÇÃO: gerar/baixar o dossiê do cliente (PDF/CSV). */
+    alert('Download do dossiê do cliente — em breve.');
+  }
+
+  /* ── CHAMAR CLIENTE NO WHATSAPP ──────────────────────── */
+  function callClient() {
+    /* INTEGRAÇÃO: substituir pelo telefone real do cliente (apenas dígitos, com DDI 55). */
+    var phone = '5521991234488';                 /* Anderson Vilela Prado — (21) 99123-4488 */
+    var firstName = 'Anderson';
+    var partner = 'Renegocia Mais';
+    var msg = 'Olá, ' + firstName + '! Aqui é da ' + partner + '. ' +
+      'Identificamos uma oportunidade de portabilidade que pode reduzir o custo das suas parcelas. ' +
+      'Podemos conversar?';
+    var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank', 'noopener');
+  }
+
+  /* ── PRÉ-VISUALIZAÇÃO DE DOCUMENTOS ──────────────────── */
+  /* Mocks fiéis — substituir por render do arquivo real na integração. */
+  var DOC_DATA = {
+    scr: {
+      title: 'SCR — Sistema de Informações de Créditos',
+      meta: 'Banco Central do Brasil · Consulta via Open Finance · Data-base 05/2026',
+      html:
+        '<div class="doc-paper">' +
+          '<div class="doc-paper__head">' +
+            '<div><div class="doc-paper__org">Banco Central do Brasil</div>' +
+            '<div class="doc-paper__sub">SCR — Sistema de Informações de Créditos</div></div>' +
+            '<span class="doc-paper__tag">Open Finance</span>' +
+          '</div>' +
+          '<div class="doc-paper__label">Titular</div>' +
+          '<div class="doc-row"><span>Nome</span><span>Não terminado</span></div>' +
+          '<div class="doc-row"><span>CPF</span><span>058.342.716-09</span></div>' +
+          '<div class="doc-row"><span>Data-base</span><span>05/2026</span></div>' +
+          '<div class="doc-row"><span>Instituições reportantes</span><span>6</span></div>' +
+          '<div class="doc-paper__label">Resumo da carteira</div>' +
+          '<div class="doc-row"><span>Operações vigentes</span><span>6</span></div>' +
+          '<div class="doc-row"><span>Valor contratado total</span><span>R$ 170.764,12</span></div>' +
+          '<div class="doc-row"><span>A vencer</span><span>R$ 113.890,70</span></div>' +
+          '<div class="doc-row"><span>Vencido</span><span>R$ 0,00</span></div>' +
+          '<div class="doc-row"><span>Prejuízo</span><span>R$ 0,00</span></div>' +
+          '<div class="doc-paper__total"><span>Saldo devedor</span><span>R$ 113.890,70</span></div>' +
+          '<div class="doc-watermark">Pré-visualização · documento não editável</div>' +
+        '</div>'
+    },
+    holerites: {
+      title: 'Demonstrativo de pagamento',
+      meta: 'Holerite · Competência 05/2026 · Compartilhado pelo cliente',
+      html:
+        '<div class="doc-paper">' +
+          '<div class="doc-paper__head">' +
+            '<div><div class="doc-paper__org">Demonstrativo de pagamento</div>' +
+            '<div class="doc-paper__sub">Prefeitura Municipal · Matrícula 33.812-0</div></div>' +
+            '<span class="doc-paper__tag">Comp. 05/2026</span>' +
+          '</div>' +
+          '<div class="doc-paper__label">Proventos</div>' +
+          '<div class="doc-row"><span>Salário base</span><span>R$ 6.480,00</span></div>' +
+          '<div class="doc-row"><span>Gratificação de função</span><span>R$ 920,00</span></div>' +
+          '<div class="doc-paper__label">Descontos</div>' +
+          '<div class="doc-row doc-row--debt"><span>INSS</span><span>− R$ 712,80</span></div>' +
+          '<div class="doc-row doc-row--debt"><span>IRRF</span><span>− R$ 281,40</span></div>' +
+          '<div class="doc-row doc-row--debt"><span>Empréstimos consignados</span><span>− R$ 1.040,00</span></div>' +
+          '<div class="doc-paper__total"><span>Líquido a receber</span><span>R$ 5.365,80</span></div>' +
+          '<div class="doc-watermark">Pré-visualização · documento não editável</div>' +
+        '</div>'
+    },
+    docs: {
+      title: 'Documento de identificação',
+      meta: 'RG / CPF · Compartilhado pelo cliente',
+      html:
+        '<div class="doc-paper">' +
+          '<div class="doc-paper__head">' +
+            '<div><div class="doc-paper__org">Documento de identificação</div>' +
+            '<div class="doc-paper__sub">Carteira de Identidade · CPF</div></div>' +
+            '<span class="doc-paper__tag">RG · CPF</span>' +
+          '</div>' +
+          '<div class="doc-paper__label">Dados</div>' +
+          '<div class="doc-row"><span>Nome</span><span>Não terminado</span></div>' +
+          '<div class="doc-row"><span>CPF</span><span>058.342.716-09</span></div>' +
+          '<div class="doc-row"><span>RG</span><span>22.314.556-8 SSP/RJ</span></div>' +
+          '<div class="doc-row"><span>Nascimento</span><span>14/08/1979</span></div>' +
+          '<div class="doc-row"><span>Naturalidade</span><span>Rio de Janeiro / RJ</span></div>' +
+          '<div class="doc-row"><span>Filiação</span><span>Antônio Prado · Marlene S. Prado</span></div>' +
+          '<div class="doc-watermark">Pré-visualização · documento não editável</div>' +
+        '</div>'
+    }
+  };
+
+  var docTrigger = null;
+  var currentDoc = null;
+
+  function renderDoc(key) {
+    var d = DOC_DATA[key];
+    if (!d) return;
+    currentDoc = key;
+    document.getElementById('docTitle').textContent = d.title;
+    document.getElementById('docMeta').textContent = d.meta;
+    document.getElementById('docViewer').innerHTML = d.html;
+    document.getElementById('docViewer').scrollTop = 0;
+    document.querySelectorAll('#docTabs .doc-tab').forEach(function (t) {
+      t.classList.toggle('doc-tab--active', t.getAttribute('data-doc') === key);
+    });
+  }
+
+  function openDocPreview(key, btn) {
+    docTrigger = btn || document.activeElement;
+    renderDoc(key);
+    document.getElementById('docModal').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('docClose').focus();
+  }
+
+  function closeDocPreview() {
+    document.getElementById('docModal').classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (docTrigger) docTrigger.focus();
+  }
+
+  function downloadDoc() {
+    /* INTEGRAÇÃO: baixar o documento atual (currentDoc). */
+    alert('Download do documento — em breve.');
+  }
+
+  (function () {
+    var overlay = document.getElementById('docModal');
+    var modal = overlay.querySelector('.doc-modal');
+    overlay.addEventListener('click', function (e) { if (e.target === this) closeDocPreview(); });
+    modal.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); closeDocPreview(); return; }
+      if (e.key === 'Tab') {
+        var els = Array.prototype.slice.call(
+          modal.querySelectorAll('button:not([disabled])')
+        ).filter(function (el) { return el.offsetParent !== null; });
+        if (!els.length) return;
+        var first = els[0], last = els[els.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

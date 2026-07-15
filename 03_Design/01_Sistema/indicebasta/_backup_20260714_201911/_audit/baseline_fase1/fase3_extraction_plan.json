@@ -1,0 +1,536 @@
+{
+  "total_extractable_rules": 83,
+  "total_non_uniform_rules": 79,
+  "total_savings_chars": 51609,
+  "by_destination": {
+    "_foundation/reset.css": [
+      {
+        "selector": ":focus-visible",
+        "props_chars": 53,
+        "occurrences": 25
+      },
+      {
+        "selector": ":focus:not(:focus-visible)",
+        "props_chars": 14,
+        "occurrences": 25
+      },
+      {
+        "selector": "*, *::before, *::after",
+        "props_chars": 46,
+        "occurrences": 24
+      },
+      {
+        "selector": "a",
+        "props_chars": 38,
+        "occurrences": 23
+      },
+      {
+        "selector": "button",
+        "props_chars": 70,
+        "occurrences": 23
+      },
+      {
+        "selector": ":where(button, a)",
+        "props_chars": 17,
+        "occurrences": 16
+      },
+      {
+        "selector": ".dashboard",
+        "props_chars": 53,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__header",
+        "props_chars": 24,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__nav",
+        "props_chars": 25,
+        "occurrences": 12
+      },
+      {
+        "selector": ".nav-item",
+        "props_chars": 214,
+        "occurrences": 12
+      },
+      {
+        "selector": ".nav-item:hover",
+        "props_chars": 50,
+        "occurrences": 12
+      },
+      {
+        "selector": ".nav-item--active",
+        "props_chars": 68,
+        "occurrences": 12
+      },
+      {
+        "selector": ".nav-item--active::before",
+        "props_chars": 102,
+        "occurrences": 12
+      },
+      {
+        "selector": ".nav-item__icon",
+        "props_chars": 56,
+        "occurrences": 12
+      },
+      {
+        "selector": ".nav-item--active .nav-item__icon",
+        "props_chars": 11,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__user",
+        "props_chars": 105,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__user-info",
+        "props_chars": 22,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__user-name",
+        "props_chars": 73,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__user-email",
+        "props_chars": 140,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__logout",
+        "props_chars": 51,
+        "occurrences": 12
+      },
+      {
+        "selector": ".sidebar__logout:hover",
+        "props_chars": 20,
+        "occurrences": 12
+      },
+      {
+        "selector": ".topbar__logo",
+        "props_chars": 26,
+        "occurrences": 12
+      },
+      {
+        "selector": ".logout-overlay",
+        "props_chars": 221,
+        "occurrences": 11
+      },
+      {
+        "selector": ".logout-overlay.is-open",
+        "props_chars": 32,
+        "occurrences": 11
+      },
+      {
+        "selector": ".logout-modal",
+        "props_chars": 113,
+        "occurrences": 11
+      },
+      {
+        "selector": ".logout-modal__eyebrow",
+        "props_chars": 126,
+        "occurrences": 11
+      },
+      {
+        "selector": ".logout-modal__title",
+        "props_chars": 98,
+        "occurrences": 11
+      },
+      {
+        "selector": ".logout-modal__desc",
+        "props_chars": 80,
+        "occurrences": 11
+      },
+      {
+        "selector": ".logout-modal__actions",
+        "props_chars": 52,
+        "occurrences": 11
+      },
+      {
+        "selector": ".btn-logout-cancel:hover",
+        "props_chars": 57,
+        "occurrences": 11
+      },
+      {
+        "selector": ".btn-primary:active",
+        "props_chars": 23,
+        "occurrences": 8
+      },
+      {
+        "selector": ".btn__arrow",
+        "props_chars": 49,
+        "occurrences": 7
+      },
+      {
+        "selector": ".btn-primary:hover .btn__arrow",
+        "props_chars": 27,
+        "occurrences": 7
+      },
+      {
+        "selector": "@keyframes spin",
+        "props_chars": 33,
+        "occurrences": 7
+      },
+      {
+        "selector": "@keyframes modalIn",
+        "props_chars": 94,
+        "occurrences": 6
+      },
+      {
+        "selector": ".sidebar__section-title",
+        "props_chars": 190,
+        "occurrences": 6
+      },
+      {
+        "selector": ".nav-item--soon",
+        "props_chars": 56,
+        "occurrences": 6
+      },
+      {
+        "selector": ".nav-item--soon::after",
+        "props_chars": 201,
+        "occurrences": 6
+      },
+      {
+        "selector": ".skip-link:focus",
+        "props_chars": 10,
+        "occurrences": 5
+      },
+      {
+        "selector": "input",
+        "props_chars": 21,
+        "occurrences": 5
+      },
+      {
+        "selector": ".form-input:focus",
+        "props_chars": 42,
+        "occurrences": 5
+      },
+      {
+        "selector": ".form-input::placeholder",
+        "props_chars": 30,
+        "occurrences": 5
+      },
+      {
+        "selector": ".modal__header",
+        "props_chars": 108,
+        "occurrences": 5
+      },
+      {
+        "selector": ".modal__close:hover",
+        "props_chars": 48,
+        "occurrences": 5
+      },
+      {
+        "selector": ".fab:hover",
+        "props_chars": 53,
+        "occurrences": 5
+      },
+      {
+        "selector": ".fab__icon",
+        "props_chars": 42,
+        "occurrences": 5
+      },
+      {
+        "selector": ".accent",
+        "props_chars": 20,
+        "occurrences": 5
+      },
+      {
+        "selector": ".register-page",
+        "props_chars": 53,
+        "occurrences": 4
+      },
+      {
+        "selector": ".sidebar__headline",
+        "props_chars": 119,
+        "occurrences": 4
+      },
+      {
+        "selector": ".sidebar__subtext",
+        "props_chars": 103,
+        "occurrences": 4
+      },
+      {
+        "selector": ".sidebar::after",
+        "props_chars": 14,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-area",
+        "props_chars": 133,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-container",
+        "props_chars": 30,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-header",
+        "props_chars": 20,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-group:last-child",
+        "props_chars": 17,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-input--error",
+        "props_chars": 38,
+        "occurrences": 4
+      },
+      {
+        "selector": ".btn-close:active",
+        "props_chars": 23,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-cta",
+        "props_chars": 17,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-login-link a:hover",
+        "props_chars": 20,
+        "occurrences": 4
+      },
+      {
+        "selector": ".modal__title span",
+        "props_chars": 20,
+        "occurrences": 4
+      },
+      {
+        "selector": ".doc-header__meta",
+        "props_chars": 146,
+        "occurrences": 3
+      },
+      {
+        "selector": ".doc-header__meta strong",
+        "props_chars": 38,
+        "occurrences": 3
+      },
+      {
+        "selector": ".doc-footer a",
+        "props_chars": 55,
+        "occurrences": 3
+      },
+      {
+        "selector": ".password-toggle:hover",
+        "props_chars": 20,
+        "occurrences": 3
+      },
+      {
+        "selector": ".btn--loading .btn__text",
+        "props_chars": 19,
+        "occurrences": 3
+      },
+      {
+        "selector": ".modal-overlay.is-open",
+        "props_chars": 32,
+        "occurrences": 3
+      }
+    ],
+    "_foundation/responsive.css (novo)": [
+      {
+        "selector": "@media (prefers-reduced-motion: reduce)",
+        "props_chars": 105,
+        "occurrences": 22
+      },
+      {
+        "selector": "@media (hover: none) and (pointer: coarse)",
+        "props_chars": 68,
+        "occurrences": 14
+      },
+      {
+        "selector": "@media (max-width: 1024px)",
+        "props_chars": 76,
+        "occurrences": 4
+      }
+    ],
+    "_components/btn.css": [
+      {
+        "selector": ".btn-logout-confirm:hover",
+        "props_chars": 43,
+        "occurrences": 11
+      }
+    ],
+    "_components/form.css": [
+      {
+        "selector": ".form-group",
+        "props_chars": 20,
+        "occurrences": 5
+      },
+      {
+        "selector": ".form-title",
+        "props_chars": 97,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-subtitle",
+        "props_chars": 76,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-core",
+        "props_chars": 46,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-error",
+        "props_chars": 140,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-error__icon",
+        "props_chars": 59,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-error[hidden]",
+        "props_chars": 14,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-fields-block .form-group",
+        "props_chars": 20,
+        "occurrences": 4
+      },
+      {
+        "selector": ".form-login-link",
+        "props_chars": 78,
+        "occurrences": 4
+      }
+    ],
+    "?? indeterminado": [
+      {
+        "selector": ".kicker__dot",
+        "props_chars": 20,
+        "occurrences": 3
+      },
+      {
+        "selector": ".icon-btn",
+        "props_chars": 297,
+        "occurrences": 3
+      },
+      {
+        "selector": ".icon-btn:hover",
+        "props_chars": 78,
+        "occurrences": 3
+      }
+    ],
+    "_components/doc-header.css (novo)": [
+      {
+        "selector": ".doc-footer strong",
+        "props_chars": 38,
+        "occurrences": 3
+      }
+    ]
+  },
+  "rules_with_drift": [
+    {
+      "selector": "html",
+      "occurrences": 25,
+      "variant_count": 2
+    },
+    {
+      "selector": "body",
+      "occurrences": 25,
+      "variant_count": 4
+    },
+    {
+      "selector": ".page",
+      "occurrences": 3,
+      "variant_count": 2
+    },
+    {
+      "selector": "@media (min-width: 720px)",
+      "occurrences": 22,
+      "variant_count": 13
+    },
+    {
+      "selector": "@media (min-width: 1024px)",
+      "occurrences": 5,
+      "variant_count": 5
+    },
+    {
+      "selector": ".doc-header",
+      "occurrences": 3,
+      "variant_count": 2
+    },
+    {
+      "selector": ".doc-header__logo",
+      "occurrences": 3,
+      "variant_count": 2
+    },
+    {
+      "selector": ".kicker",
+      "occurrences": 3,
+      "variant_count": 2
+    },
+    {
+      "selector": ".section",
+      "occurrences": 4,
+      "variant_count": 4
+    },
+    {
+      "selector": "@media (min-width: 600px)",
+      "occurrences": 8,
+      "variant_count": 6
+    },
+    {
+      "selector": "@media (min-width: 960px)",
+      "occurrences": 15,
+      "variant_count": 13
+    },
+    {
+      "selector": ".doc-footer",
+      "occurrences": 3,
+      "variant_count": 2
+    },
+    {
+      "selector": ":where(button, a, input, select, textarea)",
+      "occurrences": 5,
+      "variant_count": 2
+    },
+    {
+      "selector": ".skip-link",
+      "occurrences": 5,
+      "variant_count": 2
+    },
+    {
+      "selector": "@media (min-width: 768px)",
+      "occurrences": 23,
+      "variant_count": 20
+    },
+    {
+      "selector": ".btn",
+      "occurrences": 10,
+      "variant_count": 6
+    },
+    {
+      "selector": ".btn-primary",
+      "occurrences": 9,
+      "variant_count": 2
+    },
+    {
+      "selector": ".btn-primary:hover",
+      "occurrences": 9,
+      "variant_count": 2
+    },
+    {
+      "selector": "@media (min-width: 900px)",
+      "occurrences": 3,
+      "variant_count": 3
+    },
+    {
+      "selector": ".step",
+      "occurrences": 4,
+      "variant_count": 4
+    }
+  ]
+}

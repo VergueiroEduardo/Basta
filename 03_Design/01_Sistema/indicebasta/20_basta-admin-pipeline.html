@@ -57,7 +57,7 @@
     .nav-item--active { color: var(--black); font-weight: 700; background: var(--off-white); }
     .nav-item--active::before {
       content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
-      width: 3px; background: var(--green);
+      width: 3px; background: var(--green-action);
     }
     .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
     .nav-item--active .nav-item__icon { opacity: 1; }
@@ -74,7 +74,7 @@
       display: flex; align-items: center; gap: 10px;
     }
     .sidebar__avatar {
-      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      width: 32px; height: 32px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
     }
@@ -96,7 +96,7 @@
     }
     .topbar__logo { height: 48px; width: auto; }
     .topbar__avatar {
-      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      width: 28px; height: 28px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; letter-spacing: 0.02em;
     }
@@ -195,7 +195,7 @@
       width: 8px; height: 8px; border-radius: 50%;
       flex-shrink: 0;
     }
-    .health-dot--ok { background: var(--green); }
+    .health-dot--ok { background: var(--green-action); }
     .health-dot--watch { background: var(--warning); }
     .health-dot--cold { background: var(--error); }
     .filter-pill[data-group="health"].filter-pill--active .health-dot--ok { box-shadow: 0 0 0 2px rgba(255,255,255,0.6); }
@@ -396,7 +396,7 @@
       width: 8px; height: 8px; border-radius: 50%;
       flex-shrink: 0; margin-top: 4px;
     }
-    .lead-card__health--ok    { background: var(--green); }
+    .lead-card__health--ok    { background: var(--green-action); }
     .lead-card__health--watch { background: var(--warning); }
     .lead-card__health--cold  { background: var(--error); }
 
@@ -431,7 +431,7 @@
     .lead-card__btn--primary {
       background: var(--black); color: var(--white); border-color: var(--black);
     }
-    .lead-card__btn--primary:hover { background: var(--green); border-color: var(--green); }
+    .lead-card__btn--primary:hover { background: var(--green-action); border-color: var(--green); }
     .lead-card__btn svg { width: 10px; height: 10px; }
 
     /* placeholder de coluna vazia */
@@ -543,7 +543,7 @@
       border-radius: 50%;
       background: var(--gray-300);
     }
-    .lead-cell__health-dot--ok { background: var(--green); }
+    .lead-cell__health-dot--ok { background: var(--green-action); }
     .lead-cell__health-dot--watch { background: var(--warning); }
     .lead-cell__health-dot--cold { background: var(--error); }
 
@@ -589,7 +589,7 @@
     .stage-chip-list[data-stage="9"] .stage-chip-list__num,
     .stage-chip-list[data-stage="10"] .stage-chip-list__num,
     .stage-chip-list[data-stage="11"] .stage-chip-list__num { border-color: var(--sage); color: #6B7048; }
-    .stage-chip-list[data-stage="12"] .stage-chip-list__num { background: var(--green); border-color: var(--green); color: var(--white); }
+    .stage-chip-list[data-stage="12"] .stage-chip-list__num { background: var(--green-action); border-color: var(--green); color: var(--white); }
 
     /* Time / activity */
     .time-cell {

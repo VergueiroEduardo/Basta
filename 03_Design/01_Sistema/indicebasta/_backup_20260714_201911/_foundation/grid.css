@@ -1,0 +1,75 @@
+/* ============================================================================
+   GRID SYSTEM — Basta
+   12-col, gutters fluidos por breakpoint, max-width 1200px.
+   Fonte única para .container em toda a aplicação.
+   ============================================================================ */
+:root {
+  --container-max:    1200px;
+  --gutter-mobile:    16px;
+  --gutter-tablet:    24px;
+  --gutter-desktop:   32px;
+  --column-gap:       24px;
+  --col-count:        12;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CONTAINER CANÔNICO
+   - Centralizado com max-width
+   - padding-inline progressivo por breakpoint
+   - safe-area-inset para iOS notch (mobile)
+   ────────────────────────────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  /* Fallback para browsers antigos */
+  padding-left: var(--gutter-mobile);
+  padding-right: var(--gutter-mobile);
+  /* Moderno: respeita notch/borda mas nunca abaixo do gutter */
+  padding-left: max(var(--gutter-mobile), env(safe-area-inset-left));
+  padding-right: max(var(--gutter-mobile), env(safe-area-inset-right));
+}
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--gutter-tablet);
+    padding-right: var(--gutter-tablet);
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--gutter-desktop);
+    padding-right: var(--gutter-desktop);
+  }
+}
+
+/* Variantes */
+.container--narrow { max-width: 720px; }
+.container--wide   { max-width: 1440px; }
+.container--full   { max-width: none; }
+
+/* Bleed útil — fundo quebra a viewport, conteúdo respeita o gutter */
+.bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Grid 12 colunas (para layouts internos) */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--col-count), 1fr);
+  gap: var(--column-gap);
+}
+
+/* Helpers de span (uso em desktop) */
+@media (min-width: 768px) {
+  .col-span-3  { grid-column: span 3; }
+  .col-span-4  { grid-column: span 4; }
+  .col-span-5  { grid-column: span 5; }
+  .col-span-6  { grid-column: span 6; }
+  .col-span-7  { grid-column: span 7; }
+  .col-span-8  { grid-column: span 8; }
+  .col-span-9  { grid-column: span 9; }
+  .col-span-12 { grid-column: span 12; }
+}

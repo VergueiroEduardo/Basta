@@ -53,13 +53,13 @@
 
 /* Primary — Verde brand */
 .btn--primary {
-  background: var(--green);
+  background: var(--green-action);
   color: var(--white);
-  border: var(--border-width-thick) solid var(--green);
+  border: var(--border-width-thick) solid var(--green-action);
 }
 .btn--primary:hover {
-  background: var(--green-hover);
-  border-color: var(--green-hover);
+  background: var(--green-action-hover);
+  border-color: var(--green-action-hover);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(66, 180, 73, 0.28);
 }
@@ -109,8 +109,8 @@
 }
 .btn--outline-white-green:hover {
   background: transparent;
-  color: var(--green);
-  border-color: var(--green);
+  color: var(--green-action);
+  border-color: var(--green-action);
 }
 
 /* Error — destrutivo */
@@ -137,20 +137,20 @@
 
 /* Retry — alias semântico de primary, para clarity em telas de erro */
 .btn--retry {
-  background: var(--green);
+  background: var(--green-action);
   color: var(--white);
-  border: var(--border-width-thick) solid var(--green);
+  border: var(--border-width-thick) solid var(--green-action);
 }
 .btn--retry:hover {
-  background: var(--green-hover);
-  border-color: var(--green-hover);
+  background: var(--green-action-hover);
+  border-color: var(--green-action-hover);
 }
 
 /* === ALIASES DE LEGADO (DEPRECATED) ===
    Mantém compatibilidade com classes antigas durante a migração.
    Remover quando todos os arquivos forem padronizados. */
-.btn-primary           { background: var(--green); color: var(--white); border: var(--border-width-thick) solid var(--green); }
-.btn-primary:hover     { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(66, 180, 73, 0.28); }
+.btn-primary           { background: var(--green-action); color: var(--white); border: var(--border-width-thick) solid var(--green-action); }
+.btn-primary:hover     { background: var(--green-action-hover); border-color: var(--green-action-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(66, 180, 73, 0.28); }
 .btn-outline-black     { background: transparent; color: var(--black); border: var(--border-width-thick) solid var(--black); }
 .btn-outline-black:hover { background: var(--black); color: var(--white); }
 .btn-outline-white     { background: transparent; color: var(--white); border: var(--border-width-thick) solid var(--white); }

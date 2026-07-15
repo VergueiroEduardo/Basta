@@ -1,0 +1,22 @@
+/* ============================================================================
+   BASTA — RESPONSIVE UTILITIES
+   Media queries de acessibilidade e adaptação a dispositivos.
+   Importado por todas as 25 telas após reset.css.
+   ============================================================================ */
+
+/* Dispositivos touch: desativa hover translates e shadows que apenas fazem
+   sentido com cursor preciso. */
+@media (hover: none) and (pointer: coarse) {
+  *:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Redução de movimento — preferência de acessibilidade do sistema operacional. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

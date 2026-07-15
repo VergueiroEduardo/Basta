@@ -148,7 +148,7 @@
 
 .form-login-link { text-align: center; margin-top: 20px; font-size: 14px; color: var(--gray-600); }
 
-.form-login-link a:hover { color: var(--green); }
+.form-login-link a:hover { color: var(--green-action); }
 
 .form-fields-block { border: 1px solid var(--gray-300); padding: 20px 20px 4px; }
 

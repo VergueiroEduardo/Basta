@@ -1,0 +1,93 @@
+/* ============================================================================
+   PROGRESS COMPONENTS — Basta
+   progress-card, progress-bar, progress-circle
+   ============================================================================ */
+
+/* Card de progresso (dashboard) */
+.progress-card {
+  background: var(--white);
+  border: var(--border-width-thick) solid var(--green);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-3xl);
+  border-radius: var(--border-radius);
+}
+
+.progress-card__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--gray-600);
+  margin-bottom: var(--space-lg);
+}
+
+.progress-card__title {
+  font-size: var(--fs-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--black);
+  margin-bottom: var(--space-sm);
+}
+
+.progress-card__subtitle {
+  font-size: var(--fs-xs);
+  color: var(--gray-600);
+  margin-bottom: var(--space-2xl);
+}
+
+.progress-card__pct {
+  font-size: var(--fs-5xl);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--ls-tight);
+  color: var(--green);
+  line-height: 1;
+}
+
+.progress-card__bar,
+.progress-bar {
+  height: 4px;
+  background: var(--gray-300);
+  margin-top: var(--space-2xl);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.progress-card__fill,
+.progress-bar__fill {
+  height: 100%;
+  background: var(--green);
+  transition: width var(--duration-deliberate) var(--ease-out);
+}
+
+/* Circle (Open Finance progresso) */
+.progress-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.progress-circle__svg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+.progress-circle__bg {
+  fill: none;
+  stroke: var(--gray-200);
+  stroke-width: 8;
+}
+.progress-circle__fg {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--duration-deliberate) var(--ease-out);
+}
+.progress-circle__pct {
+  position: absolute;
+  font-size: var(--fs-2xl);
+  font-weight: var(--font-weight-black);
+  color: var(--black);
+  letter-spacing: var(--ls-tight);
+}

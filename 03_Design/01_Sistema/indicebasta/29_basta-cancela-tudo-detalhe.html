@@ -59,7 +59,7 @@
     .sidebar .nav-item--active { font-weight: 800; color: var(--green); }
     .nav-item--active::before {
       content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; background: var(--green);
+      width: 3px; background: var(--green-action);
     }
     .nav-item__icon { width: 18px; height: 18px; flex-shrink: 0; color: var(--white); }
     .nav-item--active .nav-item__icon { color: var(--green); }
@@ -69,7 +69,7 @@
       display: flex; align-items: center; gap: 10px;
     }
     .sidebar__avatar {
-      width: 32px; height: 32px; background: var(--green); color: var(--white);
+      width: 32px; height: 32px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center;
       justify-content: center; flex-shrink: 0; letter-spacing: 0.02em;
     }
@@ -93,7 +93,7 @@
     }
     .topbar__logo { height: 48px; width: auto; }
     .topbar__avatar {
-      width: 28px; height: 28px; background: var(--green); color: var(--white);
+      width: 28px; height: 28px; background: var(--green-action); color: var(--white);
       font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;
     }
 
@@ -160,7 +160,7 @@
     }
     .btn-download svg, .review-btn svg, .btn-whatsapp svg { width: 16px; height: 16px; flex-shrink: 0; }
     .btn-whatsapp {
-      background: var(--green); color: var(--white); border: 1.5px solid var(--green);
+      background: var(--green-action); color: var(--white); border: 1.5px solid var(--green);
       transition: background var(--t), border-color var(--t), transform var(--t);
     }
     .btn-whatsapp:hover { background: var(--green-hover); border-color: var(--green-hover); transform: translateY(-1px); }
@@ -266,7 +266,7 @@
       transition: background var(--t), color var(--t), border-color var(--t);
     }
     .gen-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-    .gen-btn:hover { background: var(--green); color: var(--white); border-color: var(--green); }
+    .gen-btn:hover { background: var(--green-action); color: var(--white); border-color: var(--green); }
     .gen-btn.is-done {
       background: var(--off-white); color: var(--green); border-color: var(--green);
       pointer-events: none;
@@ -343,7 +343,7 @@
       padding: 5px 9px;
     }
     .shot__verdict svg { width: 12px; height: 12px; flex-shrink: 0; }
-    .shot__verdict--ok { background: var(--green); color: var(--white); }
+    .shot__verdict--ok { background: var(--green-action); color: var(--white); }
     .shot__verdict--warn { background: var(--warning); color: var(--black); }
 
     .shot__body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
@@ -365,7 +365,7 @@
       transition: background var(--t), color var(--t), border-color var(--t);
     }
     .shot-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
-    .shot-btn--primary { background: var(--green); color: var(--white); border: 1.5px solid var(--green); }
+    .shot-btn--primary { background: var(--green-action); color: var(--white); border: 1.5px solid var(--green); }
     .shot-btn--primary:hover { background: var(--green-hover); border-color: var(--green-hover); }
     .shot-btn--warn { background: var(--warning); color: var(--black); border: 1.5px solid var(--warning); }
     .shot-btn--warn:hover { filter: brightness(0.95); }

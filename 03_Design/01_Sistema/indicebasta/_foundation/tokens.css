@@ -14,6 +14,8 @@
   --sage:               #bdc0ac;  /* Accent terciário (terra, bege) */
   --green:              #42b449;  /* Brand accent — buttons, highlights, success */
   --green-hover:        #389d3e;  /* Hover do --green */
+  --green-action:       #2E7D32;  /* Verde de AÇÃO (WCAG AA): texto branco sobre verde / verde-texto sobre claro. 5,13:1 no branco. */
+  --green-action-hover: #256428;  /* Hover do verde de ação */
   --gray-600:           #4A4A4A;  /* Texto secundário, labels, subtítulos */
   --gray-300:           #D4D4D4;  /* Bordas, divisores, linhas */
   --gray-200:           #EEEEEE;  /* Fundo modal/overlay area */

@@ -135,7 +135,7 @@
 
     .progress-fill {
       height: 100%;
-      background: var(--green);
+      background: var(--green-action);
       width: 0%;
       transition: width 0.8s var(--ease), background 0.6s var(--ease);
     }
@@ -246,6 +246,9 @@
       pointer-events: none;
     }
 
+    /* No estado de sucesso, esconde o logo do header — tela mais limpa, menos peso */
+    .modal.is-success .modal__header > svg { display: none; }
+
     /* ── SUCCESS STATE ───────────────────────────────────────── */
     .success-content {
       display: none;
@@ -271,9 +274,26 @@
       color: var(--gray-600);
       line-height: 1.6;
       margin-bottom: 32px;
-      max-width: 320px;
+      max-width: 340px;
       margin-left: auto;
       margin-right: auto;
+    }
+    .success-desc p { margin-bottom: 12px; }
+    .success-desc p:last-child { margin-bottom: 0; }
+
+    /* ── FORK: dois caminhos, cada texto com seu CTA verde ──── */
+    .success-fork {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      text-align: center;
+    }
+    .fork-block p {
+      font-size: 15px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      max-width: 340px;
+      margin: 0 auto 16px;
     }
 
     .success-actions {
@@ -302,7 +322,7 @@
     }
 
     .btn--primary {
-      background: var(--green);
+      background: var(--green-action);
       color: var(--white);
     }
     .btn--primary:hover { background: var(--black); }
@@ -311,8 +331,8 @@
       background: transparent;
       color: var(--gray-600);
       border: 1.5px solid var(--gray-300);
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 15px;
+      font-weight: 700;
       text-transform: none;
       letter-spacing: 0;
       min-height: 48px;
@@ -378,13 +398,6 @@
     <!-- ── HEADER — logo centrado ──────────────────────────── -->
     <div class="modal__header">
       <svg aria-label="Basta." role="img" viewBox="0 0 602.25 254.23"><use href="#logo-basta"/></svg>
-
-      <button class="modal__close" aria-label="Cancelar" onclick="history.back()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
     </div>
 
     <!-- ── BODY ────────────────────────────────────────────── -->
@@ -469,11 +482,18 @@
       <div class="success-content" id="success-content" aria-hidden="true">
 
         <h1 class="success-title" id="progress-title">Conta conectada<span class="accent">.</span></h1>
-        <p class="success-desc">Seus dados foram importados com sucesso. Se você tem operações de crédito em outros bancos, conecte suas outras contas seguindo as mesmas etapas. Se não tem, acesse a plataforma.</p>
 
-        <div class="success-actions">
-          <a href="12_basta-dashboard.html" class="btn btn--primary">Acessar a plataforma →</a>
-          <a href="07_basta-of-selecao-banco.html" class="btn btn--ghost">Conectar outra conta bancária</a>
+        <div class="success-fork">
+          <div class="fork-block">
+            <p>Tem operações de crédito em outros bancos?</p>
+            <a href="07_basta-of-selecao-banco.html" class="btn btn--primary">Conecte outras contas</a>
+          </div>
+
+          <div class="fork-block">
+            <p>Ou assine o contrato que garante regras claras com o Basta. <strong>Nenhum pagamento antecipado: você só paga quando houver benefício real — e só se decidir seguir.</strong><br>Sem surpresas. Justo de verdade.</p>
+            <!-- TODO: apontar para a tela de assinatura do contrato quando existir -->
+            <a href="#" class="btn btn--primary">Assine e formalize seu controle</a>
+          </div>
         </div>
 
       </div><!-- /success-content -->
@@ -484,13 +504,14 @@
 
 <script>
   // ── Dados das etapas ────────────────────────────────────────
+  // Durações reduzidas para testes: progresso completo em ~3s
   const stages = [
-    { from: 0,   to: 17,  duration: 2200, message: "Coletando contas bancárias…"       },
-    { from: 17,  to: 33,  duration: 3000, message: "Coletando cartões de crédito…"     },
-    { from: 33,  to: 50,  duration: 4200, message: "Coletando operações de crédito…"   },
-    { from: 50,  to: 67,  duration: 3800, message: "Coletando investimentos…"          },
-    { from: 67,  to: 83,  duration: 3200, message: "Coletando seguros e previdência…"  },
-    { from: 83,  to: 100, duration: 2600, message: "Coletando dados de identidade…"    },
+    { from: 0,   to: 17,  duration: 400, message: "Coletando contas bancárias…"       },
+    { from: 17,  to: 33,  duration: 400, message: "Coletando cartões de crédito…"     },
+    { from: 33,  to: 50,  duration: 400, message: "Coletando operações de crédito…"   },
+    { from: 50,  to: 67,  duration: 400, message: "Coletando investimentos…"          },
+    { from: 67,  to: 83,  duration: 400, message: "Coletando seguros e previdência…"  },
+    { from: 83,  to: 100, duration: 400, message: "Coletando dados de identidade…"    },
   ];
 
   // ── Refs ────────────────────────────────────────────────────
@@ -564,9 +585,9 @@
       } else {
         if (stageIndex + 1 >= stages.length) {
           // Última etapa concluída — aguarda e mostra sucesso
-          setTimeout(showSuccess, 800);
+          setTimeout(showSuccess, 250);
         } else {
-          setTimeout(() => animateStage(stageIndex + 1), 320);
+          setTimeout(() => animateStage(stageIndex + 1), 40);
         }
       }
     }
@@ -583,6 +604,9 @@
     // Fade out conteúdo de progresso
     progressEl.classList.add('is-fading');
 
+    // Limpa o header: esconde o logo no estado final
+    document.querySelector('.modal').classList.add('is-success');
+
     setTimeout(() => {
       progressEl.style.display = 'none';
 
@@ -598,7 +622,7 @@
   }
 
   // ── Inicia ──────────────────────────────────────────────────
-  setTimeout(() => animateStage(0), 400);
+  setTimeout(() => animateStage(0), 150);
 </script>
 
 </body>
